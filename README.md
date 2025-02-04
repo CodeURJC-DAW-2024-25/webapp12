@@ -18,25 +18,21 @@ Pixel Paradise
 - Review
 - Place
 #### **Relationships**
-- Un usuario realiza actividades y pode poner una review a las actividades.
-- Una actividad tiene a usuarios inscritos y se desarrolla en un lugar.
-- Una reseña pertenece a un usuario y está asociada a una actividad.
-- Un lugar está asociado a una actividades.
-#### **Diagram**
-
+- A user performs activities and can leave a review for the activities.
+- An activity has enrolled users and takes place at a location.
+- A review belongs to a user and is associated with an activity.
+- A location is associated with activities.
 ### **User Permissions**
-- Usarios invitado: Podrá ver las actividades disponibles pero no incribirse ni poner reseñas
-- Usuario registrado: Podrá apuntarse a las actividades y poner reseñas
-- Usuario administrador:Poderá añadir, modificar y elimianr actividades y usuario. Y ver el gráfico: Gráfico que muestra el número de actividades registradas por mes por los usuarios
+- Not registered user: Can view available activities but cannot enroll or leave reviews.
+- Registered user: Can enroll in activities and leave reviews.
+- Administrator user: Can add, modify, and delete activities and users, and view the chart: A chart that shows the number of activities registered per month by users.
 ### **Images**
-- Actividad tendrá una imagen asociada
-- Lugar tendrá una imagen asociada
+- An activity will have an associated image.
+- A user will have an associated image.
 ### **Charts**
-- Gráfico que muestra el número de actividades creadas por mes por el administrador
-- Grafico para mostrar las valoraciones de la actividad.
-
+- A chart that shows the number of activities created per month by the administrator.
+- A chart to display the activity ratings.
 ### **Complementary Technology**
-Gerenar pdf cuando el usuario se inscriba a una actividad
-
+- Generate a PDF when the user enrolls in an activity.
 ### **Algorithm or Advanced Query**
-Algoritmo de recomendación de actividades similares o de interés para el usuario, basado en sus actividades anteriores y las reseñas que ha dejado.
+- Recommendation algorithm for similar or interesting activities for the user, based on their past activities and the reviews they have left.
