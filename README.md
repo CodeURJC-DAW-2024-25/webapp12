@@ -22,6 +22,8 @@ Pixel Paradise
 - An activity has enrolled users and takes place at a location.
 - A review belongs to a user and is associated with an activity.
 - A location is associated with activities.
+### **DIAGRAM**
+- Webapp12/Images/diagrama DAW.png
 ### **User Permissions**
 - Not registered user: Can view available activities but cannot enroll or leave reviews.
 - Registered user: Can enroll in activities and leave reviews.
