@@ -43,6 +43,23 @@ Pixel Paradise
 ---
 ## ****Templates****
 ### **Screenshots**
-
-
+- Home screen
+![image](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/Images/Inicio.png).
+- Login screen
+![image](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/Images/login.png).
+- Register screen
+![image](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/Images/registrar.png).
+- Activity screen
+![image](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/Images/actividad.png).
+- User profile screen
+![image](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/Images/Perfil.png).
+- Admin profile screen
+![image](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/Images/Perfil_admin.png).
+- Admin statistics screen
+![image](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/Images/admin_estadisticas.png).
+- Admin user management screen
+![image](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/Images/admin_gestion_usuarios.png).
+- New activity screen
+![image](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/Images/nueva_actividad.png).
 ### **Navegation Diagram**
+![image](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/Images/diagrama_navegacion.png).
