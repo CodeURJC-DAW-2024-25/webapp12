@@ -86,7 +86,6 @@
 							<li class="list-inline-item">by <a href="user-profile.html">Admin</a></li>
 							<li class="list-inline-item">Jan 7, 2025</li>
 						</ul>
-						<button class="btn btn-primary" data-toggle="modal" data-target="#editActivityModal">Editar</button>
 					</div>
 					
 <!-- Modal para editar actividad -->
@@ -125,10 +124,11 @@
                         <label for="activity-category">Categoría</label>
                         <select class="form-control" id="activity-category">
                             <option value="1">Categoría</option>
-                            <option value="2">Aire libre</option>
-                            <option value="3">Espacio cerrado</option>
-                            <option value="4">Aventura y desafío</option>
-                            <option value="5">Acuático</option>
+                            <option value="2">Deporte de Contacto</option>
+                            <option value="3">Deporte de Equipo</option>
+                            <option value="4">Deporte Individual</option>
+                            <option value="5">Aventura y Desafío</option>
+                            <option value="6">Relajación</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -183,10 +183,7 @@ document.getElementById('saveChanges').addEventListener('click', function() {
 					<img src="../static/images/sports/cancha.jpg" alt="article-01">
 					<ul class="list-inline product-meta">
 						<li class="list-inline-item">
-							<a><i class="fa fa-folder-open-o"></i> Deporte</a>
-						</li>
-						<li class="list-inline-item">
-							<a><i class="fa fa-calendar"></i> Aire libre</a>
+							<a><i class="fa fa-futbol-o"></i> Deporte de Equipo</a>
 						</li>
 					</ul>
 					<p>Disfruta de una dinámica clase de baloncesto diseñada para todos los niveles, desde principiantes hasta jugadores con experiencia. Nuestro instructor certificado te guiará a través de ejercicios de calentamiento, técnicas de dribbling, pases y tiros, finalizando con un emocionante partido amistoso.</p>
@@ -274,29 +271,18 @@ document.getElementById('saveChanges').addEventListener('click', function() {
 			</div>
 			<div class="col-lg-4">
 				<div class="sidebar">
-					<!-- Search Widget -->
-					<div class="widget search p-0">
-						<div class="input-group">
-							<input type="text" class="form-control" id="expire" placeholder="Search...">
-							<span class="input-group-addon"><i class="fa fa-search px-3"></i></span>
-						</div>
-					</div>
 					<!-- Category Widget -->
-					<div class="widget category">
-						<!-- Widget Header -->
-						<h5 class="widget-header">Categories</h5>
-						<ul class="category-list">
-							<li><a href="category.html">Aire Libre <span class="float-right"></span></a></li>
-							<li><a href="category.html">Deportes <span class="float-right"></span></a></li>
-						</ul>
-					</div>
 					<!-- Archive Widget -->
 					<div class="widget archive">
 						<!-- Widget Header -->
 						<h5 class="widget-header">Realiza aquí tu Reserva</h5>
 							<div>
-								<button class="btn btn-transparent">RESERVAR</button>
+								<button class="btn btn-primary">RESERVAR</button>
 							</div>
+          <div>
+            <br>
+            <button class="btn btn-primary" data-toggle="modal" data-target="#editActivityModal">Editar</button>
+          </div>
 					</div>
 				</div>
 			</div>
@@ -313,90 +299,21 @@ document.getElementById('saveChanges').addEventListener('click', function() {
   <div class="container">
     <div class="row">
       <div class="col-lg-3 col-md-7 offset-md-1 offset-lg-0 mb-4 mb-lg-0">
-        <!-- About -->
-        <div class="block about">
-          <!-- footer logo -->
-          <img src="../static/images/logo-footer.png" alt="logo">
-          <!-- description -->
-          <p class="alt-color">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-            laboris nisi ut aliquip ex ea commodo consequat.</p>
-        </div>
       </div>
       <!-- Link list -->
       <div class="col-lg-2 offset-lg-1 col-md-3 col-6 mb-4 mb-lg-0">
         <div class="block">
-          <h4>Site Pages</h4>
-          <ul>
-            <li><a href="dashboard-my-ads.html">My Ads</a></li>
-            <li><a href="dashboard-favourite-ads.html">Favourite Ads</a></li>
-            <li><a href="dashboard-archived-ads.html">Archived Ads</a></li>
-            <li><a href="dashboard-pending-ads.html">Pending Ads</a></li>
-            <li><a href="terms-condition.html">Terms & Conditions</a></li>
-          </ul>
         </div>
       </div>
       <!-- Link list -->
       <div class="col-lg-2 col-md-3 offset-md-1 offset-lg-0 col-6 mb-4 mb-md-0">
         <div class="block">
-          <h4>Admin Pages</h4>
-          <ul>
-            <li><a href="category.html">Category</a></li>
-            <li><a href="single.html">Single Page</a></li>
-            <li><a href="store.html">Store Single</a></li>
-            <li><a href="single-blog.html">Single Post</a>
-            </li>
-            <li><a href="blog.html">Blog</a></li>
-
-
-
-          </ul>
-        </div>
-      </div>
-      <!-- Promotion -->
-      <div class="col-lg-4 col-md-7">
-        <!-- App promotion -->
-        <div class="block-2 app-promotion">
-          <div class="mobile d-flex  align-items-center">
-            <a href="index.html">
-              <!-- Icon -->
-              <img src="../static/images/footer/phone-icon.png" alt="mobile-icon">
-            </a>
-            <p class="mb-0">Get the Dealsy Mobile App and Save more</p>
-          </div>
-          <div class="download-btn d-flex my-3">
-            <a href="index.html"><img src="../static/images/apps/google-play-store.png" class="img-fluid" alt=""></a>
-            <a href="index.html" class=" ml-3"><img src="../static/images/apps/apple-app-store.png" class="img-fluid" alt=""></a>
-          </div>
         </div>
       </div>
     </div>
   </div>
   <!-- Container End -->
 </footer>
-<!-- Footer Bottom -->
-<footer class="footer-bottom">
-  <!-- Container Start -->
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-6 text-center text-lg-left mb-3 mb-lg-0">
-        <!-- Copyright -->
-        <div class="copyright">
-          <p>Copyright &copy; <script>
-              var CurrentYear = new Date().getFullYear()
-              document.write(CurrentYear)
-            </script>. Designed & Developed by <a class="text-white" href="https://themefisher.com">Themefisher</a></p>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Container End -->
-  <!-- To Top -->
-  <div class="scroll-top-to">
-    <i class="fa fa-angle-up"></i>
-  </div>
-</footer>
-
 <!-- 
 Essential Scripts
 =====================================-->
@@ -410,7 +327,7 @@ Essential Scripts
 <script src="../static/plugins/jquery-nice-select/js/jquery.nice-select.min.js"></script>
 
 
-<script src="js/script.js"></script>
+<script src="../static/js/script.js"></script>
 
 </body>
 
