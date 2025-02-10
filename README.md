@@ -23,7 +23,8 @@ Pixel Paradise
 - A review belongs to a user and is associated with an activity.
 - A location is associated with activities.
 ### **DIAGRAM**
-- Webapp12/Images/diagrama DAW.png
+![image](https://github.com/user-attachments/assets/ab529818-c485-4fc0-8154-1f52d97d67ff)
+
 ### **User Permissions**
 - Not registered user: Can view available activities but cannot enroll or leave reviews.
 - Registered user: Can enroll in activities and leave reviews.
@@ -38,3 +39,10 @@ Pixel Paradise
 - Generate a PDF when the user enrolls in an activity.
 ### **Algorithm or Advanced Query**
 - Recommendation algorithm for similar or interesting activities for the user, based on their past activities and the reviews they have left.
+
+---
+## ****Templates****
+### **Screenshots**
+
+
+### **Navegation Diagram**
