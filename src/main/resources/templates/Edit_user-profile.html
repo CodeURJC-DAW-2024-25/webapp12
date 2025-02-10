@@ -49,11 +49,13 @@
 						</button>
 						<div class="collapse navbar-collapse" id="navbarSupportedContent">
 							<ul class="navbar-nav ml-auto main-nav ">
-								<li >
+								<li>
+									<li class="nav-item active">
+								</li>
 									<a class="nav-link" href="../templates/index.html">Home</a>
 								</li>
 								<li  class="nav-item active">
-									<a class="nav-link" href="../templates/dashboard.html">Perfil</a>
+									<a class="nav-link" href="../templates/profile.html">Perfil</a>
 								</li>
 							<ul class="navbar-nav ml-auto mt-10">
 								<li class="nav-item">
@@ -88,19 +90,19 @@
 					<div class="widget user-dashboard-menu">
 						<ul>
 							<li>
-								<a href="dashboard.html"><i class="fa fa-ticket"></i>Mis actividades <span>2</span></a>
+								<a href="../templates/profile.html"><i class="fa fa-ticket"></i>Mis actividades <span>2</span></a>
               				</li>
 							<li>
-								<a href="dashboard-my-ads.html"><i class="fa fa-bolt"></i>Todas las actividades <span>25</span></a>
+								<a href="../templates/admin_activities.html"><i class="fa fa-bolt"></i>Todas las actividades <span>25</span></a>
               				</li>
               				<li>
-								<a href="ad-listing.html"><i class="fas fa-plus-square"></i> Crear nueva actividad</a>
+								<a href="../templates/create_activity.html"><i class="fas fa-plus-square"></i> Crear nueva actividad</a>
 							</li>
 							<li>
-								<a href="dashboard-favourite-ads.html"><i class="fa fa-users"></i> Todos los usuarios <span>5</span></a>
+								<a href="../templates/admin_users.html"><i class="fa fa-users"></i> Todos los usuarios <span>5</span></a>
 							</li>
 							<li>
-								<a href="dashboard-archived-ads.html"><i class="fa fa-chart-bar"></i>Estadísticas </a>
+								<a href="../templates/statistics.html"><i class="fa fa-chart-bar"></i>Estadísticas </a>
 							</li>
 							<li>
 								<a href="index.html"><i class="fa fa-power-off"></i> Cerrar sesión</a>
@@ -113,6 +115,32 @@
 
 				</div>
 			</div>
+<!-- Modal -->
+			<div class="modal fade" id="deleteaccount" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+			aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+				<div class="modal-header border-bottom-0">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body text-center">
+					<img src="../static/images/account/Account1.png" class="img-fluid mb-2" alt="">
+					<h6 class="py-2">¿Estas seguro de querer eliminar tu cuenta?</h6>
+					<p>Se borraran todos tus datos. No se podrá recuperar la Información de la cuenta.</p>
+					<textarea class="form-control" name="message" id="" cols="40" rows="4" class="w-100 rounded"></textarea>
+				</div>
+				<div class="modal-footer border-top-0 mb-3 mx-5 justify-content-center">
+					<button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
+					<button type="button" class="btn btn-danger">Borrar</button>
+				</div>
+				</div>
+			</div>
+			</div>
+<!-- delete account popup modal end-->
+          <!-- delete-account modal -->
+
 			<div class="col-lg-8">
 				<!-- Edit Profile Welcome Text -->
 				<div class="widget welcome-message">
