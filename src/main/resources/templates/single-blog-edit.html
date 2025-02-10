@@ -244,29 +244,38 @@ document.getElementById('saveChanges').addEventListener('click', function() {
 					</div>
 
 					<form action="#">
-						<!-- Message -->
-						<div class="form-group mb-30">
+						<!-- Calificación con Estrellas -->
+						<div class="form-group">
+							<label for="rating">Calificación:</label>
+							<div class="rating">
+								<input type="radio" id="star5" name="rating" value="5" required>
+								<label for="star5">&#9733;&#9733;&#9733;&#9733;&#9733;</label>
+								
+								<input type="radio" id="star4" name="rating" value="4">
+								<label for="star4">&#9733;&#9733;&#9733;&#9733;</label>
+								
+								<input type="radio" id="star3" name="rating" value="3">
+								<label for="star3">&#9733;&#9733;&#9733;</label>
+								
+								<input type="radio" id="star2" name="rating" value="2">
+								<label for="star2">&#9733;&#9733;</label>
+								
+								<input type="radio" id="star1" name="rating" value="1">
+								<label for="star1">&#9733;</label>
+							</div>
+						</div>
+					
+						<!-- Comentarios -->
+						<div class="form-group">
 							<label for="message">Comentarios</label>
-							<textarea class="form-control" id="message" rows="8" required></textarea>
+							<textarea class="form-control" id="message" rows="4" required></textarea>
 						</div>
-						<div class="row">
-							<div class="col-sm-12 col-md-6">
-								<!-- Name -->
-								<div class="form-group mb-30">
-									<label for="name">Name</label>
-									<input type="text" class="form-control" id="name" required>
-								</div>
-							</div>
-							<div class="col-sm-12 col-md-6">
-								<!-- Email -->
-								<div class="form-group mb-30">
-									<label for="email">Email</label>
-									<input type="email" class="form-control" id="email" required>
-								</div>
-							</div>
-						</div>
+					
+						<!-- Botón de Guardar -->
 						<button class="btn btn-transparent">Guardar Comentario</button>
 					</form>
+					
+					
 				</div>
 			</div>
 			<div class="col-lg-4">
