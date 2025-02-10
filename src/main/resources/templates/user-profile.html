@@ -26,6 +26,7 @@
   <link href="../static/plugins/slick/slick.css" rel="stylesheet">
   <link href="../static/plugins/slick/slick-theme.css" rel="stylesheet">
   <link href="../static/plugins/jquery-nice-select/css/nice-select.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   
   <link href="../static/css/style.css" rel="stylesheet">
 
@@ -84,14 +85,32 @@
 						<h5 class="text-center">Samanta Doe</h5>
 					</div>
 					<!-- Dashboard Links -->
-          <div class="widget user-dashboard-menu">
-            <ul>
-              <li><a href="index.html">Savings Dashboard</a></li>
-              <li><a href="index.html">Saved Offer <span>(5)</span></a></li>
-              <li><a href="index.html">Favourite Stores <span>(3)</span></a></li>
-              <li><a href="index.html">Recommended</a></li>
-            </ul>
-          </div>
+					<div class="widget user-dashboard-menu">
+						<ul>
+							<li>
+								<a href="dashboard.html"><i class="fa fa-ticket"></i>Mis actividades <span>2</span></a>
+              				</li>
+							<li>
+								<a href="dashboard-my-ads.html"><i class="fa fa-bolt"></i>Todas las actividades <span>25</span></a>
+              				</li>
+              				<li>
+								<a href="ad-listing.html"><i class="fas fa-plus-square"></i> Crear nueva actividad</a>
+							</li>
+							<li>
+								<a href="dashboard-favourite-ads.html"><i class="fa fa-users"></i> Todos los usuarios <span>5</span></a>
+							</li>
+							<li>
+								<a href="dashboard-archived-ads.html"><i class="fa fa-chart-bar"></i>Estadísticas </a>
+							</li>
+							<li>
+								<a href="index.html"><i class="fa fa-power-off"></i> Cerrar sesión</a>
+							</li>
+							<li>
+								<a href="#!" data-toggle="modal" data-target="#deleteaccount"><i class="fa fa-trash"></i>Borrar cuenta</a>
+							</li>
+						</ul>
+					</div>
+
 				</div>
 			</div>
 			<div class="col-lg-8">
@@ -104,7 +123,7 @@
 				<div class="row">
 					<div class="col-lg-6 col-md-6">
 						<div class="widget personal-info">
-							<h3 class="widget-header user">Edita ti informacion personal</h3>
+							<h3 class="widget-header user">Edita tu información personal</h3>
 							<form action="#">
 								<!-- First Name -->
 								<div class="form-group">
@@ -113,7 +132,7 @@
 								</div>
 								<!-- Last Name -->
 								<div class="form-group">
-									<label for="last-name">Apellido</label>
+									<label for="last-name">Apellidos</label>
 									<input type="text" class="form-control" id="last-name">
 								</div>
 								<!-- File chooser -->
@@ -129,7 +148,7 @@
 		
 								<!-- Tlf number -->
 								<div class="form-group">
-									<label for="tlf">numero Tlf</label>
+									<label for="tlf">Número de telefono</label>
 									<input type="number" class="form-control" id="tlf">
 								</div>
 								<!-- Submit button -->
@@ -140,7 +159,7 @@
 					<div class="col-lg-6 col-md-6">
 						<!-- Change Password -->
 					<div class="widget change-password">
-						<h3 class="widget-header user">Edit</h3>ar contraseña</h3>
+						<h3 class="widget-header user">Editar contraseña</h3>
 						<form action="#">
 							<!-- Current Password -->
 							<div class="form-group">
@@ -158,7 +177,7 @@
 								<input type="password" class="form-control" id="confirm-password">
 							</div>
 							<!-- Submit Button -->
-							<button class="btn btn-transparent">Camiar Contraseña</button>
+							<button class="btn btn-transparent">Cambiar Contraseña</button>
 						</form>
 					</div>
 					</div>
@@ -174,7 +193,7 @@
 							</div>
 							<!-- New email -->
 							<div class="form-group">
-								<label for="new-email">Nevo Email</label>
+								<label for="new-email">Nuevo Email</label>
 								<input type="email" class="form-control" id="new-email">
 							</div>
 							<!-- Submit Button -->
