@@ -193,5 +193,29 @@
     $('.value').text('$' + slideEvt.value[0] + ' - ' + '$' + slideEvt.value[1]);
   });
 
+  document.addEventListener("DOMContentLoaded", function() {
+    const stars = document.querySelectorAll(".star");
+    let selectedRating = 0;
+
+    function highlightStars(rating) {
+        stars.forEach(star => {
+            star.classList.toggle("filled", star.dataset.value <= rating);
+        });
+    }
+
+    stars.forEach(star => {
+        star.addEventListener("mouseover", function() {
+            highlightStars(this.dataset.value);
+        });
+        
+        star.addEventListener("click", function() {
+            selectedRating = this.dataset.value;
+        });
+    });
+    
+    document.getElementById("rating").addEventListener("mouseleave", function() {
+        highlightStars(selectedRating);
+    });
+});
 
 })(jQuery);

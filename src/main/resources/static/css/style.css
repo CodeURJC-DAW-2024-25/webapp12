@@ -2292,4 +2292,17 @@ form textarea {
     line-height: 35px;
   }
 }
+.rating {
+  display: flex;
+  direction: ltr;
+  font-size: 2rem;
+  cursor: pointer;
+}
+.star {
+  color: lightgray;
+  transition: color 0.2s;
+}
+.star.filled {
+  color: gold;
+}
 /*# sourceMappingURL=style.css.map */

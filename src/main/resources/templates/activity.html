@@ -247,22 +247,14 @@ document.getElementById('saveChanges').addEventListener('click', function() {
 						<!-- Calificación con Estrellas -->
 						<div class="form-group">
 							<label for="rating">Calificación:</label>
-							<div class="rating">
-								<input type="radio" id="star5" name="rating" value="5" required>
-								<label for="star5">&#9733;&#9733;&#9733;&#9733;&#9733;</label>
-								
-								<input type="radio" id="star4" name="rating" value="4">
-								<label for="star4">&#9733;&#9733;&#9733;&#9733;</label>
-								
-								<input type="radio" id="star3" name="rating" value="3">
-								<label for="star3">&#9733;&#9733;&#9733;</label>
-								
-								<input type="radio" id="star2" name="rating" value="2">
-								<label for="star2">&#9733;&#9733;</label>
-								
-								<input type="radio" id="star1" name="rating" value="1">
-								<label for="star1">&#9733;</label>
+							<div class="rating" id="rating">
+								<span class="star" data-value="1">&#9733;</span>
+								<span class="star" data-value="2">&#9733;</span>
+								<span class="star" data-value="3">&#9733;</span>
+								<span class="star" data-value="4">&#9733;</span>
+								<span class="star" data-value="5">&#9733;</span>
 							</div>
+							
 						</div>
 					
 						<!-- Comentarios -->
