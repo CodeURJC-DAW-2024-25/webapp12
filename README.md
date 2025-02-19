@@ -23,7 +23,8 @@ Pixel Paradise
 - A review belongs to a user and is associated with an activity.
 - A location is associated with activities.
 ### **DIAGRAM**
-- Webapp12/Images/diagrama DAW.png
+![image](https://github.com/user-attachments/assets/ab529818-c485-4fc0-8154-1f52d97d67ff)
+
 ### **User Permissions**
 - Not registered user: Can view available activities but cannot enroll or leave reviews.
 - Registered user: Can enroll in activities and leave reviews.
@@ -38,3 +39,27 @@ Pixel Paradise
 - Generate a PDF when the user enrolls in an activity.
 ### **Algorithm or Advanced Query**
 - Recommendation algorithm for similar or interesting activities for the user, based on their past activities and the reviews they have left.
+
+---
+## ****Templates****
+### **Screenshots**
+- Home screen
+![image](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/Images/Inicio.png).
+- Login screen
+![image](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/Images/login.png).
+- Register screen
+![image](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/Images/registrar.png).
+- Activity screen
+![image](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/Images/actividad.png).
+- User profile screen
+![image](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/Images/Perfil.png).
+- Admin profile screen
+![image](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/Images/Perfil_admin.png).
+- Admin statistics screen
+![image](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/Images/admin_estadisticas.png).
+- Admin user management screen
+![image](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/Images/admin_gestion_usuarios.png).
+- New activity screen
+![image](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/Images/nueva_actividad.png).
+### **Navegation Diagram**
+![image](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/Images/diagrama_navegacion.jpg).

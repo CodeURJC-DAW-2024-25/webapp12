@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+
+  <!-- ** Basic Page Needs ** -->
+  <meta charset="utf-8">
+  <title>Classimax | Classified Marketplace Template</title>
+
+  <!-- ** Mobile Specific Metas ** -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="Agency HTML Template">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="author" content="Themefisher">
+  <meta name="generator" content="Themefisher Classified Marketplace Template v1.0">
+
+  <!-- favicon -->
+  <link href="/images/favicon.png" rel="shortcut icon">
+
+  <!-- 
+  Essential stylesheets
+  =====================================-->
+  <link href="/plugins/bootstrap/bootstrap.min.css" rel="stylesheet">
+  <link href="/plugins/bootstrap/bootstrap-slider.css" rel="stylesheet">
+  <link href="/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="/plugins/slick/slick.css" rel="stylesheet">
+  <link href="/plugins/slick/slick-theme.css" rel="stylesheet">
+  <link href="/plugins/jquery-nice-select/css/nice-select.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <link href="/css/style.css" rel="stylesheet">
+
+</head>
+
+<body class="body-wrapper">
+
+
+	<header>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<nav class="navbar navbar-expand-lg navbar-light navigation">
+						<a class="navbar-brand" href="/index.html">
+							PIXEL PARADISE
+						</a>
+						<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+						 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+							<span class="navbar-toggler-icon"></span>
+						</button>
+						<div class="collapse navbar-collapse" id="navbarSupportedContent">
+							<ul class="navbar-nav ml-auto main-nav ">
+								<li>
+									<li class="nav-item active">
+								</li>
+									<a class="nav-link" href="/index.html">Home</a>
+								</li>
+								<li  class="nav-item active">
+									<a class="nav-link" href="/profile.html">Perfil</a>
+								</li>
+							<ul class="navbar-nav ml-auto mt-10">
+								<li class="nav-item">
+									<a class="nav-link" href="/login.html">Login</a>
+								</li>
+							</ul>
+						</div>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</header>
+<!--==================================
+=            User Profile            =
+===================================-->
+
+<section class="user-profile section">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-4">
+				<div class="sidebar">
+					<!-- User Widget -->
+					<div class="widget user">
+						<!-- User Image -->
+						<div class="image d-flex justify-content-center">
+							<img src="/images/user/user-thumb.jpg" alt="" class="">
+						</div>
+						<!-- User Name -->
+						<h5 class="text-center">Samanta Doe</h5>
+					</div>
+					<!-- Dashboard Links -->
+					<div class="widget user-dashboard-menu">
+						<ul>
+							<li>
+								<a href="/profile.html"><i class="fa fa-ticket"></i>Mis actividades <span>2</span></a>
+              				</li>
+							<li>
+								<a href="/admin_activities.html"><i class="fa fa-bolt"></i>Todas las actividades <span>25</span></a>
+              				</li>
+              				<li>
+								<a href="/create_activity.html"><i class="fas fa-plus-square"></i> Crear nueva actividad</a>
+							</li>
+							<li>
+								<a href="/admin_users.html"><i class="fa fa-users"></i> Todos los usuarios <span>5</span></a>
+							</li>
+							<li>
+								<a href="/statistics.html"><i class="fa fa-chart-bar"></i>Estadísticas </a>
+							</li>
+							<li>
+								<a href="index.html"><i class="fa fa-power-off"></i> Cerrar sesión</a>
+							</li>
+							<li>
+								<a href="#!" data-toggle="modal" data-target="#deleteaccount"><i class="fa fa-trash"></i>Borrar cuenta</a>
+							</li>
+						</ul>
+					</div>
+
+				</div>
+			</div>
+<!-- Modal -->
+			<div class="modal fade" id="deleteaccount" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+			aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+				<div class="modal-header border-bottom-0">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body text-center">
+					<img src="/images/account/Account1.png" class="img-fluid mb-2" alt="">
+					<h6 class="py-2">¿Estas seguro de querer eliminar tu cuenta?</h6>
+					<p>Se borraran todos tus datos. No se podrá recuperar la Información de la cuenta.</p>
+					<textarea class="form-control" name="message" id="" cols="40" rows="4" class="w-100 rounded"></textarea>
+				</div>
+				<div class="modal-footer border-top-0 mb-3 mx-5 justify-content-center">
+					<button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
+					<button type="button" class="btn btn-danger">Borrar</button>
+				</div>
+				</div>
+			</div>
+			</div>
+<!-- delete account popup modal end-->
+          <!-- delete-account modal -->
+
+			<div class="col-lg-8">
+				<!-- Edit Profile Welcome Text -->
+				<div class="widget welcome-message">
+					<h2>Editar perfil</h2>
+					<p>Edite los campos necesarios</p>
+				</div>
+				<!-- Edit Personal Info -->
+				<div class="row">
+					<div class="col-lg-6 col-md-6">
+						<div class="widget personal-info">
+							<h3 class="widget-header user">Edita tu información personal</h3>
+							<form action="#">
+								<!-- First Name -->
+								<div class="form-group">
+									<label for="first-name">Nombre</label>
+									<input type="text" class="form-control" id="first-name">
+								</div>
+								<!-- Last Name -->
+								<div class="form-group">
+									<label for="last-name">Apellidos</label>
+									<input type="text" class="form-control" id="last-name">
+								</div>
+								<!-- File chooser -->
+								<div class="form-group choose-file d-inline-flex">
+									<i class="fa fa-user text-center px-3"></i>
+									<input type="file" class="form-control-file mt-2 pt-1" id="input-file">
+								 </div>
+								<!-- dni-->
+								<div class="form-group">
+									<label for="dni">DNI</label>
+									<input type="text" class="form-control" id="dni">
+								</div>
+		
+								<!-- Tlf number -->
+								<div class="form-group">
+									<label for="tlf">Número de telefono</label>
+									<input type="number" class="form-control" id="tlf">
+								</div>
+								<!-- Submit button -->
+								<button class="btn btn-transparent">Guardar</button>
+							</form>
+						</div>
+					</div>
+					<div class="col-lg-6 col-md-6">
+						<!-- Change Password -->
+					<div class="widget change-password">
+						<h3 class="widget-header user">Editar contraseña</h3>
+						<form action="#">
+							<!-- Current Password -->
+							<div class="form-group">
+								<label for="current-password">Contraseña Actual</label>
+								<input type="password" class="form-control" id="current-password">
+							</div>
+							<!-- New Password -->
+							<div class="form-group">
+								<label for="new-password">Nueva Contraseña</label>
+								<input type="password" class="form-control" id="new-password">
+							</div>
+							<!-- Confirm New Password -->
+							<div class="form-group">
+								<label for="confirm-password">Confirmar nueva contraseña </label>
+								<input type="password" class="form-control" id="confirm-password">
+							</div>
+							<!-- Submit Button -->
+							<button class="btn btn-transparent">Cambiar Contraseña</button>
+						</form>
+					</div>
+					</div>
+					<div class="col-lg-6 col-md-6">
+						<!-- Change Email Address -->
+					<div class="widget change-email mb-0">
+						<h3 class="widget-header user">Editar Email </h3>
+						<form action="#">
+							<!-- Current Password -->
+							<div class="form-group">
+								<label for="current-email">Email Actual</label>
+								<input type="email" class="form-control" id="current-email">
+							</div>
+							<!-- New email -->
+							<div class="form-group">
+								<label for="new-email">Nuevo Email</label>
+								<input type="email" class="form-control" id="new-email">
+							</div>
+							<!-- Submit Button -->
+							<button class="btn btn-transparent">Cambiar Email</button>
+						</form>
+					</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!--============================
+=            Footer            =
+=============================-->
+
+<footer class="footer section section-sm">
+	<!-- Container Start -->
+	<div class="container">
+	  <div class="row">
+		<div class="col-lg-3 col-md-7 offset-md-1 offset-lg-0 mb-4 mb-lg-0">
+		</div>
+		<!-- Link list -->
+		<div class="col-lg-2 offset-lg-1 col-md-3 col-6 mb-4 mb-lg-0">
+		  <div class="block">
+		  </div>
+		</div>
+		<!-- Link list -->
+		<div class="col-lg-2 col-md-3 offset-md-1 offset-lg-0 col-6 mb-4 mb-md-0">
+		  <div class="block">
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<!-- Container End -->
+  </footer>
+<!-- 
+Essential Scripts
+=====================================-->
+<script src="/plugins/jquery/jquery.min.js"></script>
+<script src="/plugins/bootstrap/popper.min.js"></script>
+<script src="/plugins/bootstrap/bootstrap.min.js"></script>
+<script src="/plugins/bootstrap/bootstrap-slider.js"></script>
+<script src="/plugins/tether/js/tether.min.js"></script>
+<script src="/plugins/raty/jquery.raty-fa.js"></script>
+<script src="/plugins/slick/slick.min.js"></script>
+<script src="/plugins/jquery-nice-select/js/jquery.nice-select.min.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+</body>
+
+</html>

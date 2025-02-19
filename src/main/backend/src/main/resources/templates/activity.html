@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+
+<!--
+ // WEBSITE: https://themefisher.com
+ // TWITTER: https://twitter.com/themefisher
+ // FACEBOOK: https://www.facebook.com/themefisher
+ // GITHUB: https://github.com/themefisher/
+-->
+
+<html lang="en">
+<head>
+
+  <!-- ** Basic Page Needs ** -->
+  <meta charset="utf-8">
+  <title>Classimax | Classified Marketplace Template</title>
+
+  <!-- ** Mobile Specific Metas ** -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="Agency HTML Template">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="author" content="Themefisher">
+  <meta name="generator" content="Themefisher Classified Marketplace Template v1.0">
+
+  <!-- favicon -->
+  <link href="/images/favicon.png" rel="shortcut icon">
+
+  <!-- 
+  Essential stylesheets
+  =====================================-->
+  <link href="/plugins/bootstrap/bootstrap.min.css" rel="stylesheet">
+  <link href="/plugins/bootstrap/bootstrap-slider.css" rel="stylesheet">
+  <link href="/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="/plugins/slick/slick.css" rel="stylesheet">
+  <link href="/plugins/slick/slick-theme.css" rel="stylesheet">
+  <link href="/plugins/jquery-nice-select/css/nice-select.css" rel="stylesheet">
+  
+  <link href="/css/style.css" rel="stylesheet">
+
+</head>
+
+<body class="body-wrapper">
+
+
+	<header>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<nav class="navbar navbar-expand-lg navbar-light navigation">
+						<a class="navbar-brand" href="/index.html">
+							PIXEL PARADISE
+						</a>
+						<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+						 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+							<span class="navbar-toggler-icon"></span>
+						</button>
+						<div class="collapse navbar-collapse" id="navbarSupportedContent">
+							<ul class="navbar-nav ml-auto main-nav ">
+								<li class="nav-item active">
+									<a class="nav-link" href="/index.html">Home</a>
+								</li>
+								<li class="nav-item dropdown dropdown-slide @@dashboard">
+									<a class="nav-link" href="/profile.html">Perfil</a>
+								</li>
+							<ul class="navbar-nav ml-auto mt-10">
+								<li class="nav-item">
+									<a class="nav-link" href="/login.html">Login</a>
+								</li>
+							</ul>
+						</div>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</header>
+<!--=================================
+=            Single Blog            =
+==================================-->
+<section class="blog single-blog section">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-8">
+				<article class="single-post">
+					<h2 class="d-inline-block">Clases de Baloncesto.</h2>
+					<div class="d-flex justify-content-between align-items-center">
+						<ul class="list-inline mb-0">
+							<li class="list-inline-item">by <a href="user-profile.html">Admin</a></li>
+							<li class="list-inline-item">Jan 7, 2025</li>
+						</ul>
+					</div>
+					
+<!-- Modal para editar actividad -->
+<div class="modal fade" id="editActivityModal" tabindex="-1" role="dialog" aria-labelledby="editActivityModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editActivityModalLabel">Editar Actividad</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="activity-title">Título de actividad</label>
+                        <input type="text" class="form-control" id="activity-title" value="Clases de Baloncesto">
+                    </div>
+                    <div class="form-group">
+                        <label for="activity-date">Fecha</label>
+                        <input type="text" class="form-control" id="activity-date" value="Jan 7, 2025">
+                    </div>
+                    <div class="form-group">
+                        <label for="activity-time">Hora</label>
+                        <input type="text" class="form-control" id="activity-time" value="10:00 AM - 11:30 AM">
+                    </div>
+                    <div class="form-group">
+                        <label for="activity-location">Lugar</label>
+                        <input type="text" class="form-control" id="activity-location" value="Cancha de baloncesto del resort">
+                    </div>
+                    <div class="form-group">
+                        <label for="activity-description">Descripción</label>
+                        <textarea class="form-control" id="activity-description" rows="3">Disfruta de una dinámica clase de baloncesto diseñada para todos los niveles...</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="activity-category">Categoría</label>
+                        <select class="form-control" id="activity-category">
+                            <option value="1">Categoría</option>
+                            <option value="2">Deporte de Contacto</option>
+                            <option value="3">Deporte de Equipo</option>
+                            <option value="4">Deporte Individual</option>
+                            <option value="5">Aventura y Desafío</option>
+                            <option value="6">Relajación</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="activity-capacity">Vacantes</label>
+                        <input type="text" class="form-control" id="activity-capacity" value="20">
+                    </div>
+                    <div class="choose-file text-center my-4 py-4 rounded bg-white">
+                        <label for="file-upload">
+                            <span class="d-block font-weight-bold text-dark">Subir imagen de actividad</span>
+                            <img id="preview-image" src="/images/sports/cancha.jpg" alt="Imagen de actividad" class="img-fluid my-3" style="max-height: 200px;">
+                            <span class="d-block btn bg-primary text-white my-3 select-files">Seleccionar imagen</span>
+                            <input type="file" class="form-control-file d-none" id="file-upload" name="file" accept="image/*">
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="saveChanges">Guardar cambios</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('file-upload').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('preview-image').src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+    }
+});
+
+document.getElementById('saveChanges').addEventListener('click', function() {
+    $('#editActivityModal').modal('hide');
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+					<img src="/images/sports/cancha.jpg" alt="article-01">
+					<ul class="list-inline product-meta">
+						<li class="list-inline-item">
+							<a><i class="fa fa-futbol-o"></i> Deporte de Equipo</a>
+						</li>
+					</ul>
+					<p>Disfruta de una dinámica clase de baloncesto diseñada para todos los niveles, desde principiantes hasta jugadores con experiencia. Nuestro instructor certificado te guiará a través de ejercicios de calentamiento, técnicas de dribbling, pases y tiros, finalizando con un emocionante partido amistoso.</p>
+
+					<h3>Detalles de la Actividad</h3>
+					<ul>
+						<li><strong>📍 Ubicación:</strong> Cancha de baloncesto del resort</li>
+						<li><strong>⏰ Horario:</strong> Lunes, Miércoles y Viernes - 10:00 AM a 11:30 AM</li>
+						<li><strong>👥 Capacidad máxima:</strong> 20 personas</li>
+						<li><strong>🎟️ Reserva previa requerida</strong> en recepción o a través de la app del resort</li>
+					</ul>
+
+					<h3>¿Qué incluye?</h3>
+					<ul>
+						<li>Equipamiento (balones y petos)</li>
+						<li>Entrenamiento técnico y táctico</li>
+						<li>Actividades lúdicas y competición amistosa</li>
+					</ul>
+
+					<p>¡Ven a disfrutar del baloncesto en un ambiente relajado y vacacional! 🏀✨</p>
+				</article>
+
+				<div class="block comment">
+
+					<h4>Deja tus comentarios</h4>
+					<!-- Ejemplo de comentario -->
+					<div class="user-comment mt-4 p-3 border rounded">
+						<h5>Juan Pérez</h5>
+						<div class="profile-thumb">
+							<img width="50px" height="auto" src="/images/user/user-thumb.jpg" alt="" class="rounded-circle">
+						</div>
+						
+						<ul class="list-inline">
+							<li class="list-inline-item selected"><i class="fa fa-star"></i></li>
+							<li class="list-inline-item selected"><i class="fa fa-star"></i></li>
+							<li class="list-inline-item selected"><i class="fa fa-star"></i></li>
+							<li class="list-inline-item selected"><i class="fa fa-star"></i></li>
+							<li class="list-inline-item"><i class="fa fa-star"></i></li>
+						</ul>
+						<small class="text-muted">Febrero 8, 2025</small>
+						<p>¡Excelente actividad! Me encantó la clase y el instructor fue muy amable y profesional. Definitivamente regresaré.</p>
+					</div>
+
+					<!-- Ejemplo de comentario 2-->
+					<div class="user-comment mt-4 p-3 border rounded">
+						<h5>Marta Pelaez</h5>
+						<div class="profile-thumb">
+							<img width="50px" height="auto" src="/images/user/user2.png" alt="" class="rounded-circle">
+						</div>
+						
+						<ul class="list-inline">
+							<li class="list-inline-item selected"><i class="fa fa-star"></i></li>
+							<li class="list-inline-item selected"><i class="fa fa-star"></i></li>
+							<li class="list-inline-item selected"><i class="fa fa-star"></i></li>
+						</ul>
+						<small class="text-muted">Febrero 8, 2025</small>
+						<p>¡Excelente actividad! Me encantó la clase y el instructor fue muy amable y profesional. Definitivamente regresaré.</p>
+					</div>
+
+					<form action="#">
+						<!-- Calificación con Estrellas -->
+						<div class="form-group">
+							<label for="rating">Calificación:</label>
+							<div class="rating" id="rating">
+								<span class="star" data-value="1">&#9733;</span>
+								<span class="star" data-value="2">&#9733;</span>
+								<span class="star" data-value="3">&#9733;</span>
+								<span class="star" data-value="4">&#9733;</span>
+								<span class="star" data-value="5">&#9733;</span>
+							</div>
+							
+						</div>
+					
+						<!-- Comentarios -->
+						<div class="form-group">
+							<label for="message">Comentarios</label>
+							<textarea class="form-control" id="message" rows="4" required></textarea>
+						</div>
+					
+						<!-- Botón de Guardar -->
+						<button class="btn btn-transparent">Guardar Comentario</button>
+					</form>
+					
+					
+				</div>
+			</div>
+			<div class="col-lg-4">
+				<div class="sidebar">
+					<!-- Category Widget -->
+					<!-- Archive Widget -->
+					<div class="widget archive">
+						<!-- Widget Header -->
+						<h5 class="widget-header">Realiza aquí tu Reserva</h5>
+							<div>
+								<button class="btn btn-primary">RESERVAR</button>
+							</div>
+          <div>
+            <br>
+            <button class="btn btn-primary" data-toggle="modal" data-target="#editActivityModal">Editar</button>
+          </div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!--============================
+=            Footer            =
+=============================-->
+
+<footer class="footer section section-sm">
+  <!-- Container Start -->
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-3 col-md-7 offset-md-1 offset-lg-0 mb-4 mb-lg-0">
+      </div>
+      <!-- Link list -->
+      <div class="col-lg-2 offset-lg-1 col-md-3 col-6 mb-4 mb-lg-0">
+        <div class="block">
+        </div>
+      </div>
+      <!-- Link list -->
+      <div class="col-lg-2 col-md-3 offset-md-1 offset-lg-0 col-6 mb-4 mb-md-0">
+        <div class="block">
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Container End -->
+</footer>
+<!-- 
+Essential Scripts
+=====================================-->
+<script src="/plugins/jquery/jquery.min.js"></script>
+<script src="/plugins/bootstrap/popper.min.js"></script>
+<script src="/plugins/bootstrap/bootstrap.min.js"></script>
+<script src="/plugins/bootstrap/bootstrap-slider.js"></script>
+<script src="/plugins/tether/js/tether.min.js"></script>
+<script src="/plugins/raty/jquery.raty-fa.js"></script>
+<script src="/plugins/slick/slick.min.js"></script>
+<script src="/plugins/jquery-nice-select/js/jquery.nice-select.min.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+</body>
+
+</html>
