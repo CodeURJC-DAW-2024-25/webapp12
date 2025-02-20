@@ -150,6 +150,7 @@
 				</div>
 			</div>
 			<div class="col-lg-8">
+				
 				<!-- Recently Favorited -->
 				<div class="widget dashboard-container my-adslist">
 					<h3 class="widget-header">Todos los usuarios de la aplicación</h3>
@@ -163,15 +164,14 @@
 							</tr>
 						</thead>
 						<tbody>
+							{{#allUsers}}
 							<tr>
 
 								<td class="product-thumb">
 									<img width="80px" height="auto" src="/images/user/user-thumb.jpg" alt="image description"></td>
 								<td class="product-details">
-									<h3 class="title">Nombre Apellido1 Apellido2</h3>
-									<span><strong>DNI: </strong><time>11223344A</time> </span>
-									<span><strong>Telefono: </strong>+34 123456789</span>
-									<span><strong>Email: </strong>nombre@gmail.com</span>
+									<h3 class="title">{{name}} {{surname}}</h3>
+									<span><strong>Email: </strong>{{email}}</span>
 								</td>
 								<td class="product-category"><span class="categories">Usuario registrado</span></td>
 								<td class="action" data-title="Action">
@@ -186,56 +186,10 @@
 									</div>
 								</td>
 							</tr>
-							<tr>
-
-								<td class="product-thumb">
-									<img width="80px" height="auto" src="/images/user/user1.png" alt="image description"></td>
-								<td class="product-details">
-									<h3 class="title">Nombre Apellido1 Apellido2</h3>
-									<span><strong>DNI: </strong><time>11223344A</time> </span>
-									<span><strong>Telefono: </strong>+34 123456789</span>
-									<span><strong>Email: </strong>nombre@gmail.com</span>
-								</td>
-								<td class="product-category"><span class="categories">Usuario registrado</span></td>
-								<td class="action" data-title="Action">
-									<div class="">
-										<ul class="list-inline justify-content-center">
-											<li class="list-inline-item">
-												<a data-toggle="tooltip" data-placement="top" title="Delete" class="delete" href="admin_users.html">
-													<i class="fa fa-trash"></i>
-												</a>
-											</li>
-										</ul>
-									</div>
-								</td>
-							</tr>
-							<tr>
-
-								<td class="product-thumb">
-									<img width="80px" height="auto" src="/images/user/user2.png" alt="image description"></td>
-								<td class="product-details">
-									<h3 class="title">Nombre Apellido1 Apellido2</h3>
-									<span><strong>DNI: </strong><time>11223344A</time> </span>
-									<span><strong>Telefono: </strong>+34 123456789</span>
-									<span><strong>Email: </strong>nombre@gmail.com</span>
-								</td>
-								<td class="product-category"><span class="categories">Administrador</span></td>
-								<td class="action" data-title="Action">
-									<div class="">
-										<ul class="list-inline justify-content-center">
-											<li class="list-inline-item">
-												<a data-toggle="tooltip" data-placement="top" title="Delete" class="delete" href="admin_users.html">
-													<i class="fa fa-trash"></i>
-												</a>
-											</li>
-										</ul>
-									</div>
-								</td>
-							</tr>
-							
+							{{/allUsers}}
 						</tbody>
 					</table>
-
+				
 				</div>
 
 				<!-- pagination -->
