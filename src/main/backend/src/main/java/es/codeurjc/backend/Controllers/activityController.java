@@ -7,11 +7,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 import es.codeurjc.backend.Model.Activity;
+import es.codeurjc.backend.Model.User;
 import es.codeurjc.backend.Service.ActivityService;
 import es.codeurjc.backend.Service.UserService;
+
 import es.codeurjc.backend.Repository.ActivityRepository;
+
+
+
+
 
 
 
@@ -50,6 +59,30 @@ public class activityController {
         model.addAttribute("userCount", userService.countUsers());
         return "admin_activities";
     }
+    
+    @GetMapping("/removeActivity/{id}")
+    @Transactional
+    public String removeActivity(@PathVariable long id,Model model) {
+        Optional<Activity> activity = activityService.findById(id);
+        if(activity.isPresent()){
+            List <User> users = activity.get().getUsers();
+            for(User user: users){
+                user.getActivities().remove(activity.get());
+                userService.save(user);
+            }
+            activityService.delete(id);
+            model.addAttribute("activity", activity.get());
+            return "redirect:/admin_activities";
+        }else{
+            return "404";
+        }
+        
+    }
+    @GetMapping("/error")
+    public String showError() {
+        return "404";
+    }
+    
     
 }
 

@@ -24,5 +24,8 @@ public class UserService {
         return userRepository.count();
     }
 
+    public void save(User user){
+        userRepository.save(user);
+    }
 
 }

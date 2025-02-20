@@ -12,5 +12,7 @@ import es.codeurjc.backend.Model.Activity;
 public interface ActivityRepository extends JpaRepository<Activity, Long> {
     
     Optional<Activity> findByName(String nombre);
+    
+    void deleteById(Long id);
 }
 

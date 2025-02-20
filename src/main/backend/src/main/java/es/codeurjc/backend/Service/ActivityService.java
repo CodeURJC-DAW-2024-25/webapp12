@@ -2,6 +2,7 @@ package es.codeurjc.backend.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.Optional;
 
 import es.codeurjc.backend.Model.Activity;
 import es.codeurjc.backend.Repository.ActivityRepository;
@@ -31,7 +32,13 @@ public class ActivityService {
     public long activityCount(){
         return activityRepository.count();
     }
+
+    public Optional <Activity>  findById(long id){
+        return activityRepository.findById(id);
+    } 
     
-    
+    public void delete(long id){
+        activityRepository.deleteById(id);
+    }
 }
 
