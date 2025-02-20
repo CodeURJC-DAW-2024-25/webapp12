@@ -17,7 +17,7 @@ public class model {
     private String password;
 
     @OneToMany(mappedBy = "user")
-    private Set<Review> reviews;
+    private Set<review> reviews;
     
     @ManyToMany
     @JoinTable(

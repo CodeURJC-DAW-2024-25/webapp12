@@ -6,10 +6,10 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 import jakarta.persistence.*;
 
-import es.codeurjc.backend.Place;
 
-@EntityScanty
-public class Place {
+
+@Entity
+public class place {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,4 +21,3 @@ public class Place {
     private Set<Activity> activities;
 }
 
-}

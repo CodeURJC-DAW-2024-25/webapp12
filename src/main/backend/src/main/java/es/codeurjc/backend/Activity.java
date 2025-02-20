@@ -14,9 +14,9 @@ public class Activity {
     private String category;
 
     @OneToMany(mappedBy = "activity")
-    private Set<Review> reviews;
+    private Set<review> reviews;
 
     @ManyToOne
     @JoinColumn(name = "place_id")
-    private Place place;
+    private place place;
 }
