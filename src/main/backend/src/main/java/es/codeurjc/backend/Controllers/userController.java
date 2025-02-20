@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import es.codeurjc.backend.Service.UserService;
+import es.codeurjc.backend.Service.ActivityService;
 
 import org.springframework.ui.Model;
 
@@ -14,6 +15,9 @@ import org.springframework.ui.Model;
 public class userController {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ActivityService activityService;
 
     @GetMapping("/login")
     public String showLogin() {
@@ -33,6 +37,8 @@ public class userController {
     @GetMapping("/admin_users")
     public String showAdminUsers(Model model) {
         model.addAttribute("allUsers", userService.getAllUsers());
+        model.addAttribute("userCount", userService.countUsers());
+        model.addAttribute("activityCount", activityService.activityCount());
         return "admin_users";
     }
 

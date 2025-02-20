@@ -27,6 +27,10 @@ public class ActivityService {
     public List<Activity> findAll() {
        return activityRepository.findAll();
     }
+
+    public long activityCount(){
+        return activityRepository.count();
+    }
     
     
 }
