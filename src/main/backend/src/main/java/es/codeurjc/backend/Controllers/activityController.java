@@ -1,10 +1,13 @@
 package es.codeurjc.backend.Controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import es.codeurjc.backend.Model.Activity;
 import es.codeurjc.backend.Service.ActivityService;
 
 @Controller
@@ -13,13 +16,11 @@ public class ActivityController {
     @Autowired
     private ActivityService activityService;
 
-    @GetMapping("/activities")
+    @GetMapping("/")
     public String showActivities(Model model) {
-        // Obtener todas las actividades del servicio
-        model.addAttribute("activities", activityService.getAllActivities());
-
-        // Retornar la vista
-        return "index";  // Asegúrate de que el nombre de la vista sea el correcto
+        List<Activity> activities = activityService.findAll();
+        model.addAttribute("activities", activities);
+        return "index"; // Nombre del HTML en templates/
     }
 }
 

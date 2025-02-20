@@ -12,7 +12,7 @@ import java.util.List;
 public class ActivityService {
 
     @Autowired
-    private ActivityRepository activityRepository; // Asegúrate de tener este repositorio configurado
+    private ActivityRepository activityRepository; 
 
     public List<Activity> getAllActivities() {
         List<Activity> activities = activityRepository.findAll();
@@ -22,6 +22,10 @@ public class ActivityService {
     
     public Activity saveActivity(Activity activity) {
         return activityRepository.save(activity);
+    }
+
+    public List<Activity> findAll() {
+       return activityRepository.findAll();
     }
     
     
