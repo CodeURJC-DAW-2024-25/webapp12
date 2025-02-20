@@ -11,7 +11,7 @@ import es.codeurjc.backend.Model.Activity;
 import es.codeurjc.backend.Service.ActivityService;
 
 @Controller
-public class ActivityController {
+public class activityController {
 
     @Autowired
     private ActivityService activityService;
