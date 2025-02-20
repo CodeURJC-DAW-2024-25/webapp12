@@ -80,7 +80,7 @@ public class DatabaseInitializerService {
 		
 
 		// Sample activitys
-		Activity activity1 = new Activity("Padel", "Deporte equipo","Padel para la wii");
+		Activity activity1 = new Activity("Padel", "Deporte equipo","Padel para la wii",10);
 		activity1.setReviews(List.of(review1, review6, review7));
 		
 		activityRepository.save(activity1);
@@ -95,7 +95,7 @@ public class DatabaseInitializerService {
 		reviewRepository.save(review7);
 		
 
-		Activity activity2 = new Activity("Tenis", "Deporte raqueta", "Tenis para la wii");
+		Activity activity2 = new Activity("Tenis", "Deporte raqueta", "Tenis para la wii",4);
 		activity2.setReviews(List.of(review2, review8));
 		activityRepository.save(activity2);
 		review2.setActivity(activity2);
@@ -105,14 +105,14 @@ public class DatabaseInitializerService {
 		review8.setCreationDate(Calendar.getInstance());
 		reviewRepository.save(review8);
 
-		Activity activity3 = new Activity("Correr", "Deporte individual","Corre corre que te corre");
+		Activity activity3 = new Activity("Correr", "Deporte individual","Corre corre que te corre",1);
 		activity3.setReviews(List.of(review3));
 		activityRepository.save(activity3);
 		review3.setActivity(activity3);
 		review3.setCreationDate(Calendar.getInstance());
 		reviewRepository.save(review3);
 
-		Activity activity4 = new Activity("natacion", "deporte de agua","sigue nadando sigue nadando");
+		Activity activity4 = new Activity("natacion", "deporte de agua","sigue nadando sigue nadando",10);
 		
 		activityRepository.save(activity4);
 		review4.setActivity(activity4);

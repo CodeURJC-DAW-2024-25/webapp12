@@ -34,21 +34,23 @@ public class Activity {
 	private String name;
 	private String category;
 	private String description;
+	private int vacancy;
 	
 	private Calendar creationDate;
-	
+	private String formattedCreationDate;
 
 	public Activity() {
 		super();
 	}
 
-	public Activity(String name, String category, String description) {
+	public Activity(String name, String category, String description,int vacancy) {
 		this.name = name;
 		this.category = category;
 		this.description = description;
 		Calendar today = Calendar.getInstance();
 		today.set(Calendar.HOUR_OF_DAY, 0);
 		this.creationDate = today;
+		this.vacancy = vacancy;
 	}
 
 	public List<User> getUsers() {
@@ -99,6 +101,14 @@ public class Activity {
 		this.id = id;
 	}
 
+	public int getVacancy(){
+		return vacancy;
+	}
+
+	public void setVacancy(int vacancy){
+		this.vacancy = vacancy;
+	}
+
 	public List<Review> getReviews() {
 		return reviews;
 	}
@@ -114,6 +124,14 @@ public class Activity {
 
 	public void setCreationDate(Calendar creationDate) {
 		this.creationDate = creationDate;
+	}
+
+	public String getFormattedCreationDate() {
+		return formattedCreationDate;
+	}
+
+	public void setFormattedCreationDate(String formattedCreationDate) {
+		this.formattedCreationDate = formattedCreationDate;
 	}
 
 }
