@@ -28,9 +28,8 @@ public class Activity {
 	private List<Place> material = new ArrayList<>();
 	@OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Review> reviews;
-	@ManyToMany
+	@ManyToMany (mappedBy = "activities")
 	@JsonIgnore
-	@JoinTable(name = "user_activities", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "activities_id"))
 	private List<User> users;
 	private String name;
 	private String category;
