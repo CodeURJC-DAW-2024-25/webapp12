@@ -16,6 +16,7 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
     Optional<Activity> findByName(String nombre);
     
     void deleteById(Long id);
-    List<Activity> findByUserSubscribe(User user);
+
+    List<Activity> findByUsers(User user);
 }
 

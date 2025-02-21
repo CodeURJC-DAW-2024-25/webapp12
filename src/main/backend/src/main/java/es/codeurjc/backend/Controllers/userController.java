@@ -52,7 +52,11 @@ public class userController {
     }
 
     @GetMapping("/profile")
-    public String showProfile(Model model,@RequestParam("id")Long id) {
+    public String showProfile(Model model, @RequestParam(value = "id", required = false) Long id) {
+        if (id == null) {
+           return "redirect:/login"; 
+        }
+
         Optional<User> optionalUser  = userRepository.findById(id); 
         if(optionalUser.isPresent()){
             User user = optionalUser.get();
@@ -60,9 +64,12 @@ public class userController {
             model.addAttribute("user", user);
             model.addAttribute("subscribedActivities", subscribedActivities);
             model.addAttribute("countActivitiesSubscribed", subscribedActivities.size());
+        }else{
+          return "redirect:/404";
         }
         return "profile";
     }
+    
     
     
 

@@ -42,8 +42,8 @@ public class ActivityService {
         activityRepository.deleteById(id);
     }
 
-    public List<Activity> findEventsSubscribe(User user){
-        return activityRepository.findByUserSubscribe(user);
+   public List<Activity> findEventsSubscribe(User user){
+        return activityRepository.findByUsers(user);
     }
 }
 
