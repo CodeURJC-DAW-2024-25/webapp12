@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 import es.codeurjc.backend.Model.Activity;
+import es.codeurjc.backend.Model.User;
 import es.codeurjc.backend.Repository.ActivityRepository;
 
 import java.util.List;
@@ -39,6 +40,10 @@ public class ActivityService {
     
     public void delete(long id){
         activityRepository.deleteById(id);
+    }
+
+    public List<Activity> findEventsSubscribe(User user){
+        return activityRepository.findByUserSubscribe(user);
     }
 }
 

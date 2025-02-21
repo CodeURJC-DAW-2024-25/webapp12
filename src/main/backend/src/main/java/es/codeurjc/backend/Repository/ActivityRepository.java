@@ -6,7 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import es.codeurjc.backend.Model.Activity;
+import es.codeurjc.backend.Model.User;
 
+import java.util.List;
 
 @Repository
 public interface ActivityRepository extends JpaRepository<Activity, Long> {
@@ -14,5 +16,6 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
     Optional<Activity> findByName(String nombre);
     
     void deleteById(Long id);
+    List<Activity> findByUserSubscribe(User user);
 }
 
