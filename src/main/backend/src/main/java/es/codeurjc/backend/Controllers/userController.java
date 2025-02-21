@@ -3,14 +3,19 @@ package es.codeurjc.backend.Controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import es.codeurjc.backend.Service.UserService;
+import jakarta.transaction.Transactional;
 import es.codeurjc.backend.Service.ActivityService;
+import es.codeurjc.backend.Service.ReviewService;
+
 
 import org.springframework.ui.Model;
 
 import es.codeurjc.backend.Model.Activity;
+import es.codeurjc.backend.Model.Review;
 import es.codeurjc.backend.Model.User;
 import es.codeurjc.backend.Repository.UserRepository;
 import java.util.List;
@@ -27,6 +32,9 @@ public class userController {
 
     @Autowired
     private ActivityService activityService;
+
+    @Autowired
+    private ReviewService reviewService;
 
     @GetMapping("/login")
     public String showLogin() {
@@ -70,7 +78,31 @@ public class userController {
         }
         return "profile";
     }*/
-    
+    @Transactional
+    @GetMapping("/deleteUser/{id}")
+    public String removeUser(@PathVariable Long id) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        if(optionalUser.isPresent()){
+            User user = optionalUser.get();
+
+            List<Activity> activities = user.getActivities();
+            for(Activity activity:activities){
+                activity.getUsers().remove(user);
+                activityService.saveActivity(activity);
+            }
+
+            List<Review> reviews = user.getReviews();
+            for(Review review:reviews){
+                reviewService.delete(review.getId());
+            }
+
+            userRepository.delete(user);
+            return "redirect:/admin_users";
+        }else{
+            return "404";
+        }
+        
+    }
     
     
 
