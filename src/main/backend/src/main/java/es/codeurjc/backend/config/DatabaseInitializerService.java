@@ -62,6 +62,16 @@ public class DatabaseInitializerService {
 		user4.setRoles(List.of("USER"));
 		userRepository.save(user4);
 
+		User user5 = new User("Adriana", "Lopez", "adriana@email.com", "8910");
+		user4.setRoles(List.of("USER"));
+		userRepository.save(user5);
+
+
+		User user6 = new User("Paco", "Rodriguez", "paco@email.com", "1567");
+		user4.setRoles(List.of("USER"));
+		userRepository.save(user6);
+
+
 
 		User admin = new User("admin", "5678", adminMail, encodedPassword);
 		admin.setRoles(List.of("USER", "ADMIN"));
@@ -118,6 +128,20 @@ public class DatabaseInitializerService {
 		review4.setActivity(activity4);
 		review4.setCreationDate(Calendar.getInstance());
 		reviewRepository.save(review4);
+
+		Activity activity5 = new Activity("natacion", "deporte de agua","sigue nadando sigue nadando",10);
+		
+		activityRepository.save(activity5);
+		review4.setActivity(activity5);
+		review4.setCreationDate(Calendar.getInstance());
+		reviewRepository.save(review4);
+
+		Activity activity6 = new Activity("natacion", "deporte de agua","sigue nadando sigue nadando",10);
+		
+		activityRepository.save(activity6);
+		review4.setActivity(activity6);
+		review4.setCreationDate(Calendar.getInstance());
+		reviewRepository.save(review4);
 		
 
 		
@@ -133,6 +157,12 @@ public class DatabaseInitializerService {
 
 		user4.setActivities(List.of(activity1, activity2, activity3, activity4));
 		userRepository.save(user4);
+
+		user5.setActivities(List.of(activity1, activity2, activity3, activity4,activity5));
+		userRepository.save(user5);
+
+		user6.setActivities(List.of(activity1, activity2, activity3, activity4,activity5,activity6));
+		userRepository.save(user6);
 
 		
 

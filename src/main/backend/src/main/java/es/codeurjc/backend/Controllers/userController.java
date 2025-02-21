@@ -51,7 +51,8 @@ public class userController {
         return "admin_users";
     }
 
-    @GetMapping("/profile")
+
+    /*@GetMapping("/profile")
     public String showProfile(Model model, @RequestParam(value = "id", required = false) Long id) {
         if (id == null) {
            return "redirect:/login"; 
@@ -68,7 +69,7 @@ public class userController {
           return "redirect:/404";
         }
         return "profile";
-    }
+    }*/
     
     
     

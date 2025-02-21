@@ -24,7 +24,7 @@
 					<div class="widget user-dashboard-menu">
 						<ul>
 							<li>
-								<a href="/profile"><i class="fa fa-ticket"></i>Mis actividades <span>{{countActivitiesSubscribed}}</span></a>
+								<a href="/profile"><i class="fa fa-ticket"></i>Mis actividades <span>2</span></a>
 							</li>
 							<li>
 								<li class="active">
@@ -83,7 +83,7 @@
 				<!-- Recently Favorited -->
 				<div class="widget dashboard-container my-adslist">
 					<h3 class="widget-header">Todas las actividades creadas</h3>
-					<table class="table table-responsive product-dashboard-table">
+					<table class="table table-responsive product-dashboard-table" id="activitiesTable">
 						<thead>
 							<tr>
 								<th>Imagen</th>
@@ -94,7 +94,7 @@
 						</thead>
 						<tbody>
 							{{#allActivities}}
-							<tr>
+							<tr class="activity-item">
 								<td class="product-thumb">
 									<img width="80px" height="auto" src="/images/sports/beisbol.png" alt="image description"></td>
 								<td class="product-details">
@@ -132,28 +132,53 @@
 					</table>
 				</div>
 
-				<!-- pagination -->
 				<div class="pagination justify-content-center">
-					<nav aria-label="Page navigation example">
-						<ul class="pagination">
-							<li class="page-item">
-								<a class="page-link" href="dashboard-my-ads.html" aria-label="Previous">
-									<span aria-hidden="true">&laquo;</span>
-									<span class="sr-only">Previous</span>
-								</a>
-							</li>
-							<li class="page-item"><a class="page-link" href="admin_activities.html">1</a></li>
-							<li class="page-item active"><a class="page-link" href="admin_activities.html">2</a></li>
-							<li class="page-item"><a class="page-link" href="admin_activities.html">3</a></li>
-							<li class="page-item">
-								<a class="page-link" href="admin_activities.html" aria-label="Next">
-									<span aria-hidden="true">&raquo;</span>
-									<span class="sr-only">Next</span>
-								</a>
-							</li>
-						</ul>
+					<nav aria-label="Page navigation">
+						<ul class="pagination" id="paginationControls"></ul>
 					</nav>
 				</div>
+				
+				<script>
+				document.addEventListener("DOMContentLoaded", function() {
+					const itemsPerPage = 5;
+					const activityItems = document.querySelectorAll(".activity-item");
+					const totalItems = activityItems.length;
+					const totalPages = Math.ceil(totalItems / itemsPerPage);
+					const paginationControls = document.getElementById("paginationControls");
+				
+					function showPage(page) {
+						let start = (page - 1) * itemsPerPage;
+						let end = start + itemsPerPage;
+				
+						activityItems.forEach((item, index) => {
+							item.style.display = (index >= start && index < end) ? "" : "none";
+						});
+				
+						// Actualizar botones de paginación
+						paginationControls.innerHTML = "";
+						for (let i = 1; i <= totalPages; i++) {
+							let li = document.createElement("li");
+							li.classList.add("page-item");
+							if (i === page) li.classList.add("active");
+				
+							let a = document.createElement("a");
+							a.classList.add("page-link");
+							a.href = "#";
+							a.textContent = i;
+							a.addEventListener("click", function(e) {
+								e.preventDefault();
+								showPage(i);
+							});
+				
+							li.appendChild(a);
+							paginationControls.appendChild(li);
+						}
+					}
+				
+					// Mostrar la primera página al cargar
+					if (totalPages > 0) showPage(1);
+				});
+				</script>
 				<!-- pagination -->
 
 			</div>
@@ -163,46 +188,3 @@
 	<!-- Container End -->
 </section>
 {{>footer}}
-<!--============================
-=            Footer            =
-=============================-->
-
-<footer class="footer section section-sm">
-	<!-- Container Start -->
-	<div class="container">
-	  <div class="row">
-		<div class="col-lg-3 col-md-7 offset-md-1 offset-lg-0 mb-4 mb-lg-0">
-		</div>
-		<!-- Link list -->
-		<div class="col-lg-2 offset-lg-1 col-md-3 col-6 mb-4 mb-lg-0">
-		  <div class="block">
-		  </div>
-		</div>
-		<!-- Link list -->
-		<div class="col-lg-2 col-md-3 offset-md-1 offset-lg-0 col-6 mb-4 mb-md-0">
-		  <div class="block">
-		  </div>
-		</div>
-	  </div>
-	</div>
-	<!-- Container End -->
-  </footer>
-  <!-- Footer Bottom -->
-  <!-- 
-  Essential Scripts
-  =====================================-->
-<script src="/plugins/jquery/jquery.min.js"></script>
-<script src="/plugins/bootstrap/popper.min.js"></script>
-<script src="/plugins/bootstrap/bootstrap.min.js"></script>
-<script src="/plugins/bootstrap/bootstrap-slider.js"></script>
-<script src="/plugins/tether/js/tether.min.js"></script>
-<script src="/plugins/raty/jquery.raty-fa.js"></script>
-<script src="/plugins/slick/slick.min.js"></script>
-<script src="/plugins/jquery-nice-select/js/jquery.nice-select.min.js"></script>
-
-
-<script src="/js/script.js"></script>
-
-</body>
-
-</html>
