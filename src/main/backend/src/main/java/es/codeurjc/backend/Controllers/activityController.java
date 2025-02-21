@@ -1,5 +1,7 @@
 package es.codeurjc.backend.Controllers;
 
+
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -9,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import java.util.Optional;
+
+
 import org.springframework.transaction.annotation.Transactional;
 
 import es.codeurjc.backend.Model.Activity;
@@ -17,10 +21,7 @@ import es.codeurjc.backend.Service.ActivityService;
 import es.codeurjc.backend.Service.UserService;
 
 import es.codeurjc.backend.Repository.ActivityRepository;
-
-
-
-
+import java.util.Base64;
 
 
 
@@ -39,9 +40,29 @@ public class activityController {
     @GetMapping("/")
     public String showActivities(Model model) {
         List<Activity> activities = activityService.findAll();
+
+        // Convertir la imagen Blob en base64 y agregarla al modelo
+        for (Activity activity : activities) {
+            if (activity.getImageFile() != null) {
+                try {
+                    byte[] imageBytes = activity.getImageFile().getBytes(1, (int) activity.getImageFile().length());
+                    String imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
+                    activity.setImageString(imageBase64); 
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                // Asignar directamente la ruta de la imagen predeterminada
+                activity.setImageString("nofoto.png");
+                
+            }
+        }
+
         model.addAttribute("activities", activities);
         return "index"; 
     }
+
+
 
     @GetMapping("/admin_activities")
     public String showAdminActivities(Model model) {

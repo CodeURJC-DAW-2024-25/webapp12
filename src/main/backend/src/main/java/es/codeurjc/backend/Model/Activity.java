@@ -4,8 +4,10 @@ package es.codeurjc.backend.Model;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.sql.Blob;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 
 import jakarta.persistence.CascadeType;
@@ -15,6 +17,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 
@@ -39,6 +42,12 @@ public class Activity {
 	
 	private Calendar creationDate;
 	private String formattedCreationDate;
+
+	@Lob
+	@JsonIgnore
+	private Blob imageFile;
+
+	private String imageString;
 
 	public Activity() {
 		super();
@@ -134,5 +143,19 @@ public class Activity {
 	public void setFormattedCreationDate(String formattedCreationDate) {
 		this.formattedCreationDate = formattedCreationDate;
 	}
+	public String getImageString() {
+		return imageString;
+	}
 
+	public void setImageString(String imageString) {
+		this.imageString = imageString;
+	}	
+
+	public Blob getImageFile() {
+		return imageFile;
+	}
+
+	public void setImageFile(Blob imageFile) {
+		this.imageFile = imageFile;
+	}
 }

@@ -1,13 +1,14 @@
 package es.codeurjc.backend.config;
 
 import java.io.IOException;
-
+import java.io.InputStream;
 import java.net.URISyntaxException;
-
+import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.List;
 
 
+import javax.sql.rowset.serial.SerialBlob;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -37,12 +38,6 @@ public class DatabaseInitializerService {
 	private ActivityRepository activityRepository;
 
 	
-	
-	private String adminMail;
-
-	
-	private String encodedPassword;
-
 	@PostConstruct
 	public void init() throws IOException, URISyntaxException {
 		// Sample users
@@ -63,8 +58,17 @@ public class DatabaseInitializerService {
 		userRepository.save(user4);
 
 
-		User admin = new User("admin", "5678", adminMail, encodedPassword);
+		User admin = new User("admin", "5678", "admin@email.com", "5678");
 		admin.setRoles(List.of("USER", "ADMIN"));
+		try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("static/img/adminfoto.png")) { 
+
+			byte[] imageData = inputStream.readAllBytes();
+			SerialBlob imageBlob = new SerialBlob(imageData);
+			admin.setImageFile(imageBlob);
+			admin.setImage("admin_image.jpg");
+		} catch (IOException | SQLException e) {
+			e.printStackTrace();
+		}
 		
 		userRepository.save(admin);
 
@@ -80,8 +84,18 @@ public class DatabaseInitializerService {
 		
 
 		// Sample activitys
-		Activity activity1 = new Activity("Padel", "Deporte equipo","Padel para la wii",10);
+		Activity activity1 = new Activity("Baloncesto", "Deporte equipo","Baloncesto para la wii",10);
 		activity1.setReviews(List.of(review1, review6, review7));
+		try (InputStream inputStream = getClass().getClassLoader()
+				.getResourceAsStream("static/images/sports/baloncesto.png")) {
+			byte[] imageData = inputStream.readAllBytes(); 
+			SerialBlob imageBlob = new SerialBlob(imageData);
+			activity1.setImageFile(imageBlob);
+			activity1.setImageString("activity1.jpg");
+		} catch (IOException | SQLException e) {
+			e.printStackTrace();
+		}
+		
 		
 		activityRepository.save(activity1);
 		review1.setActivity(activity1);
@@ -95,8 +109,18 @@ public class DatabaseInitializerService {
 		reviewRepository.save(review7);
 		
 
-		Activity activity2 = new Activity("Tenis", "Deporte raqueta", "Tenis para la wii",4);
+		Activity activity2 = new Activity("Beisbol", "Deporte bate", "Beisbol para la wii",4);
 		activity2.setReviews(List.of(review2, review8));
+		try (InputStream inputStream = getClass().getClassLoader()
+				.getResourceAsStream("static/images/sports/beisbol.png")) {
+			byte[] imageData = inputStream.readAllBytes(); 
+			SerialBlob imageBlob = new SerialBlob(imageData);
+			activity2.setImageFile(imageBlob);
+			activity2.setImageString("activity2.jpg");
+		} catch (IOException | SQLException e) {
+			e.printStackTrace();
+		}
+
 		activityRepository.save(activity2);
 		review2.setActivity(activity2);
 		review2.setCreationDate(Calendar.getInstance());
@@ -105,15 +129,32 @@ public class DatabaseInitializerService {
 		review8.setCreationDate(Calendar.getInstance());
 		reviewRepository.save(review8);
 
-		Activity activity3 = new Activity("Correr", "Deporte individual","Corre corre que te corre",1);
+		Activity activity3 = new Activity("Bolos", "Deporte individual","Bolossss como molan los bolos (mentira)",1);
 		activity3.setReviews(List.of(review3));
+		try (InputStream inputStream = getClass().getClassLoader()
+				.getResourceAsStream("static/images/sports/bolos.png")) {
+			byte[] imageData = inputStream.readAllBytes(); 
+			SerialBlob imageBlob = new SerialBlob(imageData);
+			activity3.setImageFile(imageBlob);
+			activity3.setImageString("activity3.jpg");
+		} catch (IOException | SQLException e) {
+			e.printStackTrace();
+		}
 		activityRepository.save(activity3);
 		review3.setActivity(activity3);
 		review3.setCreationDate(Calendar.getInstance());
 		reviewRepository.save(review3);
 
-		Activity activity4 = new Activity("natacion", "deporte de agua","sigue nadando sigue nadando",10);
-		
+		Activity activity4 = new Activity("Surf", "deporte de agua","sigue nadando sigue nadando",10);
+		try (InputStream inputStream = getClass().getClassLoader()
+				.getResourceAsStream("static/images/sports/surf.png")) {
+			byte[] imageData = inputStream.readAllBytes(); 
+			SerialBlob imageBlob = new SerialBlob(imageData);
+			activity4.setImageFile(imageBlob);
+			activity4.setImageString("activity4.jpg");
+		} catch (IOException | SQLException e) {
+			e.printStackTrace();
+		}
 		activityRepository.save(activity4);
 		review4.setActivity(activity4);
 		review4.setCreationDate(Calendar.getInstance());

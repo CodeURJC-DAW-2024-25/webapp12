@@ -147,7 +147,7 @@
 							<div class="card">
 								<div class="thumb-content">
 									<a href="/activity/{{id}}">
-										<img class="card-img-top img-fluid" src="#" alt="Card image cap">
+										<img class="card-img-top img-fluid" src="data:image/jpeg;base64,{{imageString}}" alt="Card image cap">
 									</a>
 								</div>
 								<div class="card-body">
@@ -158,14 +158,10 @@
 										<li class="list-inline-item">
 											<i class="fa fa-folder-open-o"></i>{{category}}
 										</li>
-										
 									</ul>
 									<p class="card-text">{{description}}</p>
 									<div class="product-ratings">
 										<ul class="list-inline">
-											<!--{{#ratings}}
-												<li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-											{{/ratings}}-->
 										</ul>
 									</div>
 								</div>
@@ -173,6 +169,7 @@
 						</div>
 					</div>
 				{{/activities}}
+
 
 				{{^activities}}
 					<p>No hay actividades disponibles.</p>
