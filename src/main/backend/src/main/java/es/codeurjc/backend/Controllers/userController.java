@@ -3,6 +3,7 @@ package es.codeurjc.backend.Controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -20,6 +21,9 @@ import es.codeurjc.backend.Model.User;
 import es.codeurjc.backend.Repository.UserRepository;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @Controller
 public class userController {
@@ -103,7 +107,39 @@ public class userController {
         }
         
     }
+
+    @GetMapping("/Edit_user-profile/{id}")
+    public String showEditProfile(@PathVariable Long id,Model model) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        if(optionalUser.isPresent()){
+            User user = optionalUser.get();
+            model.addAttribute("user", user);
+            return "Edit_user-profile";
+        }else{
+            return "404";
+        }   
+    }
+/* 
+    @PostMapping("/Edit_user-profile/{id}")
+    public String updateProfile(@PathVariable Long id,Model model, @ModelAttribute User user){
+        Optional<User> optionalUser = userRepository.findById(id);
+        if(optionalUser.isPresent()){
+            User editedUser = optionalUser.get();
+            editedUser.setName(user.getName());
+            editedUser.setSurname(user.getSurname());
+            editedUser.setDNI(user.getDNI());
+            editedUser.setEmail(user.getEmail());
+            editedUser.setPhone(user.getPhone());
+
+            userRepository.save(editedUser);
+        return "redirect:/admin_activities";
+        }else{
+            return "404";
+        }*/
+    }
+    
+    
     
     
 
-}
+
