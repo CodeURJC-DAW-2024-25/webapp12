@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.sql.Blob;
+import java.text.SimpleDateFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -53,15 +54,16 @@ public class Activity {
 		super();
 	}
 
-	public Activity(String name, String category, String description,int vacancy) {
+	public Activity(String name, String category, String description, int vacancy) {
 		this.name = name;
 		this.category = category;
 		this.description = description;
-		Calendar today = Calendar.getInstance();
-		today.set(Calendar.HOUR_OF_DAY, 0);
-		this.creationDate = today;
 		this.vacancy = vacancy;
+		this.creationDate = Calendar.getInstance();
+		this.creationDate.set(Calendar.HOUR_OF_DAY, 0);
+		this.formattedCreationDate = new SimpleDateFormat("dd/MM/yyyy").format(this.creationDate.getTime());
 	}
+
 
 	public List<User> getUsers() {
 		return users;

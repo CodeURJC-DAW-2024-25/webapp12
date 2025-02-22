@@ -40,5 +40,12 @@ public class ActivityService {
     public void delete(long id){
         activityRepository.deleteById(id);
     }
+    public Activity getActivityById(Long id) {
+        // Utiliza el repositorio para buscar la actividad por su ID
+        Optional<Activity> activityOptional = activityRepository.findById(id);
+        //si no esta devuelve null
+        return activityOptional.orElse(null);
+       
+    }
 }
 
