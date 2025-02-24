@@ -103,9 +103,38 @@ public class activityController {
         
     }
 
-    
-    
-    
+
+
+    @GetMapping("/activity/{id}")
+    public String getActivityDetail(@PathVariable Long id, Model model) {
+        Optional<Activity> optionalActivity = activityService.findById(id);
+
+        if (optionalActivity.isEmpty()) {
+            model.addAttribute("errorMessage", "Actividad no encontrada.");
+            return "error";  // Página de error
+        }
+
+        Activity activity = optionalActivity.get();
+
+        // Convertir la imagen Blob a Base64 para Mustache
+        if (activity.getImageFile() != null) {
+            try {
+                byte[] imageBytes = activity.getImageFile().getBytes(1, (int) activity.getImageFile().length());
+                String imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
+                activity.setImageString("data:image/png;base64," + imageBase64);
+            } catch (SQLException e) {
+                e.printStackTrace();
+                activity.setImageString("nofoto.png"); // Imagen por defecto
+            }
+        } else {
+            activity.setImageString("nofoto.png");
+        }
+
+        model.addAttribute("activity", activity);
+
+        return "activity";  // Nombre del archivo .mustache
+    }
+
     
 }
 

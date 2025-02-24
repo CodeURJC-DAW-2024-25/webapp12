@@ -44,6 +44,13 @@ public class ActivityService {
 
    public List<Activity> findEventsSubscribe(User user){
         return activityRepository.findByUsers(user);
+   }
+    public Activity getActivityById(Long id) {
+        // Utiliza el repositorio para buscar la actividad por su ID
+        Optional<Activity> activityOptional = activityRepository.findById(id);
+        //si no esta devuelve null
+        return activityOptional.orElse(null);
+       
     }
 }
 
