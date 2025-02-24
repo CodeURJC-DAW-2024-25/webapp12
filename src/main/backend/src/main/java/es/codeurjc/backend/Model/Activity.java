@@ -41,12 +41,13 @@ public class Activity {
 	
 	private Calendar creationDate;
 	private String formattedCreationDate;
-
+	
 	@Lob
 	@JsonIgnore
 	private Blob imageFile;
 
 	private String imageString;
+	
 
 	public Activity() {
 		super();
@@ -158,4 +159,6 @@ public class Activity {
 	public void setImageFile(Blob imageFile) {
 		this.imageFile = imageFile;
 	}
+
+	
 }

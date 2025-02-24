@@ -1,14 +1,17 @@
 package es.codeurjc.backend.Controllers;
 
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import java.util.Optional;
 
@@ -22,6 +25,15 @@ import es.codeurjc.backend.Service.UserService;
 
 import es.codeurjc.backend.Repository.ActivityRepository;
 import java.util.Base64;
+import java.util.Calendar;
+import java.util.Date;
+
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+
 
 
 
@@ -147,6 +159,29 @@ public class activityController {
         return "activity";  // Nombre del archivo .mustache
     }
 
+    @GetMapping("/createActivity")
+    public String showFormNewActivity() {
+        return "create_activity";
+    }
+
+    @PostMapping("/createActivity")
+    public String createNewActivity(@ModelAttribute Activity activity,@RequestParam("file") MultipartFile imagFile) {
+       try{
+            if(!imagFile.isEmpty()){
+                activity.setImageFile(BlobProxy.generateProxy(imagFile.getInputStream(), imagFile.getSize()));
+            }
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date()); // Convierte Date a Calendar
+            activity.setCreationDate(calendar);
+            activityService.saveActivity(activity);
+            return "redirect:/admin_activities";
+       }catch(IOException e){
+            e.printStackTrace();
+            return "404";
+       }
+    }
+    
+    
     
 }
 
