@@ -80,29 +80,31 @@ public class activityController {
         model.addAttribute("userCount", userService.countUsers());
         return "admin_activities";
     }
-    
-    @GetMapping("/removeActivity/{id}")
+    @GetMapping("/404")
+    public String showError() {
+        return "404";
+    }
     @Transactional
+    @GetMapping("/removeActivity/{id}")
     public String removeActivity(@PathVariable long id,Model model) {
-        Optional<Activity> activity = activityService.findById(id);
-        if(activity.isPresent()){
-            List <User> users = activity.get().getUsers();
+        Optional<Activity> optionalActivity = activityService.findById(id);
+        if(optionalActivity.isPresent()){
+            Activity activity = optionalActivity.get();
+            List <User> users = activity.getUsers();
             for(User user: users){
-                user.getActivities().remove(activity.get());
+                user.getActivities().remove(activity);
                 userService.save(user);
             }
             activityService.delete(id);
-            model.addAttribute("activity", activity.get());
             return "redirect:/admin_activities";
         }else{
             return "404";
         }
         
     }
-    @GetMapping("/error")
-    public String showError() {
-        return "404";
-    }
+
+    
+    
     
     
 }

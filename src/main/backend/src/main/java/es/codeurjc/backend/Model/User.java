@@ -28,6 +28,8 @@ public class User {
 	private Long id;
 	private String email;
 	private String password;
+	private String phone;
+	private String DNI;
 	@ElementCollection(fetch = FetchType.EAGER)
 	private List<String> roles;
 	@ManyToMany
@@ -146,4 +148,19 @@ public class User {
 		this.imageFile = imageFile;
 	}
 
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getDNI() {
+		return DNI;
+	}
+
+	public void setDNI(String dNI) {
+		DNI = dNI;
+	}
 }

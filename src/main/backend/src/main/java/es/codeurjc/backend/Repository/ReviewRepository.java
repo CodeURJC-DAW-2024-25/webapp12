@@ -7,4 +7,5 @@ import es.codeurjc.backend.Model.Review;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
+    void deleteById(long id);
 }

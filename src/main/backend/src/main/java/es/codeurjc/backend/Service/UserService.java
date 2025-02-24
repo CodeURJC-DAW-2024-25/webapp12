@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import es.codeurjc.backend.Repository.UserRepository;
 
 import es.codeurjc.backend.Model.User;
+import java.util.Optional;
 
 
 import java.util.List;
@@ -26,6 +27,10 @@ public class UserService {
 
     public void save(User user){
         userRepository.save(user);
+    }
+
+    public Optional<User> findById(Long id){
+        return userRepository.findById(id);
     }
 
 }

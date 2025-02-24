@@ -15,8 +15,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
+
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
@@ -31,9 +30,8 @@ public class Activity {
 	private List<Place> material = new ArrayList<>();
 	@OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Review> reviews;
-	@ManyToMany
+	@ManyToMany (mappedBy = "activities")
 	@JsonIgnore
-	@JoinTable(name = "user_activities", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "activities_id"))
 	private List<User> users;
 	private String name;
 	private String category;
