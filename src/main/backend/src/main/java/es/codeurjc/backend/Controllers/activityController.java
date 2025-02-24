@@ -71,6 +71,18 @@ public class activityController {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
         for(Activity activity: activities){
+            if (activity.getImageFile() != null) {
+                try {
+                    byte[] imageBytes = activity.getImageFile().getBytes(1, (int) activity.getImageFile().length());
+                    String imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
+                    activity.setImageString(imageBase64); 
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                activity.setImageString("/activities/" + activity.getId() + "/image");
+            
+            }
             String formattedDate = sdf.format(activity.getCreationDate().getTime());
             activity.setFormattedCreationDate(formattedDate);
         }

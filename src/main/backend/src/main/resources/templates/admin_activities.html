@@ -14,7 +14,9 @@
 					<div class="widget user-dashboard-profile">
 						<!-- User Image -->
 						<div class="profile-thumb">
-							<img src="/images/user/user-thumb.jpg" alt="" class="rounded-circle">
+							
+							<img src="/mages/user/user-thumb.jpg" alt="" class="rounded-circle">
+							
 						</div>
 						<!-- User Name -->
 						<h5 class="text-center">Samanta Doe</h5>
@@ -96,7 +98,10 @@
 							{{#allActivities}}
 							<tr class="activity-item">
 								<td class="product-thumb">
-									<img width="80px" height="auto" src="/images/sports/beisbol.png" alt="image description"></td>
+									<a href="/activity/{{id}}">
+									<img width="80px" height="auto" src="data:image/jpeg;base64,{{imageString}}" alt="image description"></td>
+									</a>
+									
 								<td class="product-details">
 									<h3 class="title">{{name}}</h3>
 									<span><strong>Fecha y hora: </strong><time>{{formattedCreationDate}}</time> </span>
