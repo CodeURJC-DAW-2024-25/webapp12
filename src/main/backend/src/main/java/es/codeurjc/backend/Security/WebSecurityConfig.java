@@ -56,13 +56,13 @@ public class WebSecurityConfig {
 				.formLogin(formLogin -> formLogin
 					.loginPage("/login")
 					.failureUrl("/loginError")
-					.defaultSuccessUrl("/profile")
-					.permitAll());
+					.defaultSuccessUrl("/")
+					.permitAll())
 				// LOGOUT
-				/*.logout(logout -> logout
+				.logout(logout -> logout
 						.logoutUrl("/logout")
 						.logoutSuccessUrl("/")
-						.permitAll()); */
+						.permitAll());
 		
 		return http.build();
 	}
