@@ -1,6 +1,8 @@
 package es.codeurjc.backend.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -43,6 +45,9 @@ public class userController {
     @Autowired
     private ReviewService reviewService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @GetMapping("/login")
     public String showLogin() {
         return "login";
@@ -72,6 +77,7 @@ public class userController {
         
         String userEmail = principal.getName();
         User user  = userRepository.findByEmail(userEmail); 
+        
         System.out.println("email" + userEmail);
         if(user != null){
             List<Activity> subscribedActivities = activityService.findEventsSubscribe(user);
@@ -80,6 +86,7 @@ public class userController {
             model.addAttribute("countActivitiesSubscribed", subscribedActivities.size());
             model.addAttribute("userCount", userService.countUsers());
             model.addAttribute("activityCount", activityService.activityCount());
+            model.addAttribute("id", user.getId());
             return "profile";
         }else{
           return "redirect:/404";
@@ -111,35 +118,46 @@ public class userController {
         
     }
 
-    @GetMapping("/Edit_user-profile/{id}")
-    public String showEditProfile(@PathVariable Long id,Model model) {
-        Optional<User> optionalUser = userRepository.findById(id);
-        if(optionalUser.isPresent()){
-            User user = optionalUser.get();
+    @GetMapping("/Edit_user-profile")
+    public String showEditProfile(Principal principal,Model model) {
+        String userEmail = principal.getName();
+        User user = userRepository.findByEmail(userEmail);
+        if(user != null){
+            System.out.println(user.getDni());
             model.addAttribute("user", user);
             return "Edit_user-profile";
         }else{
             return "404";
         }   
     }
-/* 
-    @PostMapping("/Edit_user-profile/{id}")
-    public String updateProfile(@PathVariable Long id,Model model, @ModelAttribute User user){
-        Optional<User> optionalUser = userRepository.findById(id);
-        if(optionalUser.isPresent()){
-            User editedUser = optionalUser.get();
-            editedUser.setName(user.getName());
-            editedUser.setSurname(user.getSurname());
-            editedUser.setDNI(user.getDNI());
-            editedUser.setEmail(user.getEmail());
-            editedUser.setPhone(user.getPhone());
 
-            userRepository.save(editedUser);
+    @PostMapping("/Edit_user-profile")
+    public String updateProfile(Model model, @ModelAttribute User userUpdated,  @RequestParam(required = false) String newPassword, 
+    @RequestParam(required = false) String confirmPassword){
+        String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByEmail(userEmail);
+            if(user!=null){
+            user.setName(userUpdated.getName());
+            user.setSurname(userUpdated.getSurname());
+            user.setDni(userUpdated.getDni());
+            user.setEmail(userUpdated.getEmail());
+            user.setPhone(userUpdated.getPhone());
+            if (newPassword != null && !newPassword.isEmpty()) {
+                if (newPassword.equals(confirmPassword)) {
+                    // Cifrar la nueva contraseña antes de guardarla
+                    user.setPassword(passwordEncoder.encode(newPassword));
+                } else {
+                    model.addAttribute("error", "Las contraseñas no coinciden.");
+                    return "Edit_user-profile";  // Retorna al formulario con mensaje de error
+                }
+            }
+            userRepository.save(user);
         return "redirect:/admin_activities";
         }else{
             return "404";
-        }*/
+        }
     }
+}
     
     
     

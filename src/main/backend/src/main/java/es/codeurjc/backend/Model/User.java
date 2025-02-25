@@ -29,7 +29,7 @@ public class User {
 	private String email;
 	private String password;
 	private String phone;
-	private String DNI;
+	private String dni;
 	@ElementCollection(fetch = FetchType.EAGER)
 	private List<String> roles;
 	@ManyToMany
@@ -50,11 +50,13 @@ public class User {
 		super();
 	}
 
-	public User(String name, String surname, String email, String password) {
+	public User(String name, String surname, String email,String dni,String phone, String password) {
 		
 		this.name = name;
 		this.surname = surname;
 		this.email = email;
+		this.dni = dni;
+		this.phone = phone;
 		this.password = password;
 	}
 
@@ -156,11 +158,11 @@ public class User {
 		this.phone = phone;
 	}
 
-	public String getDNI() {
-		return DNI;
+	public String getDni() {
+		return dni;
 	}
 
-	public void setDNI(String dNI) {
-		DNI = dNI;
+	public void setDni(String dni) {
+		this.dni = dni;
 	}
 }

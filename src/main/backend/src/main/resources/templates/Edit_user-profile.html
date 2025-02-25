@@ -83,7 +83,7 @@
 					<div class="col-lg-6 col-md-6">
 						<div class="widget personal-info">
 							<h3 class="widget-header user">Edita tu información personal</h3>
-							<form action="#" method="POST">
+							<form action="/Edit_user-profile" method="POST">
 								<!-- First Name -->
 								<div class="form-group">
 									<label for="first-name">Nombre</label>
@@ -91,8 +91,8 @@
 								</div>
 								<!-- Last Name -->
 								<div class="form-group">
-									<label for="last-name">Apellidos</label>
-									<input type="text" class="form-control" id="last-name" name="lastName" value="{{user.lastName}}">
+									<label for="surname">Apellidos</label>
+									<input type="text" class="form-control" id="surname" name="surname" value="{{user.surname}}">
 								</div>
 								<!-- File chooser -->
 								<div class="form-group choose-file d-inline-flex">
@@ -116,6 +116,7 @@
 									<input type="number" class="form-control" id="tlf" name="phone" value="{{user.phone}}">
 								</div>
 								<!-- Submit button -->
+								<input type="hidden" name="_csrf" value="{{token}}"/>
 								<button class="btn btn-transparent">Guardar</button>
 							</form>
 						</div>
@@ -124,12 +125,7 @@
 						<!-- Change Password -->
 					<div class="widget change-password">
 						<h3 class="widget-header user">Editar contraseña</h3>
-						<form action="#">
-							<!-- Current Password -->
-							<div class="form-group">
-								<label for="current-password">Contraseña Actual</label>
-								<input type="password" class="form-control" id="current-password" name="currentPassword">
-							</div>
+						<form action="/Edit_user-profile">
 							<!-- New Password -->
 							<div class="form-group">
 								<label for="new-password">Nueva Contraseña</label>
@@ -141,27 +137,8 @@
 								<input type="password" class="form-control" id="confirm-password">
 							</div>
 							<!-- Submit Button -->
+							<input type="hidden" name="_csrf" value="{{token}}"/>
 							<button class="btn btn-transparent">Cambiar Contraseña</button>
-						</form>
-					</div>
-					</div>
-					<div class="col-lg-6 col-md-6">
-						<!-- Change Email Address -->
-					<div class="widget change-email mb-0">
-						<h3 class="widget-header user">Editar Email </h3>
-						<form action="#">
-							<!-- Current Password -->
-							<div class="form-group">
-								<label for="current-email">Email Actual</label>
-								<input type="email" class="form-control" id="current-email">
-							</div>
-							<!-- New email -->
-							<div class="form-group">
-								<label for="new-email">Nuevo Email</label>
-								<input type="email" class="form-control" id="new-email">
-							</div>
-							<!-- Submit Button -->
-							<button class="btn btn-transparent">Cambiar Email</button>
 						</form>
 					</div>
 					</div>

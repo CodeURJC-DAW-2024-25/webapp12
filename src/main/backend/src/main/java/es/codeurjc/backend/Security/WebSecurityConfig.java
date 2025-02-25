@@ -44,9 +44,9 @@ public class WebSecurityConfig {
 
 				
 				// USER PAGES
-				.requestMatchers("/#").hasAnyRole("USER")
+				
 				.requestMatchers("/profile").hasAnyRole("USER")
-
+				.requestMatchers("/Edit_user-profile/**").hasAnyRole("USER")
 				// ADMIN PAGES
 				.requestMatchers("/#").hasAnyRole("ADMIN")
 				
