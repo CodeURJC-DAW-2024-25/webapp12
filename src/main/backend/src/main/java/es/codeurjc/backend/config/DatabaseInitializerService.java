@@ -188,9 +188,43 @@ public class DatabaseInitializerService {
 		review4.setCreationDate(Calendar.getInstance());
 		reviewRepository.save(review4);
 		
-
+		Activity activity7 = new Activity("natacion", "deporte de agua","sigue nadando sigue nadando",10);
 		
+		activityRepository.save(activity7);
+		review4.setActivity(activity7);
+		review4.setCreationDate(Calendar.getInstance());
+		reviewRepository.save(review4);
+		
+		Activity activity8 = new Activity("natacion", "deporte de agua","sigue nadando sigue nadando",10);
+		
+		activityRepository.save(activity8);
+		review4.setActivity(activity8);
+		review4.setCreationDate(Calendar.getInstance());
+		reviewRepository.save(review4);
+		
+		Activity activity9 = new Activity("natacion", "deporte de agua","sigue nadando sigue nadando",10);
+		
+		activityRepository.save(activity9);
+		review4.setActivity(activity9);
+		review4.setCreationDate(Calendar.getInstance());
+		reviewRepository.save(review4);
+		
+		Activity activity10 = new Activity("natacion", "deporte de agua","sigue nadando sigue nadando",10);
+		
+		activityRepository.save(activity10);
+		review4.setActivity(activity10);
+		review4.setCreationDate(Calendar.getInstance());
+		reviewRepository.save(review4);
 
+		Activity activity11 = new Activity("natacion", "deporte de agua","sigue nadando sigue nadando",10);
+		
+		activityRepository.save(activity11);
+		review4.setActivity(activity11);
+		review4.setCreationDate(Calendar.getInstance());
+		reviewRepository.save(review4);
+
+
+	
 		user1.setActivities(List.of(activity1));
 		userRepository.save(user1);
 
