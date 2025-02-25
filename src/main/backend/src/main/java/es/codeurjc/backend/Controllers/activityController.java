@@ -14,14 +14,19 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import java.util.Optional;
 
 
 import org.springframework.transaction.annotation.Transactional;
 
 import es.codeurjc.backend.Model.Activity;
+import es.codeurjc.backend.Model.Review;
 import es.codeurjc.backend.Model.User;
 import es.codeurjc.backend.Service.ActivityService;
+import es.codeurjc.backend.Service.ReviewService;
 import es.codeurjc.backend.Service.UserService;
 
 import es.codeurjc.backend.Repository.ActivityRepository;
@@ -47,6 +52,9 @@ public class activityController {
 
     @Autowired
     private ActivityService activityService;
+
+    @Autowired
+    private ReviewService reviewService;
 
     @Autowired
     private ActivityRepository activityRepository;
@@ -150,14 +158,18 @@ public class activityController {
     @GetMapping("/activity/{id}")
     public String getActivityDetail(@PathVariable Long id, Model model) {
         Optional<Activity> optionalActivity = activityService.findById(id);
-
+    
         if (optionalActivity.isEmpty()) {
             model.addAttribute("errorMessage", "Actividad no encontrada.");
             return "error";  // Página de error
         }
-
+    
         Activity activity = optionalActivity.get();
-
+        
+        // Obtener todas las reviews de la actividad
+        List<Review> reviews = reviewService.findByActivity_Id(id);
+        model.addAttribute("reviews", reviews);
+    
         // Convertir la imagen Blob a Base64 para Mustache
         if (activity.getImageFile() != null) {
             try {
@@ -171,11 +183,31 @@ public class activityController {
         } else {
             activity.setImageString("nofoto.png");
         }
-
+    
         model.addAttribute("activity", activity);
-
+        model.addAttribute("reviews", reviews); // Agregar las reviews al modelo
+    
         return "activity";  // Nombre del archivo .mustache
     }
+    
+    /*@PostMapping("/activity/{id}/addReview")
+        public String addReview(
+            @PathVariable Long id,
+            @RequestParam int starsValue,
+            @RequestParam String description) {
+
+            Optional<Activity> optionalActivity = activityService.findById(id);
+            User user = userService.getCurrentUser(); // Suponiendo que tienes un método para obtener el usuario autenticado
+
+            if (optionalActivity.isPresent() && user != null) {
+                Activity activity = optionalActivity.get();
+                Review review = new Review(starsValue, description, activity, user);
+                reviewService.save(review);
+            }
+
+            return "redirect:/activity/" + id; // Redirige a la misma página para ver la nueva reseña
+        }*/
+
 
     @GetMapping("/createActivity")
     public String showFormNewActivity() {

@@ -33,4 +33,14 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    /*public User getCurrentUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            String username = ((UserDetails) principal).getUsername();
+            return userRepository.findByUsername(username).orElse(null);
+        }
+        return null;
+    }
+    */
+
 }
