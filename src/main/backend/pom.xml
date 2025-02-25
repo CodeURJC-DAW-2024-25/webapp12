@@ -69,6 +69,12 @@
 			<version>8.0.28</version> <!-- Asegúrate de usar la versión adecuada -->
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+
 
 
 	</dependencies>

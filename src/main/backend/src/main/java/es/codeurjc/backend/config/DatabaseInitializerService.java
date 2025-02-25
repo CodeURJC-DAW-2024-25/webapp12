@@ -11,8 +11,7 @@ import java.util.List;
 import javax.sql.rowset.serial.SerialBlob;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
-
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import es.codeurjc.backend.Model.Activity;
@@ -38,22 +37,27 @@ public class DatabaseInitializerService {
 	private ActivityRepository activityRepository;
 
 	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
+
+	
 	@PostConstruct
 	public void init() throws IOException, URISyntaxException {
 		// Sample users
-		User user1 = new User("Paula", "Ruiz Rubio", "paula@email.com", "1234");
+		User user1 = new User("Paula", "Ruiz Rubio", "paula@email.com", passwordEncoder.encode("1234"));
 		user1.setRoles(List.of("USER"));
 		userRepository.save(user1);
 
-		User user2 = new User("Alba", "Velasco Marqués", "alba@email.com", "2345");
+		User user2 = new User("Alba", "Velasco Marqués", "alba@email.com", passwordEncoder.encode("2345"));
 		user2.setRoles(List.of("USER"));
 		userRepository.save(user2);
 
-		User user3 = new User("Alexandra", "Cararus Verdes", "alexandra@email.com", "3456");
+		User user3 = new User("Alexandra", "Cararus Verdes", "alexandra@email.com", passwordEncoder.encode("3456"));
 		user3.setRoles(List.of("USER"));
 		userRepository.save(user3);
 
-		User user4 = new User("Gonzalo", "Perez Roca", "gonzalo@email.com", "4567");
+		User user4 = new User("Gonzalo", "Perez Roca", "gonzalo@email.com", passwordEncoder.encode("4567"));
 		user4.setRoles(List.of("USER"));
 		userRepository.save(user4);
 
@@ -68,7 +72,7 @@ public class DatabaseInitializerService {
 
 
 
-		User admin = new User("admin", "5678", "admin@email.com", "5678");
+		User admin = new User("admin", "5678", "admin@email.com", passwordEncoder.encode("5678"));
 		admin.setRoles(List.of("USER", "ADMIN"));
 		try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("static/img/adminfoto.png")) { 
 
