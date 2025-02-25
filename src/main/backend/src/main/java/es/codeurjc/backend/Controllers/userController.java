@@ -19,6 +19,9 @@ import es.codeurjc.backend.Model.Activity;
 import es.codeurjc.backend.Model.Review;
 import es.codeurjc.backend.Model.User;
 import es.codeurjc.backend.Repository.UserRepository;
+
+
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -64,24 +67,24 @@ public class userController {
     }
 
 
-    /*@GetMapping("/profile")
-    public String showProfile(Model model, @RequestParam(value = "id", required = false) Long id) {
-        if (id == null) {
-           return "redirect:/login"; 
-        }
-
-        Optional<User> optionalUser  = userRepository.findById(id); 
-        if(optionalUser.isPresent()){
-            User user = optionalUser.get();
+    @GetMapping("/profile")
+    public String showProfile(Model model, Principal principal) {
+        
+        String userEmail = principal.getName();
+        User user  = userRepository.findByEmail(userEmail); 
+        System.out.println("email" + userEmail);
+        if(user != null){
             List<Activity> subscribedActivities = activityService.findEventsSubscribe(user);
             model.addAttribute("user", user);
             model.addAttribute("subscribedActivities", subscribedActivities);
             model.addAttribute("countActivitiesSubscribed", subscribedActivities.size());
+            model.addAttribute("userCount", userService.countUsers());
+            model.addAttribute("activityCount", activityService.activityCount());
+            return "profile";
         }else{
           return "redirect:/404";
         }
-        return "profile";
-    }*/
+    }
     @Transactional
     @GetMapping("/deleteUser/{id}")
     public String removeUser(@PathVariable Long id) {

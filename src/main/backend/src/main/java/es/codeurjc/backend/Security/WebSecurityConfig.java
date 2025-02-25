@@ -45,6 +45,7 @@ public class WebSecurityConfig {
 				
 				// USER PAGES
 				.requestMatchers("/#").hasAnyRole("USER")
+				.requestMatchers("/profile").hasAnyRole("USER")
 
 				// ADMIN PAGES
 				.requestMatchers("/#").hasAnyRole("ADMIN")
@@ -55,7 +56,7 @@ public class WebSecurityConfig {
 				.formLogin(formLogin -> formLogin
 					.loginPage("/login")
 					.failureUrl("/loginError")
-					.defaultSuccessUrl("/", true)
+					.defaultSuccessUrl("/profile")
 					.permitAll());
 				// LOGOUT
 				/*.logout(logout -> logout
