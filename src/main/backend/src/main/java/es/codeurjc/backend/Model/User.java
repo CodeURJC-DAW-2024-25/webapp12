@@ -165,4 +165,12 @@ public class User {
 	public void setDni(String dni) {
 		this.dni = dni;
 	}
+
+	public String getImageString() {
+		return imageString;
+	}
+
+	public void setImageString(String imageString) {
+		this.imageString = imageString;
+	}
 }

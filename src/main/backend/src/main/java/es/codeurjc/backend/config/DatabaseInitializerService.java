@@ -47,27 +47,81 @@ public class DatabaseInitializerService {
 		// Sample users
 		User user1 = new User("Paula", "Ruiz Rubio", "paula@email.com", "12345567D", "556673336",passwordEncoder.encode("1234"));
 		user1.setRoles(List.of("USER"));
+		try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("static/images/user/user4.png")) { 
+
+			byte[] imageData = inputStream.readAllBytes();
+			SerialBlob imageBlob = new SerialBlob(imageData);
+			user1.setImageFile(imageBlob);
+			user1.setImage("user1.jpg");
+		} catch (IOException | SQLException e) {
+			e.printStackTrace();
+		}
 		userRepository.save(user1);
 
 		User user2 = new User("Alba", "Velasco Marqués", "alba@email.com", "12345567D", "556673336",passwordEncoder.encode("2345"));
 		user2.setRoles(List.of("USER"));
+		try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("static/images/user/user2.png")) { 
+
+			byte[] imageData = inputStream.readAllBytes();
+			SerialBlob imageBlob = new SerialBlob(imageData);
+			user2.setImageFile(imageBlob);
+			user2.setImage("user2.jpg");
+		} catch (IOException | SQLException e) {
+			e.printStackTrace();
+		}
 		userRepository.save(user2);
 
 		User user3 = new User("Alexandra", "Cararus Verdes", "alexandra@email.com", "12345567D", "556673336",passwordEncoder.encode("3456"));
 		user3.setRoles(List.of("USER"));
+		try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("static/images/user/user3.png")) { 
+
+			byte[] imageData = inputStream.readAllBytes();
+			SerialBlob imageBlob = new SerialBlob(imageData);
+			user3.setImageFile(imageBlob);
+			user3.setImage("user3.jpg");
+		} catch (IOException | SQLException e) {
+			e.printStackTrace();
+		}
 		userRepository.save(user3);
 
 		User user4 = new User("Gonzalo", "Perez Roca", "gonzalo@email.com", "12345567D","556673336",passwordEncoder.encode("4567"));
 		user4.setRoles(List.of("USER"));
+		try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("static/images/user/user5.png")) { 
+
+			byte[] imageData = inputStream.readAllBytes();
+			SerialBlob imageBlob = new SerialBlob(imageData);
+			user4.setImageFile(imageBlob);
+			user4.setImage("user4.jpg");
+		} catch (IOException | SQLException e) {
+			e.printStackTrace();
+		}
 		userRepository.save(user4);
 
 		User user5 = new User("Adriana", "Lopez", "adriana@email.com", "12345567D","123573336","8910");
-		user4.setRoles(List.of("USER"));
+		user5.setRoles(List.of("USER"));
+		try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("static/images/user/user1.png")) { 
+
+			byte[] imageData = inputStream.readAllBytes();
+			SerialBlob imageBlob = new SerialBlob(imageData);
+			user5.setImageFile(imageBlob);
+			user5.setImage("user5.jpg");
+		} catch (IOException | SQLException e) {
+			e.printStackTrace();
+		}
 		userRepository.save(user5);
 
 
 		User user6 = new User("Paco", "Rodriguez", "paco@email.com","12345567D", "557930394","1567");
-		user4.setRoles(List.of("USER"));
+		user6.setRoles(List.of("USER"));
+		try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("static/images/user/user5.png")) { 
+
+			byte[] imageData = inputStream.readAllBytes();
+			SerialBlob imageBlob = new SerialBlob(imageData);
+			user6.setImageFile(imageBlob);
+			user6.setImage("user6.jpg");
+		} catch (IOException | SQLException e) {
+			e.printStackTrace();
+		}
 		userRepository.save(user6);
 
 

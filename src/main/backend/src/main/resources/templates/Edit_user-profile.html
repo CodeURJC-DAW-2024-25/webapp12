@@ -16,7 +16,7 @@
 							<img src="/images/user/user-thumb.jpg" alt="" class="">
 						</div>
 						<!-- User Name -->
-						<h5 class="text-center">{{user.name}}</h5>
+						<h5 class="text-center">{{userRegistered.name}}</h5>
 					</div>
 					{{/user}}
 					<!-- Dashboard Links -->
@@ -95,12 +95,12 @@
 								<!-- First Name -->
 								<div class="form-group">
 									<label for="first-name">Nombre</label>
-									<input type="text" class="form-control" id="first-name" name="name" value="{{user.name}}">
+									<input type="text" class="form-control" id="first-name" name="name" value="{{userRegistered.name}}">
 								</div>
 								<!-- Last Name -->
 								<div class="form-group">
 									<label for="surname">Apellidos</label>
-									<input type="text" class="form-control" id="surname" name="surname" value="{{user.surname}}">
+									<input type="text" class="form-control" id="surname" name="surname" value="{{userRegistered.surname}}">
 								</div>
 								<!-- File chooser -->
 								<div class="form-group choose-file d-inline-flex">
@@ -110,18 +110,18 @@
 								<!-- dni-->
 								<div class="form-group">
 									<label for="dni">DNI</label>
-									<input type="text" class="form-control" id="dni" name="dni" value="{{user.dni}}">
+									<input type="text" class="form-control" id="dni" name="dni" value="{{userRegistered.dni}}">
 								</div>
 								<!-- email-->
 								<div class="form-group">
 									<label for="dni">EMAIL</label>
-									<input type="text" class="form-control" id="email" name="email" value="{{user.email}}">
+									<input type="text" class="form-control" id="email" name="email" value="{{userRegistered.email}}">
 								</div>
 		
 								<!-- Tlf number -->
 								<div class="form-group">
 									<label for="tlf">Número de telefono</label>
-									<input type="number" class="form-control" id="tlf" name="phone" value="{{user.phone}}">
+									<input type="number" class="form-control" id="tlf" name="phone" value="{{userRegistered.phone}}">
 								</div>
 								<!-- Submit button -->
 								<input type="hidden" name="_csrf" value="{{token}}"/>

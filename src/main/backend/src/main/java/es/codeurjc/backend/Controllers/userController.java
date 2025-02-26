@@ -24,6 +24,8 @@ import es.codeurjc.backend.Model.User;
 import es.codeurjc.backend.Repository.UserRepository;
 
 import java.security.Principal;
+import java.sql.SQLException;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -80,8 +82,20 @@ public class userController {
         String userEmail = principal.getName();
         User user  = userRepository.findByEmail(userEmail); 
         
-        System.out.println("email" + userEmail);
+
         if(user != null){
+            if (user.getImageFile() != null) {
+                try {
+                    byte[] imageBytes = user.getImageFile().getBytes(1, (int) user.getImageFile().length());
+                    String imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
+                    user.setImageString("data:image/png;base64," + imageBase64);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    user.setImageString("nofoto.png"); // Imagen por defecto
+                }
+            } else {
+                user.setImageString("nofoto.png");
+            }
             List<Activity> subscribedActivities = activityService.findEventsSubscribe(user);
             model.addAttribute("userRegister", user);
             model.addAttribute("subscribedActivities", subscribedActivities);
@@ -126,6 +140,7 @@ public class userController {
         model.addAttribute("user", request.isUserInRole("USER"));
         String userEmail = principal.getName();
         User user = userRepository.findByEmail(userEmail);
+        
         if(user != null){
             System.out.println(user.getDni());
             model.addAttribute("userRegistered", user);
