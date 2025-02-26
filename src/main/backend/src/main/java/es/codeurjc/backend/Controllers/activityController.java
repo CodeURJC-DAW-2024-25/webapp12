@@ -38,6 +38,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import jakarta.servlet.http.HttpServletRequest;
 
 
 
@@ -103,7 +104,9 @@ public class activityController {
 
 
     @GetMapping("/admin_activities")
-    public String showAdminActivities(Model model) {
+    public String showAdminActivities(Model model,HttpServletRequest request) {
+        model.addAttribute("admin", request.isUserInRole("ADMIN"));
+        model.addAttribute("user", request.isUserInRole("USER"));
         List<Activity> activities = activityRepository.findAll();
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");

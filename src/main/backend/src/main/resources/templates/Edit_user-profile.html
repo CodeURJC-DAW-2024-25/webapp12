@@ -9,6 +9,7 @@
 			<div class="col-lg-4">
 				<div class="sidebar">
 					<!-- User Widget -->
+					{{#user}}
 					<div class="widget user">
 						<!-- User Image -->
 						<div class="image d-flex justify-content-center">
@@ -17,12 +18,16 @@
 						<!-- User Name -->
 						<h5 class="text-center">{{user.name}}</h5>
 					</div>
+					{{/user}}
 					<!-- Dashboard Links -->
 					<div class="widget user-dashboard-menu">
 						<ul>
+							{{#user}}
 							<li>
 								<a href="/profile"><i class="fa fa-ticket"></i>Mis actividades <span>2</span></a>
               				</li>
+							  {{/user}}
+							  {{#admin}}
 							<li>
 								<a href="/admin_activities"><i class="fa fa-bolt"></i>Todas las actividades <span>25</span></a>
               				</li>
@@ -35,12 +40,15 @@
 							<li>
 								<a href="/statistics"><i class="fa fa-chart-bar"></i>Estadísticas </a>
 							</li>
+							{{/admin}}
+							{{#user}}
 							<li>
 								<a href="/index"><i class="fa fa-power-off"></i> Cerrar sesión</a>
 							</li>
 							<li>
 								<a href="#!" data-toggle="modal" data-target="#deleteaccount"><i class="fa fa-trash"></i>Borrar cuenta</a>
 							</li>
+							{{/user}}
 						</ul>
 					</div>
 

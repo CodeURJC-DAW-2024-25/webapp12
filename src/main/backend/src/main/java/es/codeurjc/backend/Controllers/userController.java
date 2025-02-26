@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import es.codeurjc.backend.Service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import es.codeurjc.backend.Service.ActivityService;
 import es.codeurjc.backend.Service.ReviewService;
@@ -21,7 +22,6 @@ import es.codeurjc.backend.Model.Activity;
 import es.codeurjc.backend.Model.Review;
 import es.codeurjc.backend.Model.User;
 import es.codeurjc.backend.Repository.UserRepository;
-
 
 import java.security.Principal;
 import java.util.List;
@@ -64,7 +64,8 @@ public class userController {
     }
     
     @GetMapping("/admin_users")
-    public String showAdminUsers(Model model) {
+    public String showAdminUsers(Model model,HttpServletRequest request) {
+        model.addAttribute("admin", request.isUserInRole("ADMIN"));
         model.addAttribute("allUsers", userService.getAllUsers());
         model.addAttribute("userCount", userService.countUsers());
         model.addAttribute("activityCount", activityService.activityCount());
@@ -73,15 +74,16 @@ public class userController {
 
 
     @GetMapping("/profile")
-    public String showProfile(Model model, Principal principal) {
-        
+    public String showProfile(Model model, Principal principal,HttpServletRequest request) {
+        model.addAttribute("admin", request.isUserInRole("ADMIN"));
+        model.addAttribute("user", request.isUserInRole("USER"));
         String userEmail = principal.getName();
         User user  = userRepository.findByEmail(userEmail); 
         
         System.out.println("email" + userEmail);
         if(user != null){
             List<Activity> subscribedActivities = activityService.findEventsSubscribe(user);
-            model.addAttribute("user", user);
+            model.addAttribute("userRegister", user);
             model.addAttribute("subscribedActivities", subscribedActivities);
             model.addAttribute("countActivitiesSubscribed", subscribedActivities.size());
             model.addAttribute("userCount", userService.countUsers());
@@ -119,12 +121,14 @@ public class userController {
     }
 
     @GetMapping("/Edit_user-profile")
-    public String showEditProfile(Principal principal,Model model) {
+    public String showEditProfile(Principal principal,Model model,HttpServletRequest request) {
+        model.addAttribute("admin", request.isUserInRole("ADMIN"));
+        model.addAttribute("user", request.isUserInRole("USER"));
         String userEmail = principal.getName();
         User user = userRepository.findByEmail(userEmail);
         if(user != null){
             System.out.println(user.getDni());
-            model.addAttribute("user", user);
+            model.addAttribute("userRegistered", user);
             return "Edit_user-profile";
         }else{
             return "404";
@@ -152,7 +156,7 @@ public class userController {
                 }
             }
             userRepository.save(user);
-        return "redirect:/admin_activities";
+        return "redirect:/profile";
         }else{
             return "404";
         }

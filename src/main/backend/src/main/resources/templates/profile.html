@@ -10,25 +10,31 @@
       <div class="col-lg-4">
         <div class="sidebar">
           <!-- User Widget -->
+           {{#user}}
           <div class="widget user-dashboard-profile">
             <!-- User Image -->
             <div class="profile-thumb">
               <img src="/images/user/user2.png" alt="" class="rounded-circle">
             </div>
             <!-- User Name -->
-            <h5 class="text-center">{{user.name}}</h5>
+            <h5 class="text-center">{{userRegister.name}}</h5>
             
             <a href="/Edit_user-profile" class="btn btn-main-sm">Editar Perfil</a>
           </div>
+          {{/user}}
           <!-- Dashboard Links -->
           <div class="widget user-dashboard-menu">
 						<ul>
+              {{#user}}
 							<li class="active">
 								<a href="/profile"><i class="fa fa-ticket"></i>Mis actividades <span>{{countActivitiesSubscribed}}</span></a>
               </li>
+              {{/user}}
+              {{#admin}}
 							<li>
 								<a href="/admin_activities"><i class="fa fa-bolt"></i>Todas las actividades <span>{{activityCount}}</span></a>
               </li>
+              
               <li>
 								<a href="create_activity"><i class="fas fa-plus-square"></i> Crear nueva actividad</a>
 							</li>
@@ -38,6 +44,8 @@
 							<li>
 								<a href="/statistics"><i class="fa fa-chart-bar"></i>Estadísticas </a>
 							</li>
+              {{/admin}}
+              {{#user}}
               <li>
                 <form action="/logout" method="post" style="display: inline;">
                     <input type="hidden" name="_csrf" value="{{token}}">
@@ -46,10 +54,10 @@
                     </button>
                 </form>
               </li>
-            
 							<li>
 								<a href="#!" data-toggle="modal" data-target="#deleteaccount"><i class="fa fa-trash"></i>Borrar cuenta</a>
 							</li>
+              {{/user}}
 						</ul>
 					</div>
           
