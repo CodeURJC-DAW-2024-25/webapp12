@@ -191,10 +191,11 @@ public class userController {
             }
         }catch(IOException e){
             e.printStackTrace();
-            
+            return "404";
         }
     }
 }
+
     
     
     
