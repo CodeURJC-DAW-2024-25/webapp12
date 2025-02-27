@@ -13,7 +13,7 @@
 					<div class="widget user">
 						<!-- User Image -->
 						<div class="image d-flex justify-content-center">
-							<img src="/images/user/user-thumb.jpg" alt="" class="">
+							<img src="{{userRegistered.imageString}}" alt="image description" class="rounded-circle">
 						</div>
 						<!-- User Name -->
 						<h5 class="text-center">{{userRegistered.name}}</h5>
@@ -43,8 +43,13 @@
 							{{/admin}}
 							{{#user}}
 							<li>
-								<a href="/index"><i class="fa fa-power-off"></i> Cerrar sesión</a>
-							</li>
+								<form action="/logout" method="post" style="display: inline;">
+									<input type="hidden" name="_csrf" value="{{token}}">
+									<button type="submit" style="border: none; background: none; color: inherit; cursor: pointer;">
+										<i class="fa fa-chart-bar"></i> Cerrar sesión
+									</button>
+								</form>
+							  </li>
 							<li>
 								<a href="#!" data-toggle="modal" data-target="#deleteaccount"><i class="fa fa-trash"></i>Borrar cuenta</a>
 							</li>
@@ -91,7 +96,7 @@
 					<div class="col-lg-6 col-md-6">
 						<div class="widget personal-info">
 							<h3 class="widget-header user">Edita tu información personal</h3>
-							<form action="/Edit_user-profile" method="POST">
+							<form action="/Edit_user-profile" method="POST" enctype="multipart/form-data">
 								<!-- First Name -->
 								<div class="form-group">
 									<label for="first-name">Nombre</label>
@@ -105,7 +110,7 @@
 								<!-- File chooser -->
 								<div class="form-group choose-file d-inline-flex">
 									<i class="fa fa-user text-center px-3"></i>
-									<input type="file" class="form-control-file mt-2 pt-1" id="input-file">
+									<input type="file" class="form-control-file mt-2 pt-1" id="input-file" name="file">
 								 </div>
 								<!-- dni-->
 								<div class="form-group">
@@ -128,27 +133,6 @@
 								<button class="btn btn-transparent">Guardar</button>
 							</form>
 						</div>
-					</div>
-					<div class="col-lg-6 col-md-6">
-						<!-- Change Password -->
-					<div class="widget change-password">
-						<h3 class="widget-header user">Editar contraseña</h3>
-						<form action="/Edit_user-profile">
-							<!-- New Password -->
-							<div class="form-group">
-								<label for="new-password">Nueva Contraseña</label>
-								<input type="password" class="form-control" id="new-password" name="newPassword">
-							</div>
-							<!-- Confirm New Password -->
-							<div class="form-group">
-								<label for="confirm-password">Confirmar nueva contraseña </label>
-								<input type="password" class="form-control" id="confirm-password">
-							</div>
-							<!-- Submit Button -->
-							<input type="hidden" name="_csrf" value="{{token}}"/>
-							<button class="btn btn-transparent">Cambiar Contraseña</button>
-						</form>
-					</div>
 					</div>
 				</div>
 			</div>

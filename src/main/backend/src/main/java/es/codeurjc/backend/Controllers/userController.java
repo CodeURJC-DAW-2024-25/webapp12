@@ -1,5 +1,6 @@
 package es.codeurjc.backend.Controllers;
 
+import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import es.codeurjc.backend.Service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,13 +25,17 @@ import es.codeurjc.backend.Model.Review;
 import es.codeurjc.backend.Model.User;
 import es.codeurjc.backend.Repository.UserRepository;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.sql.SQLException;
 import java.util.Base64;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 @Controller
@@ -142,37 +148,48 @@ public class userController {
         User user = userRepository.findByEmail(userEmail);
         
         if(user != null){
-            System.out.println(user.getDni());
+            if (user.getImageFile() != null) {
+                try {
+                    byte[] imageBytes = user.getImageFile().getBytes(1, (int) user.getImageFile().length());
+                    String imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
+                    user.setImageString("data:image/png;base64," + imageBase64);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    user.setImageString("nofoto.png"); // Imagen por defecto
+                }
+            } else {
+                user.setImageString("nofoto.png");
+            }
             model.addAttribute("userRegistered", user);
             return "Edit_user-profile";
         }else{
             return "404";
-        }   
-    }
+        }
+    }   
+    
 
     @PostMapping("/Edit_user-profile")
-    public String updateProfile(Model model, @ModelAttribute User userUpdated,  @RequestParam(required = false) String newPassword, 
-    @RequestParam(required = false) String confirmPassword){
+    public String updateProfile(Model model, @ModelAttribute User userUpdated,@RequestParam("file") MultipartFile imagFile){
         String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByEmail(userEmail);
+        try{
             if(user!=null){
-            user.setName(userUpdated.getName());
-            user.setSurname(userUpdated.getSurname());
-            user.setDni(userUpdated.getDni());
-            user.setEmail(userUpdated.getEmail());
-            user.setPhone(userUpdated.getPhone());
-            if (newPassword != null && !newPassword.isEmpty()) {
-                if (newPassword.equals(confirmPassword)) {
-                    // Cifrar la nueva contraseña antes de guardarla
-                    user.setPassword(passwordEncoder.encode(newPassword));
-                } else {
-                    model.addAttribute("error", "Las contraseñas no coinciden.");
-                    return "Edit_user-profile";  // Retorna al formulario con mensaje de error
+                user.setName(userUpdated.getName());
+                user.setSurname(userUpdated.getSurname());
+                user.setDni(userUpdated.getDni());
+                user.setEmail(userUpdated.getEmail());
+                user.setPhone(userUpdated.getPhone());
+                if(!imagFile.isEmpty()){
+                    user.setImageFile(BlobProxy.generateProxy(imagFile.getInputStream(), imagFile.getSize()));
                 }
+                userRepository.save(user);
+                return "redirect:/profile";
             }
-            userRepository.save(user);
-        return "redirect:/profile";
-        }else{
+            else{
+                return "404";
+            }
+        }catch(IOException e){
+            e.printStackTrace();
             return "404";
         }
     }
