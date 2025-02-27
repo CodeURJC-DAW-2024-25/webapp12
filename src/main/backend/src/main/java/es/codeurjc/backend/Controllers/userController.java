@@ -160,6 +160,7 @@ public class userController {
             } else {
                 user.setImageString("nofoto.png");
             }
+            System.out.println(user.getDni());
             model.addAttribute("userRegistered", user);
             return "Edit_user-profile";
         }else{
@@ -190,7 +191,7 @@ public class userController {
             }
         }catch(IOException e){
             e.printStackTrace();
-            return "404";
+            
         }
     }
 }
