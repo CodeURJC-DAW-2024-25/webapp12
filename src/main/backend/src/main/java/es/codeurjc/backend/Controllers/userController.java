@@ -72,11 +72,46 @@ public class userController {
     }
     
     @GetMapping("/admin_users")
-    public String showAdminUsers(Model model,HttpServletRequest request) {
+    public String showAdminUsers(Model model,HttpServletRequest request,Principal principal) {
         model.addAttribute("admin", request.isUserInRole("ADMIN"));
-        model.addAttribute("allUsers", userService.getAllUsers());
+        model.addAttribute("user", request.isUserInRole("USER"));
+
+        String userEmail = principal.getName();
+        User user  = userRepository.findByEmail(userEmail); 
+        if (user.getImageFile() != null) {
+            try {
+                byte[] imageBytes = user.getImageFile().getBytes(1, (int) user.getImageFile().length());
+                String imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
+                user.setImageString("data:image/png;base64," + imageBase64);
+            } catch (SQLException e) {
+                e.printStackTrace();
+                user.setImageString("nofoto.png"); // Imagen por defecto
+            }
+        } else {
+            user.setImageString("nofoto.png");
+        }
+        List <User> users = userRepository.findAll();
+        for(User userList : users){
+            if (userList.getImageFile() != null) {
+                try {
+                    byte[] imageBytes = userList.getImageFile().getBytes(1, (int) userList.getImageFile().length());
+                    String imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
+                    userList.setImageString("data:image/png;base64," + imageBase64);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    userList.setImageString("nofoto.png"); // Imagen por defecto
+                }
+            } else {
+                userList.setImageString("nofoto.png");
+            }
+        }
+        
+        List<Activity> subscribedActivities = activityService.findEventsSubscribe(user);
+        model.addAttribute("allUsers", users);
         model.addAttribute("userCount", userService.countUsers());
+        model.addAttribute("countActivitiesSubscribed", subscribedActivities.size());
         model.addAttribute("activityCount", activityService.activityCount());
+        model.addAttribute("userRegister", user);
         return "admin_users";
     }
 
@@ -194,6 +229,12 @@ public class userController {
             return "404";
         }
     }
+
+    @GetMapping("/statistics")
+    public String showStatistics() {
+        return "statistics";
+    }
+    
 }
 
     

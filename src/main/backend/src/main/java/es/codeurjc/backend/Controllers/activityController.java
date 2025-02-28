@@ -2,6 +2,7 @@ package es.codeurjc.backend.Controllers;
 
 
 import java.io.IOException;
+import java.security.Principal;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -30,6 +31,8 @@ import es.codeurjc.backend.Service.ReviewService;
 import es.codeurjc.backend.Service.UserService;
 
 import es.codeurjc.backend.Repository.ActivityRepository;
+import es.codeurjc.backend.Repository.UserRepository;
+
 import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
@@ -64,6 +67,9 @@ public class activityController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping("/")
     public String showActivities(Model model) {
@@ -115,10 +121,28 @@ public class activityController {
 
 
     @GetMapping("/admin_activities")
-    public String showAdminActivities(Model model,HttpServletRequest request) {
+    public String showAdminActivities(Model model,HttpServletRequest request,Principal principal) {
         model.addAttribute("admin", request.isUserInRole("ADMIN"));
         model.addAttribute("user", request.isUserInRole("USER"));
+
+        String userEmail = principal.getName();
+        User user  = userRepository.findByEmail(userEmail); 
+   
+        if (user.getImageFile() != null) {
+            try {
+                byte[] imageBytes = user.getImageFile().getBytes(1, (int) user.getImageFile().length());
+                String imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
+                user.setImageString("data:image/png;base64," + imageBase64);
+            } catch (SQLException e) {
+                e.printStackTrace();
+                user.setImageString("nofoto.png"); // Imagen por defecto
+            }
+        } else {
+            user.setImageString("nofoto.png");
+        }
+
         List<Activity> activities = activityRepository.findAll();
+        List<Activity> subscribedActivities = activityService.findEventsSubscribe(user);
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
@@ -140,8 +164,10 @@ public class activityController {
         }
 
         model.addAttribute("allActivities", activities);
+        model.addAttribute("countActivitiesSubscribed", subscribedActivities.size());
         model.addAttribute("activityCount", activityService.activityCount());
         model.addAttribute("userCount", userService.countUsers());
+        model.addAttribute("userRegister", user);
         return "admin_activities";
     }
     @GetMapping("/404")
