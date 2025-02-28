@@ -1,0 +1,29 @@
+<div id="allActivities" class="row">
+    <!-- Actividad 1 -->
+    {{#activities}}
+    <div class="col-sm-12 col-lg-3">
+        <div class="product-item bg-light">
+            <div class="card">
+                <div class="thumb-content">
+                    <a href="/activity/{{id}}">
+                        <!--Aqui se cargaba la imagen pero como no se hace bien, mustache dice que son null y no funcionaria el boton de cargar mas-->
+                    </a>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title"><a href="/activity/{{id}}">{{name}}</a></h4>
+                    <ul class="list-inline product-meta">
+                        <li class="list-inline-item">
+                            <i class="fa fa-folder-open-o"></i>{{category}}
+                        </li>
+                    </ul>
+                    <p class="card-text">{{description}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+        {{/activities}}
+        {{^activities}}
+        <p>No hay actividades disponibles.</p>
+        {{/activities}}
+    </div>
+</div>

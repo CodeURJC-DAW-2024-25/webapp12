@@ -277,6 +277,14 @@ public class DatabaseInitializerService {
 		review4.setCreationDate(Calendar.getInstance());
 		reviewRepository.save(review4);
 
+		Activity activity12 = new Activity("natacion", "deporte de agua","sigue nadando sigue nadando",10);
+		
+		activityRepository.save(activity12);
+		review4.setActivity(activity12);
+		review4.setCreationDate(Calendar.getInstance());
+		reviewRepository.save(review4);
+		
+
 
 	
 		user1.setActivities(List.of(activity1));

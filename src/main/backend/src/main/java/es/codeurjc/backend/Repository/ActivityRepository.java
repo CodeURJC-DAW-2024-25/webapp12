@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 
 import es.codeurjc.backend.Model.Activity;
 import es.codeurjc.backend.Model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -18,5 +20,7 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
     void deleteById(Long id);
 
     List<Activity> findByUsers(User user);
+
+    Page<Activity> findAll(Pageable pageable);
 }
 

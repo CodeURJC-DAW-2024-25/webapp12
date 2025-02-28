@@ -45,6 +45,8 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.Authentication;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 
 
@@ -65,7 +67,9 @@ public class activityController {
 
     @GetMapping("/")
     public String showActivities(Model model) {
-        List<Activity> activities = activityService.findAll();
+        int page = 0;
+        Page<Activity> activities = activityService.getActivitiesPaginated(page);
+        //List<Activity> activities = activityService.findAll();
 
         // Convertir la imagen Blob en base64 y agregarla al modelo
         for (Activity activity : activities) {
@@ -99,6 +103,13 @@ public class activityController {
 
 
         return "index"; 
+    }
+
+    @GetMapping("/moreActivities") 
+    public String LoadMoreActivities(@RequestParam int page, Model model) { 
+        Page<Activity> activities = activityService.getActivitiesPaginated(page);
+        model.addAttribute("activities", activities.getContent());
+        return "moreActivities";
     }
 
 

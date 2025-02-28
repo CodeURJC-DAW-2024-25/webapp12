@@ -1,5 +1,6 @@
 package es.codeurjc.backend.Service;
 
+//import org.hibernate.query.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
@@ -7,6 +8,9 @@ import java.util.Optional;
 import es.codeurjc.backend.Model.Activity;
 import es.codeurjc.backend.Model.User;
 import es.codeurjc.backend.Repository.ActivityRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -28,6 +32,12 @@ public class ActivityService {
 
     public List<Activity> findAll() {
        return activityRepository.findAll();
+    }
+
+    public Page<Activity> getActivitiesPaginated(int page) {
+        int size = 4;
+        Pageable pageable = PageRequest.of(page, size);
+        return activityRepository.findAll(pageable);
     }
 
     public long activityCount(){

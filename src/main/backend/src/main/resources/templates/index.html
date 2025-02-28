@@ -124,7 +124,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div id="allActivitiesPaginated" class="row">
             <!-- Actividad 1 -->
             {{#activities}}
             <div class="col-sm-12 col-lg-3">
@@ -152,7 +152,10 @@
                 <p>No hay actividades disponibles.</p>
                 {{/activities}}
             </div>
-        </div>	
+        </div>
+		<div>
+			<button type="button" class="btn btn-primary" id="loadMore" onclick='loadMore()'>Cargar más</button>
+		</div>	
     </div>
 </section>
 			
