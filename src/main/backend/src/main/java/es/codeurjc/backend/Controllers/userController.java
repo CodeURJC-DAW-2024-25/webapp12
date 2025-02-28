@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import es.codeurjc.backend.Service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -70,6 +71,21 @@ public class userController {
     public String showRegister() {
         return "register";
     }
+
+
+
+    @PostMapping("/signup")
+    public String signup(User user, RedirectAttributes attributes) {
+        if (userService.existsByEmail(user.getEmail())) {
+            return "redirect:/register";
+        } else {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setRoles(List.of("USER"));
+            userService.save(user);
+            return "redirect:/login";
+        }
+    }
+
     
     @GetMapping("/admin_users")
     public String showAdminUsers(Model model,HttpServletRequest request,Principal principal) {

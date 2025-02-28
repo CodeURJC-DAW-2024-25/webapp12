@@ -40,6 +40,8 @@ public class WebSecurityConfig {
 				// PUBLIC PAGES
 				.requestMatchers("/").permitAll()
 				.requestMatchers("/login").permitAll()
+				.requestMatchers("/signup").permitAll()
+				.requestMatchers("/register").permitAll()
 				.requestMatchers("/activity/**").permitAll()
 				.requestMatchers("/index").permitAll()
 				.requestMatchers("/moreActivities").permitAll()
