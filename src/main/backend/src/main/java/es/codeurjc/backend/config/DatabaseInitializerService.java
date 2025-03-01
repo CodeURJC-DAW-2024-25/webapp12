@@ -17,10 +17,12 @@ import org.springframework.stereotype.Service;
 import es.codeurjc.backend.Model.Activity;
 
 import es.codeurjc.backend.Repository.ActivityRepository;
+import es.codeurjc.backend.Repository.PlaceRepository;
 import es.codeurjc.backend.Repository.ReviewRepository;
 import es.codeurjc.backend.Repository.UserRepository;
 
 import es.codeurjc.backend.Model.User;
+import es.codeurjc.backend.Model.Place;
 import es.codeurjc.backend.Model.Review;
 import jakarta.annotation.PostConstruct;
 
@@ -35,6 +37,9 @@ public class DatabaseInitializerService {
 
 	@Autowired
 	private ActivityRepository activityRepository;
+
+	@Autowired
+	private PlaceRepository placeRepository;
 
 	
 	@Autowired
@@ -304,6 +309,36 @@ public class DatabaseInitializerService {
 
 		user6.setActivities(List.of(activity1, activity2, activity3, activity4,activity5,activity6));
 		userRepository.save(user6);
+
+
+
+		//SAMPLES PARA LUGARES
+		Place lugar1 = new Place();
+		lugar1.setDescripcion("Este lugar contiene una piscina en la que se peude nada. La piscina es una piscina olimpica de 50 metros de largo, donde podrás hacer mucho ejecicio");
+		lugar1.setNombre("Piscina cubierta");
+		lugar1.setActivity(activity1); 
+		lugar1.setActivity(activity2); 
+		lugar1.setActivity(activity3); 
+		lugar1.setActivity(activity4); 
+		lugar1.setActivity(activity5); 
+		placeRepository.save(lugar1);
+
+		Place lugar2 = new Place();
+		lugar2.setDescripcion("Se traa de pistas de atletismo que cuenta con pistas de rudgy, futbol, atletismo");
+		lugar2.setNombre("Pistas exteriores");
+		lugar2.setActivity(activity6); 
+		lugar1.setActivity(activity7); 
+		lugar1.setActivity(activity8); 
+		lugar1.setActivity(activity9); 
+		placeRepository.save(lugar2);
+
+		Place lugar3 = new Place();
+		lugar3.setDescripcion("Pista de bolos para jugar a los bolos que cuenta con 7 pistas de bolos");
+		lugar3.setNombre("Pista de bolos");
+		lugar3.setActivity(activity10);
+		lugar3.setActivity(activity11);
+		lugar3.setActivity(activity12);
+		placeRepository.save(lugar3);
 
 		
 
