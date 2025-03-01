@@ -56,6 +56,7 @@ public class WebSecurityConfig {
 				.requestMatchers("/admin_users").hasAnyRole("ADMIN")
 				.requestMatchers("/statistics").hasAnyRole("ADMIN")
 				.requestMatchers("/createActivity").hasAnyRole("ADMIN")
+				.requestMatchers("/editActivity/**").hasAnyRole("ADMIN")
 				
 				.anyRequest().authenticated())
 		

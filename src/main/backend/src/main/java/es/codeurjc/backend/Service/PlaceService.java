@@ -8,13 +8,13 @@ import org.springframework.stereotype.Service;
 import es.codeurjc.backend.Model.Place;
 import es.codeurjc.backend.Repository.PlaceRepository;
 
-
 @Service
 public class PlaceService {
-    @Autowired
+    @Autowired 
     private PlaceRepository placeRepository;
-    public List<Place> getAllPlaces(){
-        List<Place> places = placeRepository.findAll();
-        return places;
+    public List<Place> getAllPlaces() {
+         List<Place> places = placeRepository.findAll();
+            return places;
     }
+         
 }

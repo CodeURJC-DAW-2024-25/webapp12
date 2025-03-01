@@ -1,0 +1,60 @@
+{{>header}}
+
+<section class="blog single-blog section py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <article class="single-post p-4 shadow rounded bg-white">
+                    <h2 class="text-center mb-4">Editar Actividad</h2>
+                    <form action="/editActivity/{{activity.id}}" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                        
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Nombre de la actividad:</label>
+                            <input type="text" id="name" name="name" class="form-control" value="{{activity.name}}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="image" class="form-label">Imagen:</label>
+                            <input type="file" id="image" name="file" class="form-control">
+                            <div class="text-center mt-2">
+                                <img src="{{activity.imageString}}" alt="Imagen de actividad" class="img-fluid rounded shadow-sm" style="max-width: 100%; height: auto;">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Categoría:</label>
+                            <input type="text" id="category" name="category" class="form-control" value="{{activity.category}}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Descripción:</label>
+                            <textarea id="description" name="description" class="form-control" rows="4" required>{{activity.description}}</textarea>
+                        </div>
+
+                        <h3 class="text-center mt-4">Detalles de la Actividad</h3>
+                        
+                        <div class="mb-3">
+                            <label for="place" class="form-label">Ubicación:</label>
+                            <select class="w-100 form-control mt-lg-1 mt-md-2" name="place" required>
+                                {{#places}}
+                                <option value={{id}}>{{Name}}</option>
+                                {{/places}}
+                                
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="vacancy" class="form-label">Capacidad máxima:</label>
+                            <input type="number" id="vacancy" name="vacancy" class="form-control" value="{{activity.vacancy}}" required>
+                        </div>
+
+                        <div class="text-center">
+                            <input type="hidden" name="_csrf" value="{{token}}"/>
+                            <button type="submit" class="btn btn-primary px-4">Guardar Cambios</button>
+                        </div>
+                    </form>
+                </article>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{>footer}}

@@ -148,17 +148,17 @@ public class DatabaseInitializerService {
 
 		//SAMPLES DE LUGAR
 		Place lugar1 = new Place();
-		lugar1.setDescripcion("Este lugar contiene una piscina en la que se puede nadar. La piscina es una piscina olímpica de 50 metros de largo, donde podrás hacer mucho ejercicio");
+		lugar1.setDescription("Este lugar contiene una piscina en la que se puede nadar. La piscina es una piscina olímpica de 50 metros de largo, donde podrás hacer mucho ejercicio");
 		lugar1.setName("Piscina cubierta");
 		placeRepository.save(lugar1); // Guardar en BD antes de asignarlo a actividades
 		
 		Place lugar2 = new Place();
-		lugar2.setDescripcion("Se trata de pistas de atletismo que cuentan con pistas de rugby, fútbol, atletismo");
+		lugar2.setDescription("Se trata de pistas de atletismo que cuentan con pistas de rugby, fútbol, atletismo");
 		lugar2.setName("Pistas exteriores");
 		placeRepository.save(lugar2); // Guardar en BD antes de asignarlo a actividades
 		
 		Place lugar3 = new Place();
-		lugar3.setDescripcion("Pista de bolos para jugar a los bolos que cuenta con 7 pistas de bolos");
+		lugar3.setDescription("Pista de bolos para jugar a los bolos que cuenta con 7 pistas de bolos");
 		lugar3.setName("Pista de bolos");
 		placeRepository.save(lugar3); 
 

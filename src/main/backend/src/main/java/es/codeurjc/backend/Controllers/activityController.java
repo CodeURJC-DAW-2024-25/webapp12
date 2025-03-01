@@ -62,6 +62,9 @@ public class activityController {
     private ActivityService activityService;
 
     @Autowired
+    private PlaceService placeService;
+
+    @Autowired
     private ReviewService reviewService;
 
     @Autowired
@@ -209,7 +212,7 @@ public class activityController {
     
         if (optionalActivity.isEmpty()) {
             model.addAttribute("errorMessage", "Actividad no encontrada.");
-            return "error";  // Página de error
+            return "404";  // Página de error
         }
     
         Activity activity = optionalActivity.get();
@@ -237,21 +240,6 @@ public class activityController {
         System.out.println("Número de comentarios: " + reviews.size());
         
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
         // Convertir la imagen Blob a Base64 para Mustache
         if (activity.getImageFile() != null) {
             try {
@@ -321,6 +309,68 @@ public class activityController {
             return "404";
        }
     }
+    
+    @GetMapping("/editActivity/{id}")
+    public String showEditActivityForm(@PathVariable Long id, Model model) {
+        // Buscar la actividad por su ID
+        Optional<Activity> optionalActivity = activityService.findById(id);
+        Activity activity = optionalActivity.get();
+
+        if (optionalActivity.isEmpty()) {
+            model.addAttribute("errorMessage", "Actividad no encontrada.");
+            return "404";  // Página de error si no se encuentra la actividad
+        }
+        if (activity.getImageFile() != null) {
+            try {
+                byte[] imageBytes = activity.getImageFile().getBytes(1, (int) activity.getImageFile().length());
+                String imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
+                activity.setImageString(imageBase64); 
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } else {
+            activity.setImageString("/activities/" + activity.getId() + "/image");
+        
+        }
+
+        Place place = activity.getPlace();
+        model.addAttribute("activity", activity);
+        model.addAttribute("place", place);
+        model.addAttribute("places", placeService.getAllPlaces());
+
+    // Retorna la plantilla de edición
+        return "Edit_activity";  // Nombre del archivo HTML para editar
+    }
+
+    @PostMapping("/editActivity/{id}")
+    public String editActivity(@PathVariable Long id, @ModelAttribute Activity updatedActivity, @RequestParam("file") MultipartFile imagFile) throws IOException {
+        Optional<Activity> optionalActivity = activityService.findById(id);
+        if (optionalActivity.isPresent()) {
+            Activity activity = optionalActivity.get();
+
+            // Actualiza los campos de la actividad con los valores del formulario
+            activity.setName(updatedActivity.getName());
+            activity.setDescription(updatedActivity.getDescription());
+            activity.setCategory(updatedActivity.getCategory());
+            activity.setVacancy(updatedActivity.getVacancy());
+            activity.setPlace(updatedActivity.getPlace());
+
+            // Si se sube una nueva imagen, actualiza la imagen
+            if (!imagFile.isEmpty()) {
+                activity.setImageFile(BlobProxy.generateProxy(imagFile.getInputStream(), imagFile.getSize()));
+            }
+
+            // Guarda los cambios
+            activityService.saveActivity(activity);
+
+            return "redirect:/admin_activities";  // Redirige a la vista de administración de actividades
+        }
+
+        return "404";  // Si no se encuentra la actividad, muestra un error
+    }
+
+
+
     
     
     

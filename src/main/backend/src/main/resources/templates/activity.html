@@ -23,8 +23,8 @@
 
                     <h3>Detalles de la Actividad</h3>
                     <ul>
-                        <li><strong>📍 Ubicación:</strong> {{#place}}{{nombre}}{{/place}}</li>
-                        <li><strong>📍 Ubicación - Descripción:</strong> {{#place}}{{descripcion}}{{/place}}</li>
+                        <li><strong>📍 Ubicación:</strong> {{#place}}{{name}}{{/place}}</li>
+                        <li><strong>📍 Ubicación - Descripción:</strong> {{#place}}{{description}}{{/place}}</li>
                         <li><strong>⏰ Horario:</strong> Lunes, Miércoles y Viernes - 10:00 AM a 11:30 AM</li>
                         <li><strong>👥 Capacidad máxima:</strong> {{activity.vacancy}} personas</li>
                         <li><strong>🎟️ Reserva previa requerida</strong> en recepción o a través de la app del resort</li>
@@ -101,10 +101,6 @@
                         <h5 class="widget-header">Realiza aquí tu Reserva</h5>
                         <div>
                             <button class="btn btn-primary">RESERVAR</button>
-                        </div>
-                        <div>
-                            <br>
-                            <button class="btn btn-primary" data-toggle="modal" data-target="#editActivityModal">Editar</button>
                         </div>
                     </div>
                 </div>

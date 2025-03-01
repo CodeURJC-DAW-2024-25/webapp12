@@ -17,7 +17,7 @@ public class Place {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String descripcion;
+	private String description;
 	private String name;
 	@OneToMany(mappedBy = "place")
 	private List<Activity> activities;
@@ -28,12 +28,12 @@ public class Place {
 		super();
 	}
 
-	public String getDescripcion() {
-		return descripcion;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public String getName() {
