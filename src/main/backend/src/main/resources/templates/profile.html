@@ -36,7 +36,7 @@
               </li>
               
               <li>
-								<a href="create_activity"><i class="fas fa-plus-square"></i> Crear nueva actividad</a>
+								<a href="/createActivity"><i class="fas fa-plus-square"></i> Crear nueva actividad</a>
 							</li>
 							<li>
 								<a href="/admin_users"><i class="fa fa-users"></i> Todos los usuarios <span>{{userCount}}</span></a>
@@ -47,48 +47,18 @@
               {{/admin}}
               {{#user}}
               <li>
-                <form action="/logout" method="post" style="display: inline;">
-                    <input type="hidden" name="_csrf" value="{{token}}">
-                    <button type="submit" style="border: none; background: none; color: inherit; cursor: pointer;">
-                        <i class="fa fa-chart-bar"></i> Cerrar sesión
-                    </button>
-                </form>
+                <a>
+                  <form action="/logout" method="post" style="display: inline;">
+                      <input type="hidden" name="_csrf" value="{{token}}">
+                      <button type="submit" style="border: none; background: none; color: inherit; cursor: pointer;">
+                          <i class="fa fa-chart-bar"></i> Cerrar sesión
+                      </button>
+                  </form>
+                </a>
               </li>
-							<li>
-								<a href="#!" data-toggle="modal" data-target="#deleteaccount"><i class="fa fa-trash"></i>Borrar cuenta</a>
-							</li>
               {{/user}}
 						</ul>
 					</div>
-          
-          <!-- delete-account modal -->
-          <!-- delete account popup modal start-->
-          <!-- Modal -->
-          <div class="modal fade" id="deleteaccount" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-            aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-              <div class="modal-content">
-                <div class="modal-header border-bottom-0">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body text-center">
-                  <img src="/images/account/Account1.png" class="img-fluid mb-2" alt="">
-                  <h6 class="py-2">¿Estas seguro de querer eliminar tu cuenta?</h6>
-                  <p>Se borraran todos tus datos. No se podrá recuperar la Información de la cuenta.</p>
-                  <textarea class="form-control" name="message" id="" cols="40" rows="4" class="w-100 rounded"></textarea>
-                </div>
-                <div class="modal-footer border-top-0 mb-3 mx-5 justify-content-center">
-                  <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
-                  <button type="button" class="btn btn-danger">Borrar</button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- delete account popup modal end-->
-                    <!-- delete-account modal -->
-
         </div>
       </div>
       <div class="col-lg-8">

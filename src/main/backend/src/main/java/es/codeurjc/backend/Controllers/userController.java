@@ -246,8 +246,38 @@ public class userController {
     }
 
     @GetMapping("/statistics")
-    public String showStatistics() {
-        return "statistics";
+    public String showStatistics(HttpServletRequest request,Model model,Principal principal) {
+        model.addAttribute("admin", request.isUserInRole("ADMIN"));
+        model.addAttribute("user", request.isUserInRole("USER"));
+
+        String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByEmail(userEmail);
+
+        if(user != null){
+            if (user.getImageFile() != null) {
+                try {
+                    byte[] imageBytes = user.getImageFile().getBytes(1, (int) user.getImageFile().length());
+                    String imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
+                    user.setImageString("data:image/png;base64," + imageBase64);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    user.setImageString("nofoto.png"); // Imagen por defecto
+                }
+            } else {
+                user.setImageString("nofoto.png");
+            }
+            List<Activity> subscribedActivities = activityService.findEventsSubscribe(user);
+            model.addAttribute("userRegistered", user);
+            model.addAttribute("subscribedActivities", subscribedActivities);
+            model.addAttribute("countActivitiesSubscribed", subscribedActivities.size());
+            model.addAttribute("userCount", userService.countUsers());
+            model.addAttribute("activityCount", activityService.activityCount());
+            
+
+            return "statistics";
+        }else{
+            return "404";
+        }
     }
     
 }

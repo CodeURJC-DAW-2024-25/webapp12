@@ -18,7 +18,7 @@ public class Place {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String descripcion;
-	private String nombre;
+	private String name;
 	@OneToMany(mappedBy = "place")
 	private List<Activity> activities;
 
@@ -36,12 +36,12 @@ public class Place {
 		this.descripcion = descripcion;
 	}
 
-	public String getNombre() {
-		return nombre;
+	public String getName() {
+		return name;
 	}
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public Long getId() {

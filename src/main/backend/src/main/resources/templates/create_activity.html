@@ -1,4 +1,4 @@
-{{> header}}
+{{>header}}
 
 <section class="advt-post bg-gray py-5">
   <div class="container">
@@ -16,8 +16,15 @@
             <input type="text" name="date" class="form-control bg-white" placeholder="Fecha" required>
             <h6 class="font-weight-bold pt-4 pb-1">Hora:</h6>
             <input type="text" name="time" class="form-control bg-white" placeholder="Hora" required>
+            
             <h6 class="font-weight-bold pt-4 pb-1">Lugar:</h6>
-            <input type="text" name="place" class="form-control bg-white" placeholder="Lugar" required>
+              <select name="placeId" class="form-control bg-white" required>
+                  <option value="">Lugares</option>
+                  {{#allPlaces}}
+                  <option value="{{id}}">{{name}}</option>
+                  {{/allPlaces}}
+              </select> 
+          
             <h6 class="font-weight-bold pt-4 pb-1">Descripcion:</h6>
             <textarea name="description" id="" class="form-control bg-white" rows="7"
               placeholder="Descripcion" required></textarea>
@@ -26,11 +33,11 @@
             <h6 class="font-weight-bold pt-4 pb-1">Categoria:</h6>
             <select name="category" class="form-control w-100 bg-white" id="inputGroupSelect">
               <option>Categorias</option>
-												<option value="1">Deportes de contacto</option>
-												<option value="2">Deportes de equipo</option>
-												<option value="3">Deportes individuales</option>
-												<option value="4">Aventura y desafío</option>
-												<option value="4">Relajación</option>
+												<option value="Deportes de contacto">Deportes de contacto</option>
+												<option value="Deportes de equipo">Deportes de equipo</option>
+												<option value="Deportes individuales">Deportes individuales</option>
+												<option value="Aventura y desafío">Aventura y desafío</option>
+												<option value="Relajación">Relajación</option>
             </select>
             <div class="vacancy">
               <h6 class="font-weight-bold pt-4 pb-1">Vacantes:</h6>
@@ -53,6 +60,7 @@
       <!-- Post Your ad end -->
 
       <!-- submit button -->
+      <input type="hidden" name="_csrf" value="{{token}}">
       <button type="submit" class="btn btn-primary d-block mt-2">Crear Actividad</button>
     </form>
   </div>

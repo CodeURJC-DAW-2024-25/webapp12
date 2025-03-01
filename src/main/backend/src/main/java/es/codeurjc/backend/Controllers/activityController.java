@@ -28,10 +28,12 @@ import es.codeurjc.backend.Model.Place;
 import es.codeurjc.backend.Model.Review;
 import es.codeurjc.backend.Model.User;
 import es.codeurjc.backend.Service.ActivityService;
+import es.codeurjc.backend.Service.PlaceService;
 import es.codeurjc.backend.Service.ReviewService;
 import es.codeurjc.backend.Service.UserService;
 
 import es.codeurjc.backend.Repository.ActivityRepository;
+import es.codeurjc.backend.Repository.PlaceRepository;
 import es.codeurjc.backend.Repository.UserRepository;
 
 import java.util.Base64;
@@ -48,6 +50,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 
 
 
@@ -69,6 +72,12 @@ public class activityController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PlaceRepository placeRepository;
+
+    @Autowired
+    private PlaceService placeService;
 
     @GetMapping("/")
     public String showActivities(Model model) {
@@ -224,7 +233,7 @@ public class activityController {
         System.out.println("Categoría: " + activity.getCategory());
         System.out.println("Vacantes: " + activity.getVacancy());
         System.out.println("Imagen: " + activity.getImageString());
-        System.out.println("Lugar: " + (place != null ? place.getNombre() : "No tiene lugar asignado"));
+        System.out.println("Lugar: " + (place != null ? place.getName() : "No tiene lugar asignado"));
         System.out.println("Número de comentarios: " + reviews.size());
         
 
@@ -283,12 +292,14 @@ public class activityController {
 
 
     @GetMapping("/createActivity")
-    public String showFormNewActivity() {
+    public String showFormNewActivity(Model model) {
+
+        model.addAttribute("allPlaces", placeService.getAllPlaces());
         return "create_activity";
     }
 
     @PostMapping("/createActivity")
-    public String createNewActivity(@ModelAttribute Activity activity,@RequestParam("file") MultipartFile imagFile) {
+    public String createNewActivity(@ModelAttribute Activity activity, @RequestParam("placeId") Long placeId,@RequestParam("file") MultipartFile imagFile) {
        try{
             if(!imagFile.isEmpty()){
                 activity.setImageFile(BlobProxy.generateProxy(imagFile.getInputStream(), imagFile.getSize()));
@@ -296,6 +307,13 @@ public class activityController {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(new Date()); // Convierte Date a Calendar
             activity.setCreationDate(calendar);
+            Optional<Place> optionalPlace = placeRepository.findById(placeId);
+            if (optionalPlace.isPresent()) {
+                Place place = optionalPlace.get();
+                activity.setPlace(place);
+            }else{
+                return "404";
+            }
             activityService.saveActivity(activity);
             return "redirect:/admin_activities";
        }catch(IOException e){
