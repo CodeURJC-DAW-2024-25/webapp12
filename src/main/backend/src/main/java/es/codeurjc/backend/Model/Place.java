@@ -1,11 +1,15 @@
 package es.codeurjc.backend.Model;
 
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Place {
@@ -15,17 +19,13 @@ public class Place {
 	private Long id;
 	private String descripcion;
 	private String nombre;
-	@ManyToOne
-	private Activity activity;
+	@OneToMany(mappedBy = "place")
+	private List<Activity> activities;
+
 
 
 	public Place() {
 		super();
-	}
-
-	public Place(String descripcion, Activity activity) {
-		this.descripcion = descripcion;
-		this.activity = activity;
 	}
 
 	public String getDescripcion() {
@@ -51,14 +51,13 @@ public class Place {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-
-	public Activity getActivity() {
-		return activity;
+	
+	public List<Activity> getActivities() {
+		return activities;
 	}
 
-	public void setActivity(Activity activity) {
-		this.activity = activity;
+	public void setActivities(List<Activity> activities) {
+		this.activities = activities;
 	}
 
 }

@@ -1,7 +1,6 @@
 package es.codeurjc.backend.Model;
 
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.sql.Blob;
@@ -16,9 +15,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 @Entity
@@ -27,13 +27,20 @@ public class Activity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Place> material = new ArrayList<>();
+
+
+	@ManyToOne
+	@JoinColumn(name = "place_id")
+	private Place place;
+
 	@OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Review> reviews;
+
 	@ManyToMany (mappedBy = "activities")
 	@JsonIgnore
 	private List<User> users;
+
+
 	private String name;
 	private String category;
 	private String description;
@@ -72,14 +79,6 @@ public class Activity {
 		this.users = users;
 	}
 
-	public List<Place> getMaterial() {
-		return material;
-	}
-
-	public void setMaterial(List<Place> materiales) {
-		this.material = materiales;
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -110,6 +109,14 @@ public class Activity {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Place getPlace() {
+		return place;
+	}
+
+	public void setPlace(Place place) {
+		this.place = place;
 	}
 
 	public int getVacancy(){

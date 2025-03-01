@@ -24,6 +24,7 @@ import java.util.Optional;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.codeurjc.backend.Model.Activity;
+import es.codeurjc.backend.Model.Place;
 import es.codeurjc.backend.Model.Review;
 import es.codeurjc.backend.Model.User;
 import es.codeurjc.backend.Service.ActivityService;
@@ -203,10 +204,44 @@ public class activityController {
         }
     
         Activity activity = optionalActivity.get();
+    
         
         // Obtener todas las reviews de la actividad
         List<Review> reviews = reviewService.findByActivity_Id(id);
         model.addAttribute("reviews", reviews);
+
+        // Obtener el lugar asociado a la actividad
+        Place place = activity.getPlace(); 
+        model.addAttribute("place", place);
+
+
+
+
+
+
+        System.out.println("Nombre de actividad: " + activity.getName());
+        System.out.println("Descripción: " + activity.getDescription());
+        System.out.println("Categoría: " + activity.getCategory());
+        System.out.println("Vacantes: " + activity.getVacancy());
+        System.out.println("Imagen: " + activity.getImageString());
+        System.out.println("Lugar: " + (place != null ? place.getNombre() : "No tiene lugar asignado"));
+        System.out.println("Número de comentarios: " + reviews.size());
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
         // Convertir la imagen Blob a Base64 para Mustache
         if (activity.getImageFile() != null) {

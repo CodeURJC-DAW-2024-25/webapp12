@@ -145,6 +145,27 @@ public class DatabaseInitializerService {
 		
 		userRepository.save(admin);
 
+
+		//SAMPLES DE LUGAR
+		Place lugar1 = new Place();
+		lugar1.setDescripcion("Este lugar contiene una piscina en la que se puede nadar. La piscina es una piscina olímpica de 50 metros de largo, donde podrás hacer mucho ejercicio");
+		lugar1.setNombre("Piscina cubierta");
+		placeRepository.save(lugar1); // Guardar en BD antes de asignarlo a actividades
+		
+		Place lugar2 = new Place();
+		lugar2.setDescripcion("Se trata de pistas de atletismo que cuentan con pistas de rugby, fútbol, atletismo");
+		lugar2.setNombre("Pistas exteriores");
+		placeRepository.save(lugar2); // Guardar en BD antes de asignarlo a actividades
+		
+		Place lugar3 = new Place();
+		lugar3.setDescripcion("Pista de bolos para jugar a los bolos que cuenta con 7 pistas de bolos");
+		lugar3.setNombre("Pista de bolos");
+		placeRepository.save(lugar3); 
+
+
+
+		
+
 		// Sample reviews
 		Review review1 = new Review(1, "No me ha gustado nada, muy mejorable :(", user1);
 		Review review2 = new Review(2, "He aprendido poco, es muy para principiantes", user2);
@@ -168,7 +189,7 @@ public class DatabaseInitializerService {
 		} catch (IOException | SQLException e) {
 			e.printStackTrace();
 		}
-		
+		activity1.setPlace(lugar1);
 		
 		activityRepository.save(activity1);
 		review1.setActivity(activity1);
@@ -194,6 +215,8 @@ public class DatabaseInitializerService {
 			e.printStackTrace();
 		}
 
+		activity2.setPlace(lugar1);
+
 		activityRepository.save(activity2);
 		review2.setActivity(activity2);
 		review2.setCreationDate(Calendar.getInstance());
@@ -213,6 +236,9 @@ public class DatabaseInitializerService {
 		} catch (IOException | SQLException e) {
 			e.printStackTrace();
 		}
+
+		activity3.setPlace(lugar1);
+
 		activityRepository.save(activity3);
 		review3.setActivity(activity3);
 		review3.setCreationDate(Calendar.getInstance());
@@ -228,6 +254,9 @@ public class DatabaseInitializerService {
 		} catch (IOException | SQLException e) {
 			e.printStackTrace();
 		}
+
+		activity4.setPlace(lugar1);
+
 		activityRepository.save(activity4);
 		review4.setActivity(activity4);
 		review4.setCreationDate(Calendar.getInstance());
@@ -235,6 +264,8 @@ public class DatabaseInitializerService {
 
 		Activity activity5 = new Activity("natacion", "deporte de agua","sigue nadando sigue nadando",10);
 		
+		activity5.setPlace(lugar1);
+
 		activityRepository.save(activity5);
 		review4.setActivity(activity5);
 		review4.setCreationDate(Calendar.getInstance());
@@ -242,6 +273,8 @@ public class DatabaseInitializerService {
 
 		Activity activity6 = new Activity("natacion", "deporte de agua","sigue nadando sigue nadando",10);
 		
+		activity6.setPlace(lugar1);
+
 		activityRepository.save(activity6);
 		review4.setActivity(activity6);
 		review4.setCreationDate(Calendar.getInstance());
@@ -249,6 +282,8 @@ public class DatabaseInitializerService {
 		
 		Activity activity7 = new Activity("natacion", "deporte de agua","sigue nadando sigue nadando",10);
 		
+		activity7.setPlace(lugar2);
+
 		activityRepository.save(activity7);
 		review4.setActivity(activity7);
 		review4.setCreationDate(Calendar.getInstance());
@@ -256,6 +291,8 @@ public class DatabaseInitializerService {
 		
 		Activity activity8 = new Activity("natacion", "deporte de agua","sigue nadando sigue nadando",10);
 		
+		activity8.setPlace(lugar2);
+
 		activityRepository.save(activity8);
 		review4.setActivity(activity8);
 		review4.setCreationDate(Calendar.getInstance());
@@ -263,6 +300,8 @@ public class DatabaseInitializerService {
 		
 		Activity activity9 = new Activity("natacion", "deporte de agua","sigue nadando sigue nadando",10);
 		
+		activity9.setPlace(lugar2);
+
 		activityRepository.save(activity9);
 		review4.setActivity(activity9);
 		review4.setCreationDate(Calendar.getInstance());
@@ -270,6 +309,8 @@ public class DatabaseInitializerService {
 		
 		Activity activity10 = new Activity("natacion", "deporte de agua","sigue nadando sigue nadando",10);
 		
+		activity10.setPlace(lugar3);
+
 		activityRepository.save(activity10);
 		review4.setActivity(activity10);
 		review4.setCreationDate(Calendar.getInstance());
@@ -277,6 +318,8 @@ public class DatabaseInitializerService {
 
 		Activity activity11 = new Activity("natacion", "deporte de agua","sigue nadando sigue nadando",10);
 		
+		activity11.setPlace(lugar3);
+
 		activityRepository.save(activity11);
 		review4.setActivity(activity11);
 		review4.setCreationDate(Calendar.getInstance());
@@ -284,6 +327,8 @@ public class DatabaseInitializerService {
 
 		Activity activity12 = new Activity("natacion", "deporte de agua","sigue nadando sigue nadando",10);
 		
+		activity12.setPlace(lugar3);
+
 		activityRepository.save(activity12);
 		review4.setActivity(activity12);
 		review4.setCreationDate(Calendar.getInstance());
@@ -309,38 +354,6 @@ public class DatabaseInitializerService {
 
 		user6.setActivities(List.of(activity1, activity2, activity3, activity4,activity5,activity6));
 		userRepository.save(user6);
-
-
-
-		//SAMPLES PARA LUGARES
-		Place lugar1 = new Place();
-		lugar1.setDescripcion("Este lugar contiene una piscina en la que se peude nada. La piscina es una piscina olimpica de 50 metros de largo, donde podrás hacer mucho ejecicio");
-		lugar1.setNombre("Piscina cubierta");
-		lugar1.setActivity(activity1); 
-		lugar1.setActivity(activity2); 
-		lugar1.setActivity(activity3); 
-		lugar1.setActivity(activity4); 
-		lugar1.setActivity(activity5); 
-		placeRepository.save(lugar1);
-
-		Place lugar2 = new Place();
-		lugar2.setDescripcion("Se traa de pistas de atletismo que cuenta con pistas de rudgy, futbol, atletismo");
-		lugar2.setNombre("Pistas exteriores");
-		lugar2.setActivity(activity6); 
-		lugar1.setActivity(activity7); 
-		lugar1.setActivity(activity8); 
-		lugar1.setActivity(activity9); 
-		placeRepository.save(lugar2);
-
-		Place lugar3 = new Place();
-		lugar3.setDescripcion("Pista de bolos para jugar a los bolos que cuenta con 7 pistas de bolos");
-		lugar3.setNombre("Pista de bolos");
-		lugar3.setActivity(activity10);
-		lugar3.setActivity(activity11);
-		lugar3.setActivity(activity12);
-		placeRepository.save(lugar3);
-
-		
 
 	}
 
