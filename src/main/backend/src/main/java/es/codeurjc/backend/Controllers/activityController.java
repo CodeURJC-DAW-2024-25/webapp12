@@ -62,9 +62,6 @@ public class activityController {
     private ActivityService activityService;
 
     @Autowired
-    private PlaceService placeService;
-
-    @Autowired
     private ReviewService reviewService;
 
     @Autowired
