@@ -4,6 +4,7 @@ package es.codeurjc.backend.Model;
 import java.util.Calendar;
 import java.util.List;
 import java.sql.Blob;
+import java.sql.Date;
 import java.text.SimpleDateFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -48,7 +49,12 @@ public class Activity {
 	
 	private Calendar creationDate;
 	private String formattedCreationDate;
+
+	private Date activityDate;
+
+
 	
+
 	@Lob
 	@JsonIgnore
 	private Blob imageFile;
@@ -144,6 +150,12 @@ public class Activity {
 		this.creationDate = creationDate;
 	}
 
+	public void setCreationDateMethod (){
+		this.creationDate = Calendar.getInstance();
+		this.creationDate.set(Calendar.HOUR_OF_DAY, 0);
+		this.formattedCreationDate = new SimpleDateFormat("dd/MM/yyyy").format(this.creationDate.getTime());
+	}
+
 	public String getFormattedCreationDate() {
 		return formattedCreationDate;
 	}
@@ -166,6 +178,16 @@ public class Activity {
 	public void setImageFile(Blob imageFile) {
 		this.imageFile = imageFile;
 	}
+	
+	public Date getActivityDate() {
+		return activityDate;
+	}
+
+	public Date setActivityDate(Date activityDate) {
+		return this.activityDate = activityDate;
+	}
+
+
 
 	
 }

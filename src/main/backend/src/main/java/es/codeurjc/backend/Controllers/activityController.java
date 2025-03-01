@@ -50,7 +50,6 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 
 
 
@@ -284,28 +283,43 @@ public class activityController {
     }
 
     @PostMapping("/createActivity")
-    public String createNewActivity(@ModelAttribute Activity activity, @RequestParam("placeId") Long placeId,@RequestParam("file") MultipartFile imagFile) {
-       try{
-            if(!imagFile.isEmpty()){
-                activity.setImageFile(BlobProxy.generateProxy(imagFile.getInputStream(), imagFile.getSize()));
-            }
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(new Date()); // Convierte Date a Calendar
-            activity.setCreationDate(calendar);
-            Optional<Place> optionalPlace = placeRepository.findById(placeId);
-            if (optionalPlace.isPresent()) {
-                Place place = optionalPlace.get();
-                activity.setPlace(place);
-            }else{
-                return "404";
-            }
-            activityService.saveActivity(activity);
-            return "redirect:/admin_activities";
-       }catch(IOException e){
-            e.printStackTrace();
-            return "404";
-       }
+public String createNewActivity(@ModelAttribute Activity activity, @RequestParam("placeId") Long placeId, @RequestParam("file") MultipartFile imagFile) {
+    try {
+        // Si el archivo no está vacío, lo convertimos en un Blob y lo asignamos a la actividad
+        if (!imagFile.isEmpty()) {
+            activity.setImageFile(BlobProxy.generateProxy(imagFile.getInputStream(), imagFile.getSize()));
+        }
+
+        activity.setCreationDateMethod();
+
+        // Obtener el lugar de la actividad
+        Optional<Place> optionalPlace = placeRepository.findById(placeId);
+        if (optionalPlace.isPresent()) {
+            Place place = optionalPlace.get();
+            activity.setPlace(place);
+        } else {
+            return "404"; // Si no se encuentra el lugar, retorna error
+        }
+
+        // Convertir la fecha de actividad desde el tipo java.util.Date a java.sql.Date
+        java.util.Date utilDate = activity.getActivityDate(); // Suponiendo que el formulario pasa la fecha como java.util.Date
+        if (utilDate != null) {
+            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+            activity.setActivityDate(sqlDate); // Establecer la fecha de actividad convertida
+        }
+
+        // Guardar la actividad
+        activityService.saveActivity(activity);
+        return "redirect:/admin_activities"; // Redirigir a la página de administración de actividades
+    } catch (IOException e) {
+        e.printStackTrace();
+        return "404"; // Si ocurre un error, se maneja el error y retorna una página de error
     }
+}
+
+
+
+
     
     @GetMapping("/editActivity/{id}")
     public String showEditActivityForm(@PathVariable Long id, Model model) {

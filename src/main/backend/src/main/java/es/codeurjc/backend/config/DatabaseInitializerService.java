@@ -3,6 +3,7 @@ package es.codeurjc.backend.config;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.List;
@@ -190,6 +191,7 @@ public class DatabaseInitializerService {
 			e.printStackTrace();
 		}
 		activity1.setPlace(lugar1);
+		activity1.setActivityDate(Date.valueOf("2026-03-01"));
 		
 		activityRepository.save(activity1);
 		review1.setActivity(activity1);
@@ -216,6 +218,7 @@ public class DatabaseInitializerService {
 		}
 
 		activity2.setPlace(lugar1);
+		activity2.setActivityDate(Date.valueOf("2026-03-01"));
 
 		activityRepository.save(activity2);
 		review2.setActivity(activity2);
@@ -238,6 +241,7 @@ public class DatabaseInitializerService {
 		}
 
 		activity3.setPlace(lugar1);
+		activity3.setActivityDate(Date.valueOf("2026-03-01"));
 
 		activityRepository.save(activity3);
 		review3.setActivity(activity3);
@@ -256,6 +260,7 @@ public class DatabaseInitializerService {
 		}
 
 		activity4.setPlace(lugar1);
+		activity4.setActivityDate(Date.valueOf("2026-03-01"));
 
 		activityRepository.save(activity4);
 		review4.setActivity(activity4);
@@ -265,6 +270,7 @@ public class DatabaseInitializerService {
 		Activity activity5 = new Activity("natacion", "deporte de agua","sigue nadando sigue nadando",10);
 		
 		activity5.setPlace(lugar1);
+		activity5.setActivityDate(Date.valueOf("2026-03-01"));
 
 		activityRepository.save(activity5);
 		review4.setActivity(activity5);
@@ -274,6 +280,7 @@ public class DatabaseInitializerService {
 		Activity activity6 = new Activity("natacion", "deporte de agua","sigue nadando sigue nadando",10);
 		
 		activity6.setPlace(lugar1);
+		activity6.setActivityDate(Date.valueOf("2026-03-01"));
 
 		activityRepository.save(activity6);
 		review4.setActivity(activity6);
@@ -283,6 +290,7 @@ public class DatabaseInitializerService {
 		Activity activity7 = new Activity("natacion", "deporte de agua","sigue nadando sigue nadando",10);
 		
 		activity7.setPlace(lugar2);
+		activity7.setActivityDate(Date.valueOf("2026-03-01"));
 
 		activityRepository.save(activity7);
 		review4.setActivity(activity7);
@@ -292,6 +300,7 @@ public class DatabaseInitializerService {
 		Activity activity8 = new Activity("natacion", "deporte de agua","sigue nadando sigue nadando",10);
 		
 		activity8.setPlace(lugar2);
+		activity8.setActivityDate(Date.valueOf("2026-03-01"));
 
 		activityRepository.save(activity8);
 		review4.setActivity(activity8);
@@ -301,6 +310,7 @@ public class DatabaseInitializerService {
 		Activity activity9 = new Activity("natacion", "deporte de agua","sigue nadando sigue nadando",10);
 		
 		activity9.setPlace(lugar2);
+		activity9.setActivityDate(Date.valueOf("2026-03-01"));
 
 		activityRepository.save(activity9);
 		review4.setActivity(activity9);
@@ -310,6 +320,7 @@ public class DatabaseInitializerService {
 		Activity activity10 = new Activity("natacion", "deporte de agua","sigue nadando sigue nadando",10);
 		
 		activity10.setPlace(lugar3);
+		activity10.setActivityDate(Date.valueOf("2026-03-01"));
 
 		activityRepository.save(activity10);
 		review4.setActivity(activity10);
@@ -319,6 +330,7 @@ public class DatabaseInitializerService {
 		Activity activity11 = new Activity("natacion", "deporte de agua","sigue nadando sigue nadando",10);
 		
 		activity11.setPlace(lugar3);
+		activity11.setActivityDate(Date.valueOf("2026-03-01"));
 
 		activityRepository.save(activity11);
 		review4.setActivity(activity11);
@@ -328,6 +340,7 @@ public class DatabaseInitializerService {
 		Activity activity12 = new Activity("natacion", "deporte de agua","sigue nadando sigue nadando",10);
 		
 		activity12.setPlace(lugar3);
+		activity12.setActivityDate(Date.valueOf("2026-03-01"));
 
 		activityRepository.save(activity12);
 		review4.setActivity(activity12);
