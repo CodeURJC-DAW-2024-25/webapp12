@@ -10,6 +10,7 @@ import es.codeurjc.backend.Model.Place;
 import es.codeurjc.backend.Model.User;
 import es.codeurjc.backend.Repository.ActivityRepository;
 import es.codeurjc.backend.Repository.UserRepository;
+import jakarta.transaction.Transactional;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Page;
@@ -73,7 +74,7 @@ public class ActivityService {
 
    public List<Activity> findEventsSubscribe(User user){
         return activityRepository.findByUsers(user);
-   }
+    }
     public Activity getActivityById(Long id) {
         // Utiliza el repositorio para buscar la actividad por su ID
         Optional<Activity> activityOptional = activityRepository.findById(id);
@@ -120,6 +121,45 @@ public class ActivityService {
         }
 
         return activitiesByMonth;
+    }
+
+    @Transactional
+    public boolean reserveActivity(Long activityId, Long userId) {
+        // Buscar la actividad
+        Activity activity = activityRepository.findById(activityId).orElse(null);
+        if (activity == null) {
+            return false; // Si no se encuentra la actividad, retornar false
+        }
+
+        // Verificar si hay vacantes disponibles
+        if (activity.getVacancy() <= 0) {
+            return false; // Si no hay vacantes disponibles, retornar false
+        }
+
+        // Buscar el usuario
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            return false; // Si no se encuentra el usuario, retornar false
+        }
+
+        // Añadir la actividad al usuario si no está ya inscrito
+        if (user.getActivities().contains(activity)) {
+            return false; // Si el usuario ya está inscrito en la actividad, retornar false
+        }
+
+        // Disminuir el número de vacantes disponibles
+        activity.setVacancy(activity.getVacancy() - 1);
+        
+        // Guardar la actividad con las nuevas vacantes
+        activityRepository.save(activity);
+
+        // Agregar la actividad al usuario
+        user.getActivities().add(activity);
+        
+        // Guardar el usuario con la nueva actividad reservada
+        userRepository.save(user);
+
+        return true; // Reserva exitosa
     }
 }
 

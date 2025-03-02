@@ -223,39 +223,36 @@ public class activityController {
 
 
     @GetMapping("/activity/{id}")
-    public String getActivityDetail(@PathVariable Long id, Model model) {
+    public String getActivityDetail(@PathVariable Long id, Model model, Principal principal) {
         Optional<Activity> optionalActivity = activityService.findById(id);
-    
+        
         if (optionalActivity.isEmpty()) {
             model.addAttribute("errorMessage", "Actividad no encontrada.");
             return "404";  // Página de error
         }
     
         Activity activity = optionalActivity.get();
-    
         
         // Obtener todas las reviews de la actividad
         List<Review> reviews = reviewService.findByActivity_Id(id);
         model.addAttribute("reviews", reviews);
-
+    
         // Obtener el lugar asociado a la actividad
         Place place = activity.getPlace(); 
         model.addAttribute("place", place);
-
-
-
-
-
-
-        System.out.println("Nombre de actividad: " + activity.getName());
-        System.out.println("Descripción: " + activity.getDescription());
-        System.out.println("Categoría: " + activity.getCategory());
-        System.out.println("Vacantes: " + activity.getVacancy());
-        System.out.println("Imagen: " + activity.getImageString());
-        System.out.println("Lugar: " + (place != null ? place.getName() : "No tiene lugar asignado"));
-        System.out.println("Número de comentarios: " + reviews.size());
         
-
+        // Obtener el usuario autenticado
+        if (principal != null) {
+            String userEmail = principal.getName();
+            User user = userRepository.findByEmail(userEmail);
+    
+            // Verificar si el usuario está suscrito a esta actividad
+            List<Activity> subscribedActivities = activityService.findEventsSubscribe(user);
+            boolean isSubscribed = subscribedActivities.contains(activity);  // Verifica si la actividad está en la lista de actividades del usuario
+            
+            model.addAttribute("isSubscribed", isSubscribed);
+        }
+    
         // Convertir la imagen Blob a Base64 para Mustache
         if (activity.getImageFile() != null) {
             try {
@@ -269,7 +266,7 @@ public class activityController {
         } else {
             activity.setImageString("nofoto.png");
         }
-    
+        
         model.addAttribute("activity", activity);
         model.addAttribute("reviews", reviews); // Agregar las reviews al modelo
     
@@ -284,39 +281,39 @@ public class activityController {
     }
 
     @PostMapping("/createActivity")
-public String createNewActivity(@ModelAttribute Activity activity, @RequestParam("placeId") Long placeId, @RequestParam("file") MultipartFile imagFile) {
-    try {
-        // Si el archivo no está vacío, lo convertimos en un Blob y lo asignamos a la actividad
-        if (!imagFile.isEmpty()) {
-            activity.setImageFile(BlobProxy.generateProxy(imagFile.getInputStream(), imagFile.getSize()));
+    public String createNewActivity(@ModelAttribute Activity activity, @RequestParam("placeId") Long placeId, @RequestParam("file") MultipartFile imagFile) {
+        try {
+            // Si el archivo no está vacío, lo convertimos en un Blob y lo asignamos a la actividad
+            if (!imagFile.isEmpty()) {
+                activity.setImageFile(BlobProxy.generateProxy(imagFile.getInputStream(), imagFile.getSize()));
+            }
+
+            activity.setCreationDateMethod();
+
+            // Obtener el lugar de la actividad
+            Optional<Place> optionalPlace = placeRepository.findById(placeId);
+            if (optionalPlace.isPresent()) {
+                Place place = optionalPlace.get();
+                activity.setPlace(place);
+            } else {
+                return "404"; // Si no se encuentra el lugar, retorna error
+            }
+
+            // Convertir la fecha de actividad desde el tipo java.util.Date a java.sql.Date
+            java.util.Date utilDate = activity.getActivityDate(); // Suponiendo que el formulario pasa la fecha como java.util.Date
+            if (utilDate != null) {
+                java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+                activity.setActivityDate(sqlDate); // Establecer la fecha de actividad convertida
+            }
+
+            // Guardar la actividad
+            activityService.saveActivity(activity);
+            return "redirect:/admin_activities"; // Redirigir a la página de administración de actividades
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "404"; // Si ocurre un error, se maneja el error y retorna una página de error
         }
-
-        activity.setCreationDateMethod();
-
-        // Obtener el lugar de la actividad
-        Optional<Place> optionalPlace = placeRepository.findById(placeId);
-        if (optionalPlace.isPresent()) {
-            Place place = optionalPlace.get();
-            activity.setPlace(place);
-        } else {
-            return "404"; // Si no se encuentra el lugar, retorna error
-        }
-
-        // Convertir la fecha de actividad desde el tipo java.util.Date a java.sql.Date
-        java.util.Date utilDate = activity.getActivityDate(); // Suponiendo que el formulario pasa la fecha como java.util.Date
-        if (utilDate != null) {
-            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-            activity.setActivityDate(sqlDate); // Establecer la fecha de actividad convertida
-        }
-
-        // Guardar la actividad
-        activityService.saveActivity(activity);
-        return "redirect:/admin_activities"; // Redirigir a la página de administración de actividades
-    } catch (IOException e) {
-        e.printStackTrace();
-        return "404"; // Si ocurre un error, se maneja el error y retorna una página de error
     }
-}
 
 
 
@@ -435,5 +432,28 @@ public String createNewActivity(@ModelAttribute Activity activity, @RequestParam
         return "search_page"; // Devuelve la vista "search_page" con las actividades
     }
 
+    @PostMapping("/activity/{id}/reserve")
+    public String reserveActivity(@PathVariable Long id, Principal principal) {
+        if (principal == null) {
+            return "redirect:/login"; // Si el usuario no está autenticado, redirigir al login
+        }
+
+        String userEmail = principal.getName();
+        User user = userRepository.findByEmail(userEmail);
+
+        if (user == null) {
+            return "404"; // Si el usuario no existe, devolver error
+        }
+
+        boolean success = activityService.reserveActivity(id, user.getId());
+
+        if (!success) {
+            return "redirect:/activity/" + id + "?error=cupo_lleno";
+        }
+
+        return "redirect:/activity/" + id + "?success=reserva_exitosa";
+    }
+
+    
 }
 

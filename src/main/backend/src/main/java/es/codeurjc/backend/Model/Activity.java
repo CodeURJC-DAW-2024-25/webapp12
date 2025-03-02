@@ -3,6 +3,7 @@ package es.codeurjc.backend.Model;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 import java.sql.Blob;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -188,6 +189,17 @@ public class Activity {
 	}
 
 
+	@Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Activity activity = (Activity) o;
+        return Objects.equals(id, activity.id);  // Compara por id, o por cualquier otro atributo único
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);  // Usa el mismo atributo que en equals
+    }
 	
 }

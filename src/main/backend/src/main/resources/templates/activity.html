@@ -82,8 +82,16 @@
                 <div class="sidebar">
                     <div class="widget archive">
                         <h5 class="widget-header">Realiza aquí tu Reserva</h5>
-                        <div>
-                            <button class="btn btn-primary">RESERVAR</button>
+                            {{#isSubscribed}}
+                                <p>Ya estás inscrito en esta actividad.</p>
+                            {{/isSubscribed}}
+
+                            {{^isSubscribed}}
+                                <form action="/activity/{{activity.id}}/reserve" method="post">
+                                    <input type="hidden" name="_csrf" value="{{token}}"/>
+                                    <button type="submit" class="btn btn-primary">RESERVAR</button>
+                                </form>
+                            {{/isSubscribed}}
                         </div>
                     </div>
                 </div>
