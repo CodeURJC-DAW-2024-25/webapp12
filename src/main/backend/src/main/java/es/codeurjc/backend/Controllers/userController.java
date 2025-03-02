@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import es.codeurjc.backend.Service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
@@ -29,11 +32,14 @@ import es.codeurjc.backend.Repository.UserRepository;
 import java.io.IOException;
 import java.security.Principal;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Base64;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.springframework.web.bind.annotation.PostMapping;
+
 
 
 
@@ -246,7 +252,7 @@ public class userController {
     }
 
     @GetMapping("/statistics")
-    public String showStatistics(HttpServletRequest request,Model model,Principal principal) {
+    public String showStatistics(HttpServletRequest request,Model model,Principal principal) throws JsonProcessingException {
         model.addAttribute("admin", request.isUserInRole("ADMIN"));
         model.addAttribute("user", request.isUserInRole("USER"));
 
@@ -267,6 +273,16 @@ public class userController {
                 user.setImageString("nofoto.png");
             }
             List<Activity> subscribedActivities = activityService.findEventsSubscribe(user);
+            Map<Integer, Long> activitiesByMonth = activityService.countActivitiesByMonth();
+            
+            List<Integer> activityData = new ArrayList<>();
+                for (int i = 1; i <= 12; i++) {
+                    activityData.add(activitiesByMonth.getOrDefault(i, 0L).intValue());
+                }
+
+            model.addAttribute("activityData", new ObjectMapper().writeValueAsString(activityData));
+
+            
             model.addAttribute("userRegistered", user);
             model.addAttribute("subscribedActivities", subscribedActivities);
             model.addAttribute("countActivitiesSubscribed", subscribedActivities.size());

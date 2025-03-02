@@ -15,10 +15,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import java.util.Set;
-import java.util.stream.Collectors; 
+import java.util.stream.Collectors;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 @Service
@@ -89,7 +95,38 @@ public List<Activity> recommendActivities(Long userId) {
     
     return activityRepository.findSimilarActivities(categories, places, userActivities);
 }
+    
+public Map<Integer, Long> countActivitiesByMonth() {
+        List<Activity> activities = activityRepository.findAll();
+        Map<Integer, Long> activitiesByMonth = new HashMap<>();
 
+        // Inicializar el mapa con 0 actividades en cada mes
+        for (int i = 1; i <= 12; i++) {
+            activitiesByMonth.put(i, 0L);
+        }
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        for (Activity activity : activities) {
+            String formattedDate = activity.getFormattedCreationDate();
+            if (formattedDate != null && !formattedDate.isEmpty()) {
+                try {
+                    Date date = dateFormat.parse(formattedDate);
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(date);
+                    int month = calendar.get(Calendar.MONTH) + 1; // +1 porque Calendar empieza en 0
+
+                    activitiesByMonth.put(month, activitiesByMonth.get(month) + 1);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return activitiesByMonth;
+    }
 }
+
+
 
 

@@ -104,10 +104,30 @@
 					</div>
 					</div>
 				</div>
-				
-				<!-- Añadir librerías de Chart.js -->
 				<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-				<script src="/js/charts.js"></script>
+				
+				<script>
+					document.addEventListener("DOMContentLoaded", function (){
+						const activityByMonth = JSON.parse('{{activityData}}');
+						console.log("actividades" + '{{activityData}}');
+						console.log("actividades2" + activityByMonth);
+						const revenueCtx = document.getElementById('revenueChart').getContext('2d');	
+						new Chart(revenueCtx, {
+							type: 'bar',
+							data: {
+								labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            					datasets: [{
+									label: 'Cantidad de actividades realizadas durante el mes',
+									data: activityByMonth,
+									backgroundColor: '#2c4a7f'
+								}]
+							},
+							options: { responsive: true }
+						});
+					});
+				</script>
+				
+				
 			  
 		<!-- Row End -->
 	</div>

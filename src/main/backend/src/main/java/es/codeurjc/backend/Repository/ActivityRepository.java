@@ -35,5 +35,7 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
     List<Activity> findSimilarActivities(@Param("categories") Set<String> categories, 
                                          @Param("places") Set<Place> places, 
                                          @Param("userActivities") List<Activity> userActivities);
+    
+    
 }
 
