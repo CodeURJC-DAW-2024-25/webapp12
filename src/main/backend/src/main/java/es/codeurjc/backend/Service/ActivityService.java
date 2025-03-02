@@ -77,49 +77,41 @@ public class ActivityService {
         return activityOptional.orElse(null);
        
     }
-// ALGORITMO DE RECOMENDACIÓN:
-public List<Activity> recommendActivities(Long userId) {
-    User user = userRepository.findById(userId)
-            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+    // ALGORITMO DE RECOMENDACIÓN:
+    public List<Activity> recommendActivities(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        
+        // Cargar las actividades del usuario para evitar problemas de inicialización perezosa
+        List<Activity> userActivities = new ArrayList<>(user.getActivities());
+        
+        Set<String> categories = userActivities.stream()
+                .map(Activity::getCategory)
+                .collect(Collectors.toSet());
+        
+        Set<Place> places = userActivities.stream()
+                .map(Activity::getPlace)
+                .collect(Collectors.toSet());
+        
+        return activityRepository.findSimilarActivities(categories, places, userActivities);
+    }
     
-    // Cargar las actividades del usuario para evitar problemas de inicialización perezosa
-    List<Activity> userActivities = new ArrayList<>(user.getActivities());
-    
-    Set<String> categories = userActivities.stream()
-            .map(Activity::getCategory)
-            .collect(Collectors.toSet());
-    
-    Set<Place> places = userActivities.stream()
-            .map(Activity::getPlace)
-            .collect(Collectors.toSet());
-    
-    return activityRepository.findSimilarActivities(categories, places, userActivities);
-}
-    
-public Map<Integer, Long> countActivitiesByMonth() {
+    public Map<Integer, Long> countActivitiesByMonth() {
         List<Activity> activities = activityRepository.findAll();
         Map<Integer, Long> activitiesByMonth = new HashMap<>();
 
-        // Inicializar el mapa con 0 actividades en cada mes
         for (int i = 1; i <= 12; i++) {
             activitiesByMonth.put(i, 0L);
         }
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-
         for (Activity activity : activities) {
-            String formattedDate = activity.getFormattedCreationDate();
-            if (formattedDate != null && !formattedDate.isEmpty()) {
-                try {
-                    Date date = dateFormat.parse(formattedDate);
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTime(date);
-                    int month = calendar.get(Calendar.MONTH) + 1; // +1 porque Calendar empieza en 0
+            Date activityDate = activity.getActivityDate();
+            if (activityDate != null) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(activityDate);
+                int month = calendar.get(Calendar.MONTH) + 1; 
 
-                    activitiesByMonth.put(month, activitiesByMonth.get(month) + 1);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                activitiesByMonth.put(month, activitiesByMonth.get(month) + 1);
             }
         }
 
