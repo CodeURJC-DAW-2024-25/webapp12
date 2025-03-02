@@ -79,7 +79,7 @@ public class activityController {
     private PlaceService placeService;
 
     @GetMapping("/")
-    public String showActivities(Model model) {
+    public String showActivities(Model model, Principal principal) {
         int page = 0;
         Page<Activity> activities = activityService.getActivitiesPaginated(page);
         //List<Activity> activities = activityService.findAll();
@@ -102,17 +102,43 @@ public class activityController {
         }
 
         model.addAttribute("activities", activities);
+        
+        // Obtener usuario autenticado a través de Principal
+        if (principal != null) {
+            String userEmail = principal.getName();
+            System.out.println("Usuario autenticado: " + userEmail);
+
+            // Buscar usuario en la base de datos por email
+            User user = userRepository.findByEmail(userEmail);
+            if (user != null) {
+                // Obtener actividades recomendadas
+                List<Activity> recommendedActivities = activityService.recommendActivities(user.getId());
+                // Convertir la imagen Blob en base64 y agregarla al modelo
+                for (Activity activity : recommendedActivities) {
+                    if (activity.getImageFile() != null) {
+                        try {
+                            byte[] imageBytes = activity.getImageFile().getBytes(1, (int) activity.getImageFile().length());
+                            String imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
+                            activity.setImageString(imageBase64); 
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        // Asignar directamente la ruta de la imagen predeterminada
+                        activity.setImageString("nofoto.png");
+                        
+                    }
+                }
+                model.addAttribute("recommendedActivities", recommendedActivities);
+            } else {
+                System.out.println("No se encontró el usuario con email: " + userEmail);
+       }
+    }
 
 
 
 
 
-        // Imprimir el nombre del usuario autenticado
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated()) {
-            String username = authentication.getName();
-            System.out.println("Usuario autenticado: " + username);
-        }
 
 
         return "index"; 

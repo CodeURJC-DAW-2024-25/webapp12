@@ -32,7 +32,7 @@ public class User {
 	private String dni;
 	@ElementCollection(fetch = FetchType.EAGER)
 	private List<String> roles;
-	@ManyToMany
+	@ManyToMany (fetch = FetchType.EAGER)
 	@JsonIgnore
 	private List<Activity> activities;
 	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
@@ -173,4 +173,6 @@ public class User {
 	public void setImageString(String imageString) {
 		this.imageString = imageString;
 	}
+
+
 }
