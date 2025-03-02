@@ -172,7 +172,7 @@ public class DatabaseInitializerService {
 		Review review2 = new Review(2, "He aprendido poco, es muy para principiantes", user2);
 		Review review3 = new Review(3, "Me ha servido, aunque hay cosas que he tenido que buscar en internet", user3);
 		Review review4 = new Review(4,"Es un curso fantastico, aunque podrían poner los comandos en un archivo adjunto", user4);		
-		//Review review5 = new Review(5, "Perfecto, gracias a este curso soy mucho mejor profesional", user3);
+		Review review5 = new Review(5, "Perfecto, gracias a este curso soy mucho mejor profesional", user3);
 		Review review6 = new Review(3, "No he encontrado útiles las explicaciones, demasiado confusas", user1);
 		Review review7 = new Review(4, "Buena introducción al tema, pero necesitaría más ejercicios prácticos", user4);
 		Review review8 = new Review(5, "Increíble, he aprendido tanto en tan poco tiempo, gracias al equipo del curso",user2);
@@ -203,6 +203,9 @@ public class DatabaseInitializerService {
 		review7.setActivity(activity1);
 		review7.setCreationDate(Calendar.getInstance());
 		reviewRepository.save(review7);
+		review5.setActivity(activity1);
+		review5.setCreationDate(Calendar.getInstance());
+		reviewRepository.save(review5);
 		
 
 		Activity activity2 = new Activity("Beisbol", "Deporte bate", "Beisbol para la wii",4);
@@ -241,7 +244,7 @@ public class DatabaseInitializerService {
 		}
 
 		activity3.setPlace(lugar1);
-		activity3.setActivityDate(Date.valueOf("2026-03-01"));
+		activity3.setActivityDate(Date.valueOf("2026-04-01"));
 
 		activityRepository.save(activity3);
 		review3.setActivity(activity3);

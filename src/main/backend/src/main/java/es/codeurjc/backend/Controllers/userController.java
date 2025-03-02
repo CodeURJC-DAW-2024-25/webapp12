@@ -19,6 +19,7 @@ import es.codeurjc.backend.Service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import es.codeurjc.backend.Service.ActivityService;
+import es.codeurjc.backend.Service.PlaceService;
 import es.codeurjc.backend.Service.ReviewService;
 
 
@@ -56,11 +57,15 @@ public class userController {
     @Autowired
     private ActivityService activityService;
 
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Autowired
     private ReviewService reviewService;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private PlaceService placeService;
 
     @GetMapping("/login")
     public String showLogin() {
@@ -276,19 +281,18 @@ public class userController {
             Map<Integer, Long> activitiesByMonth = activityService.countActivitiesByMonth();
             
             List<Integer> activityData = new ArrayList<>();
-                for (int i = 1; i <= 12; i++) {
-                    activityData.add(activitiesByMonth.getOrDefault(i, 0L).intValue());
-                }
+            for (int i = 1; i <= 12; i++) {
+                activityData.add(activitiesByMonth.getOrDefault(i, 0L).intValue());
+            }
 
             model.addAttribute("activityData", new ObjectMapper().writeValueAsString(activityData));
-
-            
+            model.addAttribute("reviewData", reviewService.countReviewsByValoration());
             model.addAttribute("userRegistered", user);
             model.addAttribute("subscribedActivities", subscribedActivities);
             model.addAttribute("countActivitiesSubscribed", subscribedActivities.size());
             model.addAttribute("userCount", userService.countUsers());
             model.addAttribute("activityCount", activityService.activityCount());
-            
+            model.addAttribute("placeCount", placeService.placeCount());
 
             return "statistics";
         }else{

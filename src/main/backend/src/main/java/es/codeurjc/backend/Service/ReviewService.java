@@ -1,5 +1,7 @@
 package es.codeurjc.backend.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -25,5 +27,17 @@ public class ReviewService {
 
     public void save(Review review) {
         reviewRepository.save(review);
+    }
+
+    public List<Integer> countReviewsByValoration(){
+        List<Review> reviews = reviewRepository.findAll();
+        List<Integer> reviewListValoration = new ArrayList<>(Arrays.asList(0, 0, 0, 0, 0)); 
+        for (Review review : reviews) {
+            int valoration = review.getStarsValue(); 
+            if (valoration >= 1 && valoration <= 5) {
+                reviewListValoration.set(valoration - 1, reviewListValoration.get(valoration - 1) + 1); 
+            }
+        }
+        return reviewListValoration; 
     }
 }

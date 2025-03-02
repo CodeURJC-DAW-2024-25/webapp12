@@ -82,7 +82,7 @@
 					<div class="col-md-6 mb-4">
 					  <div class="card text-center p-3 shadow-sm" style="background-color: rgba(86, 114, 249, 0.1); color: #5672f9;">
 						<h4>Número de lugares en los que se han desarrollado las actividades</h4>
-						<p>7 lugares</p>
+						<p>{{placeCount}}</p>
 					  </div>
 					</div>
 				</div>
@@ -109,8 +109,9 @@
 				<script>
 					document.addEventListener("DOMContentLoaded", function (){
 						const activityByMonth = JSON.parse('{{activityData}}');
-						console.log("actividades" + '{{activityData}}');
-						console.log("actividades2" + activityByMonth);
+						console.log("actividades"+activityByMonth);
+						const reviewByValoration = JSON.parse('{{reviewData}}');
+						console.log("reviews"+reviewByValoration);
 						const revenueCtx = document.getElementById('revenueChart').getContext('2d');	
 						new Chart(revenueCtx, {
 							type: 'bar',
@@ -120,6 +121,18 @@
 									label: 'Cantidad de actividades realizadas durante el mes',
 									data: activityByMonth,
 									backgroundColor: '#2c4a7f'
+								}]
+							},
+							options: { responsive: true }
+						});
+						const segmentsCtx = document.getElementById('segmentsChart').getContext('2d');
+						new Chart(segmentsCtx, {
+							type: 'pie',
+							data: {
+								labels: ['1', '2', '3', '4', '5'],
+								datasets: [{
+									data: reviewByValoration,
+									backgroundColor: ['#e0f0ff', '#aad3ff', '#80b8ff', '#4f8cff', '#2c4a7f'],
 								}]
 							},
 							options: { responsive: true }

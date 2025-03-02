@@ -12,9 +12,14 @@ import es.codeurjc.backend.Repository.PlaceRepository;
 public class PlaceService {
     @Autowired 
     private PlaceRepository placeRepository;
+
     public List<Place> getAllPlaces() {
          List<Place> places = placeRepository.findAll();
             return places;
+    }
+
+    public long placeCount(){
+        return placeRepository.count();
     }
          
 }
