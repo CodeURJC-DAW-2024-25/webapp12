@@ -2,19 +2,30 @@ package es.codeurjc.backend.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.time.LocalDateTime;
 import java.util.List;
-
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import es.codeurjc.backend.Model.Activity;
 import es.codeurjc.backend.Model.Review;
+import es.codeurjc.backend.Model.User;
+import es.codeurjc.backend.Repository.ActivityRepository;
 import es.codeurjc.backend.Repository.ReviewRepository;
+import es.codeurjc.backend.Repository.UserRepository;
 
 @Service
 public class ReviewService {
      @Autowired
     private ReviewRepository reviewRepository; 
+
+     @Autowired
+    private ActivityRepository ActivityRepository; 
+
+    @Autowired
+    private UserRepository UserRepository;
     
     public void delete(long id){
         reviewRepository.deleteById(id);
@@ -39,5 +50,21 @@ public class ReviewService {
             }
         }
         return reviewListValoration; 
+    }
+    public void saveReview(Long activityId, int starsValue, String description, Long userId) {
+        Optional<Activity> activityOpt = ActivityRepository.findById(activityId);
+        Optional<User> userOpt = UserRepository.findById(userId); // Suponiendo un usuario autenticado
+
+        if (activityOpt.isPresent() && userOpt.isPresent()) {
+            Review review = new Review();
+            review.setActivity(activityOpt.get());
+            review.setUser(userOpt.get());
+            review.setStarsValue(starsValue);
+            review.setDescription(description);
+
+            reviewRepository.save(review);
+        } else {
+            throw new RuntimeException("Actividad o usuario no encontrado");
+        }
     }
 }

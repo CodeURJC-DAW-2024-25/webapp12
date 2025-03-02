@@ -282,25 +282,6 @@ public class activityController {
         return "activity";  // Nombre del archivo .mustache
     }
     
-    /*@PostMapping("/activity/{id}/addReview")
-        public String addReview(
-            @PathVariable Long id,
-            @RequestParam int starsValue,
-            @RequestParam String description) {
-
-            Optional<Activity> optionalActivity = activityService.findById(id);
-            User user = userService.getCurrentUser(); // Suponiendo que tienes un método para obtener el usuario autenticado
-
-            if (optionalActivity.isPresent() && user != null) {
-                Activity activity = optionalActivity.get();
-                Review review = new Review(starsValue, description, activity, user);
-                reviewService.save(review);
-            }
-
-            return "redirect:/activity/" + id; // Redirige a la misma página para ver la nueva reseña
-        }*/
-
-
     @GetMapping("/createActivity")
     public String showFormNewActivity(Model model) {
 

@@ -57,22 +57,7 @@
                         {{/reviews}}
                     </div>
                     
-
-                    <form action="#">
-						<!-- Calificación con Estrellas -->
-						<div class="form-group">
-							<label for="rating">Calificación:</label>
-							<div class="rating" id="rating">
-								<span class="star" data-value="1">&#9733;</span>
-								<span class="star" data-value="2">&#9733;</span>
-								<span class="star" data-value="3">&#9733;</span>
-								<span class="star" data-value="4">&#9733;</span>
-								<span class="star" data-value="5">&#9733;</span>
-							</div>
-							
-						</div>
-					
-                        <form action="/activity/{{activity.id}}/addReview" method="post">
+                    <form action="/activity/{{activity.id}}/addReview" method="post">
                             <label for="starsValue">Calificación:</label>
                             <select id="starsValue" name="starsValue" required>
                                 <option value="1">1 ⭐</option>
@@ -83,14 +68,12 @@
                             </select>
                             <br>
                             <label for="description">Comentario:</label>
-                            <textarea id="description" name="description" required></textarea>
+                            <textarea id="description" name="description" required style="width: 100%; height: 150px;"></textarea>
                             <br>
+                            <input type="hidden" name="_csrf" value="{{token}}"/>
                             <button type="submit" class="btn btn-primary">Enviar</button>
                         </form>
 					
-						<!-- Botón de Guardar -->
-						<button class="btn btn-transparent">Guardar Comentario</button>
-					</form>
                     
                 </div>
             </div>
