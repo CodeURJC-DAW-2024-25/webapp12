@@ -164,6 +164,20 @@ public class userController {
                 user.setImageString("nofoto.png");
             }
             List<Activity> subscribedActivities = activityService.findEventsSubscribe(user);
+            for(Activity activity: subscribedActivities){
+                if (activity.getImageFile() != null) {
+                    try {
+                        byte[] imageBytes = activity.getImageFile().getBytes(1, (int) activity.getImageFile().length());
+                        String imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
+                        activity.setImageString(imageBase64); 
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    activity.setImageString("/activities/" + activity.getId() + "/image");
+                
+                }
+            }
             model.addAttribute("userRegister", user);
             model.addAttribute("subscribedActivities", subscribedActivities);
             model.addAttribute("countActivitiesSubscribed", subscribedActivities.size());

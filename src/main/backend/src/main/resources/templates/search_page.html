@@ -1,0 +1,77 @@
+{{>header}}
+
+<!--===============================
+=            Hero Area            =
+================================-->
+
+<section class="hero-area bg-1 text-center overly">
+	<!-- Container Start -->
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<!-- Header Contetnt -->
+				<div class="content-block">
+					<h1>Bienvenido a Pixel Paradise</h1>
+					<p>Un resort donde los deportes icónicos de la Wii cobran vida. <br>
+					Juega tenis en arenas soleadas, enfréntate en épicas competencias de bolos,<br>
+					 conquista las olas en tabla de surf y vive la emoción del golf en escenarios paradisíacos.<br>
+					  Aquí, la nostalgia y la aventura se combinan para crear la experiencia deportiva definitiva.<br>
+					   ¡Tu próximo juego comienza ahora!</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Container End -->
+</section>
+
+<!--==========================================
+=            All Category Section            =
+===========================================-->
+
+<section class="popular-deals section bg-gray">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="section-title">
+                    <h2>RESULTADOS DE BUSQUEDA ""</h2>
+                </div>
+            </div>
+        </div>
+        <div id="allActivitiesPaginated" class="row">
+            <!-- Actividad 1 -->
+            {{#activitiesByPlace}}
+            <div class="col-sm-12 col-lg-3">
+                <div class="product-item bg-light">
+                    <div class="card">
+                        <div class="thumb-content">
+                            <a href="/activity/{{id}}">
+                                <img class="card-img-top img-fluid" src="data:image/jpeg;base64,{{imageString}}" alt="Card image cap">
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <h4 class="card-title"><a href="/activity/{{id}}">{{name}}</a></h4>
+                            <ul class="list-inline product-meta">
+                                <li class="list-inline-item">
+                                    <i class="fa fa-folder-open-o"></i>{{category}}
+                                </li>
+                            </ul>
+                            <p class="card-text">{{description}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                {{/activitiesByPlace}}
+                {{^activitiesByPlace}}
+                <p>No hay actividades que se desarrollen en ese lugar</p>
+                {{/activitiesByPlace}}
+            </div>
+        </div>
+		<div>
+			<button type="button" class="btn btn-primary" id="loadMore" onclick='loadMore()'>Cargar más</button>
+		</div>	
+    </div>
+</section>
+			
+</section>									
+					
+{{>footer}}

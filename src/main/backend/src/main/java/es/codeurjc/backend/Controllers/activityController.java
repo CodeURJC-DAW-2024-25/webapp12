@@ -100,8 +100,9 @@ public class activityController {
                 
             }
         }
-
+        List<Place> places = placeRepository.findAll();
         model.addAttribute("activities", activities);
+        model.addAttribute("allPlaces", places);
         
         // Obtener usuario autenticado a través de Principal
         if (principal != null) {
@@ -134,13 +135,6 @@ public class activityController {
                 System.out.println("No se encontró el usuario con email: " + userEmail);
        }
     }
-
-
-
-
-
-
-
         return "index"; 
     }
 
@@ -387,10 +381,59 @@ public String createNewActivity(@ModelAttribute Activity activity, @RequestParam
         return "404";  // Si no se encuentra la actividad, muestra un error
     }
 
+    @GetMapping("/search_page")
+    public String showSearchs(Model model, Principal principal, @RequestParam("placeId") Long placeId) {
+        int page = 0;  // Si deseas implementar paginación, ajusta la variable `page`
+        Page<Activity> activities = activityService.getActivitiesPaginated(page);
 
+        if (principal != null) {
+            String userEmail = principal.getName();
+            System.out.println("Usuario autenticado: " + userEmail);
 
-    
-    
-    
+            User user = userRepository.findByEmail(userEmail);
+            if (user != null) {
+                List<Activity> recommendedActivities = activityService.recommendActivities(user.getId());
+                for (Activity activity : recommendedActivities) {
+                    if (activity.getImageFile() != null) {
+                        try {
+                            byte[] imageBytes = activity.getImageFile().getBytes(1, (int) activity.getImageFile().length());
+                            String imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
+                            activity.setImageString(imageBase64);
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        activity.setImageString("nofoto.png");
+                    }
+                }
+            }
+        }
+        // Buscar actividades por lugar
+        Optional<Place> optionalPlace = placeRepository.findById(placeId);
+
+        if (optionalPlace.isPresent()) {
+            Place place = optionalPlace.get();
+            List<Activity> activitiesByPlace = activityRepository.findByPlace(place);
+             // Convertir la imagen Blob en base64 y agregarla al modelo
+            for (Activity activity : activitiesByPlace) {
+                if (activity.getImageFile() != null) {
+                    try {
+                        byte[] imageBytes = activity.getImageFile().getBytes(1, (int) activity.getImageFile().length());
+                        String imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
+                        activity.setImageString(imageBase64);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    activity.setImageString("nofoto.png");
+                }
+            }
+            model.addAttribute("activitiesByPlace", activitiesByPlace); // Pasa las actividades al modelo
+        } else {
+            return "404";  // Si no se encuentra el lugar, redirige a una página de error
+        }
+        return "search_page"; // Devuelve la vista "search_page" con las actividades
+    }
+
 }
 

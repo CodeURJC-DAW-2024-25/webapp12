@@ -49,6 +49,10 @@ public class ActivityService {
        return activityRepository.findAll();
     }
 
+    public Page<Activity> getAllActivities(Pageable pageable) {
+        return activityRepository.findAll(pageable);
+    }
+
     public Page<Activity> getActivitiesPaginated(int page) {
         int size = 4;
         Pageable pageable = PageRequest.of(page, size);
