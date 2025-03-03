@@ -25,5 +25,16 @@
         {{^activities}}
         <p>No hay actividades disponibles.</p>
         {{/activities}}
+        <!-- Indicar si hay más elementos -->
+    <div id="loadMoreIndicator" data-has-more="{{hasMore}}" style="display: none;"></div>
+
+    <!-- Mensaje de fin de actividades -->
+    {{^hasMore}}
+    <p id="noMoreActivitiesMessage" style="text-align: center; font-weight: bold; display: none;">
+        No hay más actividades para cargar.
+    </p>
+    {{/hasMore}}
+</div>
+
     </div>
 </div>

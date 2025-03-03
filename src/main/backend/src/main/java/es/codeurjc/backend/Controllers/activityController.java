@@ -142,6 +142,9 @@ public class activityController {
     public String LoadMoreActivities(@RequestParam int page, Model model) { 
         Page<Activity> activities = activityService.getActivitiesPaginated(page);
         model.addAttribute("activities", activities.getContent());
+        boolean hasMore = page < activities.getTotalPages() - 1;
+        model.addAttribute("hasMore", hasMore);
+        model.addAttribute("activities", activities.getContent());
         return "moreActivities";
     }
 
