@@ -22,3 +22,48 @@ async function loadMore() {
 
 
 }
+
+async function loadMoreReview() {
+    page++; 
+
+    const loadMoreButton = document.getElementById("loadMore");
+    const noMoreMessage = document.getElementById("noMoreReviewsMessage");
+
+    if (!loadMoreButton) {
+        console.error("❌ Error: El botón 'Cargar más' no existe en el DOM.");
+        return;
+    }
+
+    const activityId = loadMoreButton.getAttribute("data-activity-id");
+
+    const response = await fetch(`/moreReviews?activityId=${activityId}&page=${page}`);
+    const data = await response.text();
+
+    const reviewsContainer = document.getElementById("allReviewsPaginated");
+
+    if (!reviewsContainer) {
+        console.error("❌ Error: El contenedor de reseñas no existe en el DOM.");
+        return;
+    }
+
+    reviewsContainer.insertAdjacentHTML("beforeend", data);
+
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = data;
+
+    const hasMore = tempDiv.querySelector("#loadMoreIndicator")?.getAttribute("data-has-more") === "true";
+
+    if (!hasMore) {
+        if (loadMoreButton) loadMoreButton.style.display = "none";
+        if (noMoreMessage) noMoreMessage.style.display = "block";
+    }
+}
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const loadMoreButton = document.getElementById("loadMore");
+    
+    if (loadMoreButton) {
+        loadMoreButton.addEventListener("click", loadMoreReview);
+    }
+});

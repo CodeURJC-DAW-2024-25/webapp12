@@ -1,0 +1,22 @@
+<div id="allReviewsPaginated">
+    {{#reviews}}
+    <div class="comment">
+        <p><strong>{{user.name}}</strong> - {{starsValue}} ⭐</p>
+        <p>{{description}}</p>
+    </div>
+    {{/reviews}}
+</div>
+
+<div class="text-center mt-3">
+   
+
+</div>
+
+<div id="loadMoreIndicator" data-has-more="{{hasMore}}" style="display: none;"></div>
+
+{{^hasMore}}
+<p id="noMoreReviewsMessage" style="display: none;">
+    No hay más reviews para cargar.
+</p>
+{{/hasMore}}  
+

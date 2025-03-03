@@ -2,11 +2,13 @@ package es.codeurjc.backend.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import es.codeurjc.backend.Model.Activity;
@@ -67,4 +69,13 @@ public class ReviewService {
             throw new RuntimeException("Actividad o usuario no encontrado");
         }
     }
+
+    public Page<Review> getReviewsPaginated(Long activityId, int page) {
+        int size = 2; // Número de reviews por página
+        Pageable pageable = PageRequest.of(page, size);
+        return reviewRepository.findByActivityId(activityId, pageable); // Asegúrate de que el repositorio filtre por activityId
+    }
+    
+    
+
 }

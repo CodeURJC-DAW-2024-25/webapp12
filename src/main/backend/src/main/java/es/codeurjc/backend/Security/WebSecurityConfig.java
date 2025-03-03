@@ -45,6 +45,7 @@ public class WebSecurityConfig {
 				.requestMatchers("/activity/**").permitAll()
 				.requestMatchers("/index").permitAll()
 				.requestMatchers("/moreActivities").permitAll()
+				.requestMatchers("/moreReviews").permitAll()
 				.requestMatchers("/search_page").permitAll()
 				
 

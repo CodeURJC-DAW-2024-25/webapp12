@@ -9,7 +9,6 @@ import java.util.List;
 
 import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,18 +36,11 @@ import es.codeurjc.backend.Repository.PlaceRepository;
 import es.codeurjc.backend.Repository.UserRepository;
 
 import java.util.Base64;
-import java.util.Calendar;
-import java.util.Date;
-
 
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-
-
-
-import org.springframework.security.core.Authentication;
 import org.springframework.data.domain.Page;
 
 
@@ -82,7 +74,6 @@ public class activityController {
     public String showActivities(Model model, Principal principal) {
         int page = 0;
         Page<Activity> activities = activityService.getActivitiesPaginated(page);
-        //List<Activity> activities = activityService.findAll();
 
         // Convertir la imagen Blob en base64 y agregarla al modelo
         for (Activity activity : activities) {
@@ -237,7 +228,11 @@ public class activityController {
         Activity activity = optionalActivity.get();
         
         // Obtener todas las reviews de la actividad
-        List<Review> reviews = reviewService.findByActivity_Id(id);
+        //List<Review> reviews = reviewService.findByActivity_Id(id);
+        //model.addAttribute("reviews", reviews);
+
+        int page = 0;
+        Page<Review> reviews = reviewService.getReviewsPaginated(id, page);
         model.addAttribute("reviews", reviews);
     
         // Obtener el lugar asociado a la actividad
@@ -271,10 +266,49 @@ public class activityController {
         }
         
         model.addAttribute("activity", activity);
-        model.addAttribute("reviews", reviews); // Agregar las reviews al modelo
     
         return "activity";  // Nombre del archivo .mustache
     }
+
+   /* @GetMapping("/moreReviews")
+    public String loadMoreReviews(@RequestParam Long activityId, @RequestParam int page, Model model) {
+        Page<Review> reviews = reviewService.getReviewsPaginated(activityId, page);
+        
+        
+        boolean hasMore = page < reviews.getTotalPages() - 1;
+        
+        model.addAttribute("reviews", reviews.getContent());
+        model.addAttribute("hasMore", hasMore);
+        
+        
+        return "moreReviews";
+    }*/
+
+    @GetMapping("/moreReviews")
+    public String loadMoreReviews(@RequestParam Long activityId, @RequestParam int page, Model model) {
+        Page<Review> reviews = reviewService.getReviewsPaginated(activityId, page);
+        
+        // Buscar la actividad por ID
+        Optional<Activity> optionalActivity = activityService.findById(activityId);
+        if (optionalActivity.isEmpty()) {
+            model.addAttribute("errorMessage", "Actividad no encontrada.");
+            return "404";  // Página de error
+        }
+
+        Activity activity = optionalActivity.get();
+        model.addAttribute("activity", activity);  // Agregamos activity al modelo
+        
+        // Asegurar si hay más páginas
+        boolean hasMore = page < reviews.getTotalPages() - 1;
+        model.addAttribute("reviews", reviews.getContent());
+        model.addAttribute("hasMore", hasMore);
+
+        return "moreReviews";  // Nombre de la plantilla Mustache
+    }
+
+    
+    
+    
     
     @GetMapping("/createActivity")
     public String showFormNewActivity(Model model) {
@@ -317,9 +351,6 @@ public class activityController {
             return "404"; // Si ocurre un error, se maneja el error y retorna una página de error
         }
     }
-
-
-
 
     
     @GetMapping("/editActivity/{id}")
@@ -383,8 +414,8 @@ public class activityController {
 
     @GetMapping("/search_page")
     public String showSearchs(Model model, Principal principal, @RequestParam("placeId") Long placeId) {
-        int page = 0;  // Si deseas implementar paginación, ajusta la variable `page`
-        Page<Activity> activities = activityService.getActivitiesPaginated(page);
+        //int page = 0;  // Si deseas implementar paginación, ajusta la variable `page`
+       // Page<Activity> activities = activityService.getActivitiesPaginated(page);
 
         if (principal != null) {
             String userEmail = principal.getName();
