@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -45,6 +46,7 @@ public class Activity {
 
 	private String name;
 	private String category;
+	@Column(columnDefinition = "LONGTEXT")
 	private String description;
 	private int vacancy;
 	

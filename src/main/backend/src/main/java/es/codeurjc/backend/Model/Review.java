@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,6 +19,7 @@ public class Review {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private int starsValue;
+	@Column(columnDefinition = "LONGTEXT")
 	private String description;
 	@ManyToOne
 	@JsonIgnore
