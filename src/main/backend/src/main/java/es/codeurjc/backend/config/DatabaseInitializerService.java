@@ -11,7 +11,9 @@ import java.util.List;
 
 import javax.sql.rowset.serial.SerialBlob;
 
+import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,8 @@ import es.codeurjc.backend.Model.User;
 import es.codeurjc.backend.Model.Place;
 import es.codeurjc.backend.Model.Review;
 import jakarta.annotation.PostConstruct;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 
 @Service
 public class DatabaseInitializerService {
@@ -53,96 +57,42 @@ public class DatabaseInitializerService {
 		// Sample users
 		User user1 = new User("Paula", "Ruiz Rubio", "paula@email.com", "12345567D", "556673336",passwordEncoder.encode("1234"));
 		user1.setRoles(List.of("USER"));
-		try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("static/images/user/user4.png")) { 
-
-			byte[] imageData = inputStream.readAllBytes();
-			SerialBlob imageBlob = new SerialBlob(imageData);
-			user1.setImageFile(imageBlob);
-			user1.setImage("user1.jpg");
-		} catch (IOException | SQLException e) {
-			e.printStackTrace();
-		}
+		setUserImage(user1, "static/images/user/user4.png");
+		
 		userRepository.save(user1);
 
 		User user2 = new User("Alba", "Velasco Marqués", "alba@email.com", "12345567D", "556673336",passwordEncoder.encode("2345"));
 		user2.setRoles(List.of("USER"));
-		try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("static/images/user/user2.png")) { 
-
-			byte[] imageData = inputStream.readAllBytes();
-			SerialBlob imageBlob = new SerialBlob(imageData);
-			user2.setImageFile(imageBlob);
-			user2.setImage("user2.jpg");
-		} catch (IOException | SQLException e) {
-			e.printStackTrace();
-		}
+		setUserImage(user2, "static/images/user/user2.png");
 		userRepository.save(user2);
 
 		User user3 = new User("Alexandra", "Cararus Verdes", "alexandra@email.com", "12345567D", "556673336",passwordEncoder.encode("3456"));
 		user3.setRoles(List.of("USER"));
-		try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("static/images/user/user3.png")) { 
-
-			byte[] imageData = inputStream.readAllBytes();
-			SerialBlob imageBlob = new SerialBlob(imageData);
-			user3.setImageFile(imageBlob);
-			user3.setImage("user3.jpg");
-		} catch (IOException | SQLException e) {
-			e.printStackTrace();
-		}
+		setUserImage(user3, "static/images/user/user3.png");
 		userRepository.save(user3);
 
 		User user4 = new User("Gonzalo", "Perez Roca", "gonzalo@email.com", "12345567D","556673336",passwordEncoder.encode("4567"));
 		user4.setRoles(List.of("USER"));
-		try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("static/images/user/user5.png")) { 
-
-			byte[] imageData = inputStream.readAllBytes();
-			SerialBlob imageBlob = new SerialBlob(imageData);
-			user4.setImageFile(imageBlob);
-			user4.setImage("user4.jpg");
-		} catch (IOException | SQLException e) {
-			e.printStackTrace();
-		}
+		setUserImage(user4, "static/images/user/user5.png");
+	
 		userRepository.save(user4);
 
 		User user5 = new User("Adriana", "Lopez", "adriana@email.com", "12345567D","123573336","8910");
 		user5.setRoles(List.of("USER"));
-		try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("static/images/user/user1.png")) { 
-
-			byte[] imageData = inputStream.readAllBytes();
-			SerialBlob imageBlob = new SerialBlob(imageData);
-			user5.setImageFile(imageBlob);
-			user5.setImage("user5.jpg");
-		} catch (IOException | SQLException e) {
-			e.printStackTrace();
-		}
+		setUserImage(user5, "static/images/user/user1.png");
+		
 		userRepository.save(user5);
 
 
 		User user6 = new User("Paco", "Rodriguez", "paco@email.com","12345567D", "557930394","1567");
 		user6.setRoles(List.of("USER"));
-		try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("static/images/user/user5.png")) { 
-
-			byte[] imageData = inputStream.readAllBytes();
-			SerialBlob imageBlob = new SerialBlob(imageData);
-			user6.setImageFile(imageBlob);
-			user6.setImage("user6.jpg");
-		} catch (IOException | SQLException e) {
-			e.printStackTrace();
-		}
+		setUserImage(user6, "static/images/user/user5.png");
+		
 		userRepository.save(user6);
-
-
 
 		User admin = new User("admin", "5678", "admin@email.com", "12345567D","556659504",passwordEncoder.encode("5678"));
 		admin.setRoles(List.of("USER", "ADMIN"));
-		try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("static/img/adminfoto.png")) { 
-
-			byte[] imageData = inputStream.readAllBytes();
-			SerialBlob imageBlob = new SerialBlob(imageData);
-			admin.setImageFile(imageBlob);
-			admin.setImage("admin_image.jpg");
-		} catch (IOException | SQLException e) {
-			e.printStackTrace();
-		}
+		setUserImage(admin, "static/img/adminfoto.png");
 		
 		userRepository.save(admin);
 
@@ -208,16 +158,8 @@ public class DatabaseInitializerService {
 		// Sample activitys
 		Activity activity1 = new Activity("Baloncesto", "Deporte de equipo","Disfruta de una emocionante competencia en nuestra cancha de baloncesto. Forma tu equipo, compite en partidos amistosos y demuestra tus habilidades en un ambiente divertido y relajado. Ideal para jugadores de todos los niveles, esta actividad es perfecta para ejercitarte, socializar y vivir la pasión del baloncesto mientras disfrutas del sol y la brisa del resort. ¡Inscríbete y únete a la diversión!",10);
 		activity1.setReviews(List.of(review1, review6, review7));
-		try (InputStream inputStream = getClass().getClassLoader()
-				.getResourceAsStream("static/images/sports/baloncesto.png")) {
-			byte[] imageData = inputStream.readAllBytes(); 
-			SerialBlob imageBlob = new SerialBlob(imageData);
-			activity1.setImageFile(imageBlob);
-			activity1.setImageString("activity1.jpg");
-		} catch (IOException | SQLException e) {
-			e.printStackTrace();
-		}
-		activity1.setPlace(lugar4);
+		setActivityImage(activity1, "static/images/sports/baloncesto.png");
+		activity1.setPlace(lugar1);
 		activity1.setActivityDate(Date.valueOf("2026-03-01"));
 		
 		activityRepository.save(activity1);
@@ -237,17 +179,8 @@ public class DatabaseInitializerService {
 
 		Activity activity2 = new Activity("Beisbol", "Deporte de equipo", "Vive la emoción del béisbol en un entorno espectacular. Únete a un equipo, batea, corre las bases y atrapa la victoria en un partido amistoso diseñado para todas las edades y niveles de experiencia. Disfruta del espíritu deportivo, la competencia sana y la diversión bajo el sol del resort. ¡Inscríbete y sé parte del juego!",4);
 		activity2.setReviews(List.of(review2, review8));
-		try (InputStream inputStream = getClass().getClassLoader()
-				.getResourceAsStream("static/images/sports/beisbol.png")) {
-			byte[] imageData = inputStream.readAllBytes(); 
-			SerialBlob imageBlob = new SerialBlob(imageData);
-			activity2.setImageFile(imageBlob);
-			activity2.setImageString("activity2.jpg");
-		} catch (IOException | SQLException e) {
-			e.printStackTrace();
-		}
-
-		activity2.setPlace(lugar4);
+		setActivityImage(activity2, "static/images/sports/beisbol.png");
+		activity2.setPlace(lugar1);
 		activity2.setActivityDate(Date.valueOf("2026-03-01"));
 
 		activityRepository.save(activity2);
@@ -260,17 +193,9 @@ public class DatabaseInitializerService {
 
 		Activity activity3 = new Activity("Bolos", "Deportes individuales","Disfruta de una divertida partida de bolos en un ambiente relajado y amigable. Perfecto para todas las edades, este juego combina habilidad y entretenimiento mientras compartes risas y buenos momentos con amigos y familia. ¡Apunta, lanza y derriba todos los pinos para convertirte en el campeón de la noche!",10);
 		activity3.setReviews(List.of(review3));
-		try (InputStream inputStream = getClass().getClassLoader()
-				.getResourceAsStream("static/images/sports/bolos.png")) {
-			byte[] imageData = inputStream.readAllBytes(); 
-			SerialBlob imageBlob = new SerialBlob(imageData);
-			activity3.setImageFile(imageBlob);
-			activity3.setImageString("activity3.jpg");
-		} catch (IOException | SQLException e) {
-			e.printStackTrace();
-		}
-
-		activity3.setPlace(lugar3);
+		setActivityImage(activity3, "static/images/sports/bolos.png");
+		
+		activity3.setPlace(lugar1);
 		activity3.setActivityDate(Date.valueOf("2026-04-01"));
 
 		activityRepository.save(activity3);
@@ -278,16 +203,8 @@ public class DatabaseInitializerService {
 		review3.setCreationDate(Calendar.getInstance());
 		reviewRepository.save(review3);
 
-		Activity activity4 = new Activity("Surf", "Deportes individuales","Domina las olas y siente la adrenalina con nuestras clases de surf, guiadas por instructores expertos. Ya seas principiante o tengas experiencia, esta actividad te permitirá mejorar tu técnica mientras disfrutas del mar y el sol. ¡Anímate a deslizarte sobre las olas y vive una experiencia inolvidable!",10);
-		try (InputStream inputStream = getClass().getClassLoader()
-				.getResourceAsStream("static/images/sports/surf.png")) {
-			byte[] imageData = inputStream.readAllBytes(); 
-			SerialBlob imageBlob = new SerialBlob(imageData);
-			activity4.setImageFile(imageBlob);
-			activity4.setImageString("activity4.jpg");
-		} catch (IOException | SQLException e) {
-			e.printStackTrace();
-		}
+		Activity activity4 = new Activity("Surf", "deporte de agua","sigue nadando sigue nadando",10);
+		setActivityImage(activity4, "static/images/sports/surf.png");
 
 		activity4.setPlace(lugar5);
 		activity4.setActivityDate(Date.valueOf("2026-03-01"));
@@ -299,6 +216,7 @@ public class DatabaseInitializerService {
 
 		Activity activity5 = new Activity("Natacion", "Deportes individuales","Refresca tu día y mejora tus habilidades en el agua con nuestras clases de natación, diseñadas para todas las edades y niveles. Aprende técnicas de respiración, flotación y estilos de nado con instructores certificados, todo en un ambiente seguro y relajante. ¡Sumérgete en la diversión y disfruta del agua como nunca!",20);
 		
+		setActivityImage(activity5, "static/images/sports/surf.png");
 		activity5.setPlace(lugar1);
 		activity5.setActivityDate(Date.valueOf("2026-03-01"));
 
@@ -310,6 +228,7 @@ public class DatabaseInitializerService {
 		Activity activity6 = new Activity("Rugby", "Deporte de contacto","Siente la emoción y la intensidad del rugby en un partido amistoso diseñado para todos los niveles. Forma tu equipo, corre, pasa y anota mientras disfrutas de la competencia en un ambiente dinámico y lleno de energía. ¡Únete a la acción y vive la pasión del rugby en el resort!",22);
 		
 		activity6.setPlace(lugar2);
+		setActivityImage(activity6, "static/images/sports/surf.png");
 		activity6.setActivityDate(Date.valueOf("2026-03-01"));
 
 		activityRepository.save(activity6);
@@ -319,6 +238,7 @@ public class DatabaseInitializerService {
 		
 		Activity activity7 = new Activity("Atletismo", "Deporte individual","Ponte a prueba y libera tu energía con nuestras actividades de atletismo. Desde carreras de velocidad hasta resistencia y saltos, disfruta de un entrenamiento dinámico en un entorno espectacular. Ideal para todos los niveles, esta es la oportunidad perfecta para mejorar tu rendimiento y divertirte al aire libre. ¡Acepta el desafío y cruza la meta con nosotros!",10);
 		
+		setActivityImage(activity7, "static/images/sports/surf.png");
 		activity7.setPlace(lugar2);
 		activity7.setActivityDate(Date.valueOf("2026-03-01"));
 
@@ -330,6 +250,7 @@ public class DatabaseInitializerService {
 		Activity activity8 = new Activity("Padel", "Deporte de euipo","Disfruta de la emoción del pádel en nuestras modernas canchas, perfectas para jugadores de todos los niveles. Forma pareja, mejora tu técnica y compite en partidos dinámicos llenos de estrategia y diversión. Una excelente manera de hacer ejercicio, socializar y disfrutar del deporte en un entorno único. ¡Reserva tu turno y vive la pasión del pádel!",10);
 		
 		activity8.setPlace(lugar4);
+		setActivityImage(activity8, "static/images/sports/surf.png");
 		activity8.setActivityDate(Date.valueOf("2026-03-01"));
 
 		activityRepository.save(activity8);
@@ -341,6 +262,8 @@ public class DatabaseInitializerService {
 		
 		activity9.setPlace(lugar4);
 		activity9.setActivityDate(Date.valueOf("2026-04-15"));
+		setActivityImage(activity9, "static/images/sports/surf.png");
+		activity9.setActivityDate(Date.valueOf("2026-03-01"));
 
 		activityRepository.save(activity9);
 		review4.setActivity(activity9);
@@ -351,6 +274,9 @@ public class DatabaseInitializerService {
 		
 		activity10.setPlace(lugar2);
 		activity10.setActivityDate(Date.valueOf("2025-07-01"));
+		setActivityImage(activity10, "static/images/sports/surf.png");
+		
+		activity10.setActivityDate(Date.valueOf("2026-03-01"));
 
 		activityRepository.save(activity10);
 		review4.setActivity(activity10);
@@ -361,6 +287,9 @@ public class DatabaseInitializerService {
 		
 		activity11.setPlace(lugar6);
 		activity11.setActivityDate(Date.valueOf("2026-01-01"));
+		setActivityImage(activity11, "static/images/sports/surf.png");
+		
+		activity11.setActivityDate(Date.valueOf("2026-03-01"));
 
 		activityRepository.save(activity11);
 		review4.setActivity(activity11);
@@ -371,6 +300,8 @@ public class DatabaseInitializerService {
 		
 		activity12.setPlace(lugar7);
 		activity12.setActivityDate(Date.valueOf("2026-01-01"));
+		setActivityImage(activity12, "static/images/sports/surf.png");
+		activity12.setActivityDate(Date.valueOf("2026-03-01"));
 
 		activityRepository.save(activity12);
 		review4.setActivity(activity12);
@@ -382,7 +313,7 @@ public class DatabaseInitializerService {
 		
 		activity12.setPlace(lugar8);
 		activity12.setActivityDate(Date.valueOf("2025-05-09"));
-
+		setActivityImage(activity13, "static/images/sports/surf.png");
 		activityRepository.save(activity13);
 		review4.setActivity(activity13);
 		review4.setCreationDate(Calendar.getInstance());
@@ -393,7 +324,7 @@ public class DatabaseInitializerService {
 		
 		activity12.setPlace(lugar8);
 		activity12.setActivityDate(Date.valueOf("2025-04-30"));
-
+		setActivityImage(activity14, "static/images/sports/surf.png");
 		activityRepository.save(activity14);
 		review4.setActivity(activity14);
 		review4.setCreationDate(Calendar.getInstance());
@@ -404,7 +335,7 @@ public class DatabaseInitializerService {
 		
 		activity12.setPlace(lugar8);
 		activity12.setActivityDate(Date.valueOf("2025-09-10"));
-
+		setActivityImage(activity15, "static/images/sports/surf.png");
 		activityRepository.save(activity15);
 		review4.setActivity(activity15);
 		review4.setCreationDate(Calendar.getInstance());
@@ -430,6 +361,18 @@ public class DatabaseInitializerService {
 		user6.setActivities(List.of(activity1, activity2, activity3, activity4,activity5,activity6,activity15));
 		userRepository.save(user6);
 
+	}
+
+	public void setActivityImage(Activity activity, String classpathResource) throws IOException {
+		activity.setImage(true);
+		Resource image = new ClassPathResource(classpathResource);
+		activity.setImageFile(BlobProxy.generateProxy(image.getInputStream(), image.contentLength()));
+	}
+
+	public void setUserImage(User user, String classpathResource) throws IOException {
+		user.setImage(true);
+		Resource image = new ClassPathResource(classpathResource);
+		user.setImageFile(BlobProxy.generateProxy(image.getInputStream(), image.contentLength()));
 	}
 
 }

@@ -2,6 +2,10 @@ package es.codeurjc.backend.Controllers;
 
 import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -104,33 +108,8 @@ public class userController {
 
         String userEmail = principal.getName();
         User user  = userRepository.findByEmail(userEmail); 
-        if (user.getImageFile() != null) {
-            try {
-                byte[] imageBytes = user.getImageFile().getBytes(1, (int) user.getImageFile().length());
-                String imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
-                user.setImageString("data:image/png;base64," + imageBase64);
-            } catch (SQLException e) {
-                e.printStackTrace();
-                user.setImageString("nofoto.png"); // Imagen por defecto
-            }
-        } else {
-            user.setImageString("nofoto.png");
-        }
+        
         List <User> users = userRepository.findAll();
-        for(User userList : users){
-            if (userList.getImageFile() != null) {
-                try {
-                    byte[] imageBytes = userList.getImageFile().getBytes(1, (int) userList.getImageFile().length());
-                    String imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
-                    userList.setImageString("data:image/png;base64," + imageBase64);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    userList.setImageString("nofoto.png"); // Imagen por defecto
-                }
-            } else {
-                userList.setImageString("nofoto.png");
-            }
-        }
         
         List<Activity> subscribedActivities = activityService.findEventsSubscribe(user);
         model.addAttribute("allUsers", users);
@@ -141,6 +120,37 @@ public class userController {
         return "admin_users";
     }
 
+    @GetMapping("/user/{id}/image")
+	public ResponseEntity<Object> downloadImage(@PathVariable long id) throws SQLException {
+
+		Optional<User> optionalUser = userService.findById(id);
+		if (optionalUser.isPresent() && optionalUser.get().getImageFile() != null) {
+
+			Resource file = new InputStreamResource(optionalUser.get().getImageFile().getBinaryStream());
+
+			return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
+					.contentLength(optionalUser.get().getImageFile().length()).body(file);
+
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+	}
+
+    private void updateImage(User user, boolean removeImage, MultipartFile imageField) throws IOException, SQLException {
+		
+		if (!imageField.isEmpty()) {
+			user.setImageFile(BlobProxy.generateProxy(imageField.getInputStream(), imageField.getSize()));
+			user.setImage(true);
+		} else {
+			if (removeImage) {
+				user.setImageFile(null);
+				user.setImage(false);
+            } else if (imageField != null && !imageField.isEmpty()) {
+                user.setImageFile(BlobProxy.generateProxy(imageField.getInputStream(), imageField.getSize()));
+                user.setImage(true);
+            }
+		}
+	}
 
     @GetMapping("/profile")
     public String showProfile(Model model, Principal principal,HttpServletRequest request) {
@@ -149,35 +159,9 @@ public class userController {
         String userEmail = principal.getName();
         User user  = userRepository.findByEmail(userEmail); 
         
-
         if(user != null){
-            if (user.getImageFile() != null) {
-                try {
-                    byte[] imageBytes = user.getImageFile().getBytes(1, (int) user.getImageFile().length());
-                    String imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
-                    user.setImageString("data:image/png;base64," + imageBase64);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    user.setImageString("nofoto.png"); // Imagen por defecto
-                }
-            } else {
-                user.setImageString("nofoto.png");
-            }
             List<Activity> subscribedActivities = activityService.findEventsSubscribe(user);
-            for(Activity activity: subscribedActivities){
-                if (activity.getImageFile() != null) {
-                    try {
-                        byte[] imageBytes = activity.getImageFile().getBytes(1, (int) activity.getImageFile().length());
-                        String imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
-                        activity.setImageString(imageBase64); 
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    activity.setImageString("/activities/" + activity.getId() + "/image");
-                
-                }
-            }
+            
             model.addAttribute("userRegister", user);
             model.addAttribute("subscribedActivities", subscribedActivities);
             model.addAttribute("countActivitiesSubscribed", subscribedActivities.size());
@@ -190,8 +174,8 @@ public class userController {
         }
     }
     @Transactional
-    @GetMapping("/deleteUser/{id}")
-    public String removeUser(@PathVariable Long id) {
+    @PostMapping("/removeUser")
+    public String removeUser(@RequestParam Long id) {
         Optional<User> optionalUser = userRepository.findById(id);
         if(optionalUser.isPresent()){
             User user = optionalUser.get();
@@ -215,28 +199,19 @@ public class userController {
         
     }
 
-    @GetMapping("/Edit_user-profile")
-    public String showEditProfile(Principal principal,Model model,HttpServletRequest request) {
+    @GetMapping("/Edit_user-profile/{id}")
+    public String showEditProfile(Principal principal,Model model,HttpServletRequest request, @PathVariable long id) {
         model.addAttribute("admin", request.isUserInRole("ADMIN"));
         model.addAttribute("user", request.isUserInRole("USER"));
-        String userEmail = principal.getName();
-        User user = userRepository.findByEmail(userEmail);
+        Optional<User> optionalUser = userService.findById(id);
         
-        if(user != null){
-            if (user.getImageFile() != null) {
-                try {
-                    byte[] imageBytes = user.getImageFile().getBytes(1, (int) user.getImageFile().length());
-                    String imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
-                    user.setImageString("data:image/png;base64," + imageBase64);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    user.setImageString("nofoto.png"); // Imagen por defecto
-                }
-            } else {
-                user.setImageString("nofoto.png");
-            }
-            System.out.println(user.getDni());
+        if(optionalUser.isPresent()){
+            User user = optionalUser.get();
+            List<Activity> subscribedActivities = activityService.findEventsSubscribe(user);
             model.addAttribute("userRegistered", user);
+            model.addAttribute("countActivitiesSubscribed", subscribedActivities.size());
+            model.addAttribute("userCount", userService.countUsers());
+            model.addAttribute("activityCount", activityService.activityCount());
             return "Edit_user-profile";
         }else{
             return "404";
@@ -245,19 +220,19 @@ public class userController {
     
 
     @PostMapping("/Edit_user-profile")
-    public String updateProfile(Model model, @ModelAttribute User userUpdated,@RequestParam("file") MultipartFile imagFile){
+    public String updateProfile(Model model, @ModelAttribute User userUpdated,
+    @RequestParam("file") MultipartFile imagFile,
+    @RequestParam(value = "removeImage", required = false, defaultValue = "false") boolean removeImage)
+    throws IOException, SQLException{
         String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByEmail(userEmail);
         try{
-            if(user!=null){
+            if(user != null){
                 user.setName(userUpdated.getName());
                 user.setSurname(userUpdated.getSurname());
                 user.setDni(userUpdated.getDni());
-                user.setEmail(userUpdated.getEmail());
                 user.setPhone(userUpdated.getPhone());
-                if(!imagFile.isEmpty()){
-                    user.setImageFile(BlobProxy.generateProxy(imagFile.getInputStream(), imagFile.getSize()));
-                }
+                updateImage(user, removeImage, imagFile);
                 userRepository.save(user);
                 return "redirect:/profile";
             }
@@ -279,18 +254,6 @@ public class userController {
         User user = userRepository.findByEmail(userEmail);
 
         if(user != null){
-            if (user.getImageFile() != null) {
-                try {
-                    byte[] imageBytes = user.getImageFile().getBytes(1, (int) user.getImageFile().length());
-                    String imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
-                    user.setImageString("data:image/png;base64," + imageBase64);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    user.setImageString("nofoto.png"); // Imagen por defecto
-                }
-            } else {
-                user.setImageString("nofoto.png");
-            }
             List<Activity> subscribedActivities = activityService.findEventsSubscribe(user);
             Map<Integer, Long> activitiesByMonth = activityService.countActivitiesByMonth();
             

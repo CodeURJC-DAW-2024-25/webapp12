@@ -16,8 +16,11 @@
                             <label for="image" class="form-label">Imagen:</label>
                             <input type="file" id="image" name="file" class="form-control">
                             <div class="text-center mt-2">
-                                <img src="{{activity.imageString}}" alt="Imagen de actividad" class="img-fluid rounded shadow-sm" style="max-width: 100%; height: auto;">
+                                <img src="/activity/{{activity.id}}/image" alt="Imagen de actividad" class="img-fluid rounded shadow-sm" style="max-width: 100%; height: auto;">
                             </div>
+
+							<input type='checkbox' name='removeImage'>
+							<label>Eliminar imagen actual</label><br>
                         </div>
 
                         <div class="mb-3">

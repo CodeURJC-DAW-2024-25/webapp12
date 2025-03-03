@@ -8,12 +8,12 @@
                     <h2 class="d-inline-block">{{activity.name}}</h2>
                     <div class="d-flex justify-content-between align-items-center">
                         <ul class="list-inline mb-0">
-                            <li class="list-inline-item">by <a href="user-profile.html">Admin</a></li>
+                            <li class="list-inline-item">by Admin</li>
                             <li class="list-inline-item">{{activity.formattedCreationDate}}</li>
                         </ul>
                     </div>
 
-                    <img src="{{activity.imageString}}" alt="Imagen de actividad">
+                    <img src="/activity/{{activity.id}}/image" alt="Imagen de actividad">
                     <ul class="list-inline product-meta">
                         <li class="list-inline-item">
                             <a><i class="fa fa-futbol-o"></i> {{activity.category}}</a>

@@ -27,7 +27,7 @@
 									<div class="form-row">
 										<div class="form-group col-lg-3 col-md-6">
 											<select name="placeId" class="w-100 form-control mt-lg-1 mt-md-2">
-												<option value="lugar">Lugares</option>
+												<option value="">Lugares</option>
 												{{#allPlaces}}
 													<option value="{{id}}">{{name}}</option>
 												{{/allPlaces}}
@@ -73,7 +73,7 @@
 							<div class="card">
 								<div class="thumb-content">
 									<a href="/activity/{{id}}">
-										<img class="card-img-top img-fluid" src="data:image/jpeg;base64,{{imageString}}" alt="Card image cap">
+										<img class="card-img-top img-fluid" src="/activity/{{id}}/image" alt="Card image cap">
 									</a>
 								</div>
 								<div class="card-body">
@@ -125,7 +125,7 @@
                     <div class="card">
                         <div class="thumb-content">
                             <a href="/activity/{{id}}">
-                                <img class="card-img-top img-fluid" src="data:image/jpeg;base64,{{imageString}}" alt="Card image cap">
+                                <img class="card-img-top img-fluid" src="/activity/{{id}}/image" alt="Card image cap">
                             </a>
                         </div>
                         <div class="card-body">

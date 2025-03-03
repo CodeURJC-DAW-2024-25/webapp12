@@ -62,7 +62,7 @@ public class Activity {
 	@JsonIgnore
 	private Blob imageFile;
 
-	private String imageString;
+	private boolean imageBoolean;
 	
 
 	public Activity() {
@@ -166,13 +166,7 @@ public class Activity {
 	public void setFormattedCreationDate(String formattedCreationDate) {
 		this.formattedCreationDate = formattedCreationDate;
 	}
-	public String getImageString() {
-		return imageString;
-	}
-
-	public void setImageString(String imageString) {
-		this.imageString = imageString;
-	}	
+		
 
 	public Blob getImageFile() {
 		return imageFile;
@@ -180,6 +174,14 @@ public class Activity {
 
 	public void setImageFile(Blob imageFile) {
 		this.imageFile = imageFile;
+	}
+
+	public boolean getImage(){
+		return this.imageBoolean;
+	}
+
+	public void setImage(boolean imageBoolean){
+		this.imageBoolean = imageBoolean;
 	}
 	
 	public Date getActivityDate() {

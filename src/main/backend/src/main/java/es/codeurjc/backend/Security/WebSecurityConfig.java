@@ -47,8 +47,11 @@ public class WebSecurityConfig {
 				.requestMatchers("/moreActivities").permitAll()
 				.requestMatchers("/moreReviews").permitAll()
 				.requestMatchers("/search_page").permitAll()
+				.requestMatchers("/activity/{id}/image").permitAll()
+				.requestMatchers("/user/{id}/image").permitAll()
+				.requestMatchers("/404").permitAll()
 				
-
+				
 				
 				// USER PAGES
 				
@@ -61,6 +64,8 @@ public class WebSecurityConfig {
 				.requestMatchers("/statistics").hasAnyRole("ADMIN")
 				.requestMatchers("/createActivity").hasAnyRole("ADMIN")
 				.requestMatchers("/editActivity/**").hasAnyRole("ADMIN")
+				.requestMatchers("/removeActivity").hasAnyRole("ADMIN")
+				.requestMatchers("/removeUser").hasAnyRole("ADMIN")
 				
 				.anyRequest().authenticated())
 		

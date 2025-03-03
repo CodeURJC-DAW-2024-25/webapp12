@@ -14,12 +14,12 @@
           <div class="widget user-dashboard-profile">
             <!-- User Image -->
             <div class="profile-thumb">
-              <img src="{{userRegister.imageString}}" alt="image description" class="rounded-circle">
+              <img src="/user/{{userRegister.id}}/image" alt="image description" class="rounded-circle">
             </div>
             <!-- User Name -->
             <h5 class="text-center">{{userRegister.name}}</h5>
             
-            <a href="/Edit_user-profile" class="btn btn-main-sm">Editar Perfil</a>
+            <a href="/Edit_user-profile/{{userRegister.id}}" class="btn btn-main-sm">Editar Perfil</a>
           </div>
           {{/user}}
           <!-- Dashboard Links -->
@@ -78,7 +78,7 @@
              {{#subscribedActivities}}
               <tr>
 								<td class="product-thumb">
-									<img width="80px" height="auto" src="{{imageString}}" alt="image description"></td>
+									<img width="80px" height="auto" src="/activity/{{id}}/image" alt="image description"></td>
 								<td class="product-details">
 									<h3 class="title">{{name}}</h3>
 									<span><strong>Fecha y hora: </strong>{{activityDate}} </span>

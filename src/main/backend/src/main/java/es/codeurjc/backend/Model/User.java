@@ -43,7 +43,7 @@ public class User {
 	@JsonIgnore
 	private Blob imageFile;
 
-	private String imageString;
+	private boolean imageBoolean;
 	
 
 	public User() {
@@ -108,16 +108,6 @@ public class User {
 		this.reviews = reviews;
 	}
 
-	public String getImage() {
-		return image;
-	}
-
-	public void setImage(String image) {
-		this.image = image;
-	}
-
-	
-
 	public String getPassword() {
 		return password;
 	}
@@ -134,13 +124,6 @@ public class User {
 		this.roles = roles;
 	}
 
-	public String getimageString() {
-		return imageString;
-	}
-
-	public void setimageString(String imageString) {
-		this.imageString = imageString;
-	}
 
 	public Blob getImageFile() {
 		return imageFile;
@@ -166,13 +149,12 @@ public class User {
 		this.dni = dni;
 	}
 
-	public String getImageString() {
-		return imageString;
+	public boolean getImage(){
+		return this.imageBoolean;
 	}
 
-	public void setImageString(String imageString) {
-		this.imageString = imageString;
+	public void setImage(boolean imageBoolean){
+		this.imageBoolean = imageBoolean;
 	}
-
 
 }

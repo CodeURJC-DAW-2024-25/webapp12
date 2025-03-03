@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +31,8 @@ import es.codeurjc.backend.Service.ActivityService;
 import es.codeurjc.backend.Service.PlaceService;
 import es.codeurjc.backend.Service.ReviewService;
 import es.codeurjc.backend.Service.UserService;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 
 import es.codeurjc.backend.Repository.ActivityRepository;
 import es.codeurjc.backend.Repository.PlaceRepository;
@@ -42,6 +45,7 @@ import org.springframework.web.multipart.MultipartFile;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 
 
 
@@ -75,22 +79,7 @@ public class activityController {
         int page = 0;
         Page<Activity> activities = activityService.getActivitiesPaginated(page);
 
-        // Convertir la imagen Blob en base64 y agregarla al modelo
-        for (Activity activity : activities) {
-            if (activity.getImageFile() != null) {
-                try {
-                    byte[] imageBytes = activity.getImageFile().getBytes(1, (int) activity.getImageFile().length());
-                    String imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
-                    activity.setImageString(imageBase64); 
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                // Asignar directamente la ruta de la imagen predeterminada
-                activity.setImageString("nofoto.png");
-                
-            }
-        }
+        
         List<Place> places = placeRepository.findAll();
         model.addAttribute("activities", activities);
         model.addAttribute("allPlaces", places);
@@ -106,7 +95,8 @@ public class activityController {
                 // Obtener actividades recomendadas
                 List<Activity> recommendedActivities = activityService.recommendActivities(user.getId());
                 // Convertir la imagen Blob en base64 y agregarla al modelo
-                for (Activity activity : recommendedActivities) {
+               /* for (Activity activity : recommendedActivities) {
+                    
                     if (activity.getImageFile() != null) {
                         try {
                             byte[] imageBytes = activity.getImageFile().getBytes(1, (int) activity.getImageFile().length());
@@ -119,8 +109,8 @@ public class activityController {
                         // Asignar directamente la ruta de la imagen predeterminada
                         activity.setImageString("nofoto.png");
                         
-                    }
-                }
+                   
+                } */
                 model.addAttribute("recommendedActivities", recommendedActivities);
             } else {
                 System.out.println("No se encontró el usuario con email: " + userEmail);
@@ -148,41 +138,9 @@ public class activityController {
 
         String userEmail = principal.getName();
         User user  = userRepository.findByEmail(userEmail); 
-   
-        if (user.getImageFile() != null) {
-            try {
-                byte[] imageBytes = user.getImageFile().getBytes(1, (int) user.getImageFile().length());
-                String imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
-                user.setImageString("data:image/png;base64," + imageBase64);
-            } catch (SQLException e) {
-                e.printStackTrace();
-                user.setImageString("nofoto.png"); // Imagen por defecto
-            }
-        } else {
-            user.setImageString("nofoto.png");
-        }
 
         List<Activity> activities = activityRepository.findAll();
         List<Activity> subscribedActivities = activityService.findEventsSubscribe(user);
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-
-        for(Activity activity: activities){
-            if (activity.getImageFile() != null) {
-                try {
-                    byte[] imageBytes = activity.getImageFile().getBytes(1, (int) activity.getImageFile().length());
-                    String imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
-                    activity.setImageString(imageBase64); 
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                activity.setImageString("/activities/" + activity.getId() + "/image");
-            
-            }
-            String formattedDate = sdf.format(activity.getCreationDate().getTime());
-            activity.setFormattedCreationDate(formattedDate);
-        }
 
         model.addAttribute("allActivities", activities);
         model.addAttribute("countActivitiesSubscribed", subscribedActivities.size());
@@ -196,8 +154,8 @@ public class activityController {
         return "404";
     }
     @Transactional
-    @GetMapping("/removeActivity/{id}")
-    public String removeActivity(@PathVariable long id,Model model) {
+    @PostMapping("/removeActivity")
+    public String removeActivity(@RequestParam Long id,Model model) {
         Optional<Activity> optionalActivity = activityService.findById(id);
         if(optionalActivity.isPresent()){
             Activity activity = optionalActivity.get();
@@ -213,8 +171,6 @@ public class activityController {
         }
         
     }
-
-
 
     @GetMapping("/activity/{id}")
     public String getActivityDetail(@PathVariable Long id, Model model, Principal principal) {
@@ -250,25 +206,48 @@ public class activityController {
             
             model.addAttribute("isSubscribed", isSubscribed);
         }
-    
-        // Convertir la imagen Blob a Base64 para Mustache
-        if (activity.getImageFile() != null) {
-            try {
-                byte[] imageBytes = activity.getImageFile().getBytes(1, (int) activity.getImageFile().length());
-                String imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
-                activity.setImageString("data:image/png;base64," + imageBase64);
-            } catch (SQLException e) {
-                e.printStackTrace();
-                activity.setImageString("nofoto.png"); // Imagen por defecto
-            }
-        } else {
-            activity.setImageString("nofoto.png");
-        }
-        
         model.addAttribute("activity", activity);
     
         return "activity";  // Nombre del archivo .mustache
     }
+
+
+    @GetMapping("/activity/{id}/image")
+	public ResponseEntity<Object> downloadImage(@PathVariable long id) throws SQLException {
+
+		Optional<Activity> optionalActivity = activityService.findById(id);
+		if (optionalActivity.isPresent() && optionalActivity.get().getImageFile() != null) {
+
+			Resource file = new InputStreamResource(optionalActivity.get().getImageFile().getBinaryStream());
+
+			return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
+					.contentLength(optionalActivity.get().getImageFile().length()).body(file);
+
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+	}
+
+    private void updateImage(Activity activity, boolean removeImage, MultipartFile imageField) throws IOException, SQLException {
+		
+		if (!imageField.isEmpty()) {
+			activity.setImageFile(BlobProxy.generateProxy(imageField.getInputStream(), imageField.getSize()));
+			activity.setImage(true);
+		} else {
+			if (removeImage) {
+				activity.setImageFile(null);
+				activity.setImage(false);
+			} else {
+				// Maintain the same image loading it before updating the book
+				Activity dbActivity = activityService.findById(activity.getId()).orElseThrow();
+				if (dbActivity.getImage()) {
+					activity.setImageFile(BlobProxy.generateProxy(dbActivity.getImageFile().getBinaryStream(),
+                    dbActivity.getImageFile().length()));
+					activity.setImage(true);
+				}
+			}
+		}
+	}
 
    /* @GetMapping("/moreReviews")
     public String loadMoreReviews(@RequestParam Long activityId, @RequestParam int page, Model model) {
@@ -323,6 +302,7 @@ public class activityController {
             // Si el archivo no está vacío, lo convertimos en un Blob y lo asignamos a la actividad
             if (!imagFile.isEmpty()) {
                 activity.setImageFile(BlobProxy.generateProxy(imagFile.getInputStream(), imagFile.getSize()));
+                activity.setImage(true);
             }
 
             activity.setCreationDateMethod();
@@ -355,53 +335,36 @@ public class activityController {
     
     @GetMapping("/editActivity/{id}")
     public String showEditActivityForm(@PathVariable Long id, Model model) {
-        // Buscar la actividad por su ID
+
         Optional<Activity> optionalActivity = activityService.findById(id);
         Activity activity = optionalActivity.get();
 
         if (optionalActivity.isEmpty()) {
             model.addAttribute("errorMessage", "Actividad no encontrada.");
-            return "404";  // Página de error si no se encuentra la actividad
+            return "404";  
         }
-        if (activity.getImageFile() != null) {
-            try {
-                byte[] imageBytes = activity.getImageFile().getBytes(1, (int) activity.getImageFile().length());
-                String imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
-                activity.setImageString(imageBase64); 
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        } else {
-            activity.setImageString("/activities/" + activity.getId() + "/image");
         
-        }
-
         Place place = activity.getPlace();
         model.addAttribute("activity", activity);
         model.addAttribute("place", place);
         model.addAttribute("places", placeService.getAllPlaces());
 
-    // Retorna la plantilla de edición
-        return "Edit_activity";  // Nombre del archivo HTML para editar
+        return "Edit_activity";  
     }
 
     @PostMapping("/editActivity/{id}")
-    public String editActivity(@PathVariable Long id, @ModelAttribute Activity updatedActivity, @RequestParam("file") MultipartFile imagFile) throws IOException {
+    public String editActivity(@PathVariable Long id, @ModelAttribute Activity updatedActivity, @RequestParam("file") MultipartFile imagFile,@RequestParam(value = "removeImage", required = false, defaultValue = "false") boolean removeImage)
+    throws IOException, SQLException {
         Optional<Activity> optionalActivity = activityService.findById(id);
         if (optionalActivity.isPresent()) {
             Activity activity = optionalActivity.get();
 
-            // Actualiza los campos de la actividad con los valores del formulario
             activity.setName(updatedActivity.getName());
             activity.setDescription(updatedActivity.getDescription());
             activity.setCategory(updatedActivity.getCategory());
             activity.setVacancy(updatedActivity.getVacancy());
             activity.setPlace(updatedActivity.getPlace());
-
-            // Si se sube una nueva imagen, actualiza la imagen
-            if (!imagFile.isEmpty()) {
-                activity.setImageFile(BlobProxy.generateProxy(imagFile.getInputStream(), imagFile.getSize()));
-            }
+            updateImage(activity, removeImage, imagFile);
 
             // Guarda los cambios
             activityService.saveActivity(activity);
@@ -413,57 +376,25 @@ public class activityController {
     }
 
     @GetMapping("/search_page")
-    public String showSearchs(Model model, Principal principal, @RequestParam("placeId") Long placeId) {
-        //int page = 0;  // Si deseas implementar paginación, ajusta la variable `page`
-       // Page<Activity> activities = activityService.getActivitiesPaginated(page);
-
-        if (principal != null) {
-            String userEmail = principal.getName();
-            System.out.println("Usuario autenticado: " + userEmail);
-
-            User user = userRepository.findByEmail(userEmail);
-            if (user != null) {
-                List<Activity> recommendedActivities = activityService.recommendActivities(user.getId());
-                for (Activity activity : recommendedActivities) {
-                    if (activity.getImageFile() != null) {
-                        try {
-                            byte[] imageBytes = activity.getImageFile().getBytes(1, (int) activity.getImageFile().length());
-                            String imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
-                            activity.setImageString(imageBase64);
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        activity.setImageString("nofoto.png");
-                    }
-                }
-            }
+    public String showSearchs(Model model, Principal principal,@RequestParam(value = "placeId", required = false) Long placeId) {
+        // Verifica si no se ha enviado un placeId
+        if (placeId == null) {
+            return "redirect:/404";  // Redirige a la página 404 si no se seleccionó un lugar
         }
-        // Buscar actividades por lugar
+    
+
         Optional<Place> optionalPlace = placeRepository.findById(placeId);
 
         if (optionalPlace.isPresent()) {
             Place place = optionalPlace.get();
             List<Activity> activitiesByPlace = activityRepository.findByPlace(place);
-             // Convertir la imagen Blob en base64 y agregarla al modelo
-            for (Activity activity : activitiesByPlace) {
-                if (activity.getImageFile() != null) {
-                    try {
-                        byte[] imageBytes = activity.getImageFile().getBytes(1, (int) activity.getImageFile().length());
-                        String imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
-                        activity.setImageString(imageBase64);
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    activity.setImageString("nofoto.png");
-                }
-            }
-            model.addAttribute("activitiesByPlace", activitiesByPlace); // Pasa las actividades al modelo
+             
+            model.addAttribute("activitiesByPlace", activitiesByPlace); 
+            model.addAttribute("placeName", place.getName());
         } else {
-            return "404";  // Si no se encuentra el lugar, redirige a una página de error
+            return "404";  
         }
-        return "search_page"; // Devuelve la vista "search_page" con las actividades
+        return "search_page"; 
     }
 
     @PostMapping("/activity/{id}/reserve")
@@ -487,7 +418,5 @@ public class activityController {
 
         return "redirect:/activity/" + id + "?success=reserva_exitosa";
     }
-
-    
 }
 

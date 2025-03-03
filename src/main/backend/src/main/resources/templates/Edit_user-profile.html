@@ -13,7 +13,7 @@
 					<div class="widget user">
 						<!-- User Image -->
 						<div class="image d-flex justify-content-center">
-							<img src="{{userRegistered.imageString}}" alt="image description" class="rounded-circle">
+							<img src="/user/{{userRegistered.id}}/image"alt="image description" class="rounded-circle">
 						</div>
 						<!-- User Name -->
 						<h5 class="text-center">{{userRegistered.name}}</h5>
@@ -24,18 +24,18 @@
 						<ul>
 							{{#user}}
 							<li>
-								<a href="/profile"><i class="fa fa-ticket"></i>Mis actividades <span>2</span></a>
+								<a href="/profile"><i class="fa fa-ticket"></i>Mis actividades <span>{{countActivitiesSubscribed}}</span></a>
               				</li>
 							  {{/user}}
 							  {{#admin}}
 							<li>
-								<a href="/admin_activities"><i class="fa fa-bolt"></i>Todas las actividades <span>25</span></a>
+								<a href="/admin_activities"><i class="fa fa-bolt"></i>Todas las actividades <span>{{activityCount}}</span></a>
               				</li>
               				<li>
 								<a href="/create_activity"><i class="fas fa-plus-square"></i> Crear nueva actividad</a>
 							</li>
 							<li>
-								<a href="/admin_users"><i class="fa fa-users"></i> Todos los usuarios <span>5</span></a>
+								<a href="/admin_users"><i class="fa fa-users"></i> Todos los usuarios <span>{{userCount}}</span></a>
 							</li>
 							<li>
 								<a href="/statistics"><i class="fa fa-chart-bar"></i>Estadísticas </a>
@@ -47,7 +47,7 @@
 								<form action="/logout" method="post" style="display: inline;">
 									<input type="hidden" name="_csrf" value="{{token}}">
 									<button type="submit" style="border: none; background: none; color: inherit; cursor: pointer;">
-										<i class="fa fa-chart-bar"></i> Cerrar sesión
+										<i class="fa fa-power-off"></i> Cerrar sesión
 									</button>
 								</form>
 								</a>
@@ -69,6 +69,7 @@
 						<div class="widget personal-info">
 							<h3 class="widget-header user">Edita tu información personal</h3>
 							<form action="/Edit_user-profile" method="POST" enctype="multipart/form-data">
+								<input type="hidden" name="id" value="{{userRegistered.id}}" />
 								<!-- First Name -->
 								<div class="form-group">
 									<label for="first-name">Nombre</label>
@@ -82,17 +83,16 @@
 								<!-- File chooser -->
 								<div class="form-group choose-file d-inline-flex">
 									<i class="fa fa-user text-center px-3"></i>
-									<input type="file" class="form-control-file mt-2 pt-1" id="input-file" name="file">
+									<label>Subir nueva imagen:</label><br>
+									<input type='file' name='file' accept=".jpg, .jpeg" /><br>
+
+									<input type='checkbox' name='removeImage'>
+									<label>Eliminar imagen actual</label><br>
 								 </div>
 								<!-- dni-->
 								<div class="form-group">
 									<label for="dni">DNI</label>
 									<input type="text" class="form-control" id="dni" name="dni" value="{{userRegistered.dni}}">
-								</div>
-								<!-- email-->
-								<div class="form-group">
-									<label for="dni">EMAIL</label>
-									<input type="text" class="form-control" id="email" name="email" value="{{userRegistered.email}}">
 								</div>
 		
 								<!-- Tlf number -->
@@ -101,6 +101,7 @@
 									<input type="number" class="form-control" id="tlf" name="phone" value="{{userRegistered.phone}}">
 								</div>
 								<!-- Submit button -->
+								
 								<input type="hidden" name="_csrf" value="{{token}}"/>
 								<button class="btn btn-transparent">Guardar</button>
 							</form>

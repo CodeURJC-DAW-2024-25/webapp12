@@ -14,11 +14,11 @@
 					<div class="widget user-dashboard-profile">
 						<!-- User Image -->
 						<div class="profile-thumb">
-							<img src="{{userRegister.imageString}}" alt="" class="rounded-circle">
+							<img src="/user/{{userRegister.id}}/image" alt="" class="rounded-circle">
 						</div>
 						<!-- User Name -->
 						<h5 class="text-center">{{userRegister.name}}</h5>
-						<a href="/Edit_user-profile" class="btn btn-main-sm">Editar Perfil</a>
+						<a href="/Edit_user-profile/{{userRegister.id}}" class="btn btn-main-sm">Editar Perfil</a>
 					</div>
 					{{/user}}
 					<!-- Dashboard Links -->
@@ -78,7 +78,7 @@
 							<tr class="user">
 
 								<td class="product-thumb">
-									<img width="80px" height="auto" src="{{imageString}}" alt="image description"></td>
+									<img width="80px" height="auto" src="/user/{{id}}/image"  alt="image description"></td>
 								<td class="product-details">
 									<h3 class="title">{{name}} {{surname}}</h3>
 									<span><strong>Email: </strong>{{email}}</span>
@@ -88,9 +88,14 @@
 									<div class="">
 										<ul class="list-inline justify-content-center">
 											<li class="list-inline-item">
-												<a data-toggle="tooltip" data-placement="top" title="Delete" class="delete" href="/deleteUser/{{id}}">
-													<i class="fa fa-trash"></i>
-												</a>
+												<form action="/removeUser" method="post">
+													<input type="hidden" name="id" value="{{id}}">
+													<input type="hidden" name="_csrf" value="{{token}}">
+													<button type="submit" style="display: none;"></button>
+													<a data-toggle="tooltip" data-placement="top" title="Eliminar" class="delete" onclick="this.closest('form').submit();">
+														<i class="fa fa-trash"></i>
+													</a>
+												</form>
 											</li>
 										</ul>
 									</div>

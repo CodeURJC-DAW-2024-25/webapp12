@@ -16,12 +16,12 @@
 						<!-- User Image -->
 						<div class="profile-thumb">
 							
-							<img src="{{userRegister.imageString}}" alt="" class="rounded-circle">
+							<img src="/user/{{userRegister.id}}/image" alt="" class="rounded-circle">
 							
 						</div>
 						<!-- User Name -->
 						<h5 class="text-center">{{userRegister.name}}</h5>
-						<!--<a href="/Edit_user-profile" class="btn btn-main-sm">Editar Perfil</a>-->
+						<a href="/Edit_user-profile/{{userRegister.id}}" class="btn btn-main-sm">Editar Perfil</a>
 					</div>
 					{{/user}}
 					<!-- Dashboard Links -->
@@ -82,7 +82,7 @@
 							<tr class="activity-item">
 								<td class="product-thumb">
 									<a href="/activity/{{id}}">
-									<img width="80px" height="auto" src="data:image/jpeg;base64,{{imageString}}" alt="image description"></td>
+									<img width="80px" height="auto" src="/activity/{{id}}/image" alt="image description"></td>
 									</a>
 									
 								<td class="product-details">
@@ -107,10 +107,16 @@
 												</a>
 											</li>
 											<li class="list-inline-item">
-												<a data-toggle="tooltip" data-placement="top" title="Eliminar" class="delete" href="/removeActivity/{{id}}">
-													<i class="fa fa-trash"></i>
-												</a>
+												<form action="/removeActivity" method="post">
+													<input type="hidden" name="id" value="{{id}}">
+													<input type="hidden" name="_csrf" value="{{token}}">
+													<button type="submit" style="display: none;"></button>
+													<a data-toggle="tooltip" data-placement="top" title="Eliminar" class="delete" onclick="this.closest('form').submit();">
+														<i class="fa fa-trash"></i>
+													</a>
+												</form>
 											</li>
+											
 										</ul>
 									</div>
 								</td>
