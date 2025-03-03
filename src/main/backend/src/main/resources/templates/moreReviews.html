@@ -5,18 +5,17 @@
         <p>{{description}}</p>
     </div>
     {{/reviews}}
-</div>
 
-<div class="text-center mt-3">
+    <!-- Indicador de más reseñas -->
+    
+
+    <!-- Mensaje cuando no hay más reseñas -->
+    {{^hasMore}}
+    <p id="noMoreReviewsMessage" style="display: none;">
+        No hay más reviews para cargar.
+    </p>
+    {{/hasMore}}  
+
    
-
+    <div id="loadMoreIndicator" data-has-more="{{hasMore}}" style="display: none;"></div>
 </div>
-
-<div id="loadMoreIndicator" data-has-more="{{hasMore}}" style="display: none;"></div>
-
-{{^hasMore}}
-<p id="noMoreReviewsMessage" style="display: none;">
-    No hay más reviews para cargar.
-</p>
-{{/hasMore}}  
-

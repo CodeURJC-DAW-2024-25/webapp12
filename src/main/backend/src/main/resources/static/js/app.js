@@ -60,10 +60,3 @@ async function loadMoreReview() {
 }
 
 
-document.addEventListener("DOMContentLoaded", function () {
-    const loadMoreButton = document.getElementById("loadMore");
-    
-    if (loadMoreButton) {
-        loadMoreButton.addEventListener("click", loadMoreReview);
-    }
-});

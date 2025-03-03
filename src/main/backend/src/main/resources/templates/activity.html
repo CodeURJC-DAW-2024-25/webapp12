@@ -56,10 +56,11 @@
                         <p>No hay comentarios aún. ¡Sé el primero en dejar uno!</p>
                         {{/reviews}}
 
-                        <div class="text-center mt-3">
-                            <button type="button" class="btn btn-primary" id="loadMore" data-activity-id="{{activity.id}}" onclick="loadMoreReview()">Cargar más</button>
-                            
-                        </div>
+                       
+                    </div>
+                    <div class="text-center mt-3">
+                        <button type="button" class="btn btn-primary" id="loadMore" data-activity-id="{{activity.id}}" onclick="loadMoreReview()">Cargar más</button>
+                        
                     </div>
                     
                     <form action="/activity/{{activity.id}}/addReview" method="post">
