@@ -216,7 +216,7 @@ public class DatabaseInitializerService {
 
 		Activity activity5 = new Activity("Natacion", "Deportes individuales","Refresca tu día y mejora tus habilidades en el agua con nuestras clases de natación, diseñadas para todas las edades y niveles. Aprende técnicas de respiración, flotación y estilos de nado con instructores certificados, todo en un ambiente seguro y relajante. ¡Sumérgete en la diversión y disfruta del agua como nunca!",20);
 		
-		setActivityImage(activity5, "static/images/sports/surf.png");
+		setActivityImage(activity5, "static/images/sports/natacion.png");
 		activity5.setPlace(lugar1);
 		activity5.setActivityDate(Date.valueOf("2026-03-01"));
 
@@ -228,7 +228,7 @@ public class DatabaseInitializerService {
 		Activity activity6 = new Activity("Rugby", "Deporte de contacto","Siente la emoción y la intensidad del rugby en un partido amistoso diseñado para todos los niveles. Forma tu equipo, corre, pasa y anota mientras disfrutas de la competencia en un ambiente dinámico y lleno de energía. ¡Únete a la acción y vive la pasión del rugby en el resort!",22);
 		
 		activity6.setPlace(lugar2);
-		setActivityImage(activity6, "static/images/sports/surf.png");
+		setActivityImage(activity6, "static/images/sports/rugby.png");
 		activity6.setActivityDate(Date.valueOf("2026-03-01"));
 
 		activityRepository.save(activity6);
@@ -238,7 +238,7 @@ public class DatabaseInitializerService {
 		
 		Activity activity7 = new Activity("Atletismo", "Deporte individual","Ponte a prueba y libera tu energía con nuestras actividades de atletismo. Desde carreras de velocidad hasta resistencia y saltos, disfruta de un entrenamiento dinámico en un entorno espectacular. Ideal para todos los niveles, esta es la oportunidad perfecta para mejorar tu rendimiento y divertirte al aire libre. ¡Acepta el desafío y cruza la meta con nosotros!",10);
 		
-		setActivityImage(activity7, "static/images/sports/surf.png");
+		setActivityImage(activity7, "static/images/sports/atletismo.png");
 		activity7.setPlace(lugar2);
 		activity7.setActivityDate(Date.valueOf("2026-03-01"));
 
@@ -250,7 +250,7 @@ public class DatabaseInitializerService {
 		Activity activity8 = new Activity("Padel", "Deporte de euipo","Disfruta de la emoción del pádel en nuestras modernas canchas, perfectas para jugadores de todos los niveles. Forma pareja, mejora tu técnica y compite en partidos dinámicos llenos de estrategia y diversión. Una excelente manera de hacer ejercicio, socializar y disfrutar del deporte en un entorno único. ¡Reserva tu turno y vive la pasión del pádel!",10);
 		
 		activity8.setPlace(lugar4);
-		setActivityImage(activity8, "static/images/sports/surf.png");
+		setActivityImage(activity8, "static/images/sports/tennis.png");
 		activity8.setActivityDate(Date.valueOf("2026-03-01"));
 
 		activityRepository.save(activity8);
@@ -262,7 +262,7 @@ public class DatabaseInitializerService {
 		
 		activity9.setPlace(lugar4);
 		activity9.setActivityDate(Date.valueOf("2026-04-15"));
-		setActivityImage(activity9, "static/images/sports/surf.png");
+		setActivityImage(activity9, "static/images/sports/tennis.png");
 		activity9.setActivityDate(Date.valueOf("2026-03-01"));
 
 		activityRepository.save(activity9);
@@ -274,7 +274,7 @@ public class DatabaseInitializerService {
 		
 		activity10.setPlace(lugar2);
 		activity10.setActivityDate(Date.valueOf("2025-07-01"));
-		setActivityImage(activity10, "static/images/sports/surf.png");
+		setActivityImage(activity10, "static/images/sports/arco.png");
 		
 		activity10.setActivityDate(Date.valueOf("2026-03-01"));
 
@@ -287,7 +287,7 @@ public class DatabaseInitializerService {
 		
 		activity11.setPlace(lugar6);
 		activity11.setActivityDate(Date.valueOf("2026-01-01"));
-		setActivityImage(activity11, "static/images/sports/surf.png");
+		setActivityImage(activity11, "static/images/sports/golf.png");
 		
 		activity11.setActivityDate(Date.valueOf("2026-03-01"));
 
@@ -300,7 +300,7 @@ public class DatabaseInitializerService {
 		
 		activity12.setPlace(lugar7);
 		activity12.setActivityDate(Date.valueOf("2026-01-01"));
-		setActivityImage(activity12, "static/images/sports/surf.png");
+		setActivityImage(activity12, "static/images/sports/montaña.png");
 		activity12.setActivityDate(Date.valueOf("2026-03-01"));
 
 		activityRepository.save(activity12);
@@ -313,7 +313,7 @@ public class DatabaseInitializerService {
 		
 		activity12.setPlace(lugar8);
 		activity12.setActivityDate(Date.valueOf("2025-05-09"));
-		setActivityImage(activity13, "static/images/sports/surf.png");
+		setActivityImage(activity13, "static/images/sports/yoga.png");
 		activityRepository.save(activity13);
 		review4.setActivity(activity13);
 		review4.setCreationDate(Calendar.getInstance());
@@ -324,7 +324,7 @@ public class DatabaseInitializerService {
 		
 		activity12.setPlace(lugar8);
 		activity12.setActivityDate(Date.valueOf("2025-04-30"));
-		setActivityImage(activity14, "static/images/sports/surf.png");
+		setActivityImage(activity14, "static/images/sports/yoga.png");
 		activityRepository.save(activity14);
 		review4.setActivity(activity14);
 		review4.setCreationDate(Calendar.getInstance());
@@ -335,7 +335,7 @@ public class DatabaseInitializerService {
 		
 		activity12.setPlace(lugar8);
 		activity12.setActivityDate(Date.valueOf("2025-09-10"));
-		setActivityImage(activity15, "static/images/sports/surf.png");
+		setActivityImage(activity15, "static/images/sports/baile.png");
 		activityRepository.save(activity15);
 		review4.setActivity(activity15);
 		review4.setCreationDate(Calendar.getInstance());
