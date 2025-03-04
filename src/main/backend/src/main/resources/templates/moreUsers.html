@@ -1,0 +1,34 @@
+<tbody>
+    {{#users}}
+    <tr class="user">
+        <td class="product-thumb">
+            <img width="80px" height="auto" src="/user/{{id}}/image" alt="image description">
+        </td>
+        <td class="product-details">
+            <h3 class="title">{{name}} {{surname}}</h3>
+            <span><strong>Email: </strong>{{email}}</span>
+        </td>
+        <td class="product-category"><span class="categories">Usuario registrado</span></td>
+        <td class="action" data-title="Action">
+            <div class="">
+                <ul class="list-inline justify-content-center">
+                    <li class="list-inline-item">
+                        <a data-toggle="tooltip" data-placement="top" title="Delete" class="delete" href="/deleteUser/{{id}}">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </td>
+    </tr>
+    {{/users}}
+</tbody>
+
+<div id="loadMoreIndicator" data-has-more="{{hasMore}}" style="display: none;"></div>
+
+<!-- Mensaje de fin de usuarios -->
+{{^hasMore}}
+<p id="noMoreUsersMessage" style="text-align: center; font-weight: bold; display: none;">
+    No hay más usuarios para cargar.
+</p>
+{{/hasMore}}

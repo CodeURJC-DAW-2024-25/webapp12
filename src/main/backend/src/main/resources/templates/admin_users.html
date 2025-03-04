@@ -62,7 +62,7 @@
 			<div class="col-lg-8">
 				
 				<!-- Recently Favorited -->
-				<div class="widget dashboard-container my-adslist">
+				<div  class="widget dashboard-container my-adslist" id="allUsersPaginated">
 					<h3 class="widget-header">Todos los usuarios de la aplicación</h3>
 					<table class="table table-responsive product-dashboard-table">
 						<thead>
@@ -74,8 +74,8 @@
 							</tr>
 						</thead>
 						<tbody>
-							{{#allUsers}}
-							<tr class="user">
+								{{#users}}
+								<tr class="user">
 
 								<td class="product-thumb">
 									<img width="80px" height="auto" src="/user/{{id}}/image"  alt="image description"></td>
@@ -101,60 +101,18 @@
 									</div>
 								</td>
 							</tr>
-							{{/allUsers}}
+							{{/users}}
 						</tbody>
-					</table>
-				</div>
+						
 
-				<div class="pagination justify-content-center">
-					<nav aria-label="Page navigation">
-						<ul class="pagination" id="paginationControls"></ul>
-					</nav>
+					</table>
+					<div class="text-center mt-3">
+						<button type="button" class="btn btn-primary" id="loadMore" onclick='loadMoreUser()'>Cargar más</button>
+					</div>
+					
 				</div>
 				
-				<script>
-					document.addEventListener("DOMContentLoaded", function() {
-						const itemsPerPage = 5;  // Elementos por página
-						const userItems = document.querySelectorAll(".user");  // Selecciona las filas con clase "user"
-						const totalItems = userItems.length;  // Obtén el número total de elementos (usuarios)
-						const totalPages = Math.ceil(totalItems / itemsPerPage);  // Calcula el total de páginas
-						const paginationControls = document.getElementById("paginationControls");  // Contenedor de botones de paginación
-					
-						// Función para mostrar una página específica
-						function showPage(page) {
-							let start = (page - 1) * itemsPerPage;
-							let end = start + itemsPerPage;
-					
-							// Mostrar u ocultar elementos según la página actual
-							userItems.forEach((item, index) => {
-								item.style.display = (index >= start && index < end) ? "" : "none";
-							});
-					
-							// Actualizar botones de paginación
-							paginationControls.innerHTML = "";
-							for (let i = 1; i <= totalPages; i++) {
-								let li = document.createElement("li");
-								li.classList.add("page-item");
-								if (i === page) li.classList.add("active");
-					
-								let a = document.createElement("a");
-								a.classList.add("page-link");
-								a.href = "#";
-								a.textContent = i;
-								a.addEventListener("click", function(e) {
-									e.preventDefault();
-									showPage(i);  // Llama a showPage para mostrar la página correspondiente
-								});
-					
-								li.appendChild(a);
-								paginationControls.appendChild(li);
-							}
-						}
-					
-						// Mostrar la primera página al cargar
-						if (totalPages > 0) showPage(1);
-					});
-					</script>					
+				
 				<!-- pagination -->
 
 			</div>

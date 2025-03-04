@@ -9,6 +9,9 @@ import org.springframework.stereotype.Repository;
 
 import es.codeurjc.backend.Model.User;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 
 
 
@@ -23,4 +26,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findById(Long id);
     void deleteById( Long id);
     boolean existsByEmail(String email);
+
+    Page<User> findAll(Pageable pageable);
 }

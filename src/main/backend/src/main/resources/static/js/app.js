@@ -59,4 +59,35 @@ async function loadMoreReview() {
     }
 }
 
+async function loadMoreUser() {
+    page++;
 
+    try {
+        const response = await fetch(`/moreUsers?page=${page}`);
+        
+        if (!response.ok) {
+            throw new Error(`Error ${response.status}: No se pudo cargar más usuarios.`);
+        }
+
+        const data = await response.text();
+
+        // Agregar nuevos usuarios a la tabla
+        document.querySelector('#allUsersPaginated tbody').insertAdjacentHTML('beforeend', data);
+
+        // Crear un DOM temporal para analizar la respuesta
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = data;
+
+        // Verificar si hay más usuarios
+        const loadMoreIndicator = tempDiv.querySelector('#loadMoreIndicator');
+        const hasMore = loadMoreIndicator && loadMoreIndicator.getAttribute('data-has-more') === 'true';
+
+        // Si no hay más usuarios, ocultar el botón y mostrar mensaje
+        if (!hasMore) {
+            document.getElementById('loadMore').style.display = 'none';
+            document.getElementById('noMoreUsersMessage').style.display = 'block';
+        }
+    } catch (error) {
+        console.error("Error al cargar más usuarios:", error);
+    }
+}

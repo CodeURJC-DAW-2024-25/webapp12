@@ -6,6 +6,7 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -103,22 +104,77 @@ public class userController {
     
     @GetMapping("/admin_users")
     public String showAdminUsers(Model model,HttpServletRequest request,Principal principal) {
+
+
         model.addAttribute("admin", request.isUserInRole("ADMIN"));
         model.addAttribute("user", request.isUserInRole("USER"));
 
         String userEmail = principal.getName();
         User user  = userRepository.findByEmail(userEmail); 
         
-        List <User> users = userRepository.findAll();
         
         List<Activity> subscribedActivities = activityService.findEventsSubscribe(user);
-        model.addAttribute("allUsers", users);
+        
+
+
+        
+        int page = 0;
+        Page<User> users = userService.getUsersPaginated(page);
+        System.out.println("Has more users: " + users.hasNext());
+
+
+    
+        model.addAttribute("users", users.getContent()); // Asegurar que es "users"
+
+        model.addAttribute("hasMore", users.hasNext());
+        
         model.addAttribute("userCount", userService.countUsers());
         model.addAttribute("countActivitiesSubscribed", subscribedActivities.size());
         model.addAttribute("activityCount", activityService.activityCount());
         model.addAttribute("userRegister", user);
         return "admin_users";
     }
+
+    @GetMapping("/moreUsers") 
+    public String LoadMoreUser(@RequestParam int page, Model model) { 
+        System.out.println("Cargando usuarios, página: " + page);
+    
+        try {
+            // Obtener el total de páginas disponibles
+            int totalPages = userService.getUsersPaginated(0).getTotalPages();
+    
+            // Si la página solicitada es mayor o igual al total, no hay más usuarios
+            if (page >= totalPages) {
+                model.addAttribute("users", new ArrayList<>()); // No hay más usuarios
+                model.addAttribute("hasMore", false);
+                return "moreUsers";
+            }
+    
+            Page<User> users = userService.getUsersPaginated(page);
+    
+            if (users == null) {
+                throw new RuntimeException("userRepository.findAll(pageable) retornó null");
+            }
+    
+            model.addAttribute("users", users.getContent()); // Asegurar que es "users"
+            boolean hasMore = page < users.getTotalPages() - 1;
+            model.addAttribute("hasMore", hasMore);
+    
+            System.out.println("Usuarios cargados: " + users.getContent().size());
+            System.out.println("Total páginas: " + users.getTotalPages());
+            System.out.println("Has more users: " + hasMore);
+    
+            return "moreUsers";
+        } catch (Exception e) {
+            System.err.println("Error en /moreUsers: " + e.getMessage());
+            e.printStackTrace();
+            return "errorPage";  // Página de error si hay un problema
+        }
+    }
+    
+        
+    
+    
 
     @GetMapping("/user/{id}/image")
 	public ResponseEntity<Object> downloadImage(@PathVariable long id) throws SQLException {
@@ -151,6 +207,8 @@ public class userController {
             }
 		}
 	}
+
+
 
     @GetMapping("/profile")
     public String showProfile(Model model, Principal principal,HttpServletRequest request) {
