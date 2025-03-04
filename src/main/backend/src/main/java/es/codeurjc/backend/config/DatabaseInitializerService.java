@@ -1,15 +1,15 @@
 package es.codeurjc.backend.config;
 
 import java.io.IOException;
-import java.io.InputStream;
+
 import java.net.URISyntaxException;
 import java.sql.Date;
-import java.sql.SQLException;
+
 import java.util.Calendar;
 import java.util.List;
 
 
-import javax.sql.rowset.serial.SerialBlob;
+
 
 import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,6 @@ import es.codeurjc.backend.Model.User;
 import es.codeurjc.backend.Model.Place;
 import es.codeurjc.backend.Model.Review;
 import jakarta.annotation.PostConstruct;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
 @Service

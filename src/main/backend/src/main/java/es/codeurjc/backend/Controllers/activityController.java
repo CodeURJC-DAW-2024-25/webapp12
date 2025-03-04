@@ -4,7 +4,7 @@ package es.codeurjc.backend.Controllers;
 import java.io.IOException;
 import java.security.Principal;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.engine.jdbc.BlobProxy;
@@ -38,7 +38,7 @@ import es.codeurjc.backend.Repository.ActivityRepository;
 import es.codeurjc.backend.Repository.PlaceRepository;
 import es.codeurjc.backend.Repository.UserRepository;
 
-import java.util.Base64;
+
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -94,23 +94,6 @@ public class activityController {
             if (user != null) {
                 // Obtener actividades recomendadas
                 List<Activity> recommendedActivities = activityService.recommendActivities(user.getId());
-                // Convertir la imagen Blob en base64 y agregarla al modelo
-               /* for (Activity activity : recommendedActivities) {
-                    
-                    if (activity.getImageFile() != null) {
-                        try {
-                            byte[] imageBytes = activity.getImageFile().getBytes(1, (int) activity.getImageFile().length());
-                            String imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
-                            activity.setImageString(imageBase64); 
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        // Asignar directamente la ruta de la imagen predeterminada
-                        activity.setImageString("nofoto.png");
-                        
-                   
-                } */
                 model.addAttribute("recommendedActivities", recommendedActivities);
             } else {
                 System.out.println("No se encontró el usuario con email: " + userEmail);
@@ -139,16 +122,65 @@ public class activityController {
         String userEmail = principal.getName();
         User user  = userRepository.findByEmail(userEmail); 
 
-        List<Activity> activities = activityRepository.findAll();
+        
         List<Activity> subscribedActivities = activityService.findEventsSubscribe(user);
 
-        model.addAttribute("allActivities", activities);
+        
         model.addAttribute("countActivitiesSubscribed", subscribedActivities.size());
         model.addAttribute("activityCount", activityService.activityCount());
         model.addAttribute("userCount", userService.countUsers());
         model.addAttribute("userRegister", user);
+
+        //PAGEABLE:
+        int page = 0;
+        Page<Activity> activities = activityService.getActivitiesPaginated(page);
+        model.addAttribute("allActivities", activities);
         return "admin_activities";
     }
+
+    @GetMapping("/moreActivitiesAdmin") 
+    public String loadMoreActivityAdmin(@RequestParam int page, Model model) { 
+        System.out.println("Cargando usuarios, página: " + page);
+    
+        try {
+            // Obtener el total de páginas disponibles
+            int totalPages = activityService.getActivitiesPaginated(0).getTotalPages();
+    
+            // Si la página solicitada es mayor o igual al total, no hay más usuarios
+            if (page >= totalPages) {
+                model.addAttribute("allActivities", new ArrayList<>()); // No hay más usuarios
+                model.addAttribute("hasMore", false);
+                return "moreActivitiesAdmin";
+            }
+    
+            Page<Activity> activities = activityService.getActivitiesPaginated(page);
+    
+            if (activities == null) {
+                throw new RuntimeException("activityRepository.findAll(pageable) retornó null");
+            }
+    
+            model.addAttribute("allActivities", activities.getContent()); // Asegurar que es "users"
+            boolean hasMore = page < activities.getTotalPages() - 1;
+            model.addAttribute("hasMore", hasMore);
+    
+            System.out.println("Usuarios cargados: " + activities.getContent().size());
+            System.out.println("Total páginas: " + activities.getTotalPages());
+            System.out.println("Has more activities: " + hasMore);
+    
+            return "moreActivitiesAdmin";
+        } catch (Exception e) {
+            System.err.println("Error en /moreActivitiesAdmin: " + e.getMessage());
+            e.printStackTrace();
+            return "errorPage";  // Página de error si hay un problema
+        }
+    }
+    
+        
+    
+
+
+
+
     @GetMapping("/404")
     public String showError() {
         return "404";

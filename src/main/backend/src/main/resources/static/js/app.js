@@ -91,3 +91,39 @@ async function loadMoreUser() {
         console.error("Error al cargar más usuarios:", error);
     }
 }
+
+
+
+async function loadMoreActivityAdmin() {
+    page++;
+
+    try {
+        const response = await fetch(`/moreActivitiesAdmin?page=${page}`);
+        
+        if (!response.ok) {
+            throw new Error(`Error ${response.status}: No se pudo cargar más actividades.`);
+        }
+
+        const data = await response.text();
+
+        // Agregar nuevos actividades a la tabla
+        document.querySelector('#allActivitiesPaginatedAdmin tbody').insertAdjacentHTML('beforeend', data);
+
+        // Crear un DOM temporal para analizar la respuesta
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = data;
+
+        // Verificar si hay más actividades
+        const loadMoreIndicator = tempDiv.querySelector('#loadMoreIndicator');
+        const hasMore = loadMoreIndicator && loadMoreIndicator.getAttribute('data-has-more') === 'true';
+
+        // Si no hay más actividades, ocultar el botón y mostrar mensaje
+        if (!hasMore) {
+            document.getElementById('loadMore').style.display = 'none';
+            document.getElementById('noMoreAdminActivitysMessage').style.display = 'block';
+        }
+    } catch (error) {
+        console.error("Error al cargar más actividades:", error);
+    }
+}
+

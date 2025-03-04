@@ -37,7 +37,7 @@ public class User {
 	private List<Activity> activities;
 	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
 	private List<Review> reviews;
-	private String image;
+	
 
 	@Lob
 	@JsonIgnore

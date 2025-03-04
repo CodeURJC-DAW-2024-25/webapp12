@@ -66,7 +66,7 @@
 			</div>
 			<div class="col-lg-8">
 				<!-- Recently Favorited -->
-				<div class="widget dashboard-container my-adslist">
+				<div class="widget dashboard-container my-adslist" id="allActivitiesPaginatedAdmin">
 					<h3 class="widget-header">Todas las actividades creadas</h3>
 					<table class="table table-responsive product-dashboard-table" id="activitiesTable">
 						<thead>
@@ -124,55 +124,11 @@
 							{{/allActivities}}
 						</tbody>
 					</table>
+					<div class="text-center mt-3">
+						<button type="button" class="btn btn-primary" id="loadMore" onclick='loadMoreActivityAdmin()'>Cargar más</button>
+					</div>
 				</div>
 				
-				<div class="pagination justify-content-center">
-					<nav aria-label="Page navigation">
-						<ul class="pagination" id="paginationControls"></ul>
-					</nav>
-				</div>
-				
-				<script>
-				document.addEventListener("DOMContentLoaded", function() {
-					const itemsPerPage = 5;
-					const activityItems = document.querySelectorAll(".activity-item");
-					const totalItems = activityItems.length;
-					const totalPages = Math.ceil(totalItems / itemsPerPage);
-					const paginationControls = document.getElementById("paginationControls");
-				
-					function showPage(page) {
-						let start = (page - 1) * itemsPerPage;
-						let end = start + itemsPerPage;
-				
-						activityItems.forEach((item, index) => {
-							item.style.display = (index >= start && index < end) ? "" : "none";
-						});
-				
-						// Actualizar botones de paginación
-						paginationControls.innerHTML = "";
-						for (let i = 1; i <= totalPages; i++) {
-							let li = document.createElement("li");
-							li.classList.add("page-item");
-							if (i === page) li.classList.add("active");
-				
-							let a = document.createElement("a");
-							a.classList.add("page-link");
-							a.href = "#";
-							a.textContent = i;
-							a.addEventListener("click", function(e) {
-								e.preventDefault();
-								showPage(i);
-							});
-				
-							li.appendChild(a);
-							paginationControls.appendChild(li);
-						}
-					}
-				
-					// Mostrar la primera página al cargar
-					if (totalPages > 0) showPage(1);
-				});
-				</script>
 				<!-- pagination -->
 
 			</div>

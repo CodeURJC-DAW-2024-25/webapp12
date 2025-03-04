@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import es.codeurjc.backend.Repository.UserRepository;
-import es.codeurjc.backend.Model.Activity;
 import es.codeurjc.backend.Model.User;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
