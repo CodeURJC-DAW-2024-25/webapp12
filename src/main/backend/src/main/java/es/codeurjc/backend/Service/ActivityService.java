@@ -1,5 +1,13 @@
 package es.codeurjc.backend.Service;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType0Font;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import java.io.File;
+
 //import org.hibernate.query.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +32,10 @@ import java.util.Map;
 
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 @Service
@@ -121,6 +133,52 @@ public class ActivityService {
         return activitiesByMonth;
     }
 
+   public ByteArrayOutputStream generateReservationPDF(Long activityId, Long userId) throws IOException {
+    // Crear un documento PDF en memoria
+    PDDocument document = new PDDocument();
+    
+    // Crear una nueva página
+    PDPage page = new PDPage();
+    document.addPage(page);
+
+    // Obtener el contenido de la página
+    PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+    // Establecer la fuente y tamaño de texto
+    contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+    contentStream.beginText();
+    
+    // Establecer la posición de inicio del texto
+    contentStream.newLineAtOffset(50, 750);
+
+    // Buscar la actividad y el usuario desde la base de datos
+    Activity activity = activityRepository.findById(activityId).orElse(null);
+    User user = userRepository.findById(userId).orElse(null);
+
+    // Verificar que la actividad y el usuario existan
+    if (activity != null && user != null) {
+        // Agregar contenido al PDF
+        contentStream.showText("Ticket de Reserva");
+        contentStream.newLineAtOffset(0, -20);
+        contentStream.showText("Usuario: " + user.getName());
+        contentStream.newLineAtOffset(0, -20);
+        contentStream.showText("Actividad: " + activity.getName());
+        contentStream.newLineAtOffset(0, -20);
+        contentStream.newLineAtOffset(0, -20);
+        contentStream.showText("Vacantes restantes: " + activity.getVacancy());
+    }
+
+    contentStream.endText();
+    contentStream.close();
+
+    // Guardar el documento en un ByteArrayOutputStream
+    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+    document.save(byteArrayOutputStream);
+    document.close();
+
+    // Retornar el contenido del PDF como un ByteArrayOutputStream
+    return byteArrayOutputStream;
+}
     @Transactional
     public boolean reserveActivity(Long activityId, Long userId) {
         // Buscar la actividad

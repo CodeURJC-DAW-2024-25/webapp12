@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.tomcat.util.http.parser.MediaType;
 import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -429,7 +430,7 @@ public class activityController {
         return "search_page"; 
     }
 
-    @PostMapping("/activity/{id}/reserve")
+   /*  @PostMapping("/activity/{id}/reserve")
     public String reserveActivity(@PathVariable Long id, Principal principal) {
         if (principal == null) {
             return "redirect:/login"; // Si el usuario no está autenticado, redirigir al login
@@ -449,6 +450,39 @@ public class activityController {
         }
 
         return "redirect:/activity/" + id + "?success=reserva_exitosa";
+    }*/
+
+    @PostMapping("/activity/{id}/reserve")
+    public ResponseEntity<byte[]> reserveActivity(@PathVariable Long id, Principal principal) throws IOException {
+        if (principal == null) {
+            return ResponseEntity.status(401).build(); // Si el usuario no está autenticado, devolver 401
+        }
+
+        String userEmail = principal.getName();
+        User user = userRepository.findByEmail(userEmail);
+
+        if (user == null) {
+            return ResponseEntity.status(404).build(); // Si el usuario no existe, devolver 404
+        }
+
+        boolean success = activityService.reserveActivity(id, user.getId());
+
+        if (!success) {
+            return ResponseEntity.status(400).build(); // Si la reserva falla, devolver 400 (error)
+        }
+
+        // Generar el PDF de la reserva
+        byte[] pdfContents = activityService.generateReservationPDF(id, user.getId()).toByteArray();
+
+        // Configurar los encabezados para la descarga
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Ticket_Reserva_" + user.getName() + ".pdf");
+
+        // Devolver el PDF como respuesta
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentType(org.springframework.http.MediaType.APPLICATION_PDF)
+                .body(pdfContents);
     }
 }
 
