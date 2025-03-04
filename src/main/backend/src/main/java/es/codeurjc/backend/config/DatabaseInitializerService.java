@@ -310,8 +310,8 @@ public class DatabaseInitializerService {
 
 		Activity activity13 = new Activity("Pilates", "Relajacion","Fortalece tu cuerpo y mente con nuestras clases de pilates, diseñadas para mejorar tu flexibilidad, postura y equilibrio. Guiadas por instructores certificados, estas sesiones ofrecen un enfoque relajante y tonificante, adaptado a todos los niveles. Perfecto para quienes buscan una actividad de bajo impacto que promueva el bienestar general. ¡Únete y siente los beneficios de Pilates en un entorno tranquilo y relajante!",20);
 		
-		activity12.setPlace(lugar8);
-		activity12.setActivityDate(Date.valueOf("2025-05-09"));
+		activity13.setPlace(lugar8);
+		activity13.setActivityDate(Date.valueOf("2025-05-09"));
 		setActivityImage(activity13, "static/images/sports/yoga.png");
 		activityRepository.save(activity13);
 		review4.setActivity(activity13);
@@ -321,8 +321,8 @@ public class DatabaseInitializerService {
 
 		Activity activity14 = new Activity("Yoga", "Relajacion","Relájate, fortalece tu cuerpo y calma tu mente con nuestras clases de yoga, ideales para todos los niveles. En un entorno tranquilo y rodeado de naturaleza, practicarás posturas que mejoran tu flexibilidad, equilibrio y bienestar general. Ya sea para iniciarte o profundizar en tu práctica, nuestras clases de yoga ofrecen una experiencia revitalizante que te ayudará a encontrar tu centro. ¡Ven y disfruta de una conexión profunda entre cuerpo, mente y espíritu!",20);
 		
-		activity12.setPlace(lugar8);
-		activity12.setActivityDate(Date.valueOf("2025-04-30"));
+		activity14.setPlace(lugar8);
+		activity14.setActivityDate(Date.valueOf("2025-04-30"));
 		setActivityImage(activity14, "static/images/sports/yoga.png");
 		activityRepository.save(activity14);
 		review4.setActivity(activity14);
@@ -332,8 +332,8 @@ public class DatabaseInitializerService {
 
 		Activity activity15 = new Activity("Danza", "Relajacion","Exprésate y diviértete mientras aprendes nuevos pasos en nuestras clases de danza. Desde ritmos latinos hasta estilos modernos, estas clases están diseñadas para todos los niveles. Disfruta de la música, mejora tu coordinación y suelta tu energía en un ambiente alegre y lleno de ritmo. ¡No importa si eres principiante o ya tienes experiencia, ven a mover el cuerpo y a disfrutar de la danza!",20);
 		
-		activity12.setPlace(lugar8);
-		activity12.setActivityDate(Date.valueOf("2025-09-10"));
+		activity15.setPlace(lugar8);
+		activity15.setActivityDate(Date.valueOf("2025-09-10"));
 		setActivityImage(activity15, "static/images/sports/baile.png");
 		activityRepository.save(activity15);
 		review4.setActivity(activity15);

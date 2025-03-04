@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
+import java.text.SimpleDateFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -39,7 +39,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -209,25 +209,40 @@ public class userController {
 
 
 
-    @GetMapping("/profile")
-    public String showProfile(Model model, Principal principal,HttpServletRequest request) {
+   @GetMapping("/profile")
+    public String showProfile(Model model, Principal principal, HttpServletRequest request) {
         model.addAttribute("admin", request.isUserInRole("ADMIN"));
         model.addAttribute("user", request.isUserInRole("USER"));
         String userEmail = principal.getName();
-        User user  = userRepository.findByEmail(userEmail); 
-        
-        if(user != null){
+        User user = userRepository.findByEmail(userEmail);
+
+        if (user != null) {
             List<Activity> subscribedActivities = activityService.findEventsSubscribe(user);
-            
+
+            // Formatear fechas antes de enviarlas a la vista
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            List<Map<String, Object>> formattedActivities = new ArrayList<>();
+
+            for (Activity activity : subscribedActivities) {
+                Map<String, Object> activityMap = new HashMap<>();
+                activityMap.put("id", activity.getId());
+                activityMap.put("name", activity.getName());
+                activityMap.put("vacancy", activity.getVacancy());
+                activityMap.put("category", activity.getCategory());
+                activityMap.put("activityDate", dateFormat.format(activity.getActivityDate())); // Formatear fecha
+
+                formattedActivities.add(activityMap);
+            }
+
             model.addAttribute("userRegister", user);
-            model.addAttribute("subscribedActivities", subscribedActivities);
+            model.addAttribute("subscribedActivities", formattedActivities);
             model.addAttribute("countActivitiesSubscribed", subscribedActivities.size());
             model.addAttribute("userCount", userService.countUsers());
             model.addAttribute("activityCount", activityService.activityCount());
             model.addAttribute("id", user.getId());
             return "profile";
-        }else{
-          return "redirect:/404";
+        } else {
+            return "redirect:/404";
         }
     }
     @Transactional
