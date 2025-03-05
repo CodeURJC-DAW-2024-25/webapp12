@@ -63,7 +63,7 @@
       </div>
       <div class="col-lg-8">
         <!-- Recently Favorited -->
-        <div class="widget dashboard-container my-adslist">
+        <div class="widget dashboard-container my-adslist" id="allActivitiesPaginatedSubscribed">
           <h3 class="widget-header">Mis Reservas</h3>
           <table class="table table-responsive product-dashboard-table">
             <thead>
@@ -101,29 +101,12 @@
               {{/subscribedActivities}}
             </tbody>
           </table>
+          <div class="text-center mt-3">
+						<button type="button" class="btn btn-primary" id="loadMore" onclick='loadMoreActivitiesSubscribed()'>Cargar más</button>
+					</div>
         </div>
         <!-- pagination -->
-        <div class="pagination justify-content-center">
-          <nav aria-label="Page navigation example">
-            <ul class="pagination">
-              <li class="page-item">
-                <a class="page-link" href="/profile.html" aria-label="Previous">
-                  <span aria-hidden="true">&laquo;</span>
-                  <span class="sr-only">Previous</span>
-                </a>
-              </li>
-              <li class="page-item"><a class="page-link" href="/profile">1</a></li>
-              <li class="page-item active"><a class="page-link" href="/profile">2</a></li>
-              <li class="page-item"><a class="page-link" href="/profile">3</a></li>
-              <li class="page-item">
-                <a class="page-link" href="/profile" aria-label="Next">
-                  <span aria-hidden="true">&raquo;</span>
-                  <span class="sr-only">Next</span>
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
+        
       </div>
     </div>
   </div>

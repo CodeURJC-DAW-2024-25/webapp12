@@ -1,0 +1,35 @@
+<tbody>
+    {{#subscribedActivities}}
+     <tr>
+                       <td class="product-thumb">
+                           <img width="80px" height="auto" src="/activity/{{id}}/image" alt="image description"></td>
+                       <td class="product-details">
+                           <h3 class="title">{{name}}</h3>
+                           <span><strong>Fecha y hora: </strong>{{activityDate}} </span>
+         <!--<span class="location"><strong>Lugar:</strong>Dhaka,Bangladesh</span>-->
+                           <span class="location"><strong>Capacidad:</strong>{{vacancy}}</span>
+                       </td>
+                       <td class="product-category"><span class="categories">{{category}}</span></td>
+                       <td class="action" data-title="Action">
+                           <div class="">
+                               <ul class="list-inline justify-content-center">
+                                   <li class="list-inline-item">
+                                       <a data-toggle="tooltip" data-placement="top" title="View" class="view" href="/activity/{{id}}">
+                                           <i class="fa fa-eye"></i>
+                                       </a>
+                                   </li>
+                               </ul>
+                           </div>
+                       </td>
+                   </tr>
+    {{/subscribedActivities}}
+</tbody>
+
+<div id="loadMoreIndicator" data-has-more="{{hasMore}}" style="display: none;"></div>
+
+<!-- Mensaje de fin de usuarios -->
+{{^hasMore}}
+<p id="noMoreSubscribedActivitysMessage" style="text-align: center; font-weight: bold; display: none;">
+    No hay más actividades para cargar.
+</p>
+{{/hasMore}}

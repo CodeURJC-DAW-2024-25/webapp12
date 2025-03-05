@@ -87,6 +87,19 @@ public class ActivityService {
    public List<Activity> findEventsSubscribe(User user){
         return activityRepository.findByUsers(user);
     }
+
+    public Page<Activity> getActivitiesSubscribed(Pageable pageable, User user) {
+        return activityRepository.findByUsers(pageable, user);
+    }
+
+    public Page<Activity> getActivitiesSubscribedPaginated(int page, User user) {
+        int size = 2;
+        Pageable pageable = PageRequest.of(page, size);
+        return activityRepository.findByUsers(pageable, user);
+    }
+
+
+
     public Activity getActivityById(Long id) {
         // Utiliza el repositorio para buscar la actividad por su ID
         Optional<Activity> activityOptional = activityRepository.findById(id);

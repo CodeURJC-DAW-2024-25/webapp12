@@ -27,6 +27,7 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
     void deleteById( Long id);
 
     List<Activity> findByUsers(User user);
+    Page<Activity> findByUsers(Pageable pageable, User user);
     
     List<Activity> findByPlace(Place place);
 
