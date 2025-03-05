@@ -3,10 +3,12 @@ package es.codeurjc.backend.Service;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import java.io.File;
+import java.awt.Color;
 
 //import org.hibernate.query.Page;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -133,52 +135,80 @@ public class ActivityService {
         return activitiesByMonth;
     }
 
-   public ByteArrayOutputStream generateReservationPDF(Long activityId, Long userId) throws IOException {
-    // Crear un documento PDF en memoria
-    PDDocument document = new PDDocument();
+    public ByteArrayOutputStream generateReservationPDF(Long activityId, Long userId) throws IOException {
+        try (PDDocument document = new PDDocument()) {
+            PDPage page = new PDPage(PDRectangle.A4);
+            document.addPage(page);
     
-    // Crear una nueva página
-    PDPage page = new PDPage();
-    document.addPage(page);
-
-    // Obtener el contenido de la página
-    PDPageContentStream contentStream = new PDPageContentStream(document, page);
-
-    // Establecer la fuente y tamaño de texto
-    contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
-    contentStream.beginText();
+            try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
+                // Definir márgenes
+                float margin = 50;
+                float yStart = page.getMediaBox().getHeight() - margin;
     
-    // Establecer la posición de inicio del texto
-    contentStream.newLineAtOffset(50, 750);
-
-    // Buscar la actividad y el usuario desde la base de datos
-    Activity activity = activityRepository.findById(activityId).orElse(null);
-    User user = userRepository.findById(userId).orElse(null);
-
-    // Verificar que la actividad y el usuario existan
-    if (activity != null && user != null) {
-        // Agregar contenido al PDF
-        contentStream.showText("Ticket de Reserva");
-        contentStream.newLineAtOffset(0, -20);
-        contentStream.showText("Usuario: " + user.getName());
-        contentStream.newLineAtOffset(0, -20);
-        contentStream.showText("Actividad: " + activity.getName());
-        contentStream.newLineAtOffset(0, -20);
-        contentStream.newLineAtOffset(0, -20);
-        contentStream.showText("Vacantes restantes: " + activity.getVacancy());
+                // Dibujar un rectángulo para enmarcar el contenido con color de fondo
+                float boxWidth = page.getMediaBox().getWidth() - 2 * margin;
+                float boxHeight = 250; // Mayor espacio para incluir más detalles
+                float boxX = margin;
+                float boxY = yStart - boxHeight - 30;
+    
+                contentStream.setLineWidth(1);
+                contentStream.setStrokingColor(Color.BLACK);
+                contentStream.setNonStrokingColor(new Color(200, 220, 255)); // Color de fondo azul claro
+                contentStream.addRect(boxX, boxY, boxWidth, boxHeight);
+                contentStream.fill();
+                contentStream.setNonStrokingColor(Color.BLACK); // Restablecer color de texto
+    
+                // Configurar fuente y escribir el título centrado con color
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 18);
+                contentStream.setNonStrokingColor(new Color(0, 102, 204)); // Título en azul
+                contentStream.beginText();
+                PDFont font = PDType1Font.HELVETICA_BOLD;
+                float titleWidth = (font.getStringWidth("Ticket de Reserva") / 1000) * 18;
+                contentStream.newLineAtOffset((page.getMediaBox().getWidth() - titleWidth) / 2, yStart);
+                contentStream.showText("Ticket de Reserva");
+                contentStream.endText();
+    
+                // Buscar actividad y usuario
+                Activity activity = activityRepository.findById(activityId).orElse(null);
+                User user = userRepository.findById(userId).orElse(null);
+    
+                if (activity != null && user != null) {
+                    // Detalles del usuario y actividad
+                    contentStream.setFont(PDType1Font.HELVETICA_BOLD, 14);
+                    contentStream.setNonStrokingColor(new Color(50, 50, 50)); // Color gris oscuro para el texto principal
+                    contentStream.beginText();
+                    contentStream.newLineAtOffset(margin + 20, yStart - 50);
+                    contentStream.showText("Usuario: ");
+                    contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+                    contentStream.setNonStrokingColor(new Color(0, 102, 204)); // Azul para el nombre del usuario
+                    contentStream.showText(user.getName());
+                    contentStream.setFont(PDType1Font.HELVETICA_BOLD, 14);
+                    contentStream.setNonStrokingColor(new Color(50, 50, 50)); // Volver al gris para la siguiente línea
+                    contentStream.newLineAtOffset(0, -20);
+                    contentStream.showText("Actividad: ");
+                    contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+                    contentStream.setNonStrokingColor(new Color(0, 102, 204)); // Azul para el nombre de la actividad
+                    contentStream.showText(activity.getName());
+                    contentStream.setFont(PDType1Font.HELVETICA_BOLD, 14);
+                    contentStream.setNonStrokingColor(new Color(50, 50, 50)); // Volver al gris para la siguiente línea
+                    contentStream.newLineAtOffset(0, -20);
+                    contentStream.showText("Vacantes restantes: " + activity.getVacancy());
+                    contentStream.endText();
+    
+                    // Línea decorativa
+                    contentStream.setLineWidth(1.5f);
+                    contentStream.setStrokingColor(new Color(0, 102, 204)); // Azul para la línea
+                    contentStream.moveTo(margin, yStart - 100);
+                    contentStream.lineTo(page.getMediaBox().getWidth() - margin, yStart - 100);
+                    contentStream.stroke();
+                }
+            }
+    
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            document.save(byteArrayOutputStream);
+            return byteArrayOutputStream;
+        }
     }
-
-    contentStream.endText();
-    contentStream.close();
-
-    // Guardar el documento en un ByteArrayOutputStream
-    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-    document.save(byteArrayOutputStream);
-    document.close();
-
-    // Retornar el contenido del PDF como un ByteArrayOutputStream
-    return byteArrayOutputStream;
-}
     @Transactional
     public boolean reserveActivity(Long activityId, Long userId) {
         // Buscar la actividad

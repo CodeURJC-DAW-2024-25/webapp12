@@ -202,7 +202,7 @@ public class DatabaseInitializerService {
 		review3.setCreationDate(Calendar.getInstance());
 		reviewRepository.save(review3);
 
-		Activity activity4 = new Activity("Surf", "deporte de agua","sigue nadando sigue nadando",10);
+		Activity activity4 = new Activity("Surf", "Deporte de agua","sigue nadando sigue nadando",10);
 		setActivityImage(activity4, "static/images/sports/surf.png");
 
 		activity4.setPlace(lugar5);
@@ -235,7 +235,7 @@ public class DatabaseInitializerService {
 		review4.setCreationDate(Calendar.getInstance());
 		reviewRepository.save(review4);
 		
-		Activity activity7 = new Activity("Atletismo", "Deporte individual","Ponte a prueba y libera tu energía con nuestras actividades de atletismo. Desde carreras de velocidad hasta resistencia y saltos, disfruta de un entrenamiento dinámico en un entorno espectacular. Ideal para todos los niveles, esta es la oportunidad perfecta para mejorar tu rendimiento y divertirte al aire libre. ¡Acepta el desafío y cruza la meta con nosotros!",10);
+		Activity activity7 = new Activity("Atletismo", "Deportes individuales","Ponte a prueba y libera tu energía con nuestras actividades de atletismo. Desde carreras de velocidad hasta resistencia y saltos, disfruta de un entrenamiento dinámico en un entorno espectacular. Ideal para todos los niveles, esta es la oportunidad perfecta para mejorar tu rendimiento y divertirte al aire libre. ¡Acepta el desafío y cruza la meta con nosotros!",10);
 		
 		setActivityImage(activity7, "static/images/sports/atletismo.png");
 		activity7.setPlace(lugar2);
@@ -246,7 +246,7 @@ public class DatabaseInitializerService {
 		review4.setCreationDate(Calendar.getInstance());
 		reviewRepository.save(review4);
 		
-		Activity activity8 = new Activity("Padel", "Deporte de euipo","Disfruta de la emoción del pádel en nuestras modernas canchas, perfectas para jugadores de todos los niveles. Forma pareja, mejora tu técnica y compite en partidos dinámicos llenos de estrategia y diversión. Una excelente manera de hacer ejercicio, socializar y disfrutar del deporte en un entorno único. ¡Reserva tu turno y vive la pasión del pádel!",10);
+		Activity activity8 = new Activity("Padel", "Deporte de equipo","Disfruta de la emoción del pádel en nuestras modernas canchas, perfectas para jugadores de todos los niveles. Forma pareja, mejora tu técnica y compite en partidos dinámicos llenos de estrategia y diversión. Una excelente manera de hacer ejercicio, socializar y disfrutar del deporte en un entorno único. ¡Reserva tu turno y vive la pasión del pádel!",10);
 		
 		activity8.setPlace(lugar4);
 		setActivityImage(activity8, "static/images/sports/tennis.png");
@@ -257,7 +257,7 @@ public class DatabaseInitializerService {
 		review4.setCreationDate(Calendar.getInstance());
 		reviewRepository.save(review4);
 		
-		Activity activity9 = new Activity("Tennis", "Deporte individual","Vive la emoción del tenis en nuestras canchas de primer nivel, diseñadas para jugadores de todos los niveles. Ya sea que quieras practicar tu saque, mejorar tu juego en pareja o competir en un partido amistoso, esta actividad es perfecta para disfrutar de un deporte dinámico y entretenido. ¡Ven a desafiarte a ti mismo y a disfrutar de un buen partido de tenis!",10);
+		Activity activity9 = new Activity("Tennis", "Deportes individuales","Vive la emoción del tenis en nuestras canchas de primer nivel, diseñadas para jugadores de todos los niveles. Ya sea que quieras practicar tu saque, mejorar tu juego en pareja o competir en un partido amistoso, esta actividad es perfecta para disfrutar de un deporte dinámico y entretenido. ¡Ven a desafiarte a ti mismo y a disfrutar de un buen partido de tenis!",10);
 		
 		activity9.setPlace(lugar4);
 		activity9.setActivityDate(Date.valueOf("2026-04-15"));
@@ -269,7 +269,7 @@ public class DatabaseInitializerService {
 		review4.setCreationDate(Calendar.getInstance());
 		reviewRepository.save(review4);
 		
-		Activity activity10 = new Activity("Tiro con Arco", "Deporte individual","sPon a prueba tu precisión y concentración con nuestra actividad de tiro con arco. Guiado por instructores experimentados, aprenderás las técnicas básicas para lanzar con destreza y alcanzar el blanco. Ideal para todos los niveles, esta actividad te permitirá disfrutar de un desafío relajante en un entorno natural. ¡Apunta, dispara y alcanza tu objetivo!",15);
+		Activity activity10 = new Activity("Tiro con Arco", "Deportes individuales","sPon a prueba tu precisión y concentración con nuestra actividad de tiro con arco. Guiado por instructores experimentados, aprenderás las técnicas básicas para lanzar con destreza y alcanzar el blanco. Ideal para todos los niveles, esta actividad te permitirá disfrutar de un desafío relajante en un entorno natural. ¡Apunta, dispara y alcanza tu objetivo!",15);
 		
 		activity10.setPlace(lugar2);
 		activity10.setActivityDate(Date.valueOf("2025-07-01"));
@@ -282,7 +282,7 @@ public class DatabaseInitializerService {
 		review4.setCreationDate(Calendar.getInstance());
 		reviewRepository.save(review4);
 
-		Activity activity11 = new Activity("golf", "Deporte individual","Disfruta de un día de golf en nuestro hermoso campo, rodeado de vistas impresionantes. Ya sea que seas principiante o un golfista experimentado, podrás mejorar tu técnica y disfrutar de un juego relajado o competitivo. Perfecto para compartir con amigos o disfrutar en solitario mientras te conectas con la naturaleza. ¡Ven a disfrutar del golf y haz de cada golpe una experiencia única!",7);
+		Activity activity11 = new Activity("golf", "Deportes individuales","Disfruta de un día de golf en nuestro hermoso campo, rodeado de vistas impresionantes. Ya sea que seas principiante o un golfista experimentado, podrás mejorar tu técnica y disfrutar de un juego relajado o competitivo. Perfecto para compartir con amigos o disfrutar en solitario mientras te conectas con la naturaleza. ¡Ven a disfrutar del golf y haz de cada golpe una experiencia única!",7);
 		
 		activity11.setPlace(lugar6);
 		activity11.setActivityDate(Date.valueOf("2026-01-01"));
