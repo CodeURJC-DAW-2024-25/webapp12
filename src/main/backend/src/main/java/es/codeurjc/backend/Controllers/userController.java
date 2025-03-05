@@ -24,6 +24,7 @@ import es.codeurjc.backend.Service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import es.codeurjc.backend.Service.ActivityService;
+import es.codeurjc.backend.Service.EmailService;
 import es.codeurjc.backend.Service.PlaceService;
 import es.codeurjc.backend.Service.ReviewService;
 
@@ -57,6 +58,8 @@ public class userController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private EmailService emailService;
 
     @Autowired
     private ActivityService activityService;
@@ -96,6 +99,14 @@ public class userController {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setRoles(List.of("USER"));
             userService.save(user);
+    
+            // Inyecta emailService en lugar de crear una nueva instancia
+            emailService.sendEmail(
+                user.getEmail(),
+                "¡Bienvenido a nuestra aplicación!",
+                "Hola " + user.getName() + ",\n\nGracias por registrarte en nuestra aplicación. ¡Esperamos que disfrutes de la experiencia!\n\nSaludos,\nEl equipo."
+            );
+    
             return "redirect:/login";
         }
     }
