@@ -21,6 +21,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import es.codeurjc.backend.Service.UserService;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import es.codeurjc.backend.Service.ActivityService;
@@ -92,7 +93,7 @@ public class userController {
 
 
     @PostMapping("/signup")
-    public String signup(User user, RedirectAttributes attributes) {
+    public String signup(User user, RedirectAttributes attributes) throws MessagingException {
         if (userService.existsByEmail(user.getEmail())) {
             return "redirect:/register";
         } else {
@@ -100,16 +101,26 @@ public class userController {
             user.setRoles(List.of("USER"));
             userService.save(user);
     
-            // Inyecta emailService en lugar de crear una nueva instancia
+            // Mensaje HTML con formato y emojis
+            String htmlMessage = "<div style='font-family: Arial, sans-serif; padding: 15px; border: 2px solid #ddd; border-radius: 10px; background-color: #f9f9f9;'>"
+                    + "<h2 style='color: #2d89ef;'>👋 ¡Bienvenido a nuestra aplicación, " + user.getName() + "! 🎉</h2>"
+                    + "<p style='font-size: 16px; color: #333;'>Gracias por registrarte en nuestra plataforma. Estamos encantados de tenerte aquí. 😊</p>"
+                    + "<p style='font-size: 16px; color: #333;'> Te damos la vienvenida a nuestro FABULOSO resort.</p>"
+                    + "<p style='font-size: 16px; color: #333;'>🚀 ¡Esperamos que disfrutes de la experiencia!</p>"
+                    + "<p style='font-size: 14px; color: #777;'>Saludos,<br><strong>El equipo de Pixel Paradise</strong></p>"
+                    + "</div>";
+    
+            // Enviar el correo con HTML
             emailService.sendEmail(
                 user.getEmail(),
                 "¡Bienvenido a nuestra aplicación!",
-                "Hola " + user.getName() + ",\n\nGracias por registrarte en nuestra aplicación. ¡Esperamos que disfrutes de la experiencia!\n\nSaludos,\nEl equipo."
+                htmlMessage
             );
     
             return "redirect:/login";
         }
     }
+    
 
     
     @GetMapping("/admin_users")
