@@ -23,7 +23,7 @@ public class WebSecurityConfig {
 	}
 
 	@Bean
-	DaoAuthenticationProvider authenticationProvider() { //DIAPOSITIVA 20 SEGURIDAD 3.2 -- El componente creado con authenticationProvider() configura un autenticador con el servicio de usuarios en memoria y el password encoder creados anteriormente
+	DaoAuthenticationProvider authenticationProvider() {
 		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 		authProvider.setUserDetailsService(userDetailService);
 		authProvider.setPasswordEncoder(passwordEncoder());

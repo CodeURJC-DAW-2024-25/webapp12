@@ -85,15 +85,15 @@ public class activityController {
         model.addAttribute("activities", activities);
         model.addAttribute("allPlaces", places);
         
-        // Obtener usuario autenticado a través de Principal
+        
         if (principal != null) {
             String userEmail = principal.getName();
             System.out.println("Usuario autenticado: " + userEmail);
 
-            // Buscar usuario en la base de datos por email
+            
             User user = userRepository.findByEmail(userEmail);
             if (user != null) {
-                // Obtener actividades recomendadas
+                 
                 List<Activity> recommendedActivities = activityService.recommendActivities(user.getId());
                 model.addAttribute("recommendedActivities", recommendedActivities);
             } else {
@@ -132,7 +132,6 @@ public class activityController {
         model.addAttribute("userCount", userService.countUsers());
         model.addAttribute("userRegister", user);
 
-        //PAGEABLE:
         int page = 0;
         Page<Activity> activities = activityService.getActivitiesPaginated(page);
         model.addAttribute("allActivities", activities);
@@ -144,12 +143,10 @@ public class activityController {
         System.out.println("Cargando usuarios, página: " + page);
     
         try {
-            // Obtener el total de páginas disponibles
             int totalPages = activityService.getActivitiesPaginated(0).getTotalPages();
     
-            // Si la página solicitada es mayor o igual al total, no hay más usuarios
             if (page >= totalPages) {
-                model.addAttribute("allActivities", new ArrayList<>()); // No hay más usuarios
+                model.addAttribute("allActivities", new ArrayList<>()); 
                 model.addAttribute("hasMore", false);
                 return "moreActivitiesAdmin";
             }
@@ -160,7 +157,7 @@ public class activityController {
                 throw new RuntimeException("activityRepository.findAll(pageable) retornó null");
             }
     
-            model.addAttribute("allActivities", activities.getContent()); // Asegurar que es "users"
+            model.addAttribute("allActivities", activities.getContent()); 
             boolean hasMore = page < activities.getTotalPages() - 1;
             model.addAttribute("hasMore", hasMore);
     
@@ -172,7 +169,7 @@ public class activityController {
         } catch (Exception e) {
             System.err.println("Error en /moreActivitiesAdmin: " + e.getMessage());
             e.printStackTrace();
-            return "errorPage";  // Página de error si hay un problema
+            return "errorPage";  
         }
     }
     
@@ -211,37 +208,35 @@ public class activityController {
         
         if (optionalActivity.isEmpty()) {
             model.addAttribute("errorMessage", "Actividad no encontrada.");
-            return "404";  // Página de error
+            return "404"; 
         }
     
         Activity activity = optionalActivity.get();
         
-        // Obtener todas las reviews de la actividad
-        //List<Review> reviews = reviewService.findByActivity_Id(id);
-        //model.addAttribute("reviews", reviews);
+        
 
         int page = 0;
         Page<Review> reviews = reviewService.getReviewsPaginated(id, page);
         model.addAttribute("reviews", reviews);
     
-        // Obtener el lugar asociado a la actividad
+        
         Place place = activity.getPlace(); 
         model.addAttribute("place", place);
         
-        // Obtener el usuario autenticado
+        
         if (principal != null) {
             String userEmail = principal.getName();
             User user = userRepository.findByEmail(userEmail);
     
-            // Verificar si el usuario está suscrito a esta actividad
+            
             List<Activity> subscribedActivities = activityService.findEventsSubscribe(user);
-            boolean isSubscribed = subscribedActivities.contains(activity);  // Verifica si la actividad está en la lista de actividades del usuario
+            boolean isSubscribed = subscribedActivities.contains(activity);  
             
             model.addAttribute("isSubscribed", isSubscribed);
         }
         model.addAttribute("activity", activity);
     
-        return "activity";  // Nombre del archivo .mustache
+        return "activity";  
     }
 
 
@@ -271,7 +266,7 @@ public class activityController {
 				activity.setImageFile(null);
 				activity.setImage(false);
 			} else {
-				// Maintain the same image loading it before updating the book
+				
 				Activity dbActivity = activityService.findById(activity.getId()).orElseThrow();
 				if (dbActivity.getImage()) {
 					activity.setImageFile(BlobProxy.generateProxy(dbActivity.getImageFile().getBinaryStream(),
@@ -282,40 +277,26 @@ public class activityController {
 		}
 	}
 
-   /* @GetMapping("/moreReviews")
-    public String loadMoreReviews(@RequestParam Long activityId, @RequestParam int page, Model model) {
-        Page<Review> reviews = reviewService.getReviewsPaginated(activityId, page);
-        
-        
-        boolean hasMore = page < reviews.getTotalPages() - 1;
-        
-        model.addAttribute("reviews", reviews.getContent());
-        model.addAttribute("hasMore", hasMore);
-        
-        
-        return "moreReviews";
-    }*/
-
     @GetMapping("/moreReviews")
     public String loadMoreReviews(@RequestParam Long activityId, @RequestParam int page, Model model) {
         Page<Review> reviews = reviewService.getReviewsPaginated(activityId, page);
         
-        // Buscar la actividad por ID
+        
         Optional<Activity> optionalActivity = activityService.findById(activityId);
         if (optionalActivity.isEmpty()) {
             model.addAttribute("errorMessage", "Actividad no encontrada.");
-            return "404";  // Página de error
+            return "404"; 
         }
 
         Activity activity = optionalActivity.get();
-        model.addAttribute("activity", activity);  // Agregamos activity al modelo
+        model.addAttribute("activity", activity);  
         
-        // Asegurar si hay más páginas
+        
         boolean hasMore = page < reviews.getTotalPages() - 1;
         model.addAttribute("reviews", reviews.getContent());
         model.addAttribute("hasMore", hasMore);
 
-        return "moreReviews";  // Nombre de la plantilla Mustache
+        return "moreReviews";  
     }
 
     
@@ -332,7 +313,6 @@ public class activityController {
     @PostMapping("/createActivity")
     public String createNewActivity(@ModelAttribute Activity activity, @RequestParam("placeId") Long placeId, @RequestParam("file") MultipartFile imagFile) {
         try {
-            // Si el archivo no está vacío, lo convertimos en un Blob y lo asignamos a la actividad
             if (!imagFile.isEmpty()) {
                 activity.setImageFile(BlobProxy.generateProxy(imagFile.getInputStream(), imagFile.getSize()));
                 activity.setImage(true);
@@ -340,28 +320,28 @@ public class activityController {
 
             activity.setCreationDateMethod();
 
-            // Obtener el lugar de la actividad
+            
             Optional<Place> optionalPlace = placeRepository.findById(placeId);
             if (optionalPlace.isPresent()) {
                 Place place = optionalPlace.get();
                 activity.setPlace(place);
             } else {
-                return "404"; // Si no se encuentra el lugar, retorna error
+                return "404"; 
             }
 
-            // Convertir la fecha de actividad desde el tipo java.util.Date a java.sql.Date
-            java.util.Date utilDate = activity.getActivityDate(); // Suponiendo que el formulario pasa la fecha como java.util.Date
+            
+            java.util.Date utilDate = activity.getActivityDate();
             if (utilDate != null) {
                 java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-                activity.setActivityDate(sqlDate); // Establecer la fecha de actividad convertida
+                activity.setActivityDate(sqlDate); 
             }
 
-            // Guardar la actividad
+            
             activityService.saveActivity(activity);
-            return "redirect:/admin_activities"; // Redirigir a la página de administración de actividades
+            return "redirect:/admin_activities";
         } catch (IOException e) {
             e.printStackTrace();
-            return "404"; // Si ocurre un error, se maneja el error y retorna una página de error
+            return "404"; 
         }
     }
 
@@ -399,20 +379,20 @@ public class activityController {
             activity.setPlace(updatedActivity.getPlace());
             updateImage(activity, removeImage, imagFile);
 
-            // Guarda los cambios
+            
             activityService.saveActivity(activity);
 
-            return "redirect:/admin_activities";  // Redirige a la vista de administración de actividades
+            return "redirect:/admin_activities";  
         }
 
-        return "404";  // Si no se encuentra la actividad, muestra un error
+        return "404";  
     }
 
     @GetMapping("/search_page")
     public String showSearchs(Model model, Principal principal,@RequestParam(value = "placeId", required = false) Long placeId) {
-        // Verifica si no se ha enviado un placeId
+        
         if (placeId == null) {
-            return "redirect:/404";  // Redirige a la página 404 si no se seleccionó un lugar
+            return "redirect:/404";  
         }
     
 
@@ -430,55 +410,31 @@ public class activityController {
         return "search_page"; 
     }
 
-   /*  @PostMapping("/activity/{id}/reserve")
-    public String reserveActivity(@PathVariable Long id, Principal principal) {
-        if (principal == null) {
-            return "redirect:/login"; // Si el usuario no está autenticado, redirigir al login
-        }
-
-        String userEmail = principal.getName();
-        User user = userRepository.findByEmail(userEmail);
-
-        if (user == null) {
-            return "404"; // Si el usuario no existe, devolver error
-        }
-
-        boolean success = activityService.reserveActivity(id, user.getId());
-
-        if (!success) {
-            return "redirect:/activity/" + id + "?error=cupo_lleno";
-        }
-
-        return "redirect:/activity/" + id + "?success=reserva_exitosa";
-    }*/
-
     @PostMapping("/activity/{id}/reserve")
     public ResponseEntity<byte[]> reserveActivity(@PathVariable Long id, Principal principal) throws IOException {
         if (principal == null) {
-            return ResponseEntity.status(401).build(); // Si el usuario no está autenticado, devolver 401
+            return ResponseEntity.status(401).build(); 
         }
 
         String userEmail = principal.getName();
         User user = userRepository.findByEmail(userEmail);
 
         if (user == null) {
-            return ResponseEntity.status(404).build(); // Si el usuario no existe, devolver 404
+            return ResponseEntity.status(404).build(); 
         }
 
         boolean success = activityService.reserveActivity(id, user.getId());
 
         if (!success) {
-            return ResponseEntity.status(400).build(); // Si la reserva falla, devolver 400 (error)
+            return ResponseEntity.status(400).build(); 
         }
 
-        // Generar el PDF de la reserva
         byte[] pdfContents = activityService.generateReservationPDF(id, user.getId()).toByteArray();
 
-        // Configurar los encabezados para la descarga
+        
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Ticket_Reserva_" + user.getName() + ".pdf");
 
-        // Devolver el PDF como respuesta
         return ResponseEntity.ok()
                 .headers(headers)
                 .contentType(org.springframework.http.MediaType.APPLICATION_PDF)

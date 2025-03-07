@@ -101,7 +101,7 @@ public class userController {
             user.setRoles(List.of("USER"));
             userService.save(user);
     
-            // Mensaje HTML con formato y emojis
+            
             String htmlMessage = "<div style='font-family: Arial, sans-serif; padding: 15px; border: 2px solid #ddd; border-radius: 10px; background-color: #f9f9f9;'>"
                     + "<h2 style='color: #2d89ef;'>👋 ¡Bienvenido a nuestra aplicación, " + user.getName() + "! 🎉</h2>"
                     + "<p style='font-size: 16px; color: #333;'>Gracias por registrarte en nuestra plataforma. Estamos encantados de tenerte aquí. 😊</p>"
@@ -110,7 +110,7 @@ public class userController {
                     + "<p style='font-size: 14px; color: #777;'>Saludos,<br><strong>El equipo de Pixel Paradise</strong></p>"
                     + "</div>";
     
-            // Enviar el correo con HTML
+           
             emailService.sendEmail(
                 user.getEmail(),
                 "¡Bienvenido a nuestra aplicación!",
@@ -145,7 +145,7 @@ public class userController {
 
 
     
-        model.addAttribute("users", users.getContent()); // Asegurar que es "users"
+        model.addAttribute("users", users.getContent()); 
 
         model.addAttribute("hasMore", users.hasNext());
         
@@ -161,12 +161,12 @@ public class userController {
         System.out.println("Cargando usuarios, página: " + page);
     
         try {
-            // Obtener el total de páginas disponibles
+            
             int totalPages = userService.getUsersPaginated(0).getTotalPages();
     
-            // Si la página solicitada es mayor o igual al total, no hay más usuarios
+           
             if (page >= totalPages) {
-                model.addAttribute("users", new ArrayList<>()); // No hay más usuarios
+                model.addAttribute("users", new ArrayList<>()); 
                 model.addAttribute("hasMore", false);
                 return "moreUsers";
             }
@@ -177,7 +177,7 @@ public class userController {
                 throw new RuntimeException("userRepository.findAll(pageable) retornó null");
             }
     
-            model.addAttribute("users", users.getContent()); // Asegurar que es "users"
+            model.addAttribute("users", users.getContent()); 
             boolean hasMore = page < users.getTotalPages() - 1;
             model.addAttribute("hasMore", hasMore);
     
@@ -189,7 +189,7 @@ public class userController {
         } catch (Exception e) {
             System.err.println("Error en /moreUsers: " + e.getMessage());
             e.printStackTrace();
-            return "errorPage";  // Página de error si hay un problema
+            return "errorPage";  
         }
     }
     
@@ -244,7 +244,7 @@ public class userController {
             model.addAttribute("activityCount", activityService.activityCount());
             model.addAttribute("id", user.getId());
 
-            //PAGEABLE ACTIVITIES SUBSCRIBED:
+            
             int page = 0;
             Page<Activity> subscribedActivities = activityService.getActivitiesSubscribedPaginated(page, user);
             model.addAttribute("subscribedActivities", subscribedActivities);

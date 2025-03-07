@@ -198,12 +198,12 @@ public class Activity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Activity activity = (Activity) o;
-        return Objects.equals(id, activity.id);  // Compara por id, o por cualquier otro atributo único
-    }
+        return Objects.equals(id, activity.id);  
+	}
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);  // Usa el mismo atributo que en equals
+        return Objects.hash(id);  
     }
 	
 }

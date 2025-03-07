@@ -55,7 +55,7 @@ public class ReviewService {
     }
     public void saveReview(Long activityId, int starsValue, String description, Long userId) {
         Optional<Activity> activityOpt = ActivityRepository.findById(activityId);
-        Optional<User> userOpt = UserRepository.findById(userId); // Suponiendo un usuario autenticado
+        Optional<User> userOpt = UserRepository.findById(userId); 
 
         if (activityOpt.isPresent() && userOpt.isPresent()) {
             Review review = new Review();
@@ -71,9 +71,9 @@ public class ReviewService {
     }
 
     public Page<Review> getReviewsPaginated(Long activityId, int page) {
-        int size = 2; // Número de reviews por página
+        int size = 2; 
         Pageable pageable = PageRequest.of(page, size);
-        return reviewRepository.findByActivityId(activityId, pageable); // Asegúrate de que el repositorio filtre por activityId
+        return reviewRepository.findByActivityId(activityId, pageable); 
     }
     
     

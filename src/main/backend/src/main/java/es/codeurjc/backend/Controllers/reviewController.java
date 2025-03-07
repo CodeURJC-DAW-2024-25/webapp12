@@ -39,7 +39,7 @@ public class reviewController {
         
         try {
             reviewService.saveReview(activityId, starsValue, description, userId);
-            return "redirect:/activity/" + activityId;  // Redirigir a la página de actividad
+            return "redirect:/activity/" + activityId;  
         } catch (Exception e) {
             return "Error al agregar la review: " + e.getMessage();
         }

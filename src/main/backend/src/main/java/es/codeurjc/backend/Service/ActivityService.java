@@ -5,12 +5,9 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import java.io.File;
 import java.awt.Color;
 
-//import org.hibernate.query.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
@@ -36,8 +33,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 @Service
@@ -50,7 +45,7 @@ public class ActivityService {
 
     public List<Activity> getAllActivities() {
         List<Activity> activities = activityRepository.findAll();
-        System.out.println("Actividades desde el repositorio: " + activities);  // Esto te mostrará las actividades por consola
+        System.out.println("Actividades desde el repositorio: " + activities);  
         return activities;
     }
     
@@ -101,18 +96,17 @@ public class ActivityService {
 
 
     public Activity getActivityById(Long id) {
-        // Utiliza el repositorio para buscar la actividad por su ID
+        
         Optional<Activity> activityOptional = activityRepository.findById(id);
-        //si no esta devuelve null
         return activityOptional.orElse(null);
        
     }
-    // ALGORITMO DE RECOMENDACIÓN:
+    
     public List<Activity> recommendActivities(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         
-        // Cargar las actividades del usuario para evitar problemas de inicialización perezosa
+       
         List<Activity> userActivities = new ArrayList<>(user.getActivities());
         
         Set<String> categories = userActivities.stream()
@@ -154,26 +148,25 @@ public class ActivityService {
             document.addPage(page);
     
             try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
-                // Definir márgenes
+                
                 float margin = 50;
                 float yStart = page.getMediaBox().getHeight() - margin;
     
-                // Dibujar un rectángulo para enmarcar el contenido con color de fondo
+                
                 float boxWidth = page.getMediaBox().getWidth() - 2 * margin;
-                float boxHeight = 250; // Mayor espacio para incluir más detalles
+                float boxHeight = 250; 
                 float boxX = margin;
                 float boxY = yStart - boxHeight - 30;
     
                 contentStream.setLineWidth(1);
                 contentStream.setStrokingColor(Color.BLACK);
-                contentStream.setNonStrokingColor(new Color(200, 220, 255)); // Color de fondo azul claro
+                contentStream.setNonStrokingColor(new Color(200, 220, 255)); 
                 contentStream.addRect(boxX, boxY, boxWidth, boxHeight);
                 contentStream.fill();
-                contentStream.setNonStrokingColor(Color.BLACK); // Restablecer color de texto
+                contentStream.setNonStrokingColor(Color.BLACK); 
     
-                // Configurar fuente y escribir el título centrado con color
                 contentStream.setFont(PDType1Font.HELVETICA_BOLD, 18);
-                contentStream.setNonStrokingColor(new Color(0, 102, 204)); // Título en azul
+                contentStream.setNonStrokingColor(new Color(0, 102, 204));
                 contentStream.beginText();
                 PDFont font = PDType1Font.HELVETICA_BOLD;
                 float titleWidth = (font.getStringWidth("Ticket de Reserva") / 1000) * 18;
@@ -181,36 +174,35 @@ public class ActivityService {
                 contentStream.showText("Ticket de Reserva");
                 contentStream.endText();
     
-                // Buscar actividad y usuario
+                
                 Activity activity = activityRepository.findById(activityId).orElse(null);
                 User user = userRepository.findById(userId).orElse(null);
     
                 if (activity != null && user != null) {
-                    // Detalles del usuario y actividad
+                    
                     contentStream.setFont(PDType1Font.HELVETICA_BOLD, 14);
-                    contentStream.setNonStrokingColor(new Color(50, 50, 50)); // Color gris oscuro para el texto principal
+                    contentStream.setNonStrokingColor(new Color(50, 50, 50)); 
                     contentStream.beginText();
                     contentStream.newLineAtOffset(margin + 20, yStart - 50);
                     contentStream.showText("Usuario: ");
                     contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
-                    contentStream.setNonStrokingColor(new Color(0, 102, 204)); // Azul para el nombre del usuario
+                    contentStream.setNonStrokingColor(new Color(0, 102, 204)); 
                     contentStream.showText(user.getName());
                     contentStream.setFont(PDType1Font.HELVETICA_BOLD, 14);
-                    contentStream.setNonStrokingColor(new Color(50, 50, 50)); // Volver al gris para la siguiente línea
+                    contentStream.setNonStrokingColor(new Color(50, 50, 50)); 
                     contentStream.newLineAtOffset(0, -20);
                     contentStream.showText("Actividad: ");
                     contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
-                    contentStream.setNonStrokingColor(new Color(0, 102, 204)); // Azul para el nombre de la actividad
+                    contentStream.setNonStrokingColor(new Color(0, 102, 204)); 
                     contentStream.showText(activity.getName());
                     contentStream.setFont(PDType1Font.HELVETICA_BOLD, 14);
-                    contentStream.setNonStrokingColor(new Color(50, 50, 50)); // Volver al gris para la siguiente línea
+                    contentStream.setNonStrokingColor(new Color(50, 50, 50)); 
                     contentStream.newLineAtOffset(0, -20);
                     contentStream.showText("Vacantes restantes: " + activity.getVacancy());
                     contentStream.endText();
     
-                    // Línea decorativa
                     contentStream.setLineWidth(1.5f);
-                    contentStream.setStrokingColor(new Color(0, 102, 204)); // Azul para la línea
+                    contentStream.setStrokingColor(new Color(0, 102, 204)); 
                     contentStream.moveTo(margin, yStart - 100);
                     contentStream.lineTo(page.getMediaBox().getWidth() - margin, yStart - 100);
                     contentStream.stroke();
@@ -224,41 +216,41 @@ public class ActivityService {
     }
     @Transactional
     public boolean reserveActivity(Long activityId, Long userId) {
-        // Buscar la actividad
+      
         Activity activity = activityRepository.findById(activityId).orElse(null);
         if (activity == null) {
-            return false; // Si no se encuentra la actividad, retornar false
+            return false; 
         }
 
-        // Verificar si hay vacantes disponibles
+       
         if (activity.getVacancy() <= 0) {
-            return false; // Si no hay vacantes disponibles, retornar false
+            return false; 
         }
 
-        // Buscar el usuario
+        
         User user = userRepository.findById(userId).orElse(null);
         if (user == null) {
-            return false; // Si no se encuentra el usuario, retornar false
+            return false; 
         }
 
-        // Añadir la actividad al usuario si no está ya inscrito
+        
         if (user.getActivities().contains(activity)) {
-            return false; // Si el usuario ya está inscrito en la actividad, retornar false
+            return false; 
         }
 
-        // Disminuir el número de vacantes disponibles
+       
         activity.setVacancy(activity.getVacancy() - 1);
         
-        // Guardar la actividad con las nuevas vacantes
+        
         activityRepository.save(activity);
 
-        // Agregar la actividad al usuario
+       
         user.getActivities().add(activity);
         
-        // Guardar el usuario con la nueva actividad reservada
+        
         userRepository.save(user);
 
-        return true; // Reserva exitosa
+        return true; 
     }
 }
 

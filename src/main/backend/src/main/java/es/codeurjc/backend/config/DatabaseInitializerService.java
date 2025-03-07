@@ -53,7 +53,7 @@ public class DatabaseInitializerService {
 	
 	@PostConstruct
 	public void init() throws IOException, URISyntaxException {
-		// Sample users
+		
 		User user1 = new User("Paula", "Ruiz Rubio", "paula@email.com", "12345567D", "556673336",passwordEncoder.encode("1234"));
 		user1.setRoles(List.of("USER"));
 		setUserImage(user1, "static/images/user/user4.png");
@@ -95,17 +95,15 @@ public class DatabaseInitializerService {
 		
 		userRepository.save(admin);
 
-
-		//SAMPLES DE LUGAR
 		Place lugar1 = new Place();
 		lugar1.setDescription("Este lugar contiene una piscina en la que se puede nadar. La piscina es una piscina olímpica de 50 metros de largo, donde podrás hacer mucho ejercicio");
 		lugar1.setName("Piscina cubierta");
-		placeRepository.save(lugar1); // Guardar en BD antes de asignarlo a actividades
+		placeRepository.save(lugar1); 
 		
 		Place lugar2 = new Place();
 		lugar2.setDescription("Se trata de pistas de atletismo que cuentan con pistas de rugby, fútbol, atletismo");
 		lugar2.setName("Pistas exteriores");
-		placeRepository.save(lugar2); // Guardar en BD antes de asignarlo a actividades
+		placeRepository.save(lugar2); 
 		
 		Place lugar3 = new Place();
 		lugar3.setDescription("Pista de bolos para jugar a los bolos que cuenta con 7 pistas de bolos");
@@ -137,13 +135,6 @@ public class DatabaseInitializerService {
 		lugar8.setName("Salas Indoor");
 		placeRepository.save(lugar8);
 
-		
-
-
-
-		
-
-		// Sample reviews
 		Review review1 = new Review(1, "No me ha gustado nada, muy mejorable :(", user1);
 		Review review2 = new Review(2, "He aprendido poco, es muy para principiantes", user2);
 		Review review3 = new Review(3, "Me ha servido, aunque hay cosas que he tenido que buscar en internet", user3);
@@ -154,7 +145,7 @@ public class DatabaseInitializerService {
 		Review review8 = new Review(5, "Increíble, he aprendido tanto en tan poco tiempo, gracias al equipo del curso",user2);
 		
 
-		// Sample activitys
+		
 		Activity activity1 = new Activity("Baloncesto", "Deporte de equipo","Disfruta de una emocionante competencia en nuestra cancha de baloncesto. Forma tu equipo, compite en partidos amistosos y demuestra tus habilidades en un ambiente divertido y relajado. Ideal para jugadores de todos los niveles, esta actividad es perfecta para ejercitarte, socializar y vivir la pasión del baloncesto mientras disfrutas del sol y la brisa del resort. ¡Inscríbete y únete a la diversión!",10);
 		activity1.setReviews(List.of(review1, review6, review7));
 		setActivityImage(activity1, "static/images/sports/baloncesto.png");

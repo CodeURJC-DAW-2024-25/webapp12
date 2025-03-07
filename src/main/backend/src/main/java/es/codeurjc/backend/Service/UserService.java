@@ -39,22 +39,12 @@ public class UserService {
         return userRepository.existsByEmail(email);
     }
 
-    /*public User getCurrentUser() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            String username = ((UserDetails) principal).getUsername();
-            return userRepository.findByUsername(username).orElse(null);
-        }
-        return null;
-    }
-    */
-
     public Page<User> getAllUsers(Pageable pageable) {
         return userRepository.findAll(pageable);
     }
 
     public Page<User> getUsersPaginated(int page) {
-        int pageSize = 2; // Cargar 2 usuarios por página
+        int pageSize = 2; 
         Pageable pageable = PageRequest.of(page, pageSize);
     
         Page<User> users = userRepository.findAll(pageable);

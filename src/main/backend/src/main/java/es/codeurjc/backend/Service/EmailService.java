@@ -21,8 +21,7 @@ public class EmailService {
         helper.setSubject(subject);
         helper.setFrom("pixelparadisedaw@gmail.com");
     
-        // Usar el contenido que se pasa en el parámetro "text"
-        helper.setText(text, true); // "true" para que acepte HTML
+        helper.setText(text, true); 
     
         mailSender.send(message);
     }
