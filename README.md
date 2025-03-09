@@ -65,5 +65,33 @@ Pixel Paradise
 ![image](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/Images/diagrama_navegacion.jpg).
 ### **Class and temples diagram**
 ![diagramadaw](https://github.com/user-attachments/assets/8d26b857-5ddc-49d3-a01b-11b3ea944756)
+## **Member Participation**
+### **Alba Velasco Marqués**
+-Tasks:
+- Make the charts of the number of activities created per month by the administrator and the activity ratings.
+- Do the activity finder by location.
+- Delete users and activities.
+- Create new activity.
+- Edit user information.
+- Make user and admin profile screen.
+- Make all admin screens.
+
+-Commits:
+
+| Commit   | Link   | 
+|----------|------------|
+| Alba | Velasco Marques | 
+| Gonzalo | Pérez Roca | 
+| Alexandra  | Cararus Verdes |
+| Paula | Ruiz Rubio |
+
+-Files:
+
+| File   | Link   | 
+|----------|------------|
+| Alba | Velasco Marques | 
+| Gonzalo | Pérez Roca | 
+| Alexandra  | Cararus Verdes |
+| Paula | Ruiz Rubio |
 
 
