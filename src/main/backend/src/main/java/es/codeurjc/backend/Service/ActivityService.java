@@ -252,6 +252,10 @@ public class ActivityService {
 
         return true; 
     }
+
+    public List<Activity> findByPlace(Place place) {
+        return activityRepository.findByPlace(place);
+    }
 }
 
 

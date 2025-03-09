@@ -55,6 +55,14 @@ public class UserService {
         
         return users;
     }
+
+    public User findByEmail(String username) {
+        return userRepository.findByEmail(username);
+    }
+
+    public void delete(User user) {
+        userRepository.delete(user);
+    }
     
     
 }

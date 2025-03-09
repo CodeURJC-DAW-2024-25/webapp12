@@ -35,7 +35,7 @@ import org.springframework.ui.Model;
 import es.codeurjc.backend.Model.Activity;
 import es.codeurjc.backend.Model.Review;
 import es.codeurjc.backend.Model.User;
-import es.codeurjc.backend.Repository.UserRepository;
+
 
 import java.io.IOException;
 import java.security.Principal;
@@ -55,9 +55,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class userController {
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private EmailService emailService;
@@ -131,7 +128,7 @@ public class userController {
         model.addAttribute("user", request.isUserInRole("USER"));
 
         String userEmail = principal.getName();
-        User user  = userRepository.findByEmail(userEmail); 
+        User user  = userService.findByEmail(userEmail); 
         
         
         List<Activity> subscribedActivities = activityService.findEventsSubscribe(user);
@@ -236,7 +233,7 @@ public class userController {
         model.addAttribute("admin", request.isUserInRole("ADMIN"));
         model.addAttribute("user", request.isUserInRole("USER"));
         String userEmail = principal.getName();
-        User user = userRepository.findByEmail(userEmail);
+        User user = userService.findByEmail(userEmail);
 
         if (user != null) {
             model.addAttribute("userRegister", user);
@@ -258,7 +255,7 @@ public class userController {
     @GetMapping("/moreActivitiesSubscribed") 
     public String LoadMoreActivities(@RequestParam int page, Model model, Principal principal) { 
         String userEmail = principal.getName();
-        User user = userRepository.findByEmail(userEmail);
+        User user = userService.findByEmail(userEmail);
         Page<Activity> activities = activityService.getActivitiesSubscribedPaginated(page, user);
         model.addAttribute("subscribedActivities", activities.getContent());
         boolean hasMore = page < activities.getTotalPages() - 1;
@@ -274,7 +271,7 @@ public class userController {
     @Transactional
     @PostMapping("/removeUser")
     public String removeUser(@RequestParam Long id) {
-        Optional<User> optionalUser = userRepository.findById(id);
+        Optional<User> optionalUser = userService.findById(id);
         if(optionalUser.isPresent()){
             User user = optionalUser.get();
 
@@ -289,7 +286,7 @@ public class userController {
                 reviewService.delete(review.getId());
             }
 
-            userRepository.delete(user);
+            userService.delete(user);
             return "redirect:/admin_users";
         }else{
             return "404";
@@ -323,7 +320,7 @@ public class userController {
     @RequestParam(value = "removeImage", required = false, defaultValue = "false") boolean removeImage)
     throws IOException, SQLException{
         String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findByEmail(userEmail);
+        User user = userService.findByEmail(userEmail);
         try{
             if(user != null){
                 user.setName(userUpdated.getName());
@@ -331,7 +328,7 @@ public class userController {
                 user.setDni(userUpdated.getDni());
                 user.setPhone(userUpdated.getPhone());
                 updateImage(user, removeImage, imagFile);
-                userRepository.save(user);
+                userService.save(user);
                 return "redirect:/profile";
             }
             else{
@@ -349,7 +346,7 @@ public class userController {
         model.addAttribute("user", request.isUserInRole("USER"));
 
         String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findByEmail(userEmail);
+        User user = userService.findByEmail(userEmail);
 
         if(user != null){
             List<Activity> subscribedActivities = activityService.findEventsSubscribe(user);

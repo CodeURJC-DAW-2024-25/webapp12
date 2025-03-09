@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import es.codeurjc.backend.Model.User;
-import es.codeurjc.backend.Repository.UserRepository;
 import es.codeurjc.backend.Service.ReviewService;
+import es.codeurjc.backend.Service.UserService;
 
 @Controller
 public class reviewController {
@@ -21,7 +21,7 @@ public class reviewController {
     private ReviewService reviewService;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @PostMapping("/activity/{activityId}/addReview")
     public String addReview(@PathVariable Long activityId, 
@@ -32,7 +32,7 @@ public class reviewController {
                             ) 
         {
         String username = principal.getName();
-        User user = userRepository.findByEmail(username);
+        User user = userService.findByEmail(username);
         if (userId == null) {
             userId = user.getId();
         }

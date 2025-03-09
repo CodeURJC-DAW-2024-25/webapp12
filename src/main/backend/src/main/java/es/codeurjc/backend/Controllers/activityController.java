@@ -35,9 +35,7 @@ import es.codeurjc.backend.Service.UserService;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 
-import es.codeurjc.backend.Repository.ActivityRepository;
-import es.codeurjc.backend.Repository.PlaceRepository;
-import es.codeurjc.backend.Repository.UserRepository;
+
 
 
 
@@ -60,17 +58,12 @@ public class activityController {
     @Autowired
     private ReviewService reviewService;
 
-    @Autowired
-    private ActivityRepository activityRepository;
+   
 
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private UserRepository userRepository;
 
-    @Autowired
-    private PlaceRepository placeRepository;
 
     @Autowired
     private PlaceService placeService;
@@ -81,7 +74,7 @@ public class activityController {
         Page<Activity> activities = activityService.getActivitiesPaginated(page);
 
         
-        List<Place> places = placeRepository.findAll();
+        List<Place> places = placeService.findAll();
         model.addAttribute("activities", activities);
         model.addAttribute("allPlaces", places);
         
@@ -91,7 +84,7 @@ public class activityController {
             System.out.println("Usuario autenticado: " + userEmail);
 
             
-            User user = userRepository.findByEmail(userEmail);
+            User user = userService.findByEmail(userEmail);
             if (user != null) {
                  
                 List<Activity> recommendedActivities = activityService.recommendActivities(user.getId());
@@ -121,7 +114,7 @@ public class activityController {
         model.addAttribute("user", request.isUserInRole("USER"));
 
         String userEmail = principal.getName();
-        User user  = userRepository.findByEmail(userEmail); 
+        User user  = userService.findByEmail(userEmail); 
 
         
         List<Activity> subscribedActivities = activityService.findEventsSubscribe(user);
@@ -226,7 +219,7 @@ public class activityController {
         
         if (principal != null) {
             String userEmail = principal.getName();
-            User user = userRepository.findByEmail(userEmail);
+            User user = userService.findByEmail(userEmail);
     
             
             List<Activity> subscribedActivities = activityService.findEventsSubscribe(user);
@@ -321,7 +314,7 @@ public class activityController {
             activity.setCreationDateMethod();
 
             
-            Optional<Place> optionalPlace = placeRepository.findById(placeId);
+            Optional<Place> optionalPlace = placeService.findById(placeId);
             if (optionalPlace.isPresent()) {
                 Place place = optionalPlace.get();
                 activity.setPlace(place);
@@ -396,11 +389,11 @@ public class activityController {
         }
     
 
-        Optional<Place> optionalPlace = placeRepository.findById(placeId);
+        Optional<Place> optionalPlace = placeService.findById(placeId);
 
         if (optionalPlace.isPresent()) {
             Place place = optionalPlace.get();
-            List<Activity> activitiesByPlace = activityRepository.findByPlace(place);
+            List<Activity> activitiesByPlace = activityService.findByPlace(place);
              
             model.addAttribute("activitiesByPlace", activitiesByPlace); 
             model.addAttribute("placeName", place.getName());
@@ -417,7 +410,7 @@ public class activityController {
         }
 
         String userEmail = principal.getName();
-        User user = userRepository.findByEmail(userEmail);
+        User user = userService.findByEmail(userEmail);
 
         if (user == null) {
             return ResponseEntity.status(404).build(); 
