@@ -65,6 +65,9 @@ Pixel Paradise
 ![image](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/Images/diagrama_navegacion.jpg).
 ### **Class and temples diagram**
 ![diagramadaw](https://github.com/user-attachments/assets/8d26b857-5ddc-49d3-a01b-11b3ea944756)
+### **Diagram with database entities**
+![diagrama er](https://github.com/user-attachments/assets/7458b90c-80a5-4583-8777-6dc26100cd3d)
+
 ## **Member Participation**
 ### **Alba Velasco Marqués**
 -Tasks:
