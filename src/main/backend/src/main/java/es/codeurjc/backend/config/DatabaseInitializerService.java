@@ -149,7 +149,7 @@ public class DatabaseInitializerService {
 		Activity activity1 = new Activity("Baloncesto", "Deporte de equipo","Disfruta de una emocionante competencia en nuestra cancha de baloncesto. Forma tu equipo, compite en partidos amistosos y demuestra tus habilidades en un ambiente divertido y relajado. Ideal para jugadores de todos los niveles, esta actividad es perfecta para ejercitarte, socializar y vivir la pasión del baloncesto mientras disfrutas del sol y la brisa del resort. ¡Inscríbete y únete a la diversión!",10);
 		activity1.setReviews(List.of(review1, review6, review7));
 		setActivityImage(activity1, "static/images/sports/baloncesto.png");
-		activity1.setPlace(lugar1);
+		activity1.setPlace(lugar4);
 		activity1.setActivityDate(Date.valueOf("2026-03-01"));
 		
 		activityRepository.save(activity1);
@@ -170,7 +170,7 @@ public class DatabaseInitializerService {
 		Activity activity2 = new Activity("Beisbol", "Deporte de equipo", "Vive la emoción del béisbol en un entorno espectacular. Únete a un equipo, batea, corre las bases y atrapa la victoria en un partido amistoso diseñado para todas las edades y niveles de experiencia. Disfruta del espíritu deportivo, la competencia sana y la diversión bajo el sol del resort. ¡Inscríbete y sé parte del juego!",4);
 		activity2.setReviews(List.of(review2, review8));
 		setActivityImage(activity2, "static/images/sports/beisbol.png");
-		activity2.setPlace(lugar1);
+		activity2.setPlace(lugar4);
 		activity2.setActivityDate(Date.valueOf("2026-03-01"));
 
 		activityRepository.save(activity2);
@@ -185,7 +185,7 @@ public class DatabaseInitializerService {
 		activity3.setReviews(List.of(review3));
 		setActivityImage(activity3, "static/images/sports/bolos.png");
 		
-		activity3.setPlace(lugar1);
+		activity3.setPlace(lugar3);
 		activity3.setActivityDate(Date.valueOf("2026-04-01"));
 
 		activityRepository.save(activity3);
