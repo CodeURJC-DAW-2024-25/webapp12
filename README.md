@@ -80,18 +80,20 @@ Pixel Paradise
 
 | Commit   | Link   | 
 |----------|------------|
-| Alba | Velasco Marques | 
-| Gonzalo | Pérez Roca | 
-| Alexandra  | Cararus Verdes |
-| Paula | Ruiz Rubio |
+| Conseguir arreglar imagenes  | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/70579664cdb0c28fcf0e0977a0676f0517606176 | 
+| grafico valoraciones de reviews conseguido | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/cb8a7f386d34cc5b8f8c80f64a7ea0f699e8b8d2 | 
+| conseguido grafico actividades por mes  |https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/c9297f1537008d44ec2f18437277b1a85d8782fb |
+| conseguido editar perfil | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/4494f49bcea721e6332eda2967512504754b076f |
+|conseguido crear nueva actividad |https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/b51a0d67c5fe49c92b358ec99071d83b774476bb |
 
 -Files:
 
 | File   | Link   | 
 |----------|------------|
-| Alba | Velasco Marques | 
-| Gonzalo | Pérez Roca | 
-| Alexandra  | Cararus Verdes |
-| Paula | Ruiz Rubio |
+| activityController.java | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/java/es/codeurjc/backend/Controllers/activityController.java | 
+| userController.java | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/java/es/codeurjc/backend/Controllers/userController.java | 
+| admin_users.html  | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/resources/templates/admin_users.html |
+| create_activity.html | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/resources/templates/create_activity.html |
+| admin_activities.html |https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/resources/templates/admin_activities.html|
 
 
