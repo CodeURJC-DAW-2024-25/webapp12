@@ -147,7 +147,7 @@ public class activityController {
             Page<Activity> activities = activityService.getActivitiesPaginated(page);
     
             if (activities == null) {
-                throw new RuntimeException("activityRepository.findAll(pageable) retornó null");
+                throw new RuntimeException("activityService.findAll(pageable) retornó null");
             }
     
             model.addAttribute("allActivities", activities.getContent()); 

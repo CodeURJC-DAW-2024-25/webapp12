@@ -171,7 +171,7 @@ public class userController {
             Page<User> users = userService.getUsersPaginated(page);
     
             if (users == null) {
-                throw new RuntimeException("userRepository.findAll(pageable) retornó null");
+                throw new RuntimeException("userService.findAll(pageable) retornó null");
             }
     
             model.addAttribute("users", users.getContent()); 
