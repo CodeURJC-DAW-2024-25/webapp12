@@ -126,4 +126,31 @@ Pixel Paradise
 | moreActivities.html | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/resources/templates/create_activity.html |
 | register.html |https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/resources/templates/register.html|
 
+### ** Gonzalo Pérez Roca **
 
+task:
+- Generate and manage the email when a new user registers.
+- Generate the PDF corresponding to the activity a user has just subscribed to.
+- Added the functionalities to edit and modify activities.
+- Manage activity reservations.
+- Generate data for all activities.
+
+-Commits:
+
+| Commit   | Link   | 
+|----------|------------|
+|Añadido un mensaje por correo al registrar un nuevo usuario | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/deddead43094495c5bab0f9ad802601da5c5eab2 |
+|Generar el pdf v1 | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/c31a777a1ab8dd92fd2d2e9425cee67941e288cf |
+|Nuevas actividades añadidas(sin la imagen), y cambios menores en como se muestran | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/bfba779d894ad672f3017d4be79215b978d28bf6 |
+|Implementación reservas sin pdf | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/c6cde6983b96caa080f8f74048cb9f4a262f1d8f|
+|Intento de reseñas | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/ac754a8894e81052c8bfadbda0a2e1f7a22f5605 |
+
+-Files:
+
+| File   | Link   | 
+|----------|------------|
+| activityController.java | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/java/es/codeurjc/backend/Controllers/activityController.java | 
+| reviewController.java|https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/java/es/codeurjc/backend/Controllers/reviewController.java |
+| DatabaseInitializerService.java |https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/java/es/codeurjc/backend/config/DatabaseInitializerService.java|
+| Edit_activity.html |https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/resources/templates/Edit_activity.html|
+| activity.html |https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/resources/templates/activity.html|
