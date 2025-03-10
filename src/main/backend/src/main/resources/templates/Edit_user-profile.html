@@ -13,7 +13,12 @@
 					<div class="widget user">
 						<!-- User Image -->
 						<div class="image d-flex justify-content-center">
+							{{#userRegistered.image}}
 							<img src="/user/{{userRegistered.id}}/image"alt="image description" class="rounded-circle">
+							{{/userRegistered.image}}
+							{{^userRegistered.image}}
+							<img src="/images/sports/no-image.png" class="img-fluid mb-4" alt="No Image">
+							{{/userRegistered.image}}
 						</div>
 						<!-- User Name -->
 						<h5 class="text-center">{{userRegistered.name}}</h5>
@@ -85,7 +90,14 @@
 									<i class="fa fa-user text-center px-3"></i>
 									<label>Subir nueva imagen:</label><br>
 									<input type='file' name='file' accept=".jpg, .jpeg" /><br>
-
+									<div class="text-center mt-2">
+										{{#userRegistered.image}}
+										<img src="/user/{{userRegistered.id}}/image" alt="Imagen de actividad" class="img-fluid rounded shadow-sm" style="max-width: 100%; height: auto;">
+										{{/userRegistered.image}}
+										{{^userRegistered.image}}
+										<img src="/images/sports/no-image.png" class="img-fluid mb-4" alt="No Image">
+										{{/userRegistered.image}}
+									</div>
 									<input type='checkbox' name='removeImage'>
 									<label>Eliminar imagen actual</label><br>
 								 </div>

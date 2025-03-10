@@ -12,8 +12,12 @@
                             <li class="list-inline-item">{{activity.formattedCreationDate}}</li>
                         </ul>
                     </div>
-
+                    {{#activity.image}}
                     <img src="/activity/{{activity.id}}/image" alt="Imagen de actividad">
+                    {{/activity.image}}
+                    {{^activity.image}}
+                    <img src="/images/sports/no-image.png" class="img-fluid mb-4" alt="No Image">
+                    {{/activity.image}}
                     <ul class="list-inline product-meta">
                         <li class="list-inline-item">
                             <a><i class="fa fa-futbol-o"></i> {{activity.category}}</a>

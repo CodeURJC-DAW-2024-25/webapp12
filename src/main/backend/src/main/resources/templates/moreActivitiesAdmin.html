@@ -3,7 +3,13 @@
     <tr class="activity-item">
         <td class="product-thumb">
             <a href="/activity/{{id}}">
-            <img width="80px" height="auto" src="/activity/{{id}}/image" alt="image description"></td>
+            {{#image}}
+            <img width="80px" height="auto" src="/activity/{{id}}/image" alt="image description">
+            {{/image}}
+            {{^image}}
+            <img src="/images/sports/no-image.png" class="img-fluid mb-4" alt="No Image">
+            {{/image}}
+            </td>
             </a>
             
         <td class="product-details">

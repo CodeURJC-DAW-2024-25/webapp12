@@ -2,7 +2,12 @@
     {{#users}}
     <tr class="user">
         <td class="product-thumb">
+            {{#image}}
             <img width="80px" height="auto" src="/user/{{id}}/image" alt="image description">
+            {{/image}}
+            {{^image}}
+            <img src="/images/sports/no-image.png" class="img-fluid mb-4" alt="No Image">
+            {{/image}}
         </td>
         <td class="product-details">
             <h3 class="title">{{name}} {{surname}}</h3>

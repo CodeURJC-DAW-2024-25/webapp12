@@ -14,7 +14,12 @@
 					<div class="widget user-dashboard-profile">
 						<!-- User Image -->
 						<div class="profile-thumb">
+							{{#userRegister.image}}
 							<img src="/user/{{userRegister.id}}/image" alt="" class="rounded-circle">
+							{{/userRegister.image}}
+							{{^userRegister.image}}
+							<img src="/images/sports/no-image.png" class="img-fluid mb-4" alt="No Image">
+							{{/userRegister.image}}
 						</div>
 						<!-- User Name -->
 						<h5 class="text-center">{{userRegister.name}}</h5>
@@ -78,7 +83,12 @@
 								<tr class="user">
 
 								<td class="product-thumb">
+									{{#image}}
 									<img width="80px" height="auto" src="/user/{{id}}/image"  alt="image description"></td>
+									{{/image}}
+									{{^image}}
+									<img src="/images/sports/no-image.png" class="img-fluid mb-4" alt="No Image">
+									{{/image}}
 								<td class="product-details">
 									<h3 class="title">{{name}} {{surname}}</h3>
 									<span><strong>Email: </strong>{{email}}</span>

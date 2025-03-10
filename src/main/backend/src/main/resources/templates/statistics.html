@@ -14,7 +14,12 @@
 					<div class="widget user-dashboard-profile">
 						<!-- User Image -->
 						<div class="profile-thumb">
+							{{#userRegistered.image}}
 							<img src="/user/{{userRegistered.id}}/image" alt="" class="rounded-circle">
+							{{/userRegistered.image}}
+                            {{^userRegistered.image}}
+                            <img src="/images/sports/no-image.png" class="img-fluid mb-4" alt="No Image">
+                            {{/userRegistered.image}}
 						</div>
 						<!-- User Name -->
 						<h5 class="text-center">{{userRegistered.name}}</h5>

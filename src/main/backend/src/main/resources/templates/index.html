@@ -73,7 +73,12 @@
 							<div class="card">
 								<div class="thumb-content">
 									<a href="/activity/{{id}}">
+										{{#activity.image}}
 										<img class="card-img-top img-fluid" src="/activity/{{id}}/image" alt="Card image cap">
+										{{/activity.image}}
+										{{^activity.image}}
+										<img src="/images/sports/no-image.png" class="img-fluid mb-4" alt="No Image">
+										{{/activity.image}}
 									</a>
 								</div>
 								<div class="card-body">

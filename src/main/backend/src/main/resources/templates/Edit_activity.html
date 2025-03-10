@@ -16,7 +16,12 @@
                             <label for="image" class="form-label">Imagen:</label>
                             <input type="file" id="image" name="file" class="form-control">
                             <div class="text-center mt-2">
+                                {{#activity.image}}
                                 <img src="/activity/{{activity.id}}/image" alt="Imagen de actividad" class="img-fluid rounded shadow-sm" style="max-width: 100%; height: auto;">
+                                {{/activity.image}}
+                                {{^activity.image}}
+                                <img src="/images/sports/no-image.png" class="img-fluid mb-4" alt="No Image">
+                                {{/activity.image}}
                             </div>
 
 							<input type='checkbox' name='removeImage'>

@@ -2,7 +2,13 @@
     {{#subscribedActivities}}
      <tr>
                        <td class="product-thumb">
-                           <img width="80px" height="auto" src="/activity/{{id}}/image" alt="image description"></td>
+                            {{#image}}
+                           <img width="80px" height="auto" src="/activity/{{id}}/image" alt="image description">
+                           {{/image}}
+                           {{^image}}
+                           <img src="/images/sports/no-image.png" class="img-fluid mb-4" alt="No Image">
+                           {{/image}}
+                        </td>
                        <td class="product-details">
                            <h3 class="title">{{name}}</h3>
                            <span><strong>Fecha y hora: </strong>{{activityDate}} </span>
