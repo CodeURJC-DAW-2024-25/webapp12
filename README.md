@@ -99,4 +99,31 @@ Pixel Paradise
 | create_activity.html | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/resources/templates/create_activity.html |
 | admin_activities.html |https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/resources/templates/admin_activities.html|
 
+### **Alexandra Cararus Verdes**
+- Recommended algorithm
+- Class diagrams and database entity diagrams
+- Index with Mustache
+- "Load More" button with AJAX on the index page
+- Registration form
+
+-Commits:
+
+| Commit   | Link   | 
+|----------|------------|
+|Recommended algorithm | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/82e6e87af6d2a8a5d603452cea973da60c587dac | 
+|Class diagrams and database entity diagrams | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/581d572623a92ded76090299f7e539d2f4b6959c| 
+| Index with Mustache |https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/b10335ba828bd6ae6d43de808a4ea00ef0cbb656 |
+| Load More on index |https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/3fa334255990566420afde5f1f3a746e621133c1|
+|Registration form |https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/6fa73ba0ed1d71b321077da4c3a727c2f480c6cc|
+
+-Files:
+
+| File   | Link   | 
+|----------|------------|
+| activityController.java | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/java/es/codeurjc/backend/Controllers/activityController.java | 
+| app.js| https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/resources/static/js/app.js| 
+| index.html | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/resources/templates/index.html |
+| moreActivities.html | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/resources/templates/create_activity.html |
+| register.html |https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/resources/templates/register.html|
+
 
