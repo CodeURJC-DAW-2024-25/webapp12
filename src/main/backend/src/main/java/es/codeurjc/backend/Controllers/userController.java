@@ -79,7 +79,7 @@ public class userController {
 
     @GetMapping("/loginError")
     public String showErrorLogin() {
-        return "404";
+        return "error";
     }
 
     @GetMapping("/register")
@@ -248,7 +248,7 @@ public class userController {
             model.addAttribute("countActivitiesSubscribed", subscribedActivities.getTotalElements());
             return "profile";
         } else {
-            return "redirect:/404";
+            return "redirect:/error";
         }
     }
 
@@ -289,7 +289,7 @@ public class userController {
             userService.delete(user);
             return "redirect:/admin_users";
         }else{
-            return "404";
+            return "error";
         }
         
     }
@@ -309,7 +309,7 @@ public class userController {
             model.addAttribute("activityCount", activityService.activityCount());
             return "Edit_user-profile";
         }else{
-            return "404";
+            return "error";
         }
     }   
     
@@ -332,11 +332,11 @@ public class userController {
                 return "redirect:/profile";
             }
             else{
-                return "404";
+                return "error";
             }
         }catch(IOException e){
             e.printStackTrace();
-            return "404";
+            return "error";
         }
     }
 
@@ -368,7 +368,7 @@ public class userController {
 
             return "statistics";
         }else{
-            return "404";
+            return "error";
         }
     }
     

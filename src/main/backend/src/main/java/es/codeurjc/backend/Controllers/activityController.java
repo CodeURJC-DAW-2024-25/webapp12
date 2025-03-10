@@ -172,9 +172,9 @@ public class activityController {
 
 
 
-    @GetMapping("/404")
+    @GetMapping("/error")
     public String showError() {
-        return "404";
+        return "error";
     }
     @Transactional
     @PostMapping("/removeActivity")
@@ -190,7 +190,7 @@ public class activityController {
             activityService.delete(id);
             return "redirect:/admin_activities";
         }else{
-            return "404";
+            return "error";
         }
         
     }
@@ -201,7 +201,7 @@ public class activityController {
         
         if (optionalActivity.isEmpty()) {
             model.addAttribute("errorMessage", "Actividad no encontrada.");
-            return "404"; 
+            return "error"; 
         }
     
         Activity activity = optionalActivity.get();
@@ -278,7 +278,7 @@ public class activityController {
         Optional<Activity> optionalActivity = activityService.findById(activityId);
         if (optionalActivity.isEmpty()) {
             model.addAttribute("errorMessage", "Actividad no encontrada.");
-            return "404"; 
+            return "error"; 
         }
 
         Activity activity = optionalActivity.get();
@@ -319,7 +319,7 @@ public class activityController {
                 Place place = optionalPlace.get();
                 activity.setPlace(place);
             } else {
-                return "404"; 
+                return "error"; 
             }
 
             
@@ -334,7 +334,7 @@ public class activityController {
             return "redirect:/admin_activities";
         } catch (IOException e) {
             e.printStackTrace();
-            return "404"; 
+            return "error"; 
         }
     }
 
@@ -347,7 +347,7 @@ public class activityController {
 
         if (optionalActivity.isEmpty()) {
             model.addAttribute("errorMessage", "Actividad no encontrada.");
-            return "404";  
+            return "error";  
         }
         
         Place place = activity.getPlace();
@@ -378,14 +378,14 @@ public class activityController {
             return "redirect:/admin_activities";  
         }
 
-        return "404";  
+        return "error";  
     }
 
     @GetMapping("/search_page")
     public String showSearchs(Model model, Principal principal,@RequestParam(value = "placeId", required = false) Long placeId) {
         
         if (placeId == null) {
-            return "redirect:/404";  
+            return "redirect:/error";  
         }
     
 
@@ -398,7 +398,7 @@ public class activityController {
             model.addAttribute("activitiesByPlace", activitiesByPlace); 
             model.addAttribute("placeName", place.getName());
         } else {
-            return "404";  
+            return "error";  
         }
         return "search_page"; 
     }
