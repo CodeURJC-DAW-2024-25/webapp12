@@ -15,7 +15,7 @@ import es.codeurjc.backend.service.ReviewService;
 import es.codeurjc.backend.service.UserService;
 
 @Controller
-public class reviewController {
+public class ReviewController {
     
     @Autowired
     private ReviewService reviewService;
