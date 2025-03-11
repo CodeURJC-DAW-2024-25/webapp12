@@ -1,10 +1,11 @@
-package es.codeurjc.backend.Service;
+package es.codeurjc.backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import es.codeurjc.backend.Repository.UserRepository;
-import es.codeurjc.backend.Model.User;
+import es.codeurjc.backend.model.User;
+import es.codeurjc.backend.repository.UserRepository;
+
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

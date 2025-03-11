@@ -34,13 +34,13 @@
 							  {{/user}}
 							  {{#admin}}
 							<li>
-								<a href="/admin_activities"><i class="fa fa-bolt"></i>Todas las actividades <span>{{activityCount}}</span></a>
+								<a href="/adminActivities"><i class="fa fa-bolt"></i>Todas las actividades <span>{{activityCount}}</span></a>
               				</li>
               				<li>
-								<a href="/create_activity"><i class="fas fa-plus-square"></i> Crear nueva actividad</a>
+								<a href="/createActivity"><i class="fas fa-plus-square"></i> Crear nueva actividad</a>
 							</li>
 							<li>
-								<a href="/admin_users"><i class="fa fa-users"></i> Todos los usuarios <span>{{userCount}}</span></a>
+								<a href="/adminUsers"><i class="fa fa-users"></i> Todos los usuarios <span>{{userCount}}</span></a>
 							</li>
 							<li>
 								<a href="/statistics"><i class="fa fa-chart-bar"></i>Estadísticas </a>
@@ -73,7 +73,7 @@
 					<div class="col-lg-6 col-md-6">
 						<div class="widget personal-info">
 							<h3 class="widget-header user">Edita tu información personal</h3>
-							<form action="/Edit_user-profile" method="POST" enctype="multipart/form-data">
+							<form action="/editUserProfile" method="POST" enctype="multipart/form-data">
 								<input type="hidden" name="id" value="{{userRegistered.id}}" />
 								<!-- First Name -->
 								<div class="form-group">

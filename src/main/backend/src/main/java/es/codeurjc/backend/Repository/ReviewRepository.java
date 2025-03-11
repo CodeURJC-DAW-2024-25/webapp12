@@ -1,4 +1,4 @@
-package es.codeurjc.backend.Repository;
+package es.codeurjc.backend.repository;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import es.codeurjc.backend.Model.Review;
+import es.codeurjc.backend.model.Review;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {

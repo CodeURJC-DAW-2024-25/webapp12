@@ -1,4 +1,4 @@
-package es.codeurjc.backend.Security;
+package es.codeurjc.backend.security;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.servlet.HandlerInterceptor;

@@ -24,7 +24,7 @@
             <!-- User Name -->
             <h5 class="text-center">{{userRegister.name}}</h5>
             
-            <a href="/Edit_user-profile/{{userRegister.id}}" class="btn btn-main-sm">Editar Perfil</a>
+            <a href="/editUserProfile/{{userRegister.id}}" class="btn btn-main-sm">Editar Perfil</a>
           </div>
           {{/user}}
           <!-- Dashboard Links -->
@@ -37,14 +37,14 @@
               {{/user}}
               {{#admin}}
 							<li>
-								<a href="/admin_activities"><i class="fa fa-bolt"></i>Todas las actividades <span>{{activityCount}}</span></a>
+								<a href="/adminActivities"><i class="fa fa-bolt"></i>Todas las actividades <span>{{activityCount}}</span></a>
               </li>
               
               <li>
 								<a href="/createActivity"><i class="fas fa-plus-square"></i> Crear nueva actividad</a>
 							</li>
 							<li>
-								<a href="/admin_users"><i class="fa fa-users"></i> Todos los usuarios <span>{{userCount}}</span></a>
+								<a href="/adminUsers"><i class="fa fa-users"></i> Todos los usuarios <span>{{userCount}}</span></a>
 							</li>
 							<li>
 								<a href="/statistics"><i class="fa fa-chart-bar"></i>Estadísticas </a>

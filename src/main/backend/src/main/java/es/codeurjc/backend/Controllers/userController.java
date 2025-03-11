@@ -1,4 +1,4 @@
-package es.codeurjc.backend.Controllers;
+package es.codeurjc.backend.controllers;
 
 import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,22 +20,19 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import es.codeurjc.backend.Service.UserService;
+import es.codeurjc.backend.model.Activity;
+import es.codeurjc.backend.model.Review;
+import es.codeurjc.backend.model.User;
+import es.codeurjc.backend.service.ActivityService;
+import es.codeurjc.backend.service.EmailService;
+import es.codeurjc.backend.service.PlaceService;
+import es.codeurjc.backend.service.ReviewService;
+import es.codeurjc.backend.service.UserService;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
-import es.codeurjc.backend.Service.ActivityService;
-import es.codeurjc.backend.Service.EmailService;
-import es.codeurjc.backend.Service.PlaceService;
-import es.codeurjc.backend.Service.ReviewService;
-
 
 import org.springframework.ui.Model;
-
-import es.codeurjc.backend.Model.Activity;
-import es.codeurjc.backend.Model.Review;
-import es.codeurjc.backend.Model.User;
-
 
 import java.io.IOException;
 import java.security.Principal;
@@ -120,7 +117,7 @@ public class userController {
     
 
     
-    @GetMapping("/admin_users")
+    @GetMapping("/adminUsers")
     public String showAdminUsers(Model model,HttpServletRequest request,Principal principal) {
 
 
@@ -150,7 +147,7 @@ public class userController {
         model.addAttribute("countActivitiesSubscribed", subscribedActivities.size());
         model.addAttribute("activityCount", activityService.activityCount());
         model.addAttribute("userRegister", user);
-        return "admin_users";
+        return "adminUsers";
     }
 
     @GetMapping("/moreUsers") 
@@ -287,14 +284,14 @@ public class userController {
             }
 
             userService.delete(user);
-            return "redirect:/admin_users";
+            return "redirect:/adminUsers";
         }else{
             return "error";
         }
         
     }
 
-    @GetMapping("/Edit_user-profile/{id}")
+    @GetMapping("/editUserProfile/{id}")
     public String showEditProfile(Principal principal,Model model,HttpServletRequest request, @PathVariable long id) {
         model.addAttribute("admin", request.isUserInRole("ADMIN"));
         model.addAttribute("user", request.isUserInRole("USER"));
@@ -307,14 +304,14 @@ public class userController {
             model.addAttribute("countActivitiesSubscribed", subscribedActivities.size());
             model.addAttribute("userCount", userService.countUsers());
             model.addAttribute("activityCount", activityService.activityCount());
-            return "Edit_user-profile";
+            return "editUserProfile";
         }else{
             return "error";
         }
     }   
     
 
-    @PostMapping("/Edit_user-profile")
+    @PostMapping("/editUserProfile")
     public String updateProfile(Model model, @ModelAttribute User userUpdated,
     @RequestParam("file") MultipartFile imagFile,
     @RequestParam(value = "removeImage", required = false, defaultValue = "false") boolean removeImage)

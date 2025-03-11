@@ -1,5 +1,4 @@
-package es.codeurjc.backend.Controllers;
-
+package es.codeurjc.backend.controllers;
 
 import java.io.IOException;
 import java.security.Principal;
@@ -24,14 +23,15 @@ import java.util.Optional;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import es.codeurjc.backend.Model.Activity;
-import es.codeurjc.backend.Model.Place;
-import es.codeurjc.backend.Model.Review;
-import es.codeurjc.backend.Model.User;
-import es.codeurjc.backend.Service.ActivityService;
-import es.codeurjc.backend.Service.PlaceService;
-import es.codeurjc.backend.Service.ReviewService;
-import es.codeurjc.backend.Service.UserService;
+import es.codeurjc.backend.model.Activity;
+import es.codeurjc.backend.model.Place;
+import es.codeurjc.backend.model.Review;
+import es.codeurjc.backend.model.User;
+import es.codeurjc.backend.service.ActivityService;
+import es.codeurjc.backend.service.PlaceService;
+import es.codeurjc.backend.service.ReviewService;
+import es.codeurjc.backend.service.UserService;
+
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 
@@ -108,7 +108,7 @@ public class activityController {
 
 
 
-    @GetMapping("/admin_activities")
+    @GetMapping("/adminActivities")
     public String showAdminActivities(Model model,HttpServletRequest request,Principal principal) {
         model.addAttribute("admin", request.isUserInRole("ADMIN"));
         model.addAttribute("user", request.isUserInRole("USER"));
@@ -128,7 +128,7 @@ public class activityController {
         int page = 0;
         Page<Activity> activities = activityService.getActivitiesPaginated(page);
         model.addAttribute("allActivities", activities);
-        return "admin_activities";
+        return "adminActivities";
     }
 
     @GetMapping("/moreActivitiesAdmin") 
@@ -188,7 +188,7 @@ public class activityController {
                 userService.save(user);
             }
             activityService.delete(id);
-            return "redirect:/admin_activities";
+            return "redirect:/adminActivities";
         }else{
             return "error";
         }
@@ -303,7 +303,7 @@ public class activityController {
     public String showFormNewActivity(Model model) {
 
         model.addAttribute("allPlaces", placeService.getAllPlaces());
-        return "create_activity";
+        return "createActivity";
     }
 
     @PostMapping("/createActivity")
@@ -334,7 +334,7 @@ public class activityController {
 
             
             activityService.saveActivity(activity);
-            return "redirect:/admin_activities";
+            return "redirect:/adminActivities";
         } catch (IOException e) {
             e.printStackTrace();
             return "error"; 
@@ -358,7 +358,7 @@ public class activityController {
         model.addAttribute("place", place);
         model.addAttribute("places", placeService.getAllPlaces());
 
-        return "Edit_activity";  
+        return "editActivity";  
     }
 
     @PostMapping("/editActivity/{id}")
@@ -378,13 +378,13 @@ public class activityController {
             
             activityService.saveActivity(activity);
 
-            return "redirect:/admin_activities";  
+            return "redirect:/adminActivities";  
         }
 
         return "error";  
     }
 
-    @GetMapping("/search_page")
+    @GetMapping("/searchPage")
     public String showSearchs(Model model, Principal principal,@RequestParam(value = "placeId", required = false) Long placeId) {
         
         if (placeId == null) {
@@ -403,7 +403,7 @@ public class activityController {
         } else {
             return "error";  
         }
-        return "search_page"; 
+        return "searchPage"; 
     }
 
     @PostMapping("/activity/{id}/reserve")

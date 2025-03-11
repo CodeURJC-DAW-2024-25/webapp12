@@ -1,4 +1,4 @@
-package es.codeurjc.backend.Service;
+package es.codeurjc.backend.service;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -12,11 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 
-import es.codeurjc.backend.Model.Activity;
-import es.codeurjc.backend.Model.Place;
-import es.codeurjc.backend.Model.User;
-import es.codeurjc.backend.Repository.ActivityRepository;
-import es.codeurjc.backend.Repository.UserRepository;
+import es.codeurjc.backend.model.Activity;
+import es.codeurjc.backend.model.Place;
+import es.codeurjc.backend.model.User;
+import es.codeurjc.backend.repository.ActivityRepository;
+import es.codeurjc.backend.repository.UserRepository;
 import jakarta.transaction.Transactional;
 
 import org.springframework.data.domain.PageRequest;

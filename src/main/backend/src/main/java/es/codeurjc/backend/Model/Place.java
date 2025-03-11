@@ -1,4 +1,4 @@
-package es.codeurjc.backend.Model;
+package es.codeurjc.backend.model;
 
 
 import java.util.List;

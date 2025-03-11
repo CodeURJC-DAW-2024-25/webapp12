@@ -17,16 +17,14 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import es.codeurjc.backend.Model.Activity;
-
-import es.codeurjc.backend.Repository.ActivityRepository;
-import es.codeurjc.backend.Repository.PlaceRepository;
-import es.codeurjc.backend.Repository.ReviewRepository;
-import es.codeurjc.backend.Repository.UserRepository;
-
-import es.codeurjc.backend.Model.User;
-import es.codeurjc.backend.Model.Place;
-import es.codeurjc.backend.Model.Review;
+import es.codeurjc.backend.model.Activity;
+import es.codeurjc.backend.model.Place;
+import es.codeurjc.backend.model.Review;
+import es.codeurjc.backend.model.User;
+import es.codeurjc.backend.repository.ActivityRepository;
+import es.codeurjc.backend.repository.PlaceRepository;
+import es.codeurjc.backend.repository.ReviewRepository;
+import es.codeurjc.backend.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.core.io.Resource;
 

@@ -1,4 +1,4 @@
-package es.codeurjc.backend.Service;
+package es.codeurjc.backend.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,12 +11,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import es.codeurjc.backend.Model.Activity;
-import es.codeurjc.backend.Model.Review;
-import es.codeurjc.backend.Model.User;
-import es.codeurjc.backend.Repository.ActivityRepository;
-import es.codeurjc.backend.Repository.ReviewRepository;
-import es.codeurjc.backend.Repository.UserRepository;
+import es.codeurjc.backend.model.Activity;
+import es.codeurjc.backend.model.Review;
+import es.codeurjc.backend.model.User;
+import es.codeurjc.backend.repository.ActivityRepository;
+import es.codeurjc.backend.repository.ReviewRepository;
+import es.codeurjc.backend.repository.UserRepository;
 
 @Service
 public class ReviewService {

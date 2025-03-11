@@ -1,4 +1,4 @@
-package es.codeurjc.backend.Controllers;
+package es.codeurjc.backend.controllers;
 
 
 
@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import es.codeurjc.backend.Model.User;
-import es.codeurjc.backend.Service.ReviewService;
-import es.codeurjc.backend.Service.UserService;
+import es.codeurjc.backend.model.User;
+import es.codeurjc.backend.service.ReviewService;
+import es.codeurjc.backend.service.UserService;
 
 @Controller
 public class reviewController {

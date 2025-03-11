@@ -1,4 +1,4 @@
-package es.codeurjc.backend.Repository;
+package es.codeurjc.backend.repository;
 
 
 
@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import es.codeurjc.backend.Model.Place;
+import es.codeurjc.backend.model.Place;
 
 
 @Repository

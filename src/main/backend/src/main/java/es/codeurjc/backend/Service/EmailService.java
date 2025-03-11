@@ -1,4 +1,4 @@
-package es.codeurjc.backend.Service;
+package es.codeurjc.backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;

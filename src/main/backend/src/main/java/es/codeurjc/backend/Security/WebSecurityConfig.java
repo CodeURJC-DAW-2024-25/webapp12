@@ -1,4 +1,4 @@
-package es.codeurjc.backend.Security;
+package es.codeurjc.backend.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -46,7 +46,7 @@ public class WebSecurityConfig {
 				.requestMatchers("/index").permitAll()
 				.requestMatchers("/moreActivities").permitAll()
 				.requestMatchers("/moreReviews").permitAll()
-				.requestMatchers("/search_page").permitAll()
+				.requestMatchers("/searchPage").permitAll()
 				.requestMatchers("/activity/{id}/image").permitAll()
 				.requestMatchers("/user/{id}/image").permitAll()
 				.requestMatchers("/404").permitAll()
@@ -56,11 +56,11 @@ public class WebSecurityConfig {
 				// USER PAGES
 				
 				.requestMatchers("/profile").hasAnyRole("USER")
-				.requestMatchers("/Edit_user-profile/**").hasAnyRole("USER")
+				.requestMatchers("/editUserProfile/**").hasAnyRole("USER")
 				.requestMatchers("/activity/{activityId}/addReview").hasAnyRole("USER")
 				// ADMIN PAGES
-				.requestMatchers("/admin_activities").hasAnyRole("ADMIN")
-				.requestMatchers("/admin_users").hasAnyRole("ADMIN")
+				.requestMatchers("/adminActivities").hasAnyRole("ADMIN")
+				.requestMatchers("/adminUsers").hasAnyRole("ADMIN")
 				.requestMatchers("/statistics").hasAnyRole("ADMIN")
 				.requestMatchers("/createActivity").hasAnyRole("ADMIN")
 				.requestMatchers("/editActivity/**").hasAnyRole("ADMIN")
