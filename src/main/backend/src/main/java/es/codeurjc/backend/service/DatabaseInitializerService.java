@@ -1,4 +1,4 @@
-package es.codeurjc.backend.config;
+package es.codeurjc.backend.service;
 
 import java.io.IOException;
 
