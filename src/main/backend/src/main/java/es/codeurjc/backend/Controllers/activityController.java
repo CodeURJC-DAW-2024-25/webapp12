@@ -220,12 +220,15 @@ public class activityController {
         if (principal != null) {
             String userEmail = principal.getName();
             User user = userService.findByEmail(userEmail);
+            model.addAttribute("register", true);
     
             
             List<Activity> subscribedActivities = activityService.findEventsSubscribe(user);
             boolean isSubscribed = subscribedActivities.contains(activity);  
             
             model.addAttribute("isSubscribed", isSubscribed);
+        }else{
+            model.addAttribute("register", false);
         }
         model.addAttribute("activity", activity);
     
