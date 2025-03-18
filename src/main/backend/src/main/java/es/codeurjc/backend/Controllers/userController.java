@@ -49,7 +49,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 
 @Controller
-public class UserController {
+public class userController {
     @Autowired
     private UserService userService;
 

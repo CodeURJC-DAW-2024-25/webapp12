@@ -3,21 +3,27 @@ package es.codeurjc.backend.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import es.codeurjc.backend.dto.UserDto;
+import es.codeurjc.backend.dto.UserMapper;
+import es.codeurjc.backend.dto.UserUpdateDto;
 import es.codeurjc.backend.model.User;
 import es.codeurjc.backend.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-
+import java.util.Collection;
 import java.util.List;
 @Service
 public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserMapper userMapper;
 
     public List<User> getAllUsers(){
         List<User> users = userRepository.findAll();
@@ -64,6 +70,24 @@ public class UserService {
     public void delete(User user) {
         userRepository.delete(user);
     }
-    
+
+    private Collection<UserDto> toDTOs(Collection<User> users) {
+		return userMapper.toDTOs(users);
+	}
+
+    public Collection<UserDto> getUsersDtos() {
+
+		return toDTOs(userRepository.findAll());
+	}
+
+    public UserDto updateUser(Long userId, UserUpdateDto userUpdateDto) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
+
+        userMapper.updateUserFromDto(userUpdateDto, user);
+        userRepository.save(user);
+        
+        return userMapper.toDto(user);
+    }
     
 }
