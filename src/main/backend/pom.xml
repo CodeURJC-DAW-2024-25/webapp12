@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.2</version>
+		<version>3.4.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>es.codeurjc</groupId>
@@ -54,8 +54,7 @@
 
 		<dependency>
 			<groupId>jakarta.persistence</groupId>
-			<artifactId>jakarta.persistence-api</artifactId>
-			<version>3.1.0</version> <!-- Usa la última versión disponible -->
+			<artifactId>jakarta.persistence-api</artifactId> <!-- Usa la última versión disponible -->
 		</dependency>
 		<dependency>
         	<groupId>com.fasterxml.jackson.core</groupId>
@@ -88,7 +87,17 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.9.1</version>
+		</dependency>
 
+		<dependency>
+		   <groupId>org.springdoc</groupId>
+		   <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+		   <version>2.3.0</version>
+		</dependency>
 
 	</dependencies>
 

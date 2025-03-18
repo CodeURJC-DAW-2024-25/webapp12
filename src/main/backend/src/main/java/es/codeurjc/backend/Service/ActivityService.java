@@ -256,6 +256,10 @@ public class ActivityService {
     public List<Activity> findByPlace(Place place) {
         return activityRepository.findByPlace(place);
     }
+
+    public boolean exists(Long id) {
+        return activityRepository.existsById(id);
+    }
 }
 
 

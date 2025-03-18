@@ -10,12 +10,35 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+
+import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.http.SessionCreationPolicy;
+
+import org.springframework.http.HttpMethod;
+ import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+ 
+ import es.codeurjc.backend.security.jwt.JwtRequestFilter;
+ import es.codeurjc.backend.security.jwt.UnauthorizedHandlerJwt;
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
 
 	@Autowired
 	public RepositoryUserDetailsService userDetailService;
+
+	@Autowired
+	private JwtRequestFilter jwtRequestFilter;
+
+	@Autowired
+	private UnauthorizedHandlerJwt unauthorizedHandlerJwt;
+
+	@Bean
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+		return authConfig.getAuthenticationManager();
+	}
 
 	@Bean
 	PasswordEncoder passwordEncoder() {
@@ -30,7 +53,22 @@ public class WebSecurityConfig {
 		return authProvider;
 	}
 
+	/**
+	 * @Bean
+	 *       public InMemoryUserDetailsManager userDetailsService() {
+	 *       UserDetails user = User.builder()
+	 *       .username(admin)
+	 *       .password(adminpass)
+	 *       .roles("USER", "ADMIN")
+	 *       .build();
+	 *       return new InMemoryUserDetailsManager(user);
+	 *       }
+	 **/
+
+	
+
 	@Bean
+	@Order(2)
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {		
 		http.authenticationProvider(authenticationProvider());
 		http.authorizeHttpRequests(authorize -> authorize
@@ -83,5 +121,48 @@ public class WebSecurityConfig {
 		
 		return http.build();
 	}
+
+
+
+	@Bean
+	@Order(1)
+	public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
+
+		http.authenticationProvider(authenticationProvider());
+
+		http
+				.securityMatcher("/api/**")
+				.exceptionHandling(handling -> handling.authenticationEntryPoint(unauthorizedHandlerJwt));
+
+		http
+				.authorizeHttpRequests(authorize -> authorize
+					// PRIVATE ENDPOINTS
+					.requestMatchers(HttpMethod.POST, "/api/").hasAnyRole("USER")
+					.requestMatchers(HttpMethod.POST, "/api/activities/{id}").permitAll()
+					.requestMatchers(HttpMethod.POST, "/api/activities/**").permitAll()
+					
+					
+					
+					// PUBLIC ENDPOINTS
+					.anyRequest().permitAll());
+
+		// Disable Form login Authentication
+		http.formLogin(formLogin -> formLogin.disable());
+
+		// Disable CSRF protection (it is difficult to implement in REST APIs)
+		http.csrf(csrf -> csrf.disable());
+
+		// Disable Basic Authentication
+		http.httpBasic(httpBasic -> httpBasic.disable());
+
+		// Stateless session
+		http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+		// Add JWT Token filter
+		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+
+		return http.build();
+	}
+
 
 }
