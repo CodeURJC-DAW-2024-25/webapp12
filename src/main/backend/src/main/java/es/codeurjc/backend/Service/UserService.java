@@ -75,10 +75,18 @@ public class UserService {
 		return userMapper.toDTOs(users);
 	}
 
+    private UserDto toDTO(User user){
+        return userMapper.toDto(user);
+    }
+
     public Collection<UserDto> getUsersDtos() {
 
 		return toDTOs(userRepository.findAll());
 	}
+
+    public UserDto getUserDto(Long id){
+        return toDTO(userRepository.findById(id).orElseThrow());
+    }
 
     public UserDto updateUser(Long userId, UserUpdateDto userUpdateDto) {
         User user = userRepository.findById(userId)
