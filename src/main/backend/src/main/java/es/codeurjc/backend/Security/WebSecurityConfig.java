@@ -22,6 +22,11 @@ import org.springframework.http.HttpMethod;
  import es.codeurjc.backend.security.jwt.JwtRequestFilter;
  import es.codeurjc.backend.security.jwt.UnauthorizedHandlerJwt;
 
+
+
+
+
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
@@ -36,39 +41,67 @@ public class WebSecurityConfig {
 	private UnauthorizedHandlerJwt unauthorizedHandlerJwt;
 
 	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+
+	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
 		return authConfig.getAuthenticationManager();
 	}
 
 	@Bean
-	PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-
-	@Bean
-	DaoAuthenticationProvider authenticationProvider() {
+	public DaoAuthenticationProvider authenticationProvider() {
 		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+
 		authProvider.setUserDetailsService(userDetailService);
 		authProvider.setPasswordEncoder(passwordEncoder());
+
 		return authProvider;
 	}
 
-	/**
-	 * @Bean
-	 *       public InMemoryUserDetailsManager userDetailsService() {
-	 *       UserDetails user = User.builder()
-	 *       .username(admin)
-	 *       .password(adminpass)
-	 *       .roles("USER", "ADMIN")
-	 *       .build();
-	 *       return new InMemoryUserDetailsManager(user);
-	 *       }
-	 **/
-
-	
 
 	@Bean
-	@Order(2)
+	@Order(1)
+	public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
+		
+		http.authenticationProvider(authenticationProvider());
+		
+		http
+			.securityMatcher("/api/**")
+			.exceptionHandling(handling -> handling.authenticationEntryPoint(unauthorizedHandlerJwt));
+		
+		http
+			.authorizeHttpRequests(authorize -> authorize
+                    // PRIVATE ENDPOINTS
+                    .requestMatchers(HttpMethod.GET,"/api/users/").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.PUT,"/api/books/**").hasRole("USER")
+                    .requestMatchers(HttpMethod.DELETE,"/api/books/**").hasRole("ADMIN")
+					// PUBLIC ENDPOINTS
+					.anyRequest().permitAll()
+			);
+		
+        // Disable Form login Authentication
+        http.formLogin(formLogin -> formLogin.disable());
+
+        // Disable CSRF protection (it is difficult to implement in REST APIs)
+        http.csrf(csrf -> csrf.disable());
+
+        // Disable Basic Authentication
+        http.httpBasic(httpBasic -> httpBasic.disable());
+
+        // Stateless session
+        http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+		// Add JWT Token filter
+		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+
+		return http.build();
+	}
+
+
+	@Bean
+	@Order(1)
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {		
 		http.authenticationProvider(authenticationProvider());
 		http.authorizeHttpRequests(authorize -> authorize
@@ -119,48 +152,6 @@ public class WebSecurityConfig {
 						.logoutSuccessUrl("/")
 						.permitAll());
 		
-		return http.build();
-	}
-
-
-
-	@Bean
-	@Order(1)
-	public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
-
-		http.authenticationProvider(authenticationProvider());
-
-		http
-				.securityMatcher("/api/**")
-				.exceptionHandling(handling -> handling.authenticationEntryPoint(unauthorizedHandlerJwt));
-
-		http
-				.authorizeHttpRequests(authorize -> authorize
-					// PRIVATE ENDPOINTS
-					.requestMatchers(HttpMethod.POST, "/api/").hasAnyRole("USER")
-					.requestMatchers(HttpMethod.POST, "/api/activities/{id}").permitAll()
-					.requestMatchers(HttpMethod.POST, "/api/activities/**").permitAll()
-					
-					
-					
-					// PUBLIC ENDPOINTS
-					.anyRequest().permitAll());
-
-		// Disable Form login Authentication
-		http.formLogin(formLogin -> formLogin.disable());
-
-		// Disable CSRF protection (it is difficult to implement in REST APIs)
-		http.csrf(csrf -> csrf.disable());
-
-		// Disable Basic Authentication
-		http.httpBasic(httpBasic -> httpBasic.disable());
-
-		// Stateless session
-		http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
-		// Add JWT Token filter
-		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-
 		return http.build();
 	}
 
