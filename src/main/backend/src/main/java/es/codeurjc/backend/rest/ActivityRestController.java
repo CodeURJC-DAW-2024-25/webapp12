@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestBody;
 import java.io.IOException;
+import java.security.Principal;
 import java.sql.Blob;
 
 
@@ -31,7 +32,9 @@ import es.codeurjc.backend.dto.ActivityDto;
 import es.codeurjc.backend.dto.ActivityUpdateDto;
 import es.codeurjc.backend.dto.NewActivityDto;
 import es.codeurjc.backend.model.Activity;
+import es.codeurjc.backend.model.User;
 import es.codeurjc.backend.service.ActivityService;
+import es.codeurjc.backend.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 
 @RestController
@@ -40,6 +43,8 @@ public class ActivityRestController {
 
 	@Autowired
 	private ActivityService activityService;
+	@Autowired
+	private UserService userService;
 
 	@GetMapping("/")
 	public Collection<ActivityDto> getActivities() {
@@ -166,6 +171,36 @@ public class ActivityRestController {
 		} else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Actividad no encontrada"); // 404 Not Found 
 		}
+	}
+
+	@PostMapping("/{id}/reserve")
+	public ResponseEntity<byte[]> reserveActivity(@PathVariable Long id, Principal principal) throws IOException {
+		if (principal == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 401 Unauthorized
+		}
+
+		String userEmail = principal.getName();
+		User user = userService.findByEmail(userEmail);
+
+		if (user == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // 404 Not Found
+		}
+
+		boolean success = activityService.reserveActivity(id, user.getId());
+
+		if (!success) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // 400 Bad Request
+		}
+
+		byte[] pdfContents = activityService.generateReservationPDF(id, user.getId()).toByteArray();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Ticket_Reserva_" + user.getName() + ".pdf");
+
+		return ResponseEntity.ok()
+				.headers(headers)
+				.contentType(MediaType.APPLICATION_PDF)
+				.body(pdfContents);
 	}
 	
 }
