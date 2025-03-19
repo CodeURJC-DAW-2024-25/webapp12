@@ -12,11 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 
+import es.codeurjc.backend.dto.ActivityDto;
+import es.codeurjc.backend.dto.ActivityMapper;
+import es.codeurjc.backend.dto.ActivityUpdateDto;
+
 import es.codeurjc.backend.model.Activity;
 import es.codeurjc.backend.model.Place;
 import es.codeurjc.backend.model.User;
 import es.codeurjc.backend.repository.ActivityRepository;
 import es.codeurjc.backend.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +29,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -42,6 +48,8 @@ public class ActivityService {
     private ActivityRepository activityRepository; 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ActivityMapper activityMapper;
 
     public List<Activity> getAllActivities() {
         List<Activity> activities = activityRepository.findAll();
@@ -260,6 +268,36 @@ public class ActivityService {
     public boolean exists(Long id) {
         return activityRepository.existsById(id);
     }
+
+
+    
+    private Collection<ActivityDto> toDTOs(Collection<Activity> activities) {
+		return activityMapper.toDTOs(activities);
+	}
+
+    private ActivityDto toDTO(Activity activity){
+        return activityMapper.toDto(activity);
+    }
+
+    public Collection<ActivityDto> getActivitiesDtos() {
+        System.out.println("Actividades encontradas: " + activityRepository.findAll());
+		return toDTOs(activityRepository.findAll());
+	}  
+
+    public ActivityDto getActivityDto(Long id){
+        return toDTO(activityRepository.findById(id).orElseThrow());
+    }
+
+    public ActivityDto updateActivity(Long activityId, ActivityUpdateDto activityUpdateDto) {
+        Activity activity = activityRepository.findById(activityId)
+            .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
+
+        activityMapper.updateActivityFromDto(activityUpdateDto, activity);
+        activityRepository.save(activity);
+        
+        return activityMapper.toDto(activity);
+    }
+
 }
 
 
