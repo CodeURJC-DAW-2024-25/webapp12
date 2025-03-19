@@ -10,6 +10,7 @@ import es.codeurjc.backend.dto.UserMapper;
 import es.codeurjc.backend.dto.UserUpdateDto;
 import es.codeurjc.backend.model.User;
 import es.codeurjc.backend.repository.UserRepository;
+import es.codeurjc.backend.security.CSRFHandlerConfiguration;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -28,6 +29,8 @@ import java.util.NoSuchElementException;
 @Service
 public class UserService {
 
+    private final CSRFHandlerConfiguration CSRFHandlerConfiguration;
+
     @Autowired
     private UserRepository userRepository;
 
@@ -36,6 +39,10 @@ public class UserService {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
+    UserService(CSRFHandlerConfiguration CSRFHandlerConfiguration) {
+        this.CSRFHandlerConfiguration = CSRFHandlerConfiguration;
+    }
 
     public List<User> getAllUsers(){
         List<User> users = userRepository.findAll();
@@ -138,4 +145,11 @@ public class UserService {
     private User toDomain(NewUserDto userDto) {
 		return userMapper.toDomain(userDto);
 	}
+
+    public UserDto deleteUser(Long id){
+        User user = userRepository.findById(id).orElseThrow();
+        UserDto userDto = toDTO(user);
+        userRepository.deleteById(id);
+        return userDto;
+    }
 }
