@@ -10,6 +10,8 @@ import java.awt.Color;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import org.springframework.util.StringUtils;
 import java.util.Objects;
@@ -22,6 +24,7 @@ import es.codeurjc.backend.dto.ActivityUpdateDto;
 import es.codeurjc.backend.dto.NewActivityDto;
 import es.codeurjc.backend.dto.PlaceDto;
 import es.codeurjc.backend.dto.ReviewDto;
+import es.codeurjc.backend.dto.UserDto;
 import es.codeurjc.backend.model.Activity;
 import es.codeurjc.backend.model.Place;
 import es.codeurjc.backend.model.Review;
@@ -34,8 +37,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+
 
 import java.util.Calendar;
 import java.util.Collection;
@@ -409,6 +411,31 @@ public class ActivityService {
         activityRepository.save(activity);
     }
     
+    @Transactional 
+    public Page<ActivityDto> getActivities(Pageable pageable) {
+        Page<Activity> activitiesPage = activityRepository.findAll(pageable);
+
+        return activitiesPage.map(activity -> new ActivityDto(
+            activity.getId(),
+            activity.getName(),
+            activity.getCategory(),
+            activity.getDescription(),
+            activity.getVacancy(),
+            activity.getCreationDate(),
+            activity.getActivityDate(),
+            new PlaceDto(activity.getPlace().getId(), activity.getPlace().getName(), activity.getPlace().getDescription()),
+            activity.getReviews().stream()
+                .map(review -> new ReviewDto(
+                    review.getId(),
+                    review.getDescription(),
+                    review.getStarsValue(),
+                    review.getCreationDate(),
+                    review.getUserFullName()
+                ))
+                .toList(),
+            activity.getImage()
+        ));
+    }
 }
 
 

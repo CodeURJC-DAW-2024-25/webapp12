@@ -45,5 +45,8 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
 
     @Query("SELECT a FROM Activity a LEFT JOIN FETCH a.reviews WHERE a.id = :id")
     Optional<Activity> findByIdWithReviews(@Param("id") Long id);
+
+    @Query("SELECT a FROM Activity a JOIN FETCH a.reviews")
+    Page<Activity> findAllWithReviews(Pageable pageable);
 }
 

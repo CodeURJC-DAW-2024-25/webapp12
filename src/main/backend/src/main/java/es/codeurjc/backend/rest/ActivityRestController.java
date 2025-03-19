@@ -9,6 +9,7 @@ import javax.sql.rowset.serial.SerialBlob;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,6 +24,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import java.io.IOException;
 import java.security.Principal;
 import java.sql.Blob;
@@ -62,6 +66,16 @@ public class ActivityRestController {
         ActivityDto createdActivity = activityService.createActivity(activityPostDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdActivity);
     }
+
+	@GetMapping("/pageable")
+	public ResponseEntity<Page<ActivityDto>> getActivities(
+			@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "4") int size 
+	) {
+		Pageable pageable = PageRequest.of(page, size);
+		Page<ActivityDto> activitiesPage = activityService.getActivities(pageable);
+		return ResponseEntity.ok(activitiesPage);
+	}
 
 	@PutMapping("/{id}")
 	public ResponseEntity<ActivityDto> updateActivity(@PathVariable Long id, @RequestBody ActivityUpdateDto activityUpdateDto) {
