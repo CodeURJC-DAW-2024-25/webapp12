@@ -144,5 +144,28 @@ public class ActivityRestController {
             return ResponseEntity.notFound().build(); // 404 Not Found 
         }
     }
+
+	@PutMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<String> updateImage(@PathVariable long id, @RequestParam("file") MultipartFile file) {
+		Optional<Activity> optionalActivity = activityService.findById(id);
+
+		if (optionalActivity.isPresent()) {
+			Activity activity = optionalActivity.get();
+
+			try {
+				Blob imageBlob = new SerialBlob(file.getBytes());
+
+				activity.setImageFile(imageBlob);
+				activity.setImage(true); 
+				activityService.save(activity); 
+
+				return ResponseEntity.ok("Imagen actualizada correctamente"); // 200 OK 
+			} catch (IOException | SQLException e) {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar la imagen"); // 500 Internal Server Error 
+			}
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Actividad no encontrada"); // 404 Not Found 
+		}
+	}
 	
 }
