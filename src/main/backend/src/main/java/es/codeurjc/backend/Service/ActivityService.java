@@ -24,9 +24,11 @@ import es.codeurjc.backend.dto.PlaceDto;
 import es.codeurjc.backend.dto.ReviewDto;
 import es.codeurjc.backend.model.Activity;
 import es.codeurjc.backend.model.Place;
+import es.codeurjc.backend.model.Review;
 import es.codeurjc.backend.model.User;
 import es.codeurjc.backend.repository.ActivityRepository;
 import es.codeurjc.backend.repository.PlaceRepository;
+import es.codeurjc.backend.repository.ReviewRepository;
 import es.codeurjc.backend.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -60,6 +62,8 @@ public class ActivityService {
     private ActivityMapper activityMapper;
     @Autowired
     private PlaceRepository placeRepository;
+    @Autowired
+    private ReviewRepository reviewRepository;
 
 
     public List<Activity> getAllActivities() {
@@ -376,9 +380,31 @@ public class ActivityService {
         }
     
         Activity updatedActivity = activityRepository.save(activity);
-        return convertToDto(updatedActivity); // Convertir a DTO
-    }    
+        return convertToDto(updatedActivity);
+    }  
 
+    @Transactional
+    public void deleteActivity(Long id) {
+        Activity activity = activityRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Actividad no encontrada con ID: " + id));
+
+        // Desvincular las reviews de la actividad
+        List<Review> reviews = new ArrayList<>(activity.getReviews());
+        activity.getReviews().clear();
+        reviewRepository.deleteAll(reviews);
+
+        // Desvincular los usuarios de la actividad
+        List<User> users = new ArrayList<>(activity.getUsers());
+        for (User user : users) {
+            user.getActivities().remove(activity);
+            userRepository.save(user); // Guardar los cambios en el usuario
+        }
+        activity.getUsers().clear();
+
+        // Finalmente, eliminar la actividad
+        activityRepository.delete(activity);
+    }
+    
 }
 
 
