@@ -27,7 +27,7 @@ public interface ActivityMapper {
     List<ActivityDto> toDTOs(Collection<Activity> activities);
 
     @Mapping(target = "id", ignore = true)
-    void updateActivityFromDto(ActivityUpdateDto dto, @MappingTarget Activity activity);
+    void updateActivityFromDto(NewActivityDto dto, @MappingTarget Activity activity);
 
     // Método para mapear Place a PlaceDto
     default PlaceDto mapPlace(Place place) {
@@ -46,13 +46,13 @@ public interface ActivityMapper {
             review.getDescription(),
             review.getStarsValue(),
             review.getCreationDate(),
-            getUserFullName(review.getUser()) // Obtiene el nombre y apellidos del usuario
+            getUserFullName(review.getUser()) 
         );
     }
 
     default List<ReviewDto> mapReviews(List<Review> reviews) {
         if (reviews == null || reviews.isEmpty()) {
-            return List.of(); // Devuelve una lista vacía si no hay reseñas
+            return List.of();
         }
         return reviews.stream()
             .map(this::mapReview)
@@ -63,7 +63,7 @@ public interface ActivityMapper {
         if (user == null) {
             return null;
         }
-        return user.getName() + " " + user.getSurname(); // Concatena nombre y apellidos
+        return user.getName() + " " + user.getSurname();
     }
 
 

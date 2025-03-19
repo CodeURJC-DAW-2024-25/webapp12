@@ -96,4 +96,11 @@ public class Review {
 	public void setCreationDate(Calendar creationDate) {
 		this.creationDate = creationDate;
 	}
+
+	public String getUserFullName() {
+        if (getUser() == null) {
+            return null;
+        }
+        return getUser().getName() + " " + getUser().getSurname();
+    }
 }

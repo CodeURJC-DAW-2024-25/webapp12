@@ -19,7 +19,9 @@ import java.util.Optional;
 import es.codeurjc.backend.dto.ActivityDto;
 import es.codeurjc.backend.dto.ActivityMapper;
 import es.codeurjc.backend.dto.ActivityUpdateDto;
-
+import es.codeurjc.backend.dto.NewActivityDto;
+import es.codeurjc.backend.dto.PlaceDto;
+import es.codeurjc.backend.dto.ReviewDto;
 import es.codeurjc.backend.model.Activity;
 import es.codeurjc.backend.model.Place;
 import es.codeurjc.backend.model.User;
@@ -277,6 +279,33 @@ public class ActivityService {
     public boolean exists(Long id) {
         return activityRepository.existsById(id);
     }
+    private ActivityDto convertToDto(Activity activity) {
+        return new ActivityDto(
+            activity.getId(),
+            activity.getName(),
+            activity.getCategory(),
+            activity.getDescription(),
+            activity.getVacancy(),
+            activity.getCreationDate(),
+            activity.getActivityDate(),
+            activity.getPlace() != null ? 
+                new PlaceDto(
+                    activity.getPlace().getId(),
+                    activity.getPlace().getName(),
+                    activity.getPlace().getDescription()
+                ) : null,
+            activity.getReviews().stream()
+                .map(review -> new ReviewDto(
+                    review.getId(),
+                    review.getDescription(),
+                    review.getStarsValue(),
+                    review.getCreationDate(),
+                    review.getUserFullName()
+                ))
+                .toList(),
+            activity.getImage()
+        );
+    }
 
     @Transactional
     public Collection<ActivityDto> getActivitiesDtos() {
@@ -285,27 +314,13 @@ public class ActivityService {
 
     @Transactional
     public ActivityDto getActivityDtoById(Long id) {
-        // Busca la actividad por su ID y carga las reviews
         Activity activity = activityRepository.findByIdWithReviews(id)
             .orElseThrow(() -> new EntityNotFoundException("Actividad no encontrada con ID: " + id));
-
-        // Mapea la actividad a un ActivityDto
         return activityMapper.toDto(activity);
     }
-
-    public ActivityDto updateActivity(Long activityId, ActivityUpdateDto activityUpdateDto) {
-        Activity activity = activityRepository.findById(activityId)
-            .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
-
-        activityMapper.updateActivityFromDto(activityUpdateDto, activity);
-        activityRepository.save(activity);
-        
-        return activityMapper.toDto(activity);
-    }
-
         
     @Transactional
-    public ActivityDto createActivity(ActivityUpdateDto activityPostDto) {
+    public ActivityDto createActivity(NewActivityDto activityPostDto) {
         if (activityPostDto == null ||
             !StringUtils.hasText(activityPostDto.name()) ||
             !StringUtils.hasText(activityPostDto.category()) ||
@@ -333,7 +348,36 @@ public class ActivityService {
         Activity savedActivity = activityRepository.save(activity);
         return activityMapper.toDto(savedActivity);
     }
+    @Transactional
+    public ActivityDto updateActivity(Long id, ActivityUpdateDto activityUpdateDto) {
+        Activity activity = activityRepository.findByIdWithReviews(id)
+            .orElseThrow(() -> new EntityNotFoundException("Actividad no encontrada con ID: " + id));
     
+        if (activityUpdateDto.getName() != null) {
+            activity.setName(activityUpdateDto.getName());
+        }
+        if (activityUpdateDto.getCategory() != null) {
+            activity.setCategory(activityUpdateDto.getCategory());
+        }
+        if (activityUpdateDto.getDescription() != null) {
+            activity.setDescription(activityUpdateDto.getDescription());
+        }
+        if (activityUpdateDto.getVacancy() != null) {
+            activity.setVacancy(activityUpdateDto.getVacancy());
+        }    
+        if (activityUpdateDto.getActivityDate() != null) {
+            java.sql.Date sqlDate = new java.sql.Date(activityUpdateDto.getActivityDate().getTime());
+            activity.setActivityDate(sqlDate);
+        }        
+        if (activityUpdateDto.getPlaceId() != null) {
+            Place place = placeRepository.findById(activityUpdateDto.getPlaceId())
+                .orElseThrow(() -> new EntityNotFoundException("Lugar no encontrado"));
+            activity.setPlace(place);
+        }
+    
+        Activity updatedActivity = activityRepository.save(activity);
+        return convertToDto(updatedActivity); // Convertir a DTO
+    }    
 
 }
 
