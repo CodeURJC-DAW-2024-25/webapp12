@@ -8,22 +8,35 @@ import es.codeurjc.backend.dto.UserMapper;
 import es.codeurjc.backend.dto.UserUpdateDto;
 import es.codeurjc.backend.model.User;
 import es.codeurjc.backend.repository.UserRepository;
+import es.codeurjc.backend.security.CSRFHandlerConfiguration;
 import jakarta.persistence.EntityNotFoundException;
+
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
+import java.util.NoSuchElementException;
+
 @Service
 public class UserService {
+
+    private final CSRFHandlerConfiguration CSRFHandlerConfiguration;
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private UserMapper userMapper;
+
+    UserService(CSRFHandlerConfiguration CSRFHandlerConfiguration) {
+        this.CSRFHandlerConfiguration = CSRFHandlerConfiguration;
+    }
 
     public List<User> getAllUsers(){
         List<User> users = userRepository.findAll();
@@ -96,6 +109,15 @@ public class UserService {
         userRepository.save(user);
         
         return userMapper.toDto(user);
+    }
+
+    public Resource getUserImageDto(Long id) throws SQLException{
+        User user = userRepository.findById(id).orElseThrow();
+        if(user.getImageFile() != null){
+            return new InputStreamResource(user.getImageFile().getBinaryStream());
+        }else{
+            throw new NoSuchElementException();
+        }
     }
     
 }
