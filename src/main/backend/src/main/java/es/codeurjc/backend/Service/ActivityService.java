@@ -10,6 +10,10 @@ import java.awt.Color;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import org.springframework.util.StringUtils;
+import java.util.Objects;
+
 import java.util.Optional;
 
 import es.codeurjc.backend.dto.ActivityDto;
@@ -40,6 +44,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.ZoneId;
 import java.util.ArrayList;
 
 @Service
@@ -298,8 +303,19 @@ public class ActivityService {
         return activityMapper.toDto(activity);
     }
 
+        
     @Transactional
     public ActivityDto createActivity(ActivityUpdateDto activityPostDto) {
+        if (activityPostDto == null ||
+            !StringUtils.hasText(activityPostDto.name()) ||
+            !StringUtils.hasText(activityPostDto.category()) ||
+            !StringUtils.hasText(activityPostDto.description()) ||
+            Objects.isNull(activityPostDto.vacancy()) ||
+            Objects.isNull(activityPostDto.placeId()) ||
+            Objects.isNull(activityPostDto.activityDate())) {
+            throw new IllegalArgumentException("Todos los campos son obligatorios");
+        }
+
         Place place = placeRepository.findById(activityPostDto.placeId())
             .orElseThrow(() -> new EntityNotFoundException("Lugar no encontrado con ID: " + activityPostDto.placeId()));
 
@@ -311,18 +327,12 @@ public class ActivityService {
         activity.setPlace(place);
         activity.setCreationDate(Calendar.getInstance());
 
-        // Convertir java.util.Date a java.sql.Date
-        if (activityPostDto.activityDate() != null) {
-            java.sql.Date sqlDate = new java.sql.Date(activityPostDto.activityDate().getTime());
-            activity.setActivityDate(sqlDate);
-        } else {
-            activity.setActivityDate(null);
-        }
+        java.sql.Date sqlDate = java.sql.Date.valueOf(activityPostDto.activityDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        activity.setActivityDate(sqlDate);
 
         Activity savedActivity = activityRepository.save(activity);
         return activityMapper.toDto(savedActivity);
     }
-
     
 
 }
