@@ -10,5 +10,6 @@ public record UserDto(
     String phone,
     String dni,
     List<String> roles,
-    boolean imageBoolean
+    boolean imageBoolean,
+    String password 
 ) {}
