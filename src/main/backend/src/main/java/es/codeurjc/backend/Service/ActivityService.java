@@ -404,6 +404,10 @@ public class ActivityService {
         // Finalmente, eliminar la actividad
         activityRepository.delete(activity);
     }
+
+    public void save(Activity activity) {
+        activityRepository.save(activity);
+    }
     
 }
 

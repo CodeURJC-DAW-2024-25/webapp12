@@ -4,11 +4,14 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Optional;
 
+import javax.sql.rowset.serial.SerialBlob;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,8 +19,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestBody;
+import java.io.IOException;
+import java.sql.Blob;
+
 
 import es.codeurjc.backend.dto.ActivityDto;
 import es.codeurjc.backend.dto.ActivityUpdateDto;
@@ -85,13 +93,56 @@ public class ActivityRestController {
 
 			// Devolver la imagen en la respuesta
 			return ResponseEntity.ok()
-					.header(HttpHeaders.CONTENT_TYPE, "image/jpeg") // Ajusta el tipo MIME según el formato de la imagen
+					.header(HttpHeaders.CONTENT_TYPE, "image/jpeg") 
 					.contentLength(optionalActivity.get().getImageFile().length())
 					.body(file);
 		} else {
-			// Si no se encuentra la actividad o no tiene imagen, devolver 404 Not Found
 			return ResponseEntity.notFound().build();
 		}
 	}
+
+
+	@DeleteMapping("/{id}/image")
+	public ResponseEntity<String> deleteImage(@PathVariable long id) {
+		Optional<Activity> optionalActivity = activityService.findById(id);
+
+		if (optionalActivity.isPresent()) {
+			Activity activity = optionalActivity.get();
+
+			if (activity.getImageFile() != null) {
+				activity.setImageFile(null);
+				activity.setImage(false);
+				activityService.save(activity);
+
+				return ResponseEntity.ok("Imagen eliminada correctamente"); // 200 OK 
+			} else {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay imagen para eliminar"); // 404 Not Found 
+			}
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Actividad no encontrada"); // 404 Not Found 
+		}
+	}
+
+    @PostMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> uploadImage(@PathVariable long id, @RequestParam("file") MultipartFile file) {
+        Optional<Activity> optionalActivity = activityService.findById(id);
+
+        if (optionalActivity.isPresent()) {
+            Activity activity = optionalActivity.get();
+
+            try {
+                Blob imageBlob = new SerialBlob(file.getBytes());
+                activity.setImageFile(imageBlob);
+                activity.setImage(true);
+                activityService.save(activity);
+
+                return ResponseEntity.ok().build(); // 200 OK
+            } catch (IOException | SQLException e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // 500 Internal Server Error
+            }
+        } else {
+            return ResponseEntity.notFound().build(); // 404 Not Found 
+        }
+    }
 	
 }
