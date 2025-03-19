@@ -79,6 +79,7 @@ public class WebSecurityConfig {
 
 					.requestMatchers(HttpMethod.GET,"/api/activities/").permitAll()
 					.requestMatchers(HttpMethod.GET,"/api/activities/{id}").permitAll()
+					.requestMatchers(HttpMethod.POST,"/api/activities/").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.PUT,"/api/books/**").hasRole("USER")
                     .requestMatchers(HttpMethod.DELETE,"/api/books/**").hasRole("ADMIN")
 					// PUBLIC ENDPOINTS

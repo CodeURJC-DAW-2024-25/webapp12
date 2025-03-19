@@ -20,6 +20,7 @@ import es.codeurjc.backend.model.Activity;
 import es.codeurjc.backend.model.Place;
 import es.codeurjc.backend.model.User;
 import es.codeurjc.backend.repository.ActivityRepository;
+import es.codeurjc.backend.repository.PlaceRepository;
 import es.codeurjc.backend.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -50,6 +51,8 @@ public class ActivityService {
     private UserRepository userRepository;
     @Autowired
     private ActivityMapper activityMapper;
+    @Autowired
+    private PlaceRepository placeRepository;
 
 
     public List<Activity> getAllActivities() {
@@ -270,16 +273,6 @@ public class ActivityService {
         return activityRepository.existsById(id);
     }
 
-
-    
-    private Collection<ActivityDto> toDTOs(Collection<Activity> activities) {
-		return activityMapper.toDTOs(activities);
-	}
-
-    private ActivityDto toDTO(Activity activity){
-        return activityMapper.toDto(activity);
-    }
-
     @Transactional
     public Collection<ActivityDto> getActivitiesDtos() {
         return activityMapper.toDTOs(activityRepository.findAllWithReviews());
@@ -303,6 +296,31 @@ public class ActivityService {
         activityRepository.save(activity);
         
         return activityMapper.toDto(activity);
+    }
+
+    @Transactional
+    public ActivityDto createActivity(ActivityUpdateDto activityPostDto) {
+        Place place = placeRepository.findById(activityPostDto.placeId())
+            .orElseThrow(() -> new EntityNotFoundException("Lugar no encontrado con ID: " + activityPostDto.placeId()));
+
+        Activity activity = new Activity();
+        activity.setName(activityPostDto.name());
+        activity.setCategory(activityPostDto.category());
+        activity.setDescription(activityPostDto.description());
+        activity.setVacancy(activityPostDto.vacancy());
+        activity.setPlace(place);
+        activity.setCreationDate(Calendar.getInstance());
+
+        // Convertir java.util.Date a java.sql.Date
+        if (activityPostDto.activityDate() != null) {
+            java.sql.Date sqlDate = new java.sql.Date(activityPostDto.activityDate().getTime());
+            activity.setActivityDate(sqlDate);
+        } else {
+            activity.setActivityDate(null);
+        }
+
+        Activity savedActivity = activityRepository.save(activity);
+        return activityMapper.toDto(savedActivity);
     }
 
     

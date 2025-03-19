@@ -10,6 +10,7 @@ public record ActivityUpdateDto (
     boolean imageBoolean,
     int vacancy,
     Calendar creationDate,
-    Date activityDate 
+    Date activityDate,
+    Long placeId
     
 ) {}

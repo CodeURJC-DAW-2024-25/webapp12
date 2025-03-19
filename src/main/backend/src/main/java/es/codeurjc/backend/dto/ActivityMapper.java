@@ -18,9 +18,10 @@ import es.codeurjc.backend.model.User;
 public interface ActivityMapper {
 
     ActivityMapper INSTANCE = Mappers.getMapper(ActivityMapper.class);
-
-    @Mapping(target = "place", source = "place") // Mapea el lugar
-    @Mapping(target = "reviews", source = "reviews") // Mapea las reseñas
+    
+    @Mapping(target = "creationDate", source = "creationDate")
+    @Mapping(target = "place", source = "place") 
+    @Mapping(target = "reviews", source = "reviews")
     ActivityDto toDto(Activity activity);
 
     List<ActivityDto> toDTOs(Collection<Activity> activities);
@@ -36,8 +37,6 @@ public interface ActivityMapper {
         return new PlaceDto(place.getId(), place.getName(), place.getDescription());
     }
 
-
-    // Método para mapear una Review individual
     default ReviewDto mapReview(Review review) {
         if (review == null) {
             return null;
@@ -51,7 +50,15 @@ public interface ActivityMapper {
         );
     }
 
-    // Método para obtener el nombre y apellidos del usuario
+    default List<ReviewDto> mapReviews(List<Review> reviews) {
+        if (reviews == null || reviews.isEmpty()) {
+            return List.of(); // Devuelve una lista vacía si no hay reseñas
+        }
+        return reviews.stream()
+            .map(this::mapReview)
+            .collect(Collectors.toList());
+    }
+
     default String getUserFullName(User user) {
         if (user == null) {
             return null;
