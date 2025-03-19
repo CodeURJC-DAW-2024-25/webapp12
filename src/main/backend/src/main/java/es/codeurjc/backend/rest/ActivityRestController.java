@@ -1,9 +1,13 @@
 package es.codeurjc.backend.rest;
 
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -67,6 +71,26 @@ public class ActivityRestController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Actividad no encontrada"); // 404 Not Found con mensaje
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar la actividad"); // 500 Internal Server Error con mensaje
+		}
+	}
+
+	@GetMapping("/{id}/image")
+	public ResponseEntity<Resource> downloadImage(@PathVariable long id) throws SQLException {
+		// Buscar la actividad por ID
+		Optional<Activity> optionalActivity = activityService.findById(id);
+
+		if (optionalActivity.isPresent() && optionalActivity.get().getImageFile() != null) {
+			// Obtener la imagen como un recurso
+			Resource file = new InputStreamResource(optionalActivity.get().getImageFile().getBinaryStream());
+
+			// Devolver la imagen en la respuesta
+			return ResponseEntity.ok()
+					.header(HttpHeaders.CONTENT_TYPE, "image/jpeg") // Ajusta el tipo MIME según el formato de la imagen
+					.contentLength(optionalActivity.get().getImageFile().length())
+					.body(file);
+		} else {
+			// Si no se encuentra la actividad o no tiene imagen, devolver 404 Not Found
+			return ResponseEntity.notFound().build();
 		}
 	}
 	
