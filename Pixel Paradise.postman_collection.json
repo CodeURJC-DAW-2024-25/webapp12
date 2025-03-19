@@ -7,93 +7,579 @@
 	},
 	"item": [
 		{
-			"name": "Login",
+			"name": "Security",
 			"item": [
 				{
-					"name": "login - USER",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"paula@email.com\",\r\n    \"password\": \"1234\"\r\n\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+					"name": "Login",
+					"item": [
+						{
+							"name": "login - USER",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"paula@email.com\",\r\n    \"password\": \"1234\"\r\n\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:8443/api/auth/login",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "8443",
+									"path": [
+										"api",
+										"auth",
+										"login"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "https://localhost:8443/api/auth/login",
-							"protocol": "https",
-							"host": [
-								"localhost"
-							],
-							"port": "8443",
-							"path": [
-								"api",
-								"auth",
-								"login"
-							]
+						{
+							"name": "login - ADMIN",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"admin@email.com\",\r\n    \"password\": \"5678\"\r\n\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:8443/api/auth/login",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "8443",
+									"path": [
+										"api",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "login - ADMIN",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"admin@email.com\",\r\n    \"password\": \"5678\"\r\n\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+					"name": "Logout",
+					"item": [
+						{
+							"name": "logout",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:8443/api/auth/logout",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "8443",
+									"path": [
+										"api",
+										"auth",
+										"logout"
+									]
 								}
-							}
-						},
-						"url": {
-							"raw": "https://localhost:8443/api/auth/login",
-							"protocol": "https",
-							"host": [
-								"localhost"
-							],
-							"port": "8443",
-							"path": [
-								"api",
-								"auth",
-								"login"
-							]
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
+				},
+				{
+					"name": "register new user",
+					"item": [
+						{
+							"name": "add new user",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"nombre_usuario\",\r\n    \"surname\": \"apellido_1 apellido_2\",\r\n    \"email\": \"nuevousuario@email.com\",\r\n    \"password\": \"12345\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:8443/api/users",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "8443",
+									"path": [
+										"api",
+										"users"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		},
 		{
-			"name": "Logout",
+			"name": "Activities",
 			"item": [
 				{
-					"name": "logout",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "https://localhost:8443/api/auth/logout",
-							"protocol": "https",
-							"host": [
-								"localhost"
+					"name": "Show details",
+					"item": [
+						{
+							"name": "activity",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:8443/api/activities/1",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "8443",
+									"path": [
+										"api",
+										"activities",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "activities",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:8443/api/activities/",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "8443",
+									"path": [
+										"api",
+										"activities",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "view image",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:8443/api/activities/1/image",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "8443",
+									"path": [
+										"api",
+										"activities",
+										"1",
+										"image"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "activities pageable",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var template = `\r",
+											"<style type=\"text/css\">\r",
+											"    .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}\r",
+											"    .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}\r",
+											"    .tftable tr {background-color:#ffffff;}\r",
+											"    .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}\r",
+											"    .tftable tr:hover {background-color:#e0ffff;}\r",
+											"</style>\r",
+											"\r",
+											"<table class=\"tftable\" border=\"1\">\r",
+											"    <tr>\r",
+											"        <th>ID</th>\r",
+											"        <th>Name</th>\r",
+											"        <th>Category</th>\r",
+											"        <th>Description</th>\r",
+											"        <th>Vacancy</th>\r",
+											"        <th>Creation Date</th>\r",
+											"        <th>Activity Date</th>\r",
+											"        <th>Place ID</th>\r",
+											"        <th>Place Name</th>\r",
+											"        <th>Place Description</th>\r",
+											"        <th>Reviews</th>\r",
+											"        <th>Image Boolean</th>\r",
+											"    </tr>\r",
+											"    \r",
+											"    {{#each response.content}}\r",
+											"        <tr>\r",
+											"            <td>{{id}}</td>\r",
+											"            <td>{{name}}</td>\r",
+											"            <td>{{category}}</td>\r",
+											"            <td>{{description}}</td>\r",
+											"            <td>{{vacancy}}</td>\r",
+											"            <td>{{creationDate}}</td>\r",
+											"            <td>{{activityDate}}</td>\r",
+											"            <td>{{place.id}}</td>\r",
+											"            <td>{{place.name}}</td>\r",
+											"            <td>{{place.description}}</td>\r",
+											"            <td>{{#each reviews}}{{comment}} - {{starsValue}} stars, {{/each}}</td>\r",
+											"            <td>{{imageBoolean}}</td>\r",
+											"        </tr>\r",
+											"    {{/each}}\r",
+											"</table>\r",
+											"`;\r",
+											"\r",
+											"function constructVisualizerPayload() {\r",
+											"    return {response: pm.response.json()}\r",
+											"}\r",
+											"\r",
+											"pm.visualizer.set(template, constructVisualizerPayload());"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
 							],
-							"port": "8443",
-							"path": [
-								"api",
-								"auth",
-								"logout"
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:8443/api/activities/pageable?page=1&size=4",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "8443",
+									"path": [
+										"api",
+										"activities",
+										"pageable"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "size",
+											"value": "4"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Add new",
+					"item": [
+						{
+							"name": "new activity",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Nueva Actividad\",\r\n    \"category\": \"Deportes\",\r\n    \"description\": \"Descripción de la nueva actividad\",\r\n    \"vacancy\": 10,\r\n    \"placeId\": 8, \r\n    \"activityDate\":  \"2025-03-20\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:8443/api/activities/",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "8443",
+									"path": [
+										"api",
+										"activities",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Not allowed - add activity",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \r\n    \"category\": \"Deportes\",\r\n    \"description\": \"Descripción de la nueva actividad\",\r\n    \"vacancy\": 10,\r\n    \"placeId\": 8, \r\n    \"activityDate\":  \"2025-03-20\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:8443/api/activities/",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "8443",
+									"path": [
+										"api",
+										"activities",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "new image",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/Users/paula/OneDrive/Imágenes/Capitulo 56 - Hudson Vega.png"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://localhost:8443/api/activities/1/image",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "8443",
+									"path": [
+										"api",
+										"activities",
+										"1",
+										"image"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "reserve an activity",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:8443/api/activities/10/reserve",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "8443",
+									"path": [
+										"api",
+										"activities",
+										"10",
+										"reserve"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Edit",
+					"item": [
+						{
+							"name": "edit activity",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:8443/api/activities/3",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "8443",
+									"path": [
+										"api",
+										"activities",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "edit image",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/Users/paula/OneDrive/Imágenes/Capitulo 56 - Hudson Vega.png"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://localhost:8443/api/activities/1/image",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "8443",
+									"path": [
+										"api",
+										"activities",
+										"1",
+										"image"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Delete",
+					"item": [
+						{
+							"name": "delete activity",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:8443/api/activities/1",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "8443",
+									"path": [
+										"api",
+										"activities",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete image",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:8443/api/activities/1/image",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "8443",
+									"path": [
+										"api",
+										"activities",
+										"1",
+										"image"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Admin functions",
+					"item": [
+						{
+							"name": "Show details",
+							"item": [
+								{
+									"name": "user info",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "https://localhost:8443/api/users/1",
+											"protocol": "https",
+											"host": [
+												"localhost"
+											],
+											"port": "8443",
+											"path": [
+												"api",
+												"users",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "all users",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "https://localhost:8443/api/users/",
+											"protocol": "https",
+											"host": [
+												"localhost"
+											],
+											"port": "8443",
+											"path": [
+												"api",
+												"users",
+												""
+											]
+										}
+									},
+									"response": []
+								}
 							]
 						}
-					},
-					"response": []
+					]
 				}
 			]
 		}
