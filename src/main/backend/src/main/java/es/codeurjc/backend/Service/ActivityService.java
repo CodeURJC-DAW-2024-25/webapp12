@@ -51,6 +51,7 @@ public class ActivityService {
     @Autowired
     private ActivityMapper activityMapper;
 
+
     public List<Activity> getAllActivities() {
         List<Activity> activities = activityRepository.findAll();
         System.out.println("Actividades desde el repositorio: " + activities);  
@@ -279,13 +280,19 @@ public class ActivityService {
         return activityMapper.toDto(activity);
     }
 
+    @Transactional
     public Collection<ActivityDto> getActivitiesDtos() {
-        System.out.println("Actividades encontradas: " + activityRepository.findAll());
-		return toDTOs(activityRepository.findAll());
-	}  
+        return activityMapper.toDTOs(activityRepository.findAllWithReviews());
+    } 
 
-    public ActivityDto getActivityDto(Long id){
-        return toDTO(activityRepository.findById(id).orElseThrow());
+    @Transactional
+    public ActivityDto getActivityDtoById(Long id) {
+        // Busca la actividad por su ID y carga las reviews
+        Activity activity = activityRepository.findByIdWithReviews(id)
+            .orElseThrow(() -> new EntityNotFoundException("Actividad no encontrada con ID: " + id));
+
+        // Mapea la actividad a un ActivityDto
+        return activityMapper.toDto(activity);
     }
 
     public ActivityDto updateActivity(Long activityId, ActivityUpdateDto activityUpdateDto) {
@@ -297,6 +304,8 @@ public class ActivityService {
         
         return activityMapper.toDto(activity);
     }
+
+    
 
 }
 

@@ -24,8 +24,8 @@ public class ActivityRestController {
 	}
 
 	@GetMapping("/{id}")
-	public ActivityDto getActivity(@PathVariable Long id) {
-		return activityService.getActivityDto(id);
-	}
+    public ActivityDto getActivity(@PathVariable Long id) {
+        return activityService.getActivityDtoById(id);
+    }
 	
 }

@@ -40,6 +40,10 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
                                          @Param("places") Set<Place> places, 
                                          @Param("userActivities") List<Activity> userActivities);
     
-    
+    @Query("SELECT a FROM Activity a LEFT JOIN FETCH a.reviews")
+    List<Activity> findAllWithReviews();
+
+    @Query("SELECT a FROM Activity a LEFT JOIN FETCH a.reviews WHERE a.id = :id")
+    Optional<Activity> findByIdWithReviews(@Param("id") Long id);
 }
 
