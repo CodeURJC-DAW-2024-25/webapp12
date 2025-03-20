@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.PageRequest;
+
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
 
 import es.codeurjc.backend.dto.NewUserDto;
@@ -27,6 +29,9 @@ import es.codeurjc.backend.service.UserService;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 
 
 
@@ -45,6 +50,12 @@ public class UserRestController {
 
 		return userService.getUsersDtos();
 	}
+
+	 @GetMapping("/pageable")
+    public Page<UserDto> getUsers(@RequestParam(defaultValue = "0") int page) {
+        Pageable pageable = PageRequest.of(page, 10);  // Paginación de 10 elementos por página
+        return userService.getAllUsersPaginated(pageable);
+    }
 
 	@GetMapping("/{id}")
 	public UserDto getUser(@PathVariable Long id) {

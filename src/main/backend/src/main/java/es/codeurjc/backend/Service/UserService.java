@@ -109,6 +109,11 @@ public class UserService {
         return toDTO(userRepository.findById(id).orElseThrow());
     }
 
+    public Page<UserDto> getAllUsersPaginated(Pageable pageable){
+        Page<User> userPage= userRepository.findAll(pageable);
+        return userPage.map(user -> userMapper.toDto(user));
+    }
+
     public UserDto updateUser(Long userId, UserUpdateDto userUpdateDto) {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));

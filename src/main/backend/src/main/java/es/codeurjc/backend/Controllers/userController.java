@@ -7,6 +7,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import es.codeurjc.backend.dto.UserDto;
 import es.codeurjc.backend.model.Activity;
 import es.codeurjc.backend.model.Review;
 import es.codeurjc.backend.model.User;
@@ -31,7 +33,9 @@ import es.codeurjc.backend.service.UserService;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.ui.Model;
 
 import java.io.IOException;
@@ -127,22 +131,13 @@ public class userController {
         String userEmail = principal.getName();
         User user  = userService.findByEmail(userEmail); 
         
-        
         List<Activity> subscribedActivities = activityService.findEventsSubscribe(user);
-        
-
-
-        
         int page = 0;
-        Page<User> users = userService.getUsersPaginated(page);
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<UserDto> users = userService.getAllUsersPaginated(pageable);
         System.out.println("Has more users: " + users.hasNext());
-
-
-    
         model.addAttribute("users", users.getContent()); 
-
         model.addAttribute("hasMore", users.hasNext());
-        
         model.addAttribute("userCount", userService.countUsers());
         model.addAttribute("countActivitiesSubscribed", subscribedActivities.size());
         model.addAttribute("activityCount", activityService.activityCount());
