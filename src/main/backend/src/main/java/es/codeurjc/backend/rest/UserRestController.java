@@ -16,14 +16,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.core.io.Resource;
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
 
 import es.codeurjc.backend.dto.NewUserDto;
 import es.codeurjc.backend.dto.UserDto;
+import es.codeurjc.backend.dto.UserUpdateDto;
 import es.codeurjc.backend.service.UserService;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 
 
@@ -73,6 +77,21 @@ public class UserRestController {
 	@DeleteMapping("/{id}/image")
 	public ResponseEntity<Object> deleteUserImage(@PathVariable Long id)throws IOException{
 		userService.deleteUserImage(id);
+		return ResponseEntity.noContent().build();
+	}
+
+	@PutMapping("/{id}")
+	public UserDto updateUser(@PathVariable Long id, @RequestBody UserUpdateDto updaUserDto) throws SQLException{
+		
+		return userService.replaceUser(id,updaUserDto);
+	}
+
+	@PutMapping("/{id}/image")
+	public ResponseEntity<Object> replaceUserImage(@PathVariable long id, @RequestParam MultipartFile imageFile)
+			throws IOException {
+
+		userService.replaceUserImage(id, imageFile.getInputStream(), imageFile.getSize());
+
 		return ResponseEntity.noContent().build();
 	}
 }

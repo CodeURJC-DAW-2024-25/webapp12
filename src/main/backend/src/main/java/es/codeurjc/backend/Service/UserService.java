@@ -1,5 +1,6 @@
 package es.codeurjc.backend.service;
 
+import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
@@ -162,4 +164,30 @@ public class UserService {
         user.setImage(false);
         userRepository.save(user);
     }
+
+    public UserDto replaceUser(Long id,UserUpdateDto updaUserDto)throws SQLException{
+        User user = userRepository.findById(id).orElseThrow();
+        userMapper.updateUserFromDto(updaUserDto, user);
+
+        if(user.getImage() && updaUserDto.imageBoolean()){
+            user.setImageFile(BlobProxy.generateProxy(user.getImageFile().getBinaryStream(),
+					user.getImageFile().length()));
+        }
+
+        userRepository.save(user);
+        return toDTO(user);
+    }
+
+    public void replaceUserImage(long id, InputStream inputStream, long size) {
+
+		User user = userRepository.findById(id).orElseThrow();
+
+		if (!user.getImage()) {
+			throw new NoSuchElementException();
+		}
+
+		user.setImageFile(BlobProxy.generateProxy(inputStream, size));
+
+		userRepository.save(user);
+	}
 }
