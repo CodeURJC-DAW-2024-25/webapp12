@@ -152,4 +152,14 @@ public class UserService {
         userRepository.deleteById(id);
         return userDto;
     }
+
+    public void deleteUserImage(Long id){
+        User user = userRepository.findById(id).orElseThrow();
+        if(!user.getImage()){
+            throw new NoSuchElementException();
+        }
+        user.setImageFile(null);
+        user.setImage(false);
+        userRepository.save(user);
+    }
 }

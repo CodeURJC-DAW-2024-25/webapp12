@@ -69,4 +69,10 @@ public class UserRestController {
 	public UserDto deleteUser(@PathVariable Long id){
 		return userService.deleteUser(id);
 	}
+
+	@DeleteMapping("/{id}/image")
+	public ResponseEntity<Object> deleteUserImage(@PathVariable Long id)throws IOException{
+		userService.deleteUserImage(id);
+		return ResponseEntity.noContent().build();
+	}
 }
