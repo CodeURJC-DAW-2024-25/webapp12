@@ -36,8 +36,10 @@ import es.codeurjc.backend.dto.ActivityDto;
 import es.codeurjc.backend.dto.ActivityUpdateDto;
 import es.codeurjc.backend.dto.NewActivityDto;
 import es.codeurjc.backend.model.Activity;
+import es.codeurjc.backend.model.Place;
 import es.codeurjc.backend.model.User;
 import es.codeurjc.backend.service.ActivityService;
+import es.codeurjc.backend.service.PlaceService;
 import es.codeurjc.backend.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 
@@ -49,6 +51,8 @@ public class ActivityRestController {
 	private ActivityService activityService;
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private PlaceService placeService;
 
 	@GetMapping("/")
 	public Collection<ActivityDto> getActivities() {
@@ -216,5 +220,28 @@ public class ActivityRestController {
 				.contentType(MediaType.APPLICATION_PDF)
 				.body(pdfContents);
 	}
+
+	@GetMapping("/search")
+    public ResponseEntity<?> searchActivitiesByPlace(
+            @RequestParam(value = "placeId", required = false) Long placeId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "2") int size
+    ) {
+        if (placeId == null) {
+            return ResponseEntity.badRequest().body("El parámetro 'placeId' es requerido");
+        }
+
+        Optional<Place> optionalPlace = placeService.findById(placeId);
+
+        if (optionalPlace.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Lugar no encontrado");
+        }
+
+        Place place = optionalPlace.get();
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ActivityDto> activitiesPage = activityService.findByPlace(place, pageable);
+
+        return ResponseEntity.ok(activitiesPage);
+    }
 	
 }

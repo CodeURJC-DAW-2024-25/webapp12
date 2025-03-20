@@ -436,6 +436,34 @@ public class ActivityService {
             activity.getImage()
         ));
     }
+
+    @Transactional
+    public Page<ActivityDto> findByPlace(Place place, Pageable pageable) {
+        Page<Activity> activitiesPage = activityRepository.findByPlace(place, pageable);
+
+        return activitiesPage.map(activity -> new ActivityDto(
+            activity.getId(),
+            activity.getName(),
+            activity.getCategory(),
+            activity.getDescription(),
+            activity.getVacancy(),
+            activity.getCreationDate(),
+            activity.getActivityDate(),
+            new PlaceDto(activity.getPlace().getId(), activity.getPlace().getName(), activity.getPlace().getDescription()),
+            activity.getReviews().stream()
+                .map(review -> new ReviewDto(
+                    review.getId(),
+                    review.getDescription(),
+                    review.getStarsValue(),
+                    review.getCreationDate(),
+                    review.getUserFullName()
+                ))
+                .toList(),
+            activity.getImage()
+        ));
+    }
+
+
 }
 
 
