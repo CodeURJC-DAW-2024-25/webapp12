@@ -41,6 +41,11 @@ import es.codeurjc.backend.model.User;
 import es.codeurjc.backend.service.ActivityService;
 import es.codeurjc.backend.service.PlaceService;
 import es.codeurjc.backend.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.persistence.EntityNotFoundException;
 
 @RestController
@@ -54,23 +59,44 @@ public class ActivityRestController {
 	@Autowired
 	private PlaceService placeService;
 
+
+	@Operation(summary = "Get every activities", description = "Returns a list with every activity.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "List with activities returned successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ActivityDto.class))),
+			@ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
+			@ApiResponse(responseCode = "404", description = "Activity not found", content = @Content) })
 	@GetMapping("/")
 	public Collection<ActivityDto> getActivities() {
 
 		return activityService.getActivitiesDtos();
 	}
 
+	@Operation(summary = "Get activity based on ID", description = "Returns the activity whose ID matches the one on the URL.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Activity returned successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ActivityDto.class))),
+			@ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
+			@ApiResponse(responseCode = "404", description = "Activity not found", content = @Content) })
 	@GetMapping("/{id}")
     public ActivityDto getActivity(@PathVariable Long id) {
         return activityService.getActivityDtoById(id);
     }
 
+	@Operation(summary = "Create new activity", description = "Creates a new activity and returns that new activity.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "201", description = "Activity created successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ActivityDto.class))),
+			@ApiResponse(responseCode = "403", description = "The request is unauthorized", content = @Content),
+			@ApiResponse(responseCode = "404", description = "Not found", content = @Content) })
 	@PostMapping("/")
     public ResponseEntity<ActivityDto> createActivity(@RequestBody NewActivityDto activityPostDto) {
         ActivityDto createdActivity = activityService.createActivity(activityPostDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdActivity);
     }
 
+	@Operation(summary = "Get every activities", description = "Returns a list with every activity.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "List with activities returned successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ActivityDto.class))),
+			@ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
+			@ApiResponse(responseCode = "404", description = "Activity not found", content = @Content) })
 	@GetMapping("/pageable")
 	public ResponseEntity<Page<ActivityDto>> getActivities(
 			@RequestParam(defaultValue = "0") int page,
@@ -80,7 +106,12 @@ public class ActivityRestController {
 		Page<ActivityDto> activitiesPage = activityService.getActivities(pageable);
 		return ResponseEntity.ok(activitiesPage);
 	}
-
+	@Operation(summary = "Update an activity", description = "Updates the information and resources of an activity.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Activity updated successfully", content = @Content),
+			@ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
+			@ApiResponse(responseCode = "403", description = "The request is unauthorized", content = @Content),
+			@ApiResponse(responseCode = "404", description = "Not found", content = @Content) })
 	@PutMapping("/{id}")
 	public ResponseEntity<ActivityDto> updateActivity(@PathVariable Long id, @RequestBody ActivityUpdateDto activityUpdateDto) {
 		try {
@@ -93,6 +124,13 @@ public class ActivityRestController {
 		}
 	}
 
+	@Operation(summary = "Delete activity", description = "Deletes an activity and returns that deleted activity.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Activity deleted successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ActivityDto.class))),
+			@ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
+			@ApiResponse(responseCode = "404", description = "Not found", content = @Content),
+			@ApiResponse(responseCode = "405", description = "Not allowed", content = @Content)
+	})
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deleteActivity(@PathVariable Long id) {
 		try {
@@ -105,16 +143,19 @@ public class ActivityRestController {
 		}
 	}
 
+	@Operation(summary = "Get the activity photo", description = "Returns the activity image based on the ID")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "Image returned successfully", content = @Content),
+		@ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
+		@ApiResponse(responseCode = "404", description = "Activity not found", content = @Content)
+	})
 	@GetMapping("/{id}/image")
 	public ResponseEntity<Resource> downloadImage(@PathVariable long id) throws SQLException {
-		// Buscar la actividad por ID
 		Optional<Activity> optionalActivity = activityService.findById(id);
 
 		if (optionalActivity.isPresent() && optionalActivity.get().getImageFile() != null) {
-			// Obtener la imagen como un recurso
 			Resource file = new InputStreamResource(optionalActivity.get().getImageFile().getBinaryStream());
 
-			// Devolver la imagen en la respuesta
 			return ResponseEntity.ok()
 					.header(HttpHeaders.CONTENT_TYPE, "image/jpeg") 
 					.contentLength(optionalActivity.get().getImageFile().length())
@@ -124,7 +165,13 @@ public class ActivityRestController {
 		}
 	}
 
-
+	@Operation(summary = "Delete activity image", description = "Deletes an activity imageand returns that deleted activity.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Activity deleted successfully"),
+			@ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
+			@ApiResponse(responseCode = "404", description = "Not found", content = @Content),
+			@ApiResponse(responseCode = "405", description = "Not allowed", content = @Content)
+	})
 	@DeleteMapping("/{id}/image")
 	public ResponseEntity<String> deleteImage(@PathVariable long id) {
 		Optional<Activity> optionalActivity = activityService.findById(id);
@@ -146,6 +193,12 @@ public class ActivityRestController {
 		}
 	}
 
+	@Operation(summary = "Create new activity image", description = "Creates a new activity image and returns that new activity image.")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "201", description = "Activity image created successfully"),
+		@ApiResponse(responseCode = "403", description = "The request is unauthorized"),
+		@ApiResponse(responseCode = "404", description = "Not found") 
+	})				
     @PostMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> uploadImage(@PathVariable long id, @RequestParam("file") MultipartFile file) {
         Optional<Activity> optionalActivity = activityService.findById(id);
@@ -168,6 +221,12 @@ public class ActivityRestController {
         }
     }
 
+	@Operation(summary = "Update image of activity based on ID", description = "Update the image of an activity whose ID matches the one on the URL.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Image updated successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ActivityDto.class))),
+			@ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
+			@ApiResponse(responseCode = "404", description = "Activity not found", content = @Content),
+			@ApiResponse(responseCode = "405", description = "Not allowed", content = @Content) })
 	@PutMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<String> updateImage(@PathVariable long id, @RequestParam("file") MultipartFile file) {
 		Optional<Activity> optionalActivity = activityService.findById(id);
@@ -191,6 +250,11 @@ public class ActivityRestController {
 		}
 	}
 
+	@Operation(summary = "Reserve an activity", description = "A user reserve an activity and returns a .pdf with the activity information.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "201", description = "User reserve an activity successfully"),
+			@ApiResponse(responseCode = "403", description = "The request is unauthorized", content = @Content),
+			@ApiResponse(responseCode = "404", description = "Activity not found", content = @Content) })
 	@PostMapping("/{id}/reserve")
 	public ResponseEntity<byte[]> reserveActivity(@PathVariable Long id, Principal principal) throws IOException {
 		if (principal == null) {
@@ -221,6 +285,11 @@ public class ActivityRestController {
 				.body(pdfContents);
 	}
 
+	@Operation(summary = "Search an activity by place", description = "Returns a activities list found by place.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "List with activities returned successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ActivityDto.class))),
+			@ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
+			@ApiResponse(responseCode = "404", description = "Activities not found", content = @Content) })
 	@GetMapping("/search")
     public ResponseEntity<?> searchActivitiesByPlace(
             @RequestParam(value = "placeId", required = false) Long placeId,

@@ -33,9 +33,9 @@ import es.codeurjc.backend.service.UserService;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
-import org.springframework.data.domain.Page;
+
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.PageRequest;
+
 import org.springframework.ui.Model;
 
 import java.io.IOException;
