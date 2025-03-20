@@ -50,7 +50,7 @@ import org.springframework.http.ResponseEntity;
 
 
 @Controller
-public class activityController {
+public class ActivityController {
 
     @Autowired
     private ActivityService activityService;
