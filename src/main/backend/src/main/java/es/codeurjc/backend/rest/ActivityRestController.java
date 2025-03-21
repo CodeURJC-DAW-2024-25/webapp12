@@ -322,16 +322,13 @@ public class ActivityRestController {
     @GetMapping("/user/{userId}")
     public ResponseEntity<Page<ActivityDto>> getActivitiesByUser(
             @PathVariable Long userId,
-            @RequestParam(defaultValue = "0") int page, // Parámetro de consulta para la página
-            @RequestParam(defaultValue = "2") int size) { // Parámetro de consulta para el tamaño de la página
+            @RequestParam(defaultValue = "0") int page, 
+            @RequestParam(defaultValue = "2") int size) { 
 
-        // Crear el objeto Pageable
         Pageable pageable = PageRequest.of(page, size);
 
-        // Obtener las actividades paginadas
         Page<ActivityDto> activitiesPage = activityService.getActivitiesByUser(userId, pageable);
 
-        // Devolver la respuesta
         return ResponseEntity.ok(activitiesPage);
     }
 
@@ -347,13 +344,10 @@ public class ActivityRestController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "4") int size) {
 
-        // Crear el objeto Pageable
         Pageable pageable = PageRequest.of(page, size);
 
-        // Obtener las actividades recomendadas paginadas
         Page<ActivityDto> recommendedActivities = activityService.recommendActivities(userId, pageable);
 
-        // Devolver la respuesta con las actividades recomendadas
         return ResponseEntity.ok(recommendedActivities);
     }
 	

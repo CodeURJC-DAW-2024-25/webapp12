@@ -64,11 +64,6 @@ public class ActivityService {
     private ReviewRepository reviewRepository;
 
 
-    
-    public Activity saveActivity(Activity activity) {
-        return activityRepository.save(activity);
-    }
-
     public Optional <Activity>  findById(long id){
         return activityRepository.findById(id);
     } 
@@ -167,6 +162,10 @@ public class ActivityService {
             return byteArrayOutputStream;
         }
     }
+    public Activity saveActivity(Activity activity) {
+        return activityRepository.save(activity);
+    }
+    
     @Transactional
     public boolean reserveActivity(Long activityId, Long userId) {
       
@@ -314,20 +313,17 @@ public class ActivityService {
         Activity activity = activityRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Actividad no encontrada con ID: " + id));
 
-        // Desvincular las reviews de la actividad
         List<Review> reviews = new ArrayList<>(activity.getReviews());
         activity.getReviews().clear();
         reviewRepository.deleteAll(reviews);
 
-        // Desvincular los usuarios de la actividad
         List<User> users = new ArrayList<>(activity.getUsers());
         for (User user : users) {
             user.getActivities().remove(activity);
-            userRepository.save(user); // Guardar los cambios en el usuario
+            userRepository.save(user); 
         }
         activity.getUsers().clear();
 
-        // Finalmente, eliminar la actividad
         activityRepository.delete(activity);
     }
 
@@ -389,7 +385,6 @@ public class ActivityService {
 
     @Transactional
     public Page<ActivityDto> getActivitiesByUser(Long userId, Pageable pageable) {
-        // Obtener las actividades paginadas del repositorio
         Page<Activity> activitiesPage = activityRepository.findByUsers(userId, pageable);
 
         // Convertir las actividades a DTOs
@@ -422,14 +417,11 @@ public class ActivityService {
 
     @Transactional
     public Page<ActivityDto> recommendActivities(Long userId, Pageable pageable) {
-        // Obtener el usuario
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        // Obtener las actividades del usuario
         List<Activity> userActivities = new ArrayList<>(user.getActivities());
 
-        // Obtener las categorías y lugares de las actividades del usuario
         Set<String> categories = userActivities.stream()
                 .map(Activity::getCategory)
                 .collect(Collectors.toSet());
@@ -438,10 +430,8 @@ public class ActivityService {
                 .map(Activity::getPlace)
                 .collect(Collectors.toSet());
 
-        // Obtener actividades recomendadas paginadas
         Page<Activity> recommendedActivities = activityRepository.findSimilarActivities(categories, places, userActivities, pageable);
 
-        // Convertir las actividades a DTOs
         return recommendedActivities.map(activity -> new ActivityDto(
                 activity.getId(),
                 activity.getName(),

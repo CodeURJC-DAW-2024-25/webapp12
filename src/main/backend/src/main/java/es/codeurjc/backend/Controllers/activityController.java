@@ -75,35 +75,28 @@ public class activityController {
     public String showActivities(
             Model model,
             Principal principal,
-            @RequestParam(defaultValue = "0") int page) { // Parámetro de consulta para la página
+            @RequestParam(defaultValue = "0") int page) { 
 
-        // Definir el tamaño de la página
         int size = 4;
         Pageable pageable = PageRequest.of(page, size);
 
-        // Obtener las actividades paginadas
         Page<ActivityDto> activities = activityService.getActivities(pageable);
 
-        // Obtener la lista de lugares
         List<Place> places = placeService.findAll();
 
-        // Agregar atributos al modelo
         model.addAttribute("activities", activities);
         model.addAttribute("allPlaces", places);
 
-        // Manejar el usuario autenticado
         if (principal != null) {
             String userEmail = principal.getName();
-            System.out.println("Usuario autenticado: " + userEmail);
 
             User user = userService.findByEmail(userEmail);
             if (user != null) {
-                // Obtener actividades recomendadas paginadas
                 Page<ActivityDto> recommendedActivities = activityService.recommendActivities(user.getId(), pageable);
-                model.addAttribute("recommendedActivities", recommendedActivities.getContent()); // Lista de actividades recomendadas
-                model.addAttribute("hasMoreRecommended", recommendedActivities.hasNext()); // Indicador de si hay más páginas
+                model.addAttribute("recommendedActivities", recommendedActivities.getContent()); 
+                model.addAttribute("hasMoreRecommended", recommendedActivities.hasNext()); 
             } else {
-                System.out.println("No se encontró el usuario con email: " + userEmail);
+                System.out.println("User not found: " + userEmail);
             }
         }
 
@@ -112,20 +105,16 @@ public class activityController {
 
     @GetMapping("/moreActivities")
     public String loadMoreActivities(
-            @RequestParam int page, // Parámetro de consulta para la página
+            @RequestParam int page, 
             Model model) {
 
-        // Definir el tamaño de la página
         int size = 4;
         Pageable pageable = PageRequest.of(page, size);
 
-        // Obtener las actividades paginadas
         Page<ActivityDto> activities = activityService.getActivities(pageable);
 
-        // Calcular si hay más páginas
         boolean hasMore = page < activities.getTotalPages() - 1;
 
-        // Agregar atributos al modelo
         model.addAttribute("activities", activities.getContent());
         model.addAttribute("hasMore", hasMore);
 
@@ -137,34 +126,27 @@ public class activityController {
             Model model,
             HttpServletRequest request,
             Principal principal,
-            @RequestParam(defaultValue = "0") int page) { // Parámetro de consulta para la página
+            @RequestParam(defaultValue = "0") int page) { 
 
-        // Verificar roles del usuario
         model.addAttribute("admin", request.isUserInRole("ADMIN"));
         model.addAttribute("user", request.isUserInRole("USER"));
 
-        // Obtener el usuario autenticado
         String userEmail = principal.getName();
         User user = userService.findByEmail(userEmail);
 
-        // Definir el tamaño de la página para las actividades suscritas
-        int sizeSubscribed = 10; // Puedes ajustar el tamaño de la página según tus necesidades
-        Pageable pageableSubscribed = PageRequest.of(0, sizeSubscribed); // Siempre página 0 para las suscritas
+        int sizeSubscribed = 10;
+        Pageable pageableSubscribed = PageRequest.of(0, sizeSubscribed);
 
-        // Obtener las actividades suscritas por el usuario (paginadas)
         Page<ActivityDto> subscribedActivities = activityService.getActivitiesByUser(user.getId(), pageableSubscribed);
         model.addAttribute("countActivitiesSubscribed", subscribedActivities.getTotalElements());
 
-        // Obtener estadísticas
         model.addAttribute("activityCount", activityService.activityCount());
         model.addAttribute("userCount", userService.countUsers());
         model.addAttribute("userRegister", user);
 
-        // Definir el tamaño de la página para todas las actividades
-        int sizeAll = 10; // Puedes ajustar el tamaño de la página según tus necesidades
+        int sizeAll = 10;
         Pageable pageableAll = PageRequest.of(page, sizeAll);
 
-        // Obtener todas las actividades paginadas
         Page<ActivityDto> activities = activityService.getActivities(pageableAll);
         model.addAttribute("allActivities", activities);
 
@@ -173,42 +155,32 @@ public class activityController {
 
     @GetMapping("/moreActivitiesAdmin")
     public String loadMoreActivityAdmin(
-            @RequestParam int page, // Parámetro de consulta para la página
+            @RequestParam int page, 
             Model model) {
 
         System.out.println("Cargando actividades, página: " + page);
 
         try {
-            // Definir el tamaño de la página
-            int size = 10; // Puedes ajustar el tamaño de la página según tus necesidades
+            int size = 10;
             Pageable pageable = PageRequest.of(page, size);
 
-            // Obtener el número total de páginas
             int totalPages = activityService.getActivities(PageRequest.of(0, size)).getTotalPages();
 
-            // Verificar si la página solicitada es válida
             if (page >= totalPages) {
                 model.addAttribute("allActivities", new ArrayList<>());
                 model.addAttribute("hasMore", false);
                 return "moreActivitiesAdmin";
             }
 
-            // Obtener las actividades paginadas
             Page<ActivityDto> activities = activityService.getActivities(pageable);
 
             if (activities == null) {
                 throw new RuntimeException("activityService.getActivities(pageable) retornó null");
             }
 
-            // Agregar atributos al modelo
             model.addAttribute("allActivities", activities.getContent());
             boolean hasMore = page < activities.getTotalPages() - 1;
             model.addAttribute("hasMore", hasMore);
-
-            // Logs para depuración
-            System.out.println("Actividades cargadas: " + activities.getContent().size());
-            System.out.println("Total páginas: " + activities.getTotalPages());
-            System.out.println("Has more activities: " + hasMore);
 
             return "moreActivitiesAdmin";
         } catch (Exception e) {
@@ -218,12 +190,6 @@ public class activityController {
         }
     }
     
-        
-    
-
-
-
-
     @GetMapping("/error")
     public String showError() {
         return "error";
@@ -232,11 +198,9 @@ public class activityController {
     @PostMapping("/removeActivity")
     public String removeActivity(@RequestParam Long id, Model model) {
         try {
-            // Eliminar la actividad y todas sus relaciones
             activityService.deleteActivity(id);
             return "redirect:/adminActivities";
         } catch (EntityNotFoundException e) {
-            // Manejar el caso en que la actividad no se encuentre
             model.addAttribute("error", "Actividad no encontrada con ID: " + id);
             return "error";
         }
@@ -248,7 +212,6 @@ public class activityController {
             Model model,
             Principal principal) {
 
-        // Buscar la actividad por ID
         Optional<Activity> optionalActivity = activityService.findById(id);
 
         if (optionalActivity.isEmpty()) {
@@ -258,26 +221,21 @@ public class activityController {
 
         Activity activity = optionalActivity.get();
 
-        // Obtener las reseñas paginadas de la actividad
         int page = 0;
         Page<Review> reviews = reviewService.getReviewsPaginated(id, page);
         model.addAttribute("reviews", reviews);
 
-        // Obtener el lugar asociado a la actividad
         Place place = activity.getPlace();
         model.addAttribute("place", place);
 
-        // Verificar si el usuario está autenticado
         if (principal != null) {
             String userEmail = principal.getName();
             User user = userService.findByEmail(userEmail);
             model.addAttribute("register", true);
 
-            // Obtener las actividades en las que el usuario está inscrito (paginadas)
-            Pageable pageable = PageRequest.of(0, 10); // Tamaño de página fijo para las actividades suscritas
+            Pageable pageable = PageRequest.of(0, 10); 
             Page<ActivityDto> subscribedActivities = activityService.getActivitiesByUser(user.getId(), pageable);
 
-            // Verificar si el usuario está suscrito a la actividad actual
             boolean isSubscribed = subscribedActivities.getContent().stream()
                     .anyMatch(subscribedActivity -> subscribedActivity.id().equals(activity.getId()));
 
@@ -286,7 +244,6 @@ public class activityController {
             model.addAttribute("register", false);
         }
 
-        // Agregar la actividad al modelo
         model.addAttribute("activity", activity);
 
         return "activity";
@@ -352,10 +309,7 @@ public class activityController {
         return "moreReviews";  
     }
 
-    
-    
-    
-    
+        
     @GetMapping("/createActivity")
     public String showFormNewActivity(Model model) {
 
@@ -372,7 +326,6 @@ public class activityController {
             }
 
             activity.setCreationDateMethod();
-
             
             Optional<Place> optionalPlace = placeService.findById(placeId);
             if (optionalPlace.isPresent()) {
