@@ -7,7 +7,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -23,7 +22,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import es.codeurjc.backend.dto.UserDto;
 import es.codeurjc.backend.model.Activity;
-import es.codeurjc.backend.model.Review;
 import es.codeurjc.backend.model.User;
 import es.codeurjc.backend.service.ActivityService;
 import es.codeurjc.backend.service.EmailService;
@@ -33,8 +31,6 @@ import es.codeurjc.backend.service.UserService;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
-
-import org.springframework.data.domain.Pageable;
 
 import org.springframework.ui.Model;
 

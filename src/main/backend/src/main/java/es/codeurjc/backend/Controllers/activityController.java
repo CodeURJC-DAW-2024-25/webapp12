@@ -23,6 +23,7 @@ import java.util.Optional;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import es.codeurjc.backend.dto.ActivityDto;
 import es.codeurjc.backend.model.Activity;
 import es.codeurjc.backend.model.Place;
 import es.codeurjc.backend.model.Review;
@@ -36,14 +37,15 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 
 
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 
 
@@ -69,100 +71,146 @@ public class activityController {
     private PlaceService placeService;
 
     @GetMapping("/")
-    public String showActivities(Model model, Principal principal) {
-        int page = 0;
-        Page<Activity> activities = activityService.getActivitiesPaginated(page);
+    public String showActivities(
+            Model model,
+            Principal principal,
+            @RequestParam(defaultValue = "0") int page) { // Parámetro de consulta para la página
 
-        
+        // Definir el tamaño de la página
+        int size = 4;
+        Pageable pageable = PageRequest.of(page, size);
+
+        // Obtener las actividades paginadas
+        Page<ActivityDto> activities = activityService.getActivities(pageable);
+
+        // Obtener la lista de lugares
         List<Place> places = placeService.findAll();
+
+        // Agregar atributos al modelo
         model.addAttribute("activities", activities);
         model.addAttribute("allPlaces", places);
-        
-        
+
+        // Manejar el usuario autenticado
         if (principal != null) {
             String userEmail = principal.getName();
             System.out.println("Usuario autenticado: " + userEmail);
 
-            
             User user = userService.findByEmail(userEmail);
             if (user != null) {
-                 
+                // Obtener actividades recomendadas
                 List<Activity> recommendedActivities = activityService.recommendActivities(user.getId());
                 model.addAttribute("recommendedActivities", recommendedActivities);
             } else {
-                System.out.println("No se encontró el usuario con email: " + userEmail);
-       }
-    }
-        return "index"; 
+                System.out.println("No se encontró el usuario con email: " + userEmail);
+            }
+        }
+
+        return "index";
     }
 
-    @GetMapping("/moreActivities") 
-    public String LoadMoreActivities(@RequestParam int page, Model model) { 
-        Page<Activity> activities = activityService.getActivitiesPaginated(page);
-        model.addAttribute("activities", activities.getContent());
+    @GetMapping("/moreActivities")
+    public String loadMoreActivities(
+            @RequestParam int page, // Parámetro de consulta para la página
+            Model model) {
+
+        // Definir el tamaño de la página
+        int size = 4;
+        Pageable pageable = PageRequest.of(page, size);
+
+        // Obtener las actividades paginadas
+        Page<ActivityDto> activities = activityService.getActivities(pageable);
+
+        // Calcular si hay más páginas
         boolean hasMore = page < activities.getTotalPages() - 1;
-        model.addAttribute("hasMore", hasMore);
+
+        // Agregar atributos al modelo
         model.addAttribute("activities", activities.getContent());
+        model.addAttribute("hasMore", hasMore);
+
         return "moreActivities";
     }
 
 
-
     @GetMapping("/adminActivities")
-    public String showAdminActivities(Model model,HttpServletRequest request,Principal principal) {
+    public String showAdminActivities(
+            Model model,
+            HttpServletRequest request,
+            Principal principal,
+            @RequestParam(defaultValue = "0") int page) { // Parámetro de consulta para la página
+
+        // Verificar roles del usuario
         model.addAttribute("admin", request.isUserInRole("ADMIN"));
         model.addAttribute("user", request.isUserInRole("USER"));
 
+        // Obtener el usuario autenticado
         String userEmail = principal.getName();
-        User user  = userService.findByEmail(userEmail); 
+        User user = userService.findByEmail(userEmail);
 
-        
+        // Obtener actividades suscritas por el usuario
         List<Activity> subscribedActivities = activityService.findEventsSubscribe(user);
-
-        
         model.addAttribute("countActivitiesSubscribed", subscribedActivities.size());
+
+        // Obtener estadísticas
         model.addAttribute("activityCount", activityService.activityCount());
         model.addAttribute("userCount", userService.countUsers());
         model.addAttribute("userRegister", user);
 
-        int page = 0;
-        Page<Activity> activities = activityService.getActivitiesPaginated(page);
+        // Definir el tamaño de la página
+        int size = 10; // Puedes ajustar el tamaño de la página según tus necesidades
+        Pageable pageable = PageRequest.of(page, size);
+
+        // Obtener las actividades paginadas
+        Page<ActivityDto> activities = activityService.getActivities(pageable);
         model.addAttribute("allActivities", activities);
+
         return "adminActivities";
     }
 
-    @GetMapping("/moreActivitiesAdmin") 
-    public String loadMoreActivityAdmin(@RequestParam int page, Model model) { 
-        System.out.println("Cargando usuarios, página: " + page);
-    
+
+    @GetMapping("/moreActivitiesAdmin")
+    public String loadMoreActivityAdmin(
+            @RequestParam int page, // Parámetro de consulta para la página
+            Model model) {
+
+        System.out.println("Cargando actividades, página: " + page);
+
         try {
-            int totalPages = activityService.getActivitiesPaginated(0).getTotalPages();
-    
+            // Definir el tamaño de la página
+            int size = 10; // Puedes ajustar el tamaño de la página según tus necesidades
+            Pageable pageable = PageRequest.of(page, size);
+
+            // Obtener el número total de páginas
+            int totalPages = activityService.getActivities(PageRequest.of(0, size)).getTotalPages();
+
+            // Verificar si la página solicitada es válida
             if (page >= totalPages) {
-                model.addAttribute("allActivities", new ArrayList<>()); 
+                model.addAttribute("allActivities", new ArrayList<>());
                 model.addAttribute("hasMore", false);
                 return "moreActivitiesAdmin";
             }
-    
-            Page<Activity> activities = activityService.getActivitiesPaginated(page);
-    
+
+            // Obtener las actividades paginadas
+            Page<ActivityDto> activities = activityService.getActivities(pageable);
+
             if (activities == null) {
-                throw new RuntimeException("activityService.findAll(pageable) retornó null");
+                throw new RuntimeException("activityService.getActivities(pageable) retornó null");
             }
-    
-            model.addAttribute("allActivities", activities.getContent()); 
+
+            // Agregar atributos al modelo
+            model.addAttribute("allActivities", activities.getContent());
             boolean hasMore = page < activities.getTotalPages() - 1;
             model.addAttribute("hasMore", hasMore);
-    
-            System.out.println("Usuarios cargados: " + activities.getContent().size());
+
+            // Logs para depuración
+            System.out.println("Actividades cargadas: " + activities.getContent().size());
             System.out.println("Total páginas: " + activities.getTotalPages());
             System.out.println("Has more activities: " + hasMore);
-    
+
             return "moreActivitiesAdmin";
         } catch (Exception e) {
             System.err.println("Error en /moreActivitiesAdmin: " + e.getMessage());
             e.printStackTrace();
-            return "errorPage";  
+            return "errorPage";
         }
     }
     

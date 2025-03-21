@@ -24,7 +24,6 @@ import es.codeurjc.backend.dto.ActivityUpdateDto;
 import es.codeurjc.backend.dto.NewActivityDto;
 import es.codeurjc.backend.dto.PlaceDto;
 import es.codeurjc.backend.dto.ReviewDto;
-import es.codeurjc.backend.dto.UserDto;
 import es.codeurjc.backend.model.Activity;
 import es.codeurjc.backend.model.Place;
 import es.codeurjc.backend.model.Review;
@@ -83,12 +82,6 @@ public class ActivityService {
     }
 
     public Page<Activity> getAllActivities(Pageable pageable) {
-        return activityRepository.findAll(pageable);
-    }
-
-    public Page<Activity> getActivitiesPaginated(int page) {
-        int size = 4;
-        Pageable pageable = PageRequest.of(page, size);
         return activityRepository.findAll(pageable);
     }
 
@@ -285,6 +278,7 @@ public class ActivityService {
     public boolean exists(Long id) {
         return activityRepository.existsById(id);
     }
+
     private ActivityDto convertToDto(Activity activity) {
         return new ActivityDto(
             activity.getId(),
@@ -354,6 +348,7 @@ public class ActivityService {
         Activity savedActivity = activityRepository.save(activity);
         return activityMapper.toDto(savedActivity);
     }
+
     @Transactional
     public ActivityDto updateActivity(Long id, ActivityUpdateDto activityUpdateDto) {
         Activity activity = activityRepository.findByIdWithReviews(id)
