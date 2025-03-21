@@ -24,6 +24,7 @@ import es.codeurjc.backend.dto.ActivityUpdateDto;
 import es.codeurjc.backend.dto.NewActivityDto;
 import es.codeurjc.backend.dto.PlaceDto;
 import es.codeurjc.backend.dto.ReviewDto;
+import es.codeurjc.backend.dto.UserDto;
 import es.codeurjc.backend.model.Activity;
 import es.codeurjc.backend.model.Place;
 import es.codeurjc.backend.model.Review;
@@ -67,45 +68,28 @@ public class ActivityService {
     private ReviewRepository reviewRepository;
 
 
-    
-    @Transactional
-    public ActivityDto saveActivity(ActivityDto activityDto) {
-        if (activityDto == null) {
-            throw new IllegalArgumentException("El DTO de la actividad no puede ser nulo");
-        }
-    
-        // Convertir ActivityDto a entidad Activity
-        
-        Activity activity = activityMapper.toEntity(activityDto, placeRepository);
-        activity.setCreationDateMethod();
-        // Establecer la fecha de creación
-        
-    
-        // Guardar la actividad en el repositorio
-        Activity savedActivity = activityRepository.save(activity);
-    
-        // Convertir la actividad guardada de nuevo a DTO
-        return activityMapper.toDto(savedActivity);
-    }
-
-    @Transactional
-    public List<ActivityDto> findAll() {
+    public List<Activity> getAllActivities() {
         List<Activity> activities = activityRepository.findAll();
-        return activityMapper.toDTOs(activities); // Convertir a lista de DTOs
+        System.out.println("Actividades desde el repositorio: " + activities);  
+        return activities;
+    }
+    
+    public Activity saveActivity(Activity activity) {
+        return activityRepository.save(activity);
     }
 
-    @Transactional
-    public Page<ActivityDto> getAllActivities(Pageable pageable) {
-        Page<Activity> activitiesPage = activityRepository.findAll(pageable);
-        return activitiesPage.map(activityMapper::toDto); // Convertir cada actividad a DTO
+    public List<Activity> findAll() {
+       return activityRepository.findAll();
     }
 
-    @Transactional
-    public Page<ActivityDto> getActivitiesPaginated(int page) {
+    public Page<Activity> getAllActivities(Pageable pageable) {
+        return activityRepository.findAll(pageable);
+    }
+
+    public Page<Activity> getActivitiesPaginated(int page) {
         int size = 4;
         Pageable pageable = PageRequest.of(page, size);
-        Page<Activity> activitiesPage = activityRepository.findAll(pageable);
-        return activitiesPage.map(activityMapper::toDto); // Convertir cada actividad a DTO
+        return activityRepository.findAll(pageable);
     }
 
     public long activityCount(){
@@ -120,10 +104,8 @@ public class ActivityService {
         activityRepository.deleteById(id);
     }
 
-    @Transactional
-    public List<ActivityDto> findEventsSubscribe(User user) {
-        List<Activity> activities = activityRepository.findByUsers(user);
-        return activityMapper.toDTOs(activities); // Convertir a lista de DTOs
+   public List<Activity> findEventsSubscribe(User user){
+        return activityRepository.findByUsers(user);
     }
 
     public Page<Activity> getActivitiesSubscribed(Pageable pageable, User user) {
@@ -145,23 +127,22 @@ public class ActivityService {
        
     }
     
-    @Transactional
-    public List<ActivityDto> recommendActivities(Long userId) {
+    public List<Activity> recommendActivities(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-
+        
+       
         List<Activity> userActivities = new ArrayList<>(user.getActivities());
-
+        
         Set<String> categories = userActivities.stream()
                 .map(Activity::getCategory)
                 .collect(Collectors.toSet());
-
+        
         Set<Place> places = userActivities.stream()
                 .map(Activity::getPlace)
                 .collect(Collectors.toSet());
-
-        List<Activity> recommendedActivities = activityRepository.findSimilarActivities(categories, places, userActivities);
-        return activityMapper.toDTOs(recommendedActivities); // Convertir a lista de DTOs
+        
+        return activityRepository.findSimilarActivities(categories, places, userActivities);
     }
     
     public Map<Integer, Long> countActivitiesByMonth() {
@@ -312,8 +293,6 @@ public class ActivityService {
             activity.getDescription(),
             activity.getVacancy(),
             activity.getCreationDate(),
-            activity.getFormattedCreationDate(), // Nuevo atributo
-            activity.getImageFile(),             // Nuevo atributo
             activity.getActivityDate(),
             activity.getPlace() != null ? 
                 new PlaceDto(
@@ -330,7 +309,7 @@ public class ActivityService {
                     review.getUserFullName()
                 ))
                 .toList(),
-            activity.getImage()           // Nuevo atributo
+            activity.getImage()
         );
     }
 
@@ -432,7 +411,7 @@ public class ActivityService {
         activityRepository.save(activity);
     }
     
-    @Transactional
+    @Transactional 
     public Page<ActivityDto> getActivities(Pageable pageable) {
         Page<Activity> activitiesPage = activityRepository.findAll(pageable);
 
@@ -443,14 +422,8 @@ public class ActivityService {
             activity.getDescription(),
             activity.getVacancy(),
             activity.getCreationDate(),
-            activity.getFormattedCreationDate(), // Nuevo atributo
-            activity.getImageFile(),             // Nuevo atributo
             activity.getActivityDate(),
-            new PlaceDto(
-                activity.getPlace().getId(),
-                activity.getPlace().getName(),
-                activity.getPlace().getDescription()
-            ),
+            new PlaceDto(activity.getPlace().getId(), activity.getPlace().getName(), activity.getPlace().getDescription()),
             activity.getReviews().stream()
                 .map(review -> new ReviewDto(
                     review.getId(),
@@ -460,7 +433,7 @@ public class ActivityService {
                     review.getUserFullName()
                 ))
                 .toList(),
-            activity.getImage()           // Nuevo atributo
+            activity.getImage()
         ));
     }
 
@@ -475,14 +448,8 @@ public class ActivityService {
             activity.getDescription(),
             activity.getVacancy(),
             activity.getCreationDate(),
-            activity.getFormattedCreationDate(), // Nuevo atributo
-            activity.getImageFile(),               // Nuevo atributo
             activity.getActivityDate(),
-            new PlaceDto(
-                activity.getPlace().getId(),
-                activity.getPlace().getName(),
-                activity.getPlace().getDescription()
-            ),
+            new PlaceDto(activity.getPlace().getId(), activity.getPlace().getName(), activity.getPlace().getDescription()),
             activity.getReviews().stream()
                 .map(review -> new ReviewDto(
                     review.getId(),
@@ -492,7 +459,7 @@ public class ActivityService {
                     review.getUserFullName()
                 ))
                 .toList(),
-            activity.getImage()             // Nuevo atributo
+            activity.getImage()
         ));
     }
 

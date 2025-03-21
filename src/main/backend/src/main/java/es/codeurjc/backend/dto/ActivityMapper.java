@@ -13,8 +13,6 @@ import es.codeurjc.backend.model.Activity;
 import es.codeurjc.backend.model.Place;
 import es.codeurjc.backend.model.Review;
 import es.codeurjc.backend.model.User;
-import es.codeurjc.backend.repository.PlaceRepository;
-import jakarta.persistence.EntityNotFoundException;
 
 @Mapper(componentModel = "spring")
 public interface ActivityMapper {
@@ -67,41 +65,6 @@ public interface ActivityMapper {
         }
         return user.getName() + " " + user.getSurname();
     }
-    
-    default Activity toEntity(ActivityDto activityDto, PlaceRepository placeRepository) {
-        if (activityDto == null) {
-            return null;
-        }
-
-        Activity activity = new Activity();
-        activity.setId(activityDto.id());
-        activity.setName(activityDto.name());
-        activity.setCategory(activityDto.category());
-        activity.setDescription(activityDto.description());
-        activity.setVacancy(activityDto.vacancy());
-        activity.setCreationDate(activityDto.creationDate());
-        
-        // Convertir la fecha de actividad a java.sql.Date
-        java.util.Date utilDate = activity.getActivityDate();
-        if (utilDate != null) {
-            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-            activity.setActivityDate(sqlDate);
-        }
-
-        activity.setImage(activityDto.imageBoolean());
-
-        // Convertir PlaceDto a entidad Place
-        PlaceDto placeDto = activityDto.place();
-        if (placeDto != null) {
-            Place place = placeRepository.findById(placeDto.id())
-                    .orElseThrow(() -> new EntityNotFoundException("Lugar no encontrado con ID: " + placeDto.id()));
-            activity.setPlace(place);
-        }
-
-        return activity;
-    }
-
-
 
 
 }
