@@ -11,6 +11,8 @@ paths:
     get:
       tags:
       - user-rest-controller
+      summary: Get user based on ID
+      description: Returns the user whose ID matches the one on the URL.
       operationId: getUser
       parameters:
       - name: id
@@ -21,11 +23,15 @@ paths:
           format: int64
       responses:
         '200':
-          description: OK
+          description: User returned successfully
           content:
-            "*/*":
+            application/json:
               schema:
                 "$ref": "#/components/schemas/UserDto"
+        '400':
+          description: Bad request
+        '404':
+          description: User not found
     put:
       tags:
       - user-rest-controller
@@ -53,6 +59,8 @@ paths:
     delete:
       tags:
       - user-rest-controller
+      summary: Delete user
+      description: Users an activity and returns that deleted user.
       operationId: deleteUser
       parameters:
       - name: id
@@ -63,11 +71,17 @@ paths:
           format: int64
       responses:
         '200':
-          description: OK
+          description: User deleted successfully
           content:
-            "*/*":
+            application/json:
               schema:
                 "$ref": "#/components/schemas/UserDto"
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '405':
+          description: Not allowed
   "/api/users/{id}/image":
     get:
       tags:
@@ -119,6 +133,8 @@ paths:
     delete:
       tags:
       - user-rest-controller
+      summary: Delete user image
+      description: Deletes an user imageand returns that deleted user.
       operationId: deleteUserImage
       parameters:
       - name: id
@@ -129,11 +145,17 @@ paths:
           format: int64
       responses:
         '200':
-          description: OK
+          description: User deleted successfully
           content:
             "*/*":
               schema:
                 type: object
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '405':
+          description: Not allowed
   "/api/activities/{id}":
     get:
       tags:
@@ -509,6 +531,13 @@ paths:
           type: integer
           format: int32
           default: 0
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 4
       responses:
         '200':
           description: OK
@@ -665,6 +694,13 @@ components:
         creationDate:
           type: string
           format: date-time
+        formattedCreationDate:
+          type: string
+        imageFile:
+          type: object
+          properties:
+            binaryStream:
+              type: object
         activityDate:
           type: string
           format: date-time
@@ -768,12 +804,12 @@ components:
     PageUserDto:
       type: object
       properties:
-        totalPages:
-          type: integer
-          format: int32
         totalElements:
           type: integer
           format: int64
+        totalPages:
+          type: integer
+          format: int32
         size:
           type: integer
           format: int32
@@ -805,16 +841,16 @@ components:
           format: int64
         sort:
           "$ref": "#/components/schemas/SortObject"
-        unpaged:
-          type: boolean
-        paged:
-          type: boolean
-        pageSize:
-          type: integer
-          format: int32
         pageNumber:
           type: integer
           format: int32
+        pageSize:
+          type: integer
+          format: int32
+        paged:
+          type: boolean
+        unpaged:
+          type: boolean
     SortObject:
       type: object
       properties:
