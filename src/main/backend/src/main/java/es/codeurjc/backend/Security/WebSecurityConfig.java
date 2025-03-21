@@ -74,7 +74,7 @@ public class WebSecurityConfig {
 		http
 			.authorizeHttpRequests(authorize -> authorize
                     // PRIVATE ENDPOINTS
-                    .requestMatchers(HttpMethod.GET,"/api/users/").hasRole("ADMIN")
+                    
 					.requestMatchers(HttpMethod.GET,"/api/users/{id}").hasRole("ADMIN")
 
 					.requestMatchers(HttpMethod.GET,"/api/activities/").permitAll()
@@ -88,6 +88,7 @@ public class WebSecurityConfig {
 					.requestMatchers(HttpMethod.PUT,"/api/activities/{id}").hasRole("ADMIN")
 					.requestMatchers(HttpMethod.DELETE,"/api/activities/{id}").hasRole("ADMIN")
 					.requestMatchers(HttpMethod.DELETE,"/api/activities/{id}/image").hasRole("ADMIN")
+					
 					.requestMatchers(HttpMethod.POST,"/api/activities/{id}/image").hasRole("ADMIN")
 					.requestMatchers(HttpMethod.PUT,"/api/activities/{id}/image").hasRole("ADMIN")
 

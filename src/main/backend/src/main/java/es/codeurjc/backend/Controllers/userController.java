@@ -53,7 +53,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 
 @Controller
-public class UserController {
+public class userController {
     @Autowired
     private UserService userService;
 
@@ -263,27 +263,8 @@ public class UserController {
     @Transactional
     @PostMapping("/removeUser")
     public String removeUser(@RequestParam Long id) {
-        Optional<User> optionalUser = userService.findById(id);
-        if(optionalUser.isPresent()){
-            User user = optionalUser.get();
-
-            List<Activity> activities = user.getActivities();
-            for(Activity activity:activities){
-                activity.getUsers().remove(user);
-                activityService.saveActivity(activity);
-            }
-
-            List<Review> reviews = user.getReviews();
-            for(Review review:reviews){
-                reviewService.delete(review.getId());
-            }
-
-            userService.delete(user);
-            return "redirect:/adminUsers";
-        }else{
-            return "error";
-        }
-        
+        userService.deleteUser(id);
+        return "redirect:/adminUsers";
     }
 
     @GetMapping("/editUserProfile/{id}")

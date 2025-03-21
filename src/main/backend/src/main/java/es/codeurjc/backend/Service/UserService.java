@@ -9,8 +9,12 @@ import es.codeurjc.backend.dto.NewUserDto;
 import es.codeurjc.backend.dto.UserDto;
 import es.codeurjc.backend.dto.UserMapper;
 import es.codeurjc.backend.dto.UserUpdateDto;
+import es.codeurjc.backend.model.Activity;
+import es.codeurjc.backend.model.Review;
 import es.codeurjc.backend.model.User;
 import es.codeurjc.backend.repository.UserRepository;
+import es.codeurjc.backend.service.ActivityService;
+import es.codeurjc.backend.service.ReviewService;
 import es.codeurjc.backend.security.CSRFHandlerConfiguration;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.core.io.InputStreamResource;
@@ -21,7 +25,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
+import jakarta.transaction.Transactional;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.Collection;
@@ -35,6 +39,12 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ActivityService activityService;
+
+    @Autowired
+    private ReviewService reviewService;
 
     @Autowired
     private UserMapper userMapper;
@@ -153,12 +163,19 @@ public class UserService {
 		return userMapper.toDomain(userDto);
 	}
 
-    public UserDto deleteUser(Long id){
-        User user = userRepository.findById(id).orElseThrow();
+    
+    public UserDto deleteUser(Long id) {
+        User user = userRepository.findById(id)
+            .orElseThrow(() -> new NoSuchElementException("User not found with id: " + id));
+
+        // Convertimos el usuario a DTO antes de eliminarlo
         UserDto userDto = toDTO(user);
-        userRepository.deleteById(id);
+        // Finalmente, eliminamos el usuario
+        userRepository.delete(user);
+
         return userDto;
     }
+
 
     public void deleteUserImage(Long id){
         User user = userRepository.findById(id).orElseThrow();

@@ -22,10 +22,17 @@ import org.springframework.data.domain.PageRequest;
 
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
 
+import es.codeurjc.backend.dto.ActivityDto;
 import es.codeurjc.backend.dto.NewUserDto;
 import es.codeurjc.backend.dto.UserDto;
 import es.codeurjc.backend.dto.UserUpdateDto;
 import es.codeurjc.backend.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -79,12 +86,25 @@ public class UserRestController {
 
 		return ResponseEntity.created(location).body(userDto);
     } 
-	
+	@Operation(summary = "Delete user", description = "Users an activity and returns that deleted user.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "User deleted successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ActivityDto.class))),
+			@ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
+			@ApiResponse(responseCode = "404", description = "Not found", content = @Content),
+			@ApiResponse(responseCode = "405", description = "Not allowed", content = @Content)
+	})
 	@DeleteMapping("/{id}")
-	public UserDto deleteUser(@PathVariable Long id){
-		return userService.deleteUser(id);
+	public ResponseEntity<UserDto> deleteUser(@PathVariable Long id) {
+		UserDto deletedUser = userService.deleteUser(id);
+		return ResponseEntity.ok().body(deletedUser);
 	}
-
+	@Operation(summary = "Delete user image", description = "Deletes an user imageand returns that deleted user.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "User deleted successfully"),
+			@ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
+			@ApiResponse(responseCode = "404", description = "Not found", content = @Content),
+			@ApiResponse(responseCode = "405", description = "Not allowed", content = @Content)
+	})
 	@DeleteMapping("/{id}/image")
 	public ResponseEntity<Object> deleteUserImage(@PathVariable Long id)throws IOException{
 		userService.deleteUserImage(id);
