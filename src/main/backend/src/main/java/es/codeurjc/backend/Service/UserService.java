@@ -4,6 +4,7 @@ import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import es.codeurjc.backend.dto.NewUserDto;
 import es.codeurjc.backend.dto.UserDto;
@@ -26,6 +27,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import jakarta.transaction.Transactional;
+
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.Collection;
@@ -124,18 +127,35 @@ public class UserService {
         Page<User> userPage = userRepository.findAll(pageable);
         return userPage.map(userMapper::toDto);
     }
-
-    public UserDto updateUser(Long userId, UserUpdateDto userUpdateDto) {
+    @Transactional
+    public UserDto updateUser(Long userId, UserUpdateDto userUpdateDto, MultipartFile imageFile) throws IOException {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
 
-        userMapper.updateUserFromDto(userUpdateDto, user);
-        userRepository.save(user);
-        
-        return userMapper.toDto(user);
+        // Actualizar los campos del usuario
+        if (userUpdateDto.name() != null) {
+            user.setName(userUpdateDto.name());
+        }
+        if (userUpdateDto.surname() != null) {
+            user.setSurname(userUpdateDto.surname());
+        }
+        if (userUpdateDto.phone() != null) {
+            user.setPhone(userUpdateDto.phone());
+        }
+        if (userUpdateDto.dni() != null) {
+            user.setDni(userUpdateDto.dni());
+        }
+
+       
+
+        userRepository.save(user);  // Guardamos los cambios
+
+        return userMapper.toDto(user);  // Retornamos el DTO actualizado
     }
 
-    public Resource getUserImageDto(Long id) throws SQLException{
+    
+
+    public Resource getUserImage(Long id) throws SQLException{
         User user = userRepository.findById(id).orElseThrow();
         if(user.getImageFile() != null){
             return new InputStreamResource(user.getImageFile().getBinaryStream());
@@ -143,7 +163,7 @@ public class UserService {
             throw new NoSuchElementException();
         }
     }
-
+    
     public UserDto createUser(NewUserDto newUserDto){
         if (newUserDto.email() == null || newUserDto.password() == null) {
             throw new IllegalArgumentException("Email y contraseña son requeridos");
