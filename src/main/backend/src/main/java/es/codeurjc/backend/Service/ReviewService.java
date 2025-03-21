@@ -3,7 +3,9 @@ package es.codeurjc.backend.service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -74,6 +76,14 @@ public class ReviewService {
         int size = 2; 
         Pageable pageable = PageRequest.of(page, size);
         return reviewRepository.findByActivityId(activityId, pageable); 
+    }
+
+    public Map<Integer, Long> countReviewsByValorationDto() {
+        return reviewRepository.findAll().stream()
+                .collect(Collectors.groupingBy(
+                        Review::getStarsValue, 
+                        Collectors.counting()  
+                ));
     }
     
     

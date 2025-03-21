@@ -272,7 +272,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "https://localhost:8443/api/activities/pageable?page=1&size=4",
+									"raw": "https://localhost:8443/api/activities/pageable?page=2&size=4",
 									"protocol": "https",
 									"host": [
 										"localhost"
@@ -286,7 +286,283 @@
 									"query": [
 										{
 											"key": "page",
+											"value": "2"
+										},
+										{
+											"key": "size",
+											"value": "4"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "search activity",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var template = `\r",
+											"<style type=\"text/css\">\r",
+											"    .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}\r",
+											"    .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}\r",
+											"    .tftable tr {background-color:#ffffff;}\r",
+											"    .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}\r",
+											"    .tftable tr:hover {background-color:#e0ffff;}\r",
+											"</style>\r",
+											"\r",
+											"<table class=\"tftable\" border=\"1\">\r",
+											"    <tr>\r",
+											"        <th>ID</th>\r",
+											"        <th>Name</th>\r",
+											"        <th>Category</th>\r",
+											"        <th>Description</th>\r",
+											"        <th>Vacancy</th>\r",
+											"        <th>Creation Date</th>\r",
+											"        <th>Activity Date</th>\r",
+											"        <th>Place ID</th>\r",
+											"        <th>Place Name</th>\r",
+											"        <th>Place Description</th>\r",
+											"        <th>Image</th>\r",
+											"    </tr>\r",
+											"    \r",
+											"    {{#each response.content}}\r",
+											"        <tr>\r",
+											"            <td>{{id}}</td>\r",
+											"            <td>{{name}}</td>\r",
+											"            <td>{{category}}</td>\r",
+											"            <td>{{description}}</td>\r",
+											"            <td>{{vacancy}}</td>\r",
+											"            <td>{{creationDate}}</td>\r",
+											"            <td>{{activityDate}}</td>\r",
+											"            <td>{{place.id}}</td>\r",
+											"            <td>{{place.name}}</td>\r",
+											"            <td>{{place.description}}</td>\r",
+											"            <td>{{imageBoolean}}</td>\r",
+											"        </tr>\r",
+											"    {{/each}}\r",
+											"</table>\r",
+											"`;\r",
+											"\r",
+											"function constructVisualizerPayload() {\r",
+											"    return { response: pm.response.json() }\r",
+											"}\r",
+											"\r",
+											"pm.visualizer.set(template, constructVisualizerPayload());"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:8443/api/activities/search?placeId=8&page=0&size=2",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "8443",
+									"path": [
+										"api",
+										"activities",
+										"search"
+									],
+									"query": [
+										{
+											"key": "placeId",
+											"value": "8"
+										},
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "activities subcribes",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var template = `\r",
+											"<style type=\"text/css\">\r",
+											"    .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}\r",
+											"    .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}\r",
+											"    .tftable tr {background-color:#ffffff;}\r",
+											"    .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}\r",
+											"    .tftable tr:hover {background-color:#e0ffff;}\r",
+											"</style>\r",
+											"\r",
+											"<table class=\"tftable\" border=\"1\">\r",
+											"    <tr>\r",
+											"        <th>ID</th>\r",
+											"        <th>Name</th>\r",
+											"        <th>Category</th>\r",
+											"        <th>Description</th>\r",
+											"        <th>Vacancy</th>\r",
+											"        <th>Creation Date</th>\r",
+											"        <th>Activity Date</th>\r",
+											"        <th>Place ID</th>\r",
+											"        <th>Place Name</th>\r",
+											"        <th>Place Description</th>\r",
+											"        <th>Reviews</th>\r",
+											"        <th>Image Boolean</th>\r",
+											"    </tr>\r",
+											"    \r",
+											"    {{#each response.content}}\r",
+											"        <tr id=row_{{@key}}>\r",
+											"            <td>{{id}}</td>\r",
+											"            <td>{{name}}</td>\r",
+											"            <td>{{category}}</td>\r",
+											"            <td>{{description}}</td>\r",
+											"            <td>{{vacancy}}</td>\r",
+											"            <td>{{creationDate}}</td>\r",
+											"            <td>{{activityDate}}</td>\r",
+											"            <td>{{place.id}}</td>\r",
+											"            <td>{{place.name}}</td>\r",
+											"            <td>{{place.description}}</td>\r",
+											"            <td>{{reviews}}</td>\r",
+											"            <td>{{imageBoolean}}</td>\r",
+											"        </tr>\r",
+											"    {{/each}}\r",
+											"</table>\r",
+											"`;\r",
+											"\r",
+											"function constructVisualizerPayload() {\r",
+											"    return {response: pm.response.json()}\r",
+											"}\r",
+											"\r",
+											"pm.visualizer.set(template, constructVisualizerPayload());"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:8443/api/activities/user/1?page=1&size=2",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "8443",
+									"path": [
+										"api",
+										"activities",
+										"user",
+										"1"
+									],
+									"query": [
+										{
+											"key": "page",
 											"value": "1"
+										},
+										{
+											"key": "size",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Recommended activities",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var template = `\r",
+											"<style type=\"text/css\">\r",
+											"    .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}\r",
+											"    .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}\r",
+											"    .tftable tr {background-color:#ffffff;}\r",
+											"    .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}\r",
+											"    .tftable tr:hover {background-color:#e0ffff;}\r",
+											"</style>\r",
+											"\r",
+											"<table class=\"tftable\" border=\"1\">\r",
+											"    <tr>\r",
+											"        <th>ID</th>\r",
+											"        <th>Name</th>\r",
+											"        <th>Category</th>\r",
+											"        <th>Description</th>\r",
+											"        <th>Vacancy</th>\r",
+											"        <th>Creation Date</th>\r",
+											"        <th>Activity Date</th>\r",
+											"        <th>Place ID</th>\r",
+											"        <th>Place Name</th>\r",
+											"        <th>Place Description</th>\r",
+											"        <th>Image Boolean</th>\r",
+											"    </tr>\r",
+											"    \r",
+											"    {{#each response.content}}\r",
+											"        <tr id=row_{{@key}}>\r",
+											"            <td>{{id}}</td>\r",
+											"            <td>{{name}}</td>\r",
+											"            <td>{{category}}</td>\r",
+											"            <td>{{description}}</td>\r",
+											"            <td>{{vacancy}}</td>\r",
+											"            <td>{{creationDate}}</td>\r",
+											"            <td>{{activityDate}}</td>\r",
+											"            <td>{{place.id}}</td>\r",
+											"            <td>{{place.name}}</td>\r",
+											"            <td>{{place.description}}</td>\r",
+											"            <td>{{imageBoolean}}</td>\r",
+											"        </tr>\r",
+											"    {{/each}}\r",
+											"</table>\r",
+											"`;\r",
+											"\r",
+											"function constructVisualizerPayload() {\r",
+											"    return {response: pm.response.json()}\r",
+											"}\r",
+											"\r",
+											"pm.visualizer.set(template, constructVisualizerPayload());"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:8443/api/activities/users/1/recommended-activities?page=0&size=4",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "8443",
+									"path": [
+										"api",
+										"activities",
+										"users",
+										"1",
+										"recommended-activities"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0"
 										},
 										{
 											"key": "size",
@@ -426,8 +702,17 @@
 							"request": {
 								"method": "PUT",
 								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Taller de Pintura\",\r\n    \"category\": \"Arte\",\r\n    \"description\": \"Aprende técnicas avanzadas de pintura al óleo.\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
 								"url": {
-									"raw": "https://localhost:8443/api/activities/3",
+									"raw": "https://localhost:8443/api/activities/1",
 									"protocol": "https",
 									"host": [
 										"localhost"
@@ -436,7 +721,7 @@
 									"path": [
 										"api",
 										"activities",
-										"3"
+										"1"
 									]
 								}
 							},
@@ -578,6 +863,89 @@
 									"response": []
 								}
 							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Stadistics",
+			"item": [
+				{
+					"name": "Graph activities",
+					"item": [
+						{
+							"name": "graph activities",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:8443/api/statistics/activities-by-month",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "8443",
+									"path": [
+										"api",
+										"statistics",
+										"activities-by-month"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Graph reviews",
+					"item": [
+						{
+							"name": "graph reviews",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:8443/api/statistics/review-statistics",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "8443",
+									"path": [
+										"api",
+										"statistics",
+										"review-statistics"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Number Stadisitics",
+					"item": [
+						{
+							"name": "New Request",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:8443/api/statistics/general-statistics",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "8443",
+									"path": [
+										"api",
+										"statistics",
+										"general-statistics"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				}

@@ -96,6 +96,9 @@ public class WebSecurityConfig {
 					
 					.requestMatchers(HttpMethod.POST,"/api/activities/{id}/image").hasRole("ADMIN")
 					.requestMatchers(HttpMethod.PUT,"/api/activities/{id}/image").hasRole("ADMIN")
+					.requestMatchers(HttpMethod.GET,"/api/statistics/activities-by-month").hasRole("ADMIN")
+					.requestMatchers(HttpMethod.GET,"/api/statistics/review-statistics").hasRole("ADMIN")
+					.requestMatchers(HttpMethod.GET,"/api/statistics/general-statistics").hasRole("ADMIN")
 
 
 					// PUBLIC ENDPOINTS
