@@ -131,7 +131,6 @@ public class activityController {
         return "moreActivities";
     }
 
-
     @GetMapping("/adminActivities")
     public String showAdminActivities(
             Model model,
@@ -147,26 +146,29 @@ public class activityController {
         String userEmail = principal.getName();
         User user = userService.findByEmail(userEmail);
 
-        // Obtener actividades suscritas por el usuario
-        List<Activity> subscribedActivities = activityService.findEventsSubscribe(user);
-        model.addAttribute("countActivitiesSubscribed", subscribedActivities.size());
+        // Definir el tamaño de la página para las actividades suscritas
+        int sizeSubscribed = 10; // Puedes ajustar el tamaño de la página según tus necesidades
+        Pageable pageableSubscribed = PageRequest.of(0, sizeSubscribed); // Siempre página 0 para las suscritas
+
+        // Obtener las actividades suscritas por el usuario (paginadas)
+        Page<ActivityDto> subscribedActivities = activityService.getActivitiesByUser(user.getId(), pageableSubscribed);
+        model.addAttribute("countActivitiesSubscribed", subscribedActivities.getTotalElements());
 
         // Obtener estadísticas
         model.addAttribute("activityCount", activityService.activityCount());
         model.addAttribute("userCount", userService.countUsers());
         model.addAttribute("userRegister", user);
 
-        // Definir el tamaño de la página
-        int size = 10; // Puedes ajustar el tamaño de la página según tus necesidades
-        Pageable pageable = PageRequest.of(page, size);
+        // Definir el tamaño de la página para todas las actividades
+        int sizeAll = 10; // Puedes ajustar el tamaño de la página según tus necesidades
+        Pageable pageableAll = PageRequest.of(page, sizeAll);
 
-        // Obtener las actividades paginadas
-        Page<ActivityDto> activities = activityService.getActivities(pageable);
+        // Obtener todas las actividades paginadas
+        Page<ActivityDto> activities = activityService.getActivities(pageableAll);
         model.addAttribute("allActivities", activities);
 
         return "adminActivities";
     }
-
 
     @GetMapping("/moreActivitiesAdmin")
     public String loadMoreActivityAdmin(
@@ -240,43 +242,53 @@ public class activityController {
     }
 
     @GetMapping("/activity/{id}")
-    public String getActivityDetail(@PathVariable Long id, Model model, Principal principal) {
+    public String getActivityDetail(
+            @PathVariable Long id,
+            Model model,
+            Principal principal) {
+
+        // Buscar la actividad por ID
         Optional<Activity> optionalActivity = activityService.findById(id);
-        
+
         if (optionalActivity.isEmpty()) {
             model.addAttribute("errorMessage", "Actividad no encontrada.");
-            return "error"; 
+            return "error";
         }
-    
-        Activity activity = optionalActivity.get();
-        
-        
 
+        Activity activity = optionalActivity.get();
+
+        // Obtener las reseñas paginadas de la actividad
         int page = 0;
         Page<Review> reviews = reviewService.getReviewsPaginated(id, page);
         model.addAttribute("reviews", reviews);
-    
-        
-        Place place = activity.getPlace(); 
+
+        // Obtener el lugar asociado a la actividad
+        Place place = activity.getPlace();
         model.addAttribute("place", place);
-        
-        
+
+        // Verificar si el usuario está autenticado
         if (principal != null) {
             String userEmail = principal.getName();
             User user = userService.findByEmail(userEmail);
             model.addAttribute("register", true);
-    
-            
-            List<Activity> subscribedActivities = activityService.findEventsSubscribe(user);
-            boolean isSubscribed = subscribedActivities.contains(activity);  
-            
+
+            // Obtener las actividades en las que el usuario está inscrito (paginadas)
+            Pageable pageable = PageRequest.of(0, 10); // Tamaño de página fijo para las actividades suscritas
+            Page<ActivityDto> subscribedActivities = activityService.getActivitiesByUser(user.getId(), pageable);
+
+            // Verificar si el usuario está suscrito a la actividad actual
+            boolean isSubscribed = subscribedActivities.getContent().stream()
+                    .anyMatch(subscribedActivity -> subscribedActivity.id().equals(activity.getId()));
+
             model.addAttribute("isSubscribed", isSubscribed);
-        }else{
+        } else {
             model.addAttribute("register", false);
         }
+
+        // Agregar la actividad al modelo
         model.addAttribute("activity", activity);
-    
-        return "activity";  
+
+        return "activity";
     }
 
 

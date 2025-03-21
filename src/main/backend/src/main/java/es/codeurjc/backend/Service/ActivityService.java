@@ -72,18 +72,6 @@ public class ActivityService {
         return activityRepository.save(activity);
     }
 
-    public List<Activity> findAll() {
-       return activityRepository.findAll();
-    }
-
-    public Page<Activity> getAllActivities(Pageable pageable) {
-        return activityRepository.findAll(pageable);
-    }
-
-    public long activityCount(){
-        return activityRepository.count();
-    }
-
     public Optional <Activity>  findById(long id){
         return activityRepository.findById(id);
     } 
@@ -268,6 +256,10 @@ public class ActivityService {
 
     public boolean exists(Long id) {
         return activityRepository.existsById(id);
+    }
+
+    public long activityCount(){
+        return activityRepository.count();
     }
 
     private ActivityDto convertToDto(Activity activity) {
