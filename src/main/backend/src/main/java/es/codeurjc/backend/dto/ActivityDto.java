@@ -3,6 +3,7 @@ package es.codeurjc.backend.dto;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.sql.Blob;
 
 public record ActivityDto (
     Long id,
@@ -11,6 +12,8 @@ public record ActivityDto (
     String description,
     int vacancy,
     Calendar creationDate,
+    String formattedCreationDate,
+    Blob imageFile,
     Date activityDate,
 
     PlaceDto place,

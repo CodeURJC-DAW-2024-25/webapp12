@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import es.codeurjc.backend.dto.ActivityDto;
 import es.codeurjc.backend.dto.UserDto;
 import es.codeurjc.backend.model.Activity;
 import es.codeurjc.backend.model.Review;
@@ -120,28 +121,32 @@ public class userController {
     }
     
 
-    
     @GetMapping("/adminUsers")
-    public String showAdminUsers(Model model,HttpServletRequest request,Principal principal) {
-
-
+    public String showAdminUsers(Model model, HttpServletRequest request, Principal principal) {
         model.addAttribute("admin", request.isUserInRole("ADMIN"));
         model.addAttribute("user", request.isUserInRole("USER"));
 
         String userEmail = principal.getName();
-        User user  = userService.findByEmail(userEmail); 
-        
-        List<Activity> subscribedActivities = activityService.findEventsSubscribe(user);
+        User user = userService.findByEmail(userEmail);
+
+        // Obtener las actividades suscritas del usuario (como DTOs)
+        List<ActivityDto> subscribedActivities = activityService.findEventsSubscribe(user);
+
+        // Obtener usuarios paginados (como DTOs)
         int page = 0;
-        int pageSize = 4; 
+        int pageSize = 4;
         Page<UserDto> users = userService.getAllUsersPaginated(page, pageSize);
+
         System.out.println("Has more users: " + users.hasNext());
-        model.addAttribute("users", users.getContent()); 
+
+        // Agregar datos al modelo
+        model.addAttribute("users", users.getContent());
         model.addAttribute("hasMore", users.hasNext());
         model.addAttribute("userCount", userService.countUsers());
         model.addAttribute("countActivitiesSubscribed", subscribedActivities.size());
         model.addAttribute("activityCount", activityService.activityCount());
         model.addAttribute("userRegister", user);
+
         return "adminUsers";
     }
 
@@ -250,23 +255,29 @@ public class userController {
     }
 
     @GetMapping("/editUserProfile/{id}")
-    public String showEditProfile(Principal principal,Model model,HttpServletRequest request, @PathVariable long id) {
+    public String showEditProfile(Principal principal, Model model, HttpServletRequest request, @PathVariable long id) {
         model.addAttribute("admin", request.isUserInRole("ADMIN"));
         model.addAttribute("user", request.isUserInRole("USER"));
+
         Optional<User> optionalUser = userService.findById(id);
-        
-        if(optionalUser.isPresent()){
+
+        if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            List<Activity> subscribedActivities = activityService.findEventsSubscribe(user);
+
+            // Obtener las actividades suscritas del usuario (como DTOs)
+            List<ActivityDto> subscribedActivities = activityService.findEventsSubscribe(user);
+
+            // Agregar datos al modelo
             model.addAttribute("userRegistered", user);
             model.addAttribute("countActivitiesSubscribed", subscribedActivities.size());
             model.addAttribute("userCount", userService.countUsers());
             model.addAttribute("activityCount", activityService.activityCount());
+
             return "editUserProfile";
-        }else{
+        } else {
             return "error";
         }
-    }   
+    }  
     
 
     @PostMapping("/editUserProfile")
@@ -296,33 +307,38 @@ public class userController {
     }
 
     @GetMapping("/statistics")
-    public String showStatistics(HttpServletRequest request,Model model,Principal principal) throws JsonProcessingException {
+    public String showStatistics(HttpServletRequest request, Model model, Principal principal) throws JsonProcessingException {
         model.addAttribute("admin", request.isUserInRole("ADMIN"));
         model.addAttribute("user", request.isUserInRole("USER"));
-
+    
         String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.findByEmail(userEmail);
-
-        if(user != null){
-            List<Activity> subscribedActivities = activityService.findEventsSubscribe(user);
+    
+        if (user != null) {
+            // Obtener las actividades suscritas del usuario (como DTOs)
+            List<ActivityDto> subscribedActivities = activityService.findEventsSubscribe(user);
+    
+            // Obtener estadísticas de actividades por mes
             Map<Integer, Long> activitiesByMonth = activityService.countActivitiesByMonth();
-            
+    
+            // Preparar datos para el gráfico de actividades por mes
             List<Integer> activityData = new ArrayList<>();
             for (int i = 1; i <= 12; i++) {
                 activityData.add(activitiesByMonth.getOrDefault(i, 0L).intValue());
             }
-
+    
+            // Agregar datos al modelo
             model.addAttribute("activityData", new ObjectMapper().writeValueAsString(activityData));
             model.addAttribute("reviewData", reviewService.countReviewsByValoration());
             model.addAttribute("userRegistered", user);
-            model.addAttribute("subscribedActivities", subscribedActivities);
+            model.addAttribute("subscribedActivities", subscribedActivities); // Ahora es List<ActivityDto>
             model.addAttribute("countActivitiesSubscribed", subscribedActivities.size());
             model.addAttribute("userCount", userService.countUsers());
             model.addAttribute("activityCount", activityService.activityCount());
             model.addAttribute("placeCount", placeService.placeCount());
-
+    
             return "statistics";
-        }else{
+        } else {
             return "error";
         }
     }

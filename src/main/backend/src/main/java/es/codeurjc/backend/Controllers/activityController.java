@@ -23,6 +23,8 @@ import java.util.Optional;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import es.codeurjc.backend.dto.ActivityDto;
+import es.codeurjc.backend.dto.ActivityMapper;
 import es.codeurjc.backend.model.Activity;
 import es.codeurjc.backend.model.Place;
 import es.codeurjc.backend.model.Review;
@@ -41,6 +43,7 @@ import org.springframework.http.HttpHeaders;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.data.domain.Page;
@@ -58,6 +61,9 @@ public class activityController {
     @Autowired
     private ReviewService reviewService;
 
+    @Autowired
+    private ActivityMapper activityMapper;
+
    
 
     @Autowired
@@ -71,102 +77,107 @@ public class activityController {
     @GetMapping("/")
     public String showActivities(Model model, Principal principal) {
         int page = 0;
-        Page<Activity> activities = activityService.getActivitiesPaginated(page);
-
-        
-        List<Place> places = placeService.findAll();
+        // Obtener actividades paginadas (convertidas a DTO)
+        Page<ActivityDto> activities = activityService.getActivitiesPaginated(page);
         model.addAttribute("activities", activities);
+
+        // Obtener todos los lugares
+        List<Place> places = placeService.findAll();
         model.addAttribute("allPlaces", places);
-        
-        
+
         if (principal != null) {
             String userEmail = principal.getName();
             System.out.println("Usuario autenticado: " + userEmail);
 
-            
+            // Obtener el usuario autenticado
             User user = userService.findByEmail(userEmail);
             if (user != null) {
-                 
-                List<Activity> recommendedActivities = activityService.recommendActivities(user.getId());
+                // Obtener actividades recomendadas (convertidas a DTO)
+                List<ActivityDto> recommendedActivities = activityService.recommendActivities(user.getId());
                 model.addAttribute("recommendedActivities", recommendedActivities);
             } else {
-                System.out.println("No se encontró el usuario con email: " + userEmail);
-       }
-    }
-        return "index"; 
+                System.out.println("No se encontró el usuario con email: " + userEmail);
+            }
+        }
+
+        return "index";
     }
 
-    @GetMapping("/moreActivities") 
-    public String LoadMoreActivities(@RequestParam int page, Model model) { 
-        Page<Activity> activities = activityService.getActivitiesPaginated(page);
+    @GetMapping("/moreActivities")
+    public String LoadMoreActivities(@RequestParam int page, Model model) {
+        // Obtener actividades paginadas (convertidas a DTO)
+        Page<ActivityDto> activities = activityService.getActivitiesPaginated(page);
         model.addAttribute("activities", activities.getContent());
+
+        // Verificar si hay más páginas
         boolean hasMore = page < activities.getTotalPages() - 1;
         model.addAttribute("hasMore", hasMore);
-        model.addAttribute("activities", activities.getContent());
+
         return "moreActivities";
     }
 
 
 
     @GetMapping("/adminActivities")
-    public String showAdminActivities(Model model,HttpServletRequest request,Principal principal) {
+    public String showAdminActivities(Model model, HttpServletRequest request, Principal principal) {
         model.addAttribute("admin", request.isUserInRole("ADMIN"));
         model.addAttribute("user", request.isUserInRole("USER"));
 
         String userEmail = principal.getName();
-        User user  = userService.findByEmail(userEmail); 
+        User user = userService.findByEmail(userEmail);
 
-        
-        List<Activity> subscribedActivities = activityService.findEventsSubscribe(user);
-
-        
+        // Obtener actividades suscritas (convertidas a DTO)
+        List<ActivityDto> subscribedActivities = activityService.findEventsSubscribe(user);
         model.addAttribute("countActivitiesSubscribed", subscribedActivities.size());
+
+        // Obtener conteos
         model.addAttribute("activityCount", activityService.activityCount());
         model.addAttribute("userCount", userService.countUsers());
         model.addAttribute("userRegister", user);
 
+        // Obtener actividades paginadas (convertidas a DTO)
         int page = 0;
-        Page<Activity> activities = activityService.getActivitiesPaginated(page);
+        Page<ActivityDto> activities = activityService.getActivitiesPaginated(page);
         model.addAttribute("allActivities", activities);
+
         return "adminActivities";
     }
 
-    @GetMapping("/moreActivitiesAdmin") 
-    public String loadMoreActivityAdmin(@RequestParam int page, Model model) { 
-        System.out.println("Cargando usuarios, página: " + page);
-    
+    @GetMapping("/moreActivitiesAdmin")
+    public String loadMoreActivityAdmin(@RequestParam int page, Model model) {
+        System.out.println("Cargando actividades, página: " + page);
+
         try {
             int totalPages = activityService.getActivitiesPaginated(0).getTotalPages();
-    
+
             if (page >= totalPages) {
-                model.addAttribute("allActivities", new ArrayList<>()); 
+                model.addAttribute("allActivities", new ArrayList<>());
                 model.addAttribute("hasMore", false);
                 return "moreActivitiesAdmin";
             }
-    
-            Page<Activity> activities = activityService.getActivitiesPaginated(page);
-    
+
+            // Obtener actividades paginadas (convertidas a DTO)
+            Page<ActivityDto> activities = activityService.getActivitiesPaginated(page);
+
             if (activities == null) {
-                throw new RuntimeException("activityService.findAll(pageable) retornó null");
+                throw new RuntimeException("activityService.getActivitiesPaginated(page) retornó null");
             }
-    
-            model.addAttribute("allActivities", activities.getContent()); 
+
+            model.addAttribute("allActivities", activities.getContent());
             boolean hasMore = page < activities.getTotalPages() - 1;
             model.addAttribute("hasMore", hasMore);
-    
-            System.out.println("Usuarios cargados: " + activities.getContent().size());
+
+            System.out.println("Actividades cargadas: " + activities.getContent().size());
             System.out.println("Total páginas: " + activities.getTotalPages());
             System.out.println("Has more activities: " + hasMore);
-    
+
             return "moreActivitiesAdmin";
         } catch (Exception e) {
             System.err.println("Error en /moreActivitiesAdmin: " + e.getMessage());
             e.printStackTrace();
-            return "errorPage";  
+            return "errorPage";
         }
     }
-    
-        
     
 
 
@@ -195,46 +206,49 @@ public class activityController {
         
     }
 
+
     @GetMapping("/activity/{id}")
     public String getActivityDetail(@PathVariable Long id, Model model, Principal principal) {
         Optional<Activity> optionalActivity = activityService.findById(id);
-        
+
         if (optionalActivity.isEmpty()) {
             model.addAttribute("errorMessage", "Actividad no encontrada.");
-            return "error"; 
+            return "error";
         }
-    
-        Activity activity = optionalActivity.get();
-        
-        
 
+        Activity activity = optionalActivity.get();
+
+        // Obtener reseñas paginadas
         int page = 0;
         Page<Review> reviews = reviewService.getReviewsPaginated(id, page);
         model.addAttribute("reviews", reviews);
-    
-        
-        Place place = activity.getPlace(); 
+
+        // Obtener el lugar de la actividad
+        Place place = activity.getPlace();
         model.addAttribute("place", place);
-        
-        
+
+        // Verificar si el usuario está autenticado
         if (principal != null) {
             String userEmail = principal.getName();
             User user = userService.findByEmail(userEmail);
             model.addAttribute("register", true);
-    
-            
-            List<Activity> subscribedActivities = activityService.findEventsSubscribe(user);
-            boolean isSubscribed = subscribedActivities.contains(activity);  
-            
+
+            // Obtener las actividades suscritas del usuario (como DTOs)
+            List<ActivityDto> subscribedActivities = activityService.findEventsSubscribe(user);
+
+            // Verificar si la actividad actual está suscrita
+            boolean isSubscribed = subscribedActivities.stream()
+                    .anyMatch(activityDto -> activityDto.id().equals(activity.getId())); // Comparar IDs
             model.addAttribute("isSubscribed", isSubscribed);
-        }else{
+        } else {
             model.addAttribute("register", false);
         }
-        model.addAttribute("activity", activity);
-    
-        return "activity";  
-    }
 
+        // Agregar la actividad al modelo
+        model.addAttribute("activity", activity);
+
+        return "activity";
+    }
 
     @GetMapping("/activity/{id}/image")
 	public ResponseEntity<Object> downloadImage(@PathVariable long id) throws SQLException {
@@ -307,40 +321,44 @@ public class activityController {
     }
 
     @PostMapping("/createActivity")
-    public String createNewActivity(@ModelAttribute Activity activity, @RequestParam("placeId") Long placeId, @RequestParam("file") MultipartFile imagFile) {
+    public String createNewActivity(
+            @ModelAttribute Activity activity,
+            @RequestParam("placeId") Long placeId,
+            @RequestParam("file") MultipartFile imagFile) {
         try {
+            // Procesar la imagen
             if (!imagFile.isEmpty()) {
                 activity.setImageFile(BlobProxy.generateProxy(imagFile.getInputStream(), imagFile.getSize()));
                 activity.setImage(true);
             }
 
+            // Establecer la fecha de creación
             activity.setCreationDateMethod();
 
-            
-            Optional<Place> optionalPlace = placeService.findById(placeId);
-            if (optionalPlace.isPresent()) {
-                Place place = optionalPlace.get();
-                activity.setPlace(place);
-            } else {
-                return "error"; 
-            }
+            // Buscar el lugar (Place) por ID
+            Place place = placeService.findById(placeId)
+                    .orElseThrow(() -> new EntityNotFoundException("Lugar no encontrado con ID: " + placeId));
+            activity.setPlace(place);
 
-            
+            // Convertir la fecha de actividad a java.sql.Date
             java.util.Date utilDate = activity.getActivityDate();
             if (utilDate != null) {
                 java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-                activity.setActivityDate(sqlDate); 
+                activity.setActivityDate(sqlDate);
             }
 
-            
-            activityService.saveActivity(activity);
+            // Convertir la entidad Activity a ActivityDto
+            ActivityDto activityDto = activityMapper.toDto(activity);
+
+            // Guardar la actividad usando el servicio
+            activityService.saveActivity(activityDto);
+
             return "redirect:/adminActivities";
         } catch (IOException e) {
             e.printStackTrace();
-            return "error"; 
+            return "error";
         }
     }
-
     
     @GetMapping("/editActivity/{id}")
     public String showEditActivityForm(@PathVariable Long id, Model model) {
@@ -362,26 +380,38 @@ public class activityController {
     }
 
     @PostMapping("/editActivity/{id}")
-    public String editActivity(@PathVariable Long id, @ModelAttribute Activity updatedActivity, @RequestParam("file") MultipartFile imagFile,@RequestParam(value = "removeImage", required = false, defaultValue = "false") boolean removeImage)
-    throws IOException, SQLException {
-        Optional<Activity> optionalActivity = activityService.findById(id);
-        if (optionalActivity.isPresent()) {
-            Activity activity = optionalActivity.get();
+    public String editActivity(
+            @PathVariable Long id,
+            @ModelAttribute Activity updatedActivity,
+            @RequestParam("file") MultipartFile imagFile,
+            @RequestParam(value = "removeImage", required = false, defaultValue = "false") boolean removeImage)
+            throws IOException, SQLException {
+        try {
+            // Buscar la actividad existente por ID
+            Activity activity = activityService.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Actividad no encontrada con ID: " + id));
 
+            // Actualizar los campos de la actividad
             activity.setName(updatedActivity.getName());
             activity.setDescription(updatedActivity.getDescription());
             activity.setCategory(updatedActivity.getCategory());
             activity.setVacancy(updatedActivity.getVacancy());
             activity.setPlace(updatedActivity.getPlace());
+
+            // Procesar la imagen
             updateImage(activity, removeImage, imagFile);
 
-            
-            activityService.saveActivity(activity);
+            // Convertir la entidad Activity a ActivityDto
+            ActivityDto activityDto = activityMapper.toDto(activity);
 
-            return "redirect:/adminActivities";  
+            // Guardar la actividad actualizada usando el servicio
+            activityService.saveActivity(activityDto);
+
+            return "redirect:/adminActivities";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "error";
         }
-
-        return "error";  
     }
 
     @GetMapping("/searchPage")
