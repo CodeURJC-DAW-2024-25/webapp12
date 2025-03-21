@@ -82,9 +82,12 @@ public class WebSecurityConfig {
 					.requestMatchers(HttpMethod.GET,"/api/activities/{id}").permitAll()
 					.requestMatchers(HttpMethod.GET,"/api/activities/{id}/image").permitAll()
 					.requestMatchers(HttpMethod.GET,"/api/activities/user/{id}").permitAll()
+					.requestMatchers(HttpMethod.GET,"/api/activities/search").permitAll()
 
 
 					.requestMatchers(HttpMethod.POST,"/api/activities/{id}/reserve").hasRole("USER")
+					.requestMatchers(HttpMethod.POST,"/api/activities/users/**").hasRole("USER")
+					.requestMatchers(HttpMethod.POST,"/api/activities/user/**").hasRole("USER")
 
 					.requestMatchers(HttpMethod.POST,"/api/activities/").hasRole("ADMIN")
 					.requestMatchers(HttpMethod.PUT,"/api/activities/{id}").hasRole("ADMIN")
