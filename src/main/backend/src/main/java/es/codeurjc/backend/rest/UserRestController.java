@@ -58,12 +58,17 @@ public class UserRestController {
 		return userService.getUsersDtos();
 	}
 
-	 @GetMapping("/pageable")
-    public Page<UserDto> getUsers(@RequestParam(defaultValue = "0") int page) {
-        Pageable pageable = PageRequest.of(page, 10);  // Paginación de 10 elementos por página
-        return userService.getAllUsersPaginated(pageable);
-    }
-
+	@GetMapping("/pageable")
+	public Page<UserDto> getUsers(@RequestParam(defaultValue = "0") int page,
+								@RequestParam(defaultValue = "4") int size) { // Tamaño por defecto 4
+		return userService.getAllUsersPaginated(page, size);
+	}
+	@Operation(summary = "Get user based on ID", description = "Returns the user whose ID matches the one on the URL.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "User returned successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDto.class))),
+			@ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
+			@ApiResponse(responseCode = "404", description = "User not found", content = @Content) })
+	
 	@GetMapping("/{id}")
 	public UserDto getUser(@PathVariable Long id) {
 		return userService.getUserDto(id);
@@ -88,7 +93,7 @@ public class UserRestController {
     } 
 	@Operation(summary = "Delete user", description = "Users an activity and returns that deleted user.")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "User deleted successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ActivityDto.class))),
+			@ApiResponse(responseCode = "200", description = "User deleted successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDto.class))),
 			@ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
 			@ApiResponse(responseCode = "404", description = "Not found", content = @Content),
 			@ApiResponse(responseCode = "405", description = "Not allowed", content = @Content)

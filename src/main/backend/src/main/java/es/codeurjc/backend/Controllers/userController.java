@@ -133,8 +133,8 @@ public class userController {
         
         List<Activity> subscribedActivities = activityService.findEventsSubscribe(user);
         int page = 0;
-        Pageable pageable = PageRequest.of(page, 10);
-        Page<UserDto> users = userService.getAllUsersPaginated(pageable);
+        int pageSize = 4; 
+        Page<UserDto> users = userService.getAllUsersPaginated(page, pageSize);
         System.out.println("Has more users: " + users.hasNext());
         model.addAttribute("users", users.getContent()); 
         model.addAttribute("hasMore", users.hasNext());
@@ -150,31 +150,13 @@ public class userController {
         System.out.println("Cargando usuarios, página: " + page);
     
         try {
-            
-            int totalPages = userService.getUsersPaginated(0).getTotalPages();
-    
-           
-            if (page >= totalPages) {
-                model.addAttribute("users", new ArrayList<>()); 
-                model.addAttribute("hasMore", false);
-                return "moreUsers";
-            }
-    
-            Page<User> users = userService.getUsersPaginated(page);
-    
-            if (users == null) {
-                throw new RuntimeException("userService.findAll(pageable) retornó null");
-            }
+            int pageSize = 2;
+            Page<UserDto> users = userService.getAllUsersPaginated(page, pageSize);
     
             model.addAttribute("users", users.getContent()); 
-            boolean hasMore = page < users.getTotalPages() - 1;
-            model.addAttribute("hasMore", hasMore);
-    
-            System.out.println("Usuarios cargados: " + users.getContent().size());
-            System.out.println("Total páginas: " + users.getTotalPages());
-            System.out.println("Has more users: " + hasMore);
-    
-            return "moreUsers";
+            model.addAttribute("hasMore", users.hasNext()); 
+
+            return "moreUsers";  // Se sigue usando el mismo archivo para mostrar los usuarios
         } catch (Exception e) {
             System.err.println("Error en /moreUsers: " + e.getMessage());
             e.printStackTrace();

@@ -75,7 +75,7 @@ public class WebSecurityConfig {
 			.authorizeHttpRequests(authorize -> authorize
                     // PRIVATE ENDPOINTS
                     
-					.requestMatchers(HttpMethod.GET,"/api/users/{id}").hasRole("ADMIN")
+					
 
 					.requestMatchers(HttpMethod.GET,"/api/activities/").permitAll()
 					.requestMatchers(HttpMethod.GET,"/api/activities/**").permitAll()

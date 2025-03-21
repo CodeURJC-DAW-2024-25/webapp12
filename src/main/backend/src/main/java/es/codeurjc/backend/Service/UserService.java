@@ -119,9 +119,10 @@ public class UserService {
         return toDTO(userRepository.findById(id).orElseThrow());
     }
 
-    public Page<UserDto> getAllUsersPaginated(Pageable pageable){
-        Page<User> userPage= userRepository.findAll(pageable);
-        return userPage.map(user -> userMapper.toDto(user));
+    public Page<UserDto> getAllUsersPaginated(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<User> userPage = userRepository.findAll(pageable);
+        return userPage.map(userMapper::toDto);
     }
 
     public UserDto updateUser(Long userId, UserUpdateDto userUpdateDto) {
