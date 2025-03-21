@@ -25,7 +25,6 @@ import org.springframework.data.domain.Pageable;
 
 import es.codeurjc.backend.dto.ActivityDto;
 import es.codeurjc.backend.dto.UserDto;
-import es.codeurjc.backend.model.Activity;
 import es.codeurjc.backend.model.User;
 import es.codeurjc.backend.service.ActivityService;
 import es.codeurjc.backend.service.EmailService;
@@ -122,37 +121,37 @@ public class userController {
 
     
     @GetMapping("/adminUsers")
-public String showAdminUsers(Model model, HttpServletRequest request, Principal principal) {
-    // Verificar roles
-    model.addAttribute("admin", request.isUserInRole("ADMIN"));
-    model.addAttribute("user", request.isUserInRole("USER"));
+    public String showAdminUsers(Model model, HttpServletRequest request, Principal principal) {
+        // Verificar roles
+        model.addAttribute("admin", request.isUserInRole("ADMIN"));
+        model.addAttribute("user", request.isUserInRole("USER"));
 
-    // Obtener el usuario actual
-    String userEmail = principal.getName();
-    User user = userService.findByEmail(userEmail); 
+        // Obtener el usuario actual
+        String userEmail = principal.getName();
+        User user = userService.findByEmail(userEmail); 
 
-    // Obtener las actividades paginadas del usuario
-    int page = 0; // Página inicial
-    int pageSize = 4; // Tamaño de la página
-    Pageable pageable = PageRequest.of(page, pageSize);
-    Page<ActivityDto> activitiesPage = activityService.getActivitiesByUser(user.getId(), pageable);
+        // Obtener las actividades paginadas del usuario
+        int page = 0; // Página inicial
+        int pageSize = 4; // Tamaño de la página
+        Pageable pageable = PageRequest.of(page, pageSize);
+        Page<ActivityDto> activitiesPage = activityService.getActivitiesByUser(user.getId(), pageable);
 
-    // Obtener la lista de actividades suscritas
-    List<ActivityDto> subscribedActivities = activitiesPage.getContent();
+        // Obtener la lista de actividades suscritas
+        List<ActivityDto> subscribedActivities = activitiesPage.getContent();
 
-    // Obtener la lista de usuarios paginados
-    Page<UserDto> users = userService.getAllUsersPaginated(page, pageSize);
+        // Obtener la lista de usuarios paginados
+        Page<UserDto> users = userService.getAllUsersPaginated(page, pageSize);
 
-    // Agregar atributos al modelo
-    model.addAttribute("users", users.getContent()); 
-    model.addAttribute("hasMore", users.hasNext());
-    model.addAttribute("userCount", userService.countUsers());
-    model.addAttribute("countActivitiesSubscribed", subscribedActivities.size());
-    model.addAttribute("activityCount", activityService.activityCount());
-    model.addAttribute("userRegister", user);
+        // Agregar atributos al modelo
+        model.addAttribute("users", users.getContent()); 
+        model.addAttribute("hasMore", users.hasNext());
+        model.addAttribute("userCount", userService.countUsers());
+        model.addAttribute("countActivitiesSubscribed", subscribedActivities.size());
+        model.addAttribute("activityCount", activityService.activityCount());
+        model.addAttribute("userRegister", user);
 
-    return "adminUsers";
-}
+        return "adminUsers";
+    }
 
     @GetMapping("/moreUsers") 
     public String LoadMoreUser(@RequestParam int page, Model model) { 
@@ -171,11 +170,7 @@ public String showAdminUsers(Model model, HttpServletRequest request, Principal 
             e.printStackTrace();
             return "errorPage";  
         }
-    }
-    
-        
-    
-    
+    }  
 
     @GetMapping("/user/{id}/image")
 	public ResponseEntity<Object> downloadImage(@PathVariable long id) throws SQLException {
@@ -211,45 +206,63 @@ public String showAdminUsers(Model model, HttpServletRequest request, Principal 
 
 
 
-   @GetMapping("/profile")
+    @GetMapping("/profile")
     public String showProfile(Model model, Principal principal, HttpServletRequest request) {
+        // Verificar roles
         model.addAttribute("admin", request.isUserInRole("ADMIN"));
         model.addAttribute("user", request.isUserInRole("USER"));
+    
+        // Obtener el usuario actual
         String userEmail = principal.getName();
         User user = userService.findByEmail(userEmail);
-
+    
         if (user != null) {
+            // Agregar atributos básicos del usuario
             model.addAttribute("userRegister", user);
             model.addAttribute("userCount", userService.countUsers());
             model.addAttribute("activityCount", activityService.activityCount());
             model.addAttribute("id", user.getId());
-
-            
-            int page = 0;
-            Page<Activity> subscribedActivities = activityService.getActivitiesSubscribedPaginated(page, user);
+    
+            // Obtener las actividades suscritas paginadas
+            int page = 0; // Página inicial
+            int pageSize = 10; // Tamaño de la página (ajusta según sea necesario)
+            Pageable pageable = PageRequest.of(page, pageSize);
+            Page<ActivityDto> subscribedActivities = activityService.getActivitiesByUser(user.getId(), pageable);
+    
+            // Agregar las actividades suscritas al modelo
             model.addAttribute("subscribedActivities", subscribedActivities);
             model.addAttribute("countActivitiesSubscribed", subscribedActivities.getTotalElements());
+    
             return "profile";
         } else {
             return "redirect:/error";
         }
     }
 
-    @GetMapping("/moreActivitiesSubscribed") 
-    public String LoadMoreActivities(@RequestParam int page, Model model, Principal principal) { 
+    @GetMapping("/moreActivitiesSubscribed")
+    public String LoadMoreActivities(@RequestParam int page, Model model, Principal principal) {
+        // Obtener el usuario actual
         String userEmail = principal.getName();
         User user = userService.findByEmail(userEmail);
-        Page<Activity> activities = activityService.getActivitiesSubscribedPaginated(page, user);
-        model.addAttribute("subscribedActivities", activities.getContent());
-        boolean hasMore = page < activities.getTotalPages() - 1;
-        model.addAttribute("hasMore", hasMore);
-        model.addAttribute("subscribedActivities", activities.getContent());
-        return "moreActivitiesSubscribed";
-    } 
 
+        if (user != null) {
+            // Obtener las actividades suscritas paginadas
+            int pageSize = 10; // Tamaño de la página (ajusta según sea necesario)
+            Pageable pageable = PageRequest.of(page, pageSize);
+            Page<ActivityDto> activities = activityService.getActivitiesByUser(user.getId(), pageable);
 
+            // Agregar las actividades suscritas al modelo
+            model.addAttribute("subscribedActivities", activities.getContent());
 
+            // Verificar si hay más páginas
+            boolean hasMore = page < activities.getTotalPages() - 1;
+            model.addAttribute("hasMore", hasMore);
 
+            return "moreActivitiesSubscribed";
+        } else {
+            return "redirect:/error";
+        }
+    }
 
     @Transactional
     @PostMapping("/removeUser")

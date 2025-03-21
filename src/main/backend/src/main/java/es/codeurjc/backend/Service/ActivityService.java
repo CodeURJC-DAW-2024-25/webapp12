@@ -75,30 +75,7 @@ public class ActivityService {
     public Optional <Activity>  findById(long id){
         return activityRepository.findById(id);
     } 
-    
-   public List<Activity> findEventsSubscribe(User user){
-        return activityRepository.findByUsers(user);
-    }
-
-    public Page<Activity> getActivitiesSubscribed(Pageable pageable, User user) {
-        return activityRepository.findByUsers(pageable, user);
-    }
-
-    public Page<Activity> getActivitiesSubscribedPaginated(int page, User user) {
-        int size = 2;
-        Pageable pageable = PageRequest.of(page, size);
-        return activityRepository.findByUsers(pageable, user);
-    }
-
-
-
-    public Activity getActivityById(Long id) {
         
-        Optional<Activity> activityOptional = activityRepository.findById(id);
-        return activityOptional.orElse(null);
-       
-    }
-    
     public List<Activity> recommendActivities(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
