@@ -56,5 +56,15 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
 
     @Query("SELECT a FROM Activity a JOIN a.users u WHERE u.id = :userId")
     Page<Activity> findByUsersContaining(@Param("userId") Long userId, Pageable pageable);
+
+    @Query("SELECT a FROM Activity a " +
+           "WHERE (a.category IN :categories OR a.place IN :places) " +
+           "AND a NOT IN :userActivities")
+    Page<Activity> findSimilarActivities(
+        @Param("categories") Set<String> categories,
+        @Param("places") Set<Place> places,
+        @Param("userActivities") List<Activity> userActivities,
+        Pageable pageable
+    );
 }
 

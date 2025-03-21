@@ -334,5 +334,27 @@ public class ActivityRestController {
         // Devolver la respuesta
         return ResponseEntity.ok(activitiesPage);
     }
+
+	@Operation(summary = "Get activities recommended by user", description = "Returns a paginated list of activities recommended in which the user is enrolled.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Activities recommended returned successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ActivityDto.class))),
+        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
+        @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
+    })
+	@GetMapping("/users/{userId}/recommended-activities")
+    public ResponseEntity<Page<ActivityDto>> getRecommendedActivities(
+            @PathVariable Long userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "4") int size) {
+
+        // Crear el objeto Pageable
+        Pageable pageable = PageRequest.of(page, size);
+
+        // Obtener las actividades recomendadas paginadas
+        Page<ActivityDto> recommendedActivities = activityService.recommendActivities(userId, pageable);
+
+        // Devolver la respuesta con las actividades recomendadas
+        return ResponseEntity.ok(recommendedActivities);
+    }
 	
 }

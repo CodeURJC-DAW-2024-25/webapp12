@@ -35,9 +35,6 @@ import es.codeurjc.backend.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
-import org.springframework.data.domain.PageRequest;
-
-
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -75,25 +72,7 @@ public class ActivityService {
     public Optional <Activity>  findById(long id){
         return activityRepository.findById(id);
     } 
-        
-    public List<Activity> recommendActivities(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        
-       
-        List<Activity> userActivities = new ArrayList<>(user.getActivities());
-        
-        Set<String> categories = userActivities.stream()
-                .map(Activity::getCategory)
-                .collect(Collectors.toSet());
-        
-        Set<Place> places = userActivities.stream()
-                .map(Activity::getPlace)
-                .collect(Collectors.toSet());
-        
-        return activityRepository.findSimilarActivities(categories, places, userActivities);
-    }
-    
+         
     public Map<Integer, Long> countActivitiesByMonth() {
         List<Activity> activities = activityRepository.findAll();
         Map<Integer, Long> activitiesByMonth = new HashMap<>();
@@ -195,33 +174,23 @@ public class ActivityService {
         if (activity == null) {
             return false; 
         }
-
        
         if (activity.getVacancy() <= 0) {
             return false; 
         }
-
         
         User user = userRepository.findById(userId).orElse(null);
         if (user == null) {
             return false; 
         }
-
         
         if (user.getActivities().contains(activity)) {
             return false; 
         }
-
        
-        activity.setVacancy(activity.getVacancy() - 1);
-        
-        
-        activityRepository.save(activity);
-
-       
-        user.getActivities().add(activity);
-        
-        
+        activity.setVacancy(activity.getVacancy() - 1);              
+        activityRepository.save(activity);       
+        user.getActivities().add(activity);     
         userRepository.save(user);
 
         return true; 
@@ -450,6 +419,54 @@ public class ActivityService {
         ));
     }
 
+
+    @Transactional
+    public Page<ActivityDto> recommendActivities(Long userId, Pageable pageable) {
+        // Obtener el usuario
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        // Obtener las actividades del usuario
+        List<Activity> userActivities = new ArrayList<>(user.getActivities());
+
+        // Obtener las categorías y lugares de las actividades del usuario
+        Set<String> categories = userActivities.stream()
+                .map(Activity::getCategory)
+                .collect(Collectors.toSet());
+
+        Set<Place> places = userActivities.stream()
+                .map(Activity::getPlace)
+                .collect(Collectors.toSet());
+
+        // Obtener actividades recomendadas paginadas
+        Page<Activity> recommendedActivities = activityRepository.findSimilarActivities(categories, places, userActivities, pageable);
+
+        // Convertir las actividades a DTOs
+        return recommendedActivities.map(activity -> new ActivityDto(
+                activity.getId(),
+                activity.getName(),
+                activity.getCategory(),
+                activity.getDescription(),
+                activity.getVacancy(),
+                activity.getCreationDate(),
+                activity.getActivityDate(),
+                new PlaceDto(
+                    activity.getPlace().getId(),
+                    activity.getPlace().getName(),
+                    activity.getPlace().getDescription()
+                ),
+                activity.getReviews().stream()
+                    .map(review -> new ReviewDto(
+                        review.getId(),
+                        review.getDescription(),
+                        review.getStarsValue(),
+                        review.getCreationDate(),
+                        review.getUserFullName()
+                    ))
+                    .toList(),
+                activity.getImage()
+        ));
+    }
 
 }
 

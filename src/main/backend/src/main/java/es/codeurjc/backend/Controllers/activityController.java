@@ -98,9 +98,10 @@ public class activityController {
 
             User user = userService.findByEmail(userEmail);
             if (user != null) {
-                // Obtener actividades recomendadas
-                List<Activity> recommendedActivities = activityService.recommendActivities(user.getId());
-                model.addAttribute("recommendedActivities", recommendedActivities);
+                // Obtener actividades recomendadas paginadas
+                Page<ActivityDto> recommendedActivities = activityService.recommendActivities(user.getId(), pageable);
+                model.addAttribute("recommendedActivities", recommendedActivities.getContent()); // Lista de actividades recomendadas
+                model.addAttribute("hasMoreRecommended", recommendedActivities.hasNext()); // Indicador de si hay más páginas
             } else {
                 System.out.println("No se encontró el usuario con email: " + userEmail);
             }
