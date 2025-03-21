@@ -44,6 +44,7 @@ import org.springframework.data.domain.Pageable;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.http.ResponseEntity;
@@ -226,21 +227,16 @@ public class activityController {
     }
     @Transactional
     @PostMapping("/removeActivity")
-    public String removeActivity(@RequestParam Long id,Model model) {
-        Optional<Activity> optionalActivity = activityService.findById(id);
-        if(optionalActivity.isPresent()){
-            Activity activity = optionalActivity.get();
-            List <User> users = activity.getUsers();
-            for(User user: users){
-                user.getActivities().remove(activity);
-                userService.save(user);
-            }
-            activityService.delete(id);
+    public String removeActivity(@RequestParam Long id, Model model) {
+        try {
+            // Eliminar la actividad y todas sus relaciones
+            activityService.deleteActivity(id);
             return "redirect:/adminActivities";
-        }else{
+        } catch (EntityNotFoundException e) {
+            // Manejar el caso en que la actividad no se encuentre
+            model.addAttribute("error", "Actividad no encontrada con ID: " + id);
             return "error";
         }
-        
     }
 
     @GetMapping("/activity/{id}")

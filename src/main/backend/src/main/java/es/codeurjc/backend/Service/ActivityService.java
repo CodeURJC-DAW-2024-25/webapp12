@@ -67,11 +67,6 @@ public class ActivityService {
     private ReviewRepository reviewRepository;
 
 
-    public List<Activity> getAllActivities() {
-        List<Activity> activities = activityRepository.findAll();
-        System.out.println("Actividades desde el repositorio: " + activities);  
-        return activities;
-    }
     
     public Activity saveActivity(Activity activity) {
         return activityRepository.save(activity);
@@ -93,10 +88,6 @@ public class ActivityService {
         return activityRepository.findById(id);
     } 
     
-    public void delete(long id){
-        activityRepository.deleteById(id);
-    }
-
    public List<Activity> findEventsSubscribe(User user){
         return activityRepository.findByUsers(user);
     }
