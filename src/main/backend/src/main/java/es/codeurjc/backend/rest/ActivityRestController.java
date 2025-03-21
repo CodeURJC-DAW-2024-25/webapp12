@@ -312,5 +312,27 @@ public class ActivityRestController {
 
         return ResponseEntity.ok(activitiesPage);
     }
+
+	@Operation(summary = "Get activities by user", description = "Returns a paginated list of activities in which the user is enrolled.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Activities returned successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ActivityDto.class))),
+        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
+        @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
+    })
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<Page<ActivityDto>> getActivitiesByUser(
+            @PathVariable Long userId,
+            @RequestParam(defaultValue = "0") int page, // Parámetro de consulta para la página
+            @RequestParam(defaultValue = "2") int size) { // Parámetro de consulta para el tamaño de la página
+
+        // Crear el objeto Pageable
+        Pageable pageable = PageRequest.of(page, size);
+
+        // Obtener las actividades paginadas
+        Page<ActivityDto> activitiesPage = activityService.getActivitiesByUser(userId, pageable);
+
+        // Devolver la respuesta
+        return ResponseEntity.ok(activitiesPage);
+    }
 	
 }

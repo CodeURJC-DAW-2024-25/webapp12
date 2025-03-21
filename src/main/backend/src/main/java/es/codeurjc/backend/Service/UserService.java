@@ -3,19 +3,17 @@ package es.codeurjc.backend.service;
 import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import es.codeurjc.backend.dto.NewUserDto;
 import es.codeurjc.backend.dto.UserDto;
 import es.codeurjc.backend.dto.UserMapper;
 import es.codeurjc.backend.dto.UserUpdateDto;
-import es.codeurjc.backend.model.Activity;
-import es.codeurjc.backend.model.Review;
+
 import es.codeurjc.backend.model.User;
 import es.codeurjc.backend.repository.UserRepository;
-import es.codeurjc.backend.service.ActivityService;
-import es.codeurjc.backend.service.ReviewService;
+
 import es.codeurjc.backend.security.CSRFHandlerConfiguration;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.core.io.InputStreamResource;
@@ -24,7 +22,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import jakarta.transaction.Transactional;
 
@@ -233,4 +231,14 @@ public class UserService {
 
 		userRepository.save(user);
 	}
+
+    
+    public User convertToUser(UserDto userDto) {
+        User user = new User();
+        user.setId(userDto.id());
+        user.setName(userDto.name());
+        user.setEmail(userDto.email());
+        
+        return user;
+    }
 }

@@ -29,6 +29,9 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
 
     List<Activity> findByUsers(User user);
     Page<Activity> findByUsers(Pageable pageable, User user);
+
+    @Query("SELECT a FROM Activity a JOIN a.users u WHERE u.id = :userId")
+    Page<Activity> findByUsers(@Param("userId") Long userId, Pageable pageable);
     
     List<Activity> findByPlace(Place place);
 
@@ -50,5 +53,8 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
     Page<Activity> findAllWithReviews(Pageable pageable);
 
     Page<Activity> findByPlace(Place place, Pageable pageable);
+
+    @Query("SELECT a FROM Activity a JOIN a.users u WHERE u.id = :userId")
+    Page<Activity> findByUsersContaining(@Param("userId") Long userId, Pageable pageable);
 }
 

@@ -463,6 +463,38 @@ public class ActivityService {
         ));
     }
 
+    @Transactional
+    public Page<ActivityDto> getActivitiesByUser(Long userId, Pageable pageable) {
+        // Obtener las actividades paginadas del repositorio
+        Page<Activity> activitiesPage = activityRepository.findByUsers(userId, pageable);
+
+        // Convertir las actividades a DTOs
+        return activitiesPage.map(activity -> new ActivityDto(
+                activity.getId(),
+                activity.getName(),
+                activity.getCategory(),
+                activity.getDescription(),
+                activity.getVacancy(),
+                activity.getCreationDate(),
+                activity.getActivityDate(),
+                new PlaceDto(
+                    activity.getPlace().getId(),
+                    activity.getPlace().getName(),
+                    activity.getPlace().getDescription()
+                ),
+                activity.getReviews().stream()
+                    .map(review -> new ReviewDto(
+                        review.getId(),
+                        review.getDescription(),
+                        review.getStarsValue(),
+                        review.getCreationDate(),
+                        review.getUserFullName()
+                    ))
+                    .toList(),
+                activity.getImage()
+        ));
+    }
+
 
 }
 
