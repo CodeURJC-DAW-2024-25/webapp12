@@ -23,9 +23,17 @@ import es.codeurjc.backend.service.UserService;
 
 import org.springframework.data.domain.Page;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/reviews")
+@Tag(name = "Review Controller", description = "Endpoints for managing reviews")
 public class ReviewRestController {
 
     @Autowired
@@ -34,20 +42,35 @@ public class ReviewRestController {
     @Autowired
     private UserService userService;
 
+    @Operation(summary = "Get reviews by activity ID", description = "Returns a paginated list of reviews for a specific activity.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Reviews returned successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ReviewDto.class))),
+        @ApiResponse(responseCode = "400", description = "Invalid activity ID supplied", content = @Content),
+        @ApiResponse(responseCode = "404", description = "Activity not found", content = @Content),
+        @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
+    })
     @GetMapping("/activity/{activityId}")
     public ResponseEntity<Page<ReviewDto>> getReviewsByActivity(
-            @PathVariable Long activityId,
-            @RequestParam(defaultValue = "0") int page) { 
+            @Parameter(description = "ID of the activity to fetch reviews for", required = true) @PathVariable Long activityId,
+            @Parameter(description = "Page number (starting from 0)", example = "0") @RequestParam(defaultValue = "0") int page) { 
 
         Page<ReviewDto> reviewsPage = reviewService.getReviewsPaginatedDto(activityId, page);
 
         return ResponseEntity.ok(reviewsPage);
     }
 
+    @Operation(summary = "Add a review to an activity", description = "Adds a new review to the specified activity. Requires authentication.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Review added successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ReviewDto.class))),
+        @ApiResponse(responseCode = "400", description = "Invalid input data", content = @Content),
+        @ApiResponse(responseCode = "401", description = "Unauthorized - User not authenticated", content = @Content),
+        @ApiResponse(responseCode = "404", description = "Activity or user not found", content = @Content),
+        @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
+    })
     @PostMapping("/activity/{activityId}")
     public ResponseEntity<?> addReview(
-            @PathVariable Long activityId,
-            @RequestBody NewReviewDto newReviewDto,
+            @Parameter(description = "ID of the activity to add the review to", required = true) @PathVariable Long activityId,
+            @Parameter(description = "Review data to add", required = true) @RequestBody NewReviewDto newReviewDto,
             Principal principal) {
 
         if (principal == null) {
@@ -68,10 +91,19 @@ public class ReviewRestController {
         }
     }
 
+    @Operation(summary = "Update a review", description = "Updates an existing review. Requires authentication and ownership of the review.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Review updated successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ReviewDto.class))),
+        @ApiResponse(responseCode = "400", description = "Invalid input data", content = @Content),
+        @ApiResponse(responseCode = "401", description = "Unauthorized - User not authenticated", content = @Content),
+        @ApiResponse(responseCode = "403", description = "Forbidden - User does not own the review", content = @Content),
+        @ApiResponse(responseCode = "404", description = "Review not found", content = @Content),
+        @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
+    })
     @PutMapping("/{reviewId}")
     public ResponseEntity<?> updateReview(
-            @PathVariable Long reviewId,
-            @RequestBody NewReviewDto newReviewDto,
+            @Parameter(description = "ID of the review to update", required = true) @PathVariable Long reviewId,
+            @Parameter(description = "Updated review data", required = true) @RequestBody NewReviewDto newReviewDto,
             Principal principal) {
 
         if (principal == null) {
@@ -93,9 +125,15 @@ public class ReviewRestController {
         }
     }
 
+    @Operation(summary = "Delete a review", description = "Deletes an existing review by its ID.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Review deleted successfully", content = @Content),
+        @ApiResponse(responseCode = "404", description = "Review not found", content = @Content),
+        @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
+    })
     @DeleteMapping("/{reviewId}")
     public ResponseEntity<?> deleteReviewById(
-            @PathVariable Long reviewId) {
+            @Parameter(description = "ID of the review to delete", required = true) @PathVariable Long reviewId) {
         try {
             reviewService.deleteReviewById(reviewId);
             return ResponseEntity.ok("Revisión eliminada correctamente"); // Respuesta 200 OK 
