@@ -69,7 +69,7 @@ public class WebSecurityConfig {
 		http.authenticationProvider(authenticationProvider());
 		
 		http
-			.securityMatcher("/api/")
+			.securityMatcher("/api/**")
 			.exceptionHandling(handling -> handling.authenticationEntryPoint(unauthorizedHandlerJwt));
 		
 		http
@@ -77,7 +77,7 @@ public class WebSecurityConfig {
                     // PRIVATE ENDPOINTS
                     
 					
-
+					
 					.requestMatchers(HttpMethod.GET,"/api/activities/").permitAll()
 					.requestMatchers(HttpMethod.GET,"/api/activities/").permitAll()
 					.requestMatchers(HttpMethod.GET,"/api/activities/{id}").permitAll()
@@ -85,6 +85,7 @@ public class WebSecurityConfig {
 					.requestMatchers(HttpMethod.GET,"/api/activities/user/{id}").permitAll()
 					.requestMatchers(HttpMethod.GET,"/api/activities/search").permitAll()
 					.requestMatchers(HttpMethod.GET,"/api/reviews/activity/").permitAll()
+					
 
 
 					.requestMatchers(HttpMethod.POST,"/api/activities/{id}/reserve").hasRole("USER")
@@ -94,9 +95,15 @@ public class WebSecurityConfig {
 					.requestMatchers(HttpMethod.PUT,"/api/reviews/").hasRole("USER")
 
 					.requestMatchers(HttpMethod.POST,"/api/activities/").hasRole("ADMIN")
+					.requestMatchers(HttpMethod.GET,"/api/users/").hasRole("ADMIN")
 					.requestMatchers(HttpMethod.PUT,"/api/activities/{id}").hasRole("ADMIN")
+					.requestMatchers(HttpMethod.GET,"/api/users/{id}").hasRole("ADMIN")
 					.requestMatchers(HttpMethod.DELETE,"/api/activities/{id}").hasRole("ADMIN")
+					.requestMatchers(HttpMethod.GET,"/api/users/{id}/image").hasRole("ADMIN")
 					.requestMatchers(HttpMethod.DELETE,"/api/activities/{id}/image").hasRole("ADMIN")
+					.requestMatchers(HttpMethod.DELETE,"/api/users/{id}").hasRole("ADMIN")
+					.requestMatchers(HttpMethod.POST,"/api/users/").hasRole("ADMIN")
+					.requestMatchers(HttpMethod.PUT,"/api/users/{id}").hasRole("ADMIN")
 					
 					.requestMatchers(HttpMethod.POST,"/api/activities/{id}/image").hasRole("ADMIN")
 					.requestMatchers(HttpMethod.PUT,"/api/activities/{id}/image").hasRole("ADMIN")
