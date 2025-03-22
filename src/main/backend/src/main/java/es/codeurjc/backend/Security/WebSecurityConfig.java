@@ -68,7 +68,7 @@ public class WebSecurityConfig {
 		http.authenticationProvider(authenticationProvider());
 		
 		http
-			.securityMatcher("/api/**")
+			.securityMatcher("/api/")
 			.exceptionHandling(handling -> handling.authenticationEntryPoint(unauthorizedHandlerJwt));
 		
 		http
@@ -78,16 +78,19 @@ public class WebSecurityConfig {
 					
 
 					.requestMatchers(HttpMethod.GET,"/api/activities/").permitAll()
-					.requestMatchers(HttpMethod.GET,"/api/activities/**").permitAll()
+					.requestMatchers(HttpMethod.GET,"/api/activities/").permitAll()
 					.requestMatchers(HttpMethod.GET,"/api/activities/{id}").permitAll()
 					.requestMatchers(HttpMethod.GET,"/api/activities/{id}/image").permitAll()
 					.requestMatchers(HttpMethod.GET,"/api/activities/user/{id}").permitAll()
 					.requestMatchers(HttpMethod.GET,"/api/activities/search").permitAll()
+					.requestMatchers(HttpMethod.GET,"/api/reviews/activity/").permitAll()
 
 
 					.requestMatchers(HttpMethod.POST,"/api/activities/{id}/reserve").hasRole("USER")
-					.requestMatchers(HttpMethod.POST,"/api/activities/users/**").hasRole("USER")
-					.requestMatchers(HttpMethod.POST,"/api/activities/user/**").hasRole("USER")
+					.requestMatchers(HttpMethod.POST,"/api/activities/users/").hasRole("USER")
+					.requestMatchers(HttpMethod.POST,"/api/activities/user/").hasRole("USER")
+					.requestMatchers(HttpMethod.POST,"/api/reviews/activity/").hasRole("USER")
+					.requestMatchers(HttpMethod.PUT,"/api/reviews/").hasRole("USER")
 
 					.requestMatchers(HttpMethod.POST,"/api/activities/").hasRole("ADMIN")
 					.requestMatchers(HttpMethod.PUT,"/api/activities/{id}").hasRole("ADMIN")
@@ -99,6 +102,7 @@ public class WebSecurityConfig {
 					.requestMatchers(HttpMethod.GET,"/api/statistics/activities-by-month").hasRole("ADMIN")
 					.requestMatchers(HttpMethod.GET,"/api/statistics/review-statistics").hasRole("ADMIN")
 					.requestMatchers(HttpMethod.GET,"/api/statistics/general-statistics").hasRole("ADMIN")
+					.requestMatchers(HttpMethod.DELETE,"/api/reviews/").hasRole("ADMIN")
 
 
 					// PUBLIC ENDPOINTS
@@ -130,14 +134,14 @@ public class WebSecurityConfig {
 		http.authenticationProvider(authenticationProvider());
 		http.authorizeHttpRequests(authorize -> authorize
 				// STATIC RESOURCES
-				.requestMatchers("/assets/**", "/css/**", "/js/**", "/img/**", "/images/**", "/scss/**", "/cdn-cgi/**", "/cloudflare-static/**", "/plugins/**").permitAll()
+				.requestMatchers("/assets/", "/css/", "/js/", "/img/", "/images/", "/scss/", "/cdn-cgi/", "/cloudflare-static/", "/plugins/").permitAll()
 
 				// PUBLIC PAGES
 				.requestMatchers("/").permitAll()
 				.requestMatchers("/login").permitAll()
 				.requestMatchers("/signup").permitAll()
 				.requestMatchers("/register").permitAll()
-				.requestMatchers("/activity/**").permitAll()
+				.requestMatchers("/activity/").permitAll()
 				.requestMatchers("/index").permitAll()
 				.requestMatchers("/moreActivities").permitAll()
 				.requestMatchers("/moreReviews").permitAll()
@@ -151,14 +155,14 @@ public class WebSecurityConfig {
 				// USER PAGES
 				
 				.requestMatchers("/profile").hasAnyRole("USER")
-				.requestMatchers("/editUserProfile/**").hasAnyRole("USER")
+				.requestMatchers("/editUserProfile/").hasAnyRole("USER")
 				.requestMatchers("/activity/{activityId}/addReview").hasAnyRole("USER")
 				// ADMIN PAGES
 				.requestMatchers("/adminActivities").hasAnyRole("ADMIN")
 				.requestMatchers("/adminUsers").hasAnyRole("ADMIN")
 				.requestMatchers("/statistics").hasAnyRole("ADMIN")
 				.requestMatchers("/createActivity").hasAnyRole("ADMIN")
-				.requestMatchers("/editActivity/**").hasAnyRole("ADMIN")
+				.requestMatchers("/editActivity/").hasAnyRole("ADMIN")
 				.requestMatchers("/removeActivity").hasAnyRole("ADMIN")
 				.requestMatchers("/removeUser").hasAnyRole("ADMIN")
 				
