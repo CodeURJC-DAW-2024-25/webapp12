@@ -2,6 +2,7 @@ package es.codeurjc.backend.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -13,12 +14,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import es.codeurjc.backend.dto.ReviewDto;
 import es.codeurjc.backend.model.Activity;
 import es.codeurjc.backend.model.Review;
 import es.codeurjc.backend.model.User;
 import es.codeurjc.backend.repository.ActivityRepository;
 import es.codeurjc.backend.repository.ReviewRepository;
 import es.codeurjc.backend.repository.UserRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class ReviewService {
@@ -26,10 +29,10 @@ public class ReviewService {
     private ReviewRepository reviewRepository; 
 
      @Autowired
-    private ActivityRepository ActivityRepository; 
+    private ActivityRepository activityRepository; 
 
     @Autowired
-    private UserRepository UserRepository;
+    private UserRepository userRepository;
     
     public void delete(long id){
         reviewRepository.deleteById(id);
@@ -56,8 +59,8 @@ public class ReviewService {
         return reviewListValoration; 
     }
     public void saveReview(Long activityId, int starsValue, String description, Long userId) {
-        Optional<Activity> activityOpt = ActivityRepository.findById(activityId);
-        Optional<User> userOpt = UserRepository.findById(userId); 
+        Optional<Activity> activityOpt = activityRepository.findById(activityId);
+        Optional<User> userOpt = userRepository.findById(userId); 
 
         if (activityOpt.isPresent() && userOpt.isPresent()) {
             Review review = new Review();
@@ -85,7 +88,80 @@ public class ReviewService {
                         Collectors.counting()  
                 ));
     }
+
+    @Transactional
+    public Page<ReviewDto> getReviewsPaginatedDto(Long activityId, int page) {
+        int size = 2;
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Review> reviewsPage = reviewRepository.findByActivityId(activityId, pageable);
+
+        return reviewsPage.map(review -> new ReviewDto(
+            review.getId(),
+            review.getDescription(),
+            review.getStarsValue(),
+            review.getCreationDate(),
+            review.getUserFullName()
+        ));
+    }
+
+    @Transactional
+    public ReviewDto saveReviewDto(Long activityId, int starsValue, String comment, Long userId) {
+        Activity activity = activityRepository.findById(activityId)
+                .orElseThrow(() -> new RuntimeException("Actividad no encontrada"));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
     
+        Review review = new Review();
+        review.setStarsValue(starsValue);
+        review.setDescription(comment);
+        review.setUser(user);
+        review.setActivity(activity);
+        review.setCreationDate(Calendar.getInstance());
+    
+        Review savedReview = reviewRepository.save(review);
+    
+        return new ReviewDto(
+                savedReview.getId(),
+                savedReview.getDescription(),
+                savedReview.getStarsValue(),
+                savedReview.getCreationDate(),
+                savedReview.getUserFullName() 
+        );
+    }
+
+    @Transactional
+    public ReviewDto updateReview(Long reviewId, int starsValue, String comment, Long userId) {
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new RuntimeException("Revisión no encontrada"));
+
+        if (!review.getUser().getId().equals(userId)) {
+            throw new RuntimeException("No tienes permiso para modificar esta revisión");
+        }
+
+        review.setStarsValue(starsValue);
+        review.setDescription(comment);
+
+        Review updatedReview = reviewRepository.save(review);
+
+        return new ReviewDto(
+                updatedReview.getId(),
+                updatedReview.getDescription(),
+                updatedReview.getStarsValue(),
+                updatedReview.getCreationDate(),
+                updatedReview.getUserFullName()
+        );
+    }
+
+    @Transactional
+    public void deleteReviewById(Long reviewId) {
+        if (!reviewRepository.existsById(reviewId)) {
+            throw new RuntimeException("Revisión no encontrada");
+        }
+    
+        reviewRepository.deleteById(reviewId);
+    }
+        
     
 
 }
