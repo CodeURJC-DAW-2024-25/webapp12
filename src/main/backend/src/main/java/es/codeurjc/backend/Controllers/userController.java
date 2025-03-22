@@ -52,7 +52,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 
 @Controller
-public class userController {
+public class UserController {
     @Autowired
     private UserService userService;
 

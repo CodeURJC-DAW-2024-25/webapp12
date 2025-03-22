@@ -30,7 +30,7 @@ import org.springframework.data.domain.PageRequest;
 import es.codeurjc.backend.model.User;
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
 
-import es.codeurjc.backend.controllers.userController;
+import es.codeurjc.backend.controllers.UserController;
 import es.codeurjc.backend.dto.ActivityDto;
 import es.codeurjc.backend.dto.NewUserDto;
 import es.codeurjc.backend.dto.UserDto;
