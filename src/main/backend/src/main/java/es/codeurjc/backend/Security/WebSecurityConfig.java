@@ -75,7 +75,8 @@ public class WebSecurityConfig {
 			.authorizeHttpRequests(authorize -> authorize
                     // PRIVATE ENDPOINTS
                     
-					
+					.requestMatchers("/css/**", "/js/**", "/images/**", "/img/**", "/plugins/**").permitAll()
+
 
 					.requestMatchers(HttpMethod.GET,"/api/activities/").permitAll()
 					.requestMatchers(HttpMethod.GET,"/api/activities/").permitAll()
