@@ -950,6 +950,158 @@
 					]
 				}
 			]
+		},
+		{
+			"name": "Review",
+			"item": [
+				{
+					"name": "get review from activity",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var template = `\r",
+									"<style type=\"text/css\">\r",
+									"    .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}\r",
+									"    .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}\r",
+									"    .tftable tr {background-color:#ffffff;}\r",
+									"    .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}\r",
+									"    .tftable tr:hover {background-color:#e0ffff;}\r",
+									"</style>\r",
+									"\r",
+									"<table class=\"tftable\" border=\"1\">\r",
+									"    <tr>\r",
+									"        <th>ID</th>\r",
+									"        <th>Comment</th>\r",
+									"        <th>Stars Value</th>\r",
+									"        <th>Creation Date</th>\r",
+									"        <th>User Full Name</th>\r",
+									"    </tr>\r",
+									"    \r",
+									"    {{#each response.content}}\r",
+									"        <tr id=row_{{@key}}>\r",
+									"            <td>{{id}}</td>\r",
+									"            <td>{{comment}}</td>\r",
+									"            <td>{{starsValue}}</td>\r",
+									"            <td>{{creationDate}}</td>\r",
+									"            <td>{{userFullName}}</td>\r",
+									"        </tr>\r",
+									"    {{/each}}\r",
+									"</table>\r",
+									"`;\r",
+									"\r",
+									"function constructVisualizerPayload() {\r",
+									"    return {response: pm.response.json()}\r",
+									"}\r",
+									"\r",
+									"pm.visualizer.set(template, constructVisualizerPayload());"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:8443/api/reviews/activity/1?page=2&size=2",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"reviews",
+								"activity",
+								"1"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "2"
+								},
+								{
+									"key": "size",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add new review",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"starsValue\": 1,\r\n    \"comment\": \"Prueba prueba prueba.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8443/api/reviews/activity/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"reviews",
+								"activity",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "edit review",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"comment\": \"Prueba modifcada.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8443/api/reviews/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"reviews",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete review",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
