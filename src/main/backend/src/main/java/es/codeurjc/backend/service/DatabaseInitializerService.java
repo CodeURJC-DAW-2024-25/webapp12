@@ -4,10 +4,11 @@ import java.io.IOException;
 
 import java.net.URISyntaxException;
 import java.sql.Date;
-
+import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.sql.rowset.serial.SerialBlob;
 
 
 
@@ -50,7 +51,7 @@ public class DatabaseInitializerService {
 
 	
 	@PostConstruct
-	public void init() throws IOException, URISyntaxException {
+	public void init() throws IOException, URISyntaxException, SQLException {
 		
 		User user1 = new User("Paula", "Ruiz Rubio", "paula@email.com", "12345567D", "556673336",passwordEncoder.encode("1234"));
 		user1.setRoles(List.of("USER"));
@@ -351,16 +352,22 @@ public class DatabaseInitializerService {
 
 	}
 
-	public void setActivityImage(Activity activity, String classpathResource) throws IOException {
+	public void setActivityImage(Activity activity, String classpathResource) throws IOException, SQLException {
 		activity.setImage(true);
 		Resource image = new ClassPathResource(classpathResource);
-		activity.setImageFile(BlobProxy.generateProxy(image.getInputStream(), image.contentLength()));
+		byte[] data = image.getInputStream().readAllBytes();
+		SerialBlob blob = new SerialBlob(data);
+		activity.setImageFile(blob);
 	}
+	
 
-	public void setUserImage(User user, String classpathResource) throws IOException {
+	public void setUserImage(User user, String classpathResource) throws IOException, SQLException {
 		user.setImage(true);
 		Resource image = new ClassPathResource(classpathResource);
-		user.setImageFile(BlobProxy.generateProxy(image.getInputStream(), image.contentLength()));
+		byte[] data = image.getInputStream().readAllBytes();
+		SerialBlob blob = new SerialBlob(data);
+		user.setImageFile(blob);
 	}
+
 
 }

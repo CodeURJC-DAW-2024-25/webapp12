@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0.33
+    container_name: pixel-db
+    restart: "no"
+    environment:
+      MYSQL_DATABASE: Pixel_Paradise
+      MYSQL_ROOT_PASSWORD: 1234
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - pixel-network
+
+  app:
+    build: .
+    container_name: pixel-app
+    ports:
+      - "443:8443"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/Pixel_Paradise
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 1234
+    restart: "no"
+    networks:
+      - pixel-network
+
+volumes:
+  db_data:
+
+networks:
+  pixel-network:
