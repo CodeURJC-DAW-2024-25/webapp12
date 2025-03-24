@@ -375,31 +375,29 @@ ccredentials : (También se deberán incluir las credenciales de los usuarios de
 
 ### **Alba Velasco Marqués**
 Task List
-1.  
-2.   
-3. 
-4. 
-5.
+1. Do all user dto files
+2. Unify the user service for both controllers
+3. Make user Postman requests
 
 -Commits:
 
 | Commit   | Link   | 
 |----------|------------|
-|  | | 
-|  | | 
-|  | |
-| |  |
-| | |
+| Model de userDto y conseguido api de lista de users  | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/dc1c23ed361f826a41906563daa6ade2af44ee42 | 
+| conseguido logica unificada pageable user | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/b295c32ec4d76fc9dc9dde2755bbcf8349fc1025#diff-e522951d633aa2432cc00a8743b0753b548ca4ab3b2bc92972ac4b85eba323e8 | 
+| editar user e imagen en api | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/8fb508fc939ef3b2817bcfe559ce6d063fe93a3b#diff-6b862065f4c79b8a509ad9e86055c509aba9b96019ce8e30d5e5cf5e69274523 |
+| unificado service deleteUser/id | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/fccbea7753e3c838c9f3f27871197c7fc83148d1#diff-bc8f52316f497cf987879097b203f482bc7a6466e8afce44d0b70ebcdf0d0a46  |
+| arreglos de peticiones y openAi | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/ece9fa5bbd1c6c558df6bab272714d79d8edc7d6 |
 
 -Files:
 
 | File   | Link   | 
 |----------|------------|
-|  |  | 
-| |  | 
-|   | |
-| |  |
-|  ||
+| UserService.java  | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/java/es/codeurjc/backend/Service/UserService.java | 
+| UserController.java | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/java/es/codeurjc/backend/Controllers/UserController.java | 
+| UserRestController.java | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/java/es/codeurjc/backend/rest/UserRestController.java |
+| WebSecurityConfig.java | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/java/es/codeurjc/backend/Security/WebSecurityConfig.java |
+| UserDto.java | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/java/es/codeurjc/backend/dto/UserDto.java |
 
 ---
 
