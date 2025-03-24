@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
 import es.codeurjc.backend.model.User;
@@ -169,25 +170,18 @@ public class UserRestController {
 			@ApiResponse(responseCode = "405", description = "Not allowed", content = @Content) })
 	
 	@PutMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<Object> replaceUserImage(@PathVariable long id, @RequestParam("file") MultipartFile file) {
+	public ResponseEntity<Object> replaceUserImage(@PathVariable long id) throws SQLException {
 		Optional<User> optionalUser = userService.findById(id);
 
-		if (optionalUser.isPresent()) {
-			User user = optionalUser.get();
+		if (optionalUser.isPresent() && optionalUser.get().getImageFile() != null) {
+			Resource file = new InputStreamResource(optionalUser.get().getImageFile().getBinaryStream());
 
-			try {
-				Blob imageBlob = new SerialBlob(file.getBytes());
-
-				user.setImageFile(imageBlob);
-				user.setImage(true); 
-				userService.save(user); 
-
-				return ResponseEntity.ok("Imagen actualizada correctamente"); // 200 OK 
-			} catch (IOException | SQLException e) {
-				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar la imagen"); // 500 Internal Server Error 
-			}
+			return ResponseEntity.ok()
+					.header(HttpHeaders.CONTENT_TYPE, "image/jpeg") 
+					.contentLength(optionalUser.get().getImageFile().length())
+					.body(file);
 		} else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Actividad no encontrada"); // 404 Not Found 
+			return ResponseEntity.notFound().build();
 		}
 	}
 }
