@@ -18,6 +18,7 @@ import javax.sql.rowset.serial.SerialBlob;
 import org.mapstruct.control.MappingControl.Use;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -62,11 +63,20 @@ public class UserRestController {
 	@Autowired
 	private UserService userService;
 
-	@GetMapping("/")
-	public Collection<UserDto> getUsers() {
+	@Operation(summary = "Get every users", description = "Returns a list with every user.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List with users returned successfully", 
+                        content = @Content(mediaType = "application/json", 
+                        schema = @Schema(implementation = UserDto.class))),
+            @ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+            @ApiResponse(responseCode = "404", description = "User not found", content = @Content) })
+    
+    @GetMapping("/")
+    public ResponseEntity<Collection<UserDto>> getUsers() {
+        return ResponseEntity.ok(userService.getUsersDtos());
+    }
 
-		return userService.getUsersDtos();
-	}
 	@Operation(summary = "Get every users", description = "Returns a list with every user.")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "List with users returned successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDto.class))),
