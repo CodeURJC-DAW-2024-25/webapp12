@@ -31,27 +31,33 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	}
 
 	@Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+			throws ServletException, IOException {
+		
+		// Solo procesar JWT para rutas API
+		if (!request.getRequestURI().startsWith("/api/")) {
+			filterChain.doFilter(request, response);
+			return;
+		}
+		
+		try {
+			var claims = jwtTokenProvider.validateToken(request, true); // Intenta validar el token
+			var userDetails = userDetailsService.loadUserByUsername(claims.getSubject());
 
-        try {
-            var claims = jwtTokenProvider.validateToken(request, true); // Intenta validar el token
-            var userDetails = userDetailsService.loadUserByUsername(claims.getSubject());
+			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+					userDetails, null, userDetails.getAuthorities());
 
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                    userDetails, null, userDetails.getAuthorities());
+			authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+			SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+		} catch (Exception ex) {
+			// Si hay un error (token inválido o ausente), rechaza la petición
+			SecurityContextHolder.clearContext();
+			filterChain.doFilter(request, response); // Continúa para que el `AuthenticationEntryPoint` maneje el error
+			return;
+		}
 
-        } catch (Exception ex) {
-            // Si hay un error (token inválido o ausente), rechaza la petición
-            SecurityContextHolder.clearContext();
-            filterChain.doFilter(request, response); // Continúa para que el `AuthenticationEntryPoint` maneje el error
-            return;
-        }
-
-        filterChain.doFilter(request, response);
-    }
+		filterChain.doFilter(request, response);
+	}
 
 }

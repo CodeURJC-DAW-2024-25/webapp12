@@ -123,13 +123,8 @@ public class WebSecurityConfig {
         // Disable CSRF protection (it is difficult to implement in REST APIs)
         http.csrf(csrf -> csrf.disable());
 
-        // Disable Basic Authentication
-        http.httpBasic(httpBasic -> httpBasic.disable());
-
         // Stateless session
         http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
-		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
 		// Add JWT Token filter
 		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
@@ -196,6 +191,10 @@ public class WebSecurityConfig {
 						.logoutUrl("/logout")
 						.logoutSuccessUrl("/")
 						.permitAll());
+			
+			 // Stateless session
+			 http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.ALWAYS));
+
 		
 		return http.build();
 	}
