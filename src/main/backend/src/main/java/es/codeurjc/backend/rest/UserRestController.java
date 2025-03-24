@@ -1,6 +1,7 @@
 package es.codeurjc.backend.rest;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 
 import org.springframework.http.HttpHeaders;
@@ -44,6 +45,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.persistence.EntityNotFoundException;
 
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -117,7 +119,12 @@ public class UserRestController {
             return ResponseEntity.notFound().build();
         }
 	}
-
+	@Operation(summary = "Create new user", description = "Creates a new user and returns that new user.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "201", description = "User created successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDto.class))),
+			@ApiResponse(responseCode = "403", description = "The request is unauthorized", content = @Content),
+			@ApiResponse(responseCode = "404", description = "Not found", content = @Content) })
+	
 	@PostMapping("/")
 	public ResponseEntity<UserDto> createUser(@RequestBody NewUserDto newUserDto){
         UserDto userDto = userService.createUser(newUserDto);
@@ -126,7 +133,7 @@ public class UserRestController {
 
 		return ResponseEntity.created(location).body(userDto);
     } 
-	@Operation(summary = "Delete user", description = "Users an activity and returns that deleted user.")
+	@Operation(summary = "Delete user", description = "Delete an user and returns that deleted user.")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "User deleted successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDto.class))),
 			@ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
@@ -134,9 +141,15 @@ public class UserRestController {
 			@ApiResponse(responseCode = "405", description = "Not allowed", content = @Content)
 	})
 	@DeleteMapping("/{id}")
-	public ResponseEntity<UserDto> deleteUser(@PathVariable Long id) {
-		UserDto deletedUser = userService.deleteUser(id);
-		return ResponseEntity.ok().body(deletedUser);
+	public ResponseEntity<String> deleteUser(@PathVariable Long id) {
+		try {
+			userService.deleteUser(id);
+			return ResponseEntity.ok("Usuario eliminado correctamente"); // 200 OK con mensaje
+		} catch (EntityNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrada"); // 404 Not Found con mensaje
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar la usuario"); // 500 Internal Server Error con mensaje
+		}
 	}
 	@Operation(summary = "Delete user image", description = "Deletes an user imageand returns that deleted user.")
 	@ApiResponses(value = {
@@ -146,9 +159,24 @@ public class UserRestController {
 			@ApiResponse(responseCode = "405", description = "Not allowed", content = @Content)
 	})
 	@DeleteMapping("/{id}/image")
-	public ResponseEntity<Object> deleteUserImage(@PathVariable Long id)throws IOException{
-		userService.deleteUserImage(id);
-		return ResponseEntity.noContent().build();
+	public ResponseEntity<String> deleteUserImage(@PathVariable Long id)throws IOException{
+		Optional<User> optionalUser = userService.findById(id);
+
+		if (optionalUser.isPresent()) {
+			User user = optionalUser.get();
+
+			if (user.getImageFile() != null) {
+				user.setImageFile(null);
+				user.setImage(false);
+				userService.save(user);
+
+				return ResponseEntity.ok("Imagen eliminada correctamente"); // 200 OK 
+			} else {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay imagen para eliminar"); // 404 Not Found 
+			}
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrada"); // 404 Not Found 
+		}
 	}
 	@Operation(summary = "Update an user", description = "Updates the information and resources of an user.")
 	@ApiResponses(value = {
@@ -158,9 +186,16 @@ public class UserRestController {
 			@ApiResponse(responseCode = "404", description = "Not found", content = @Content) })
 	
 	@PutMapping("/{id}")
-	public UserDto updateUser(@PathVariable Long id, @RequestBody UserUpdateDto updaUserDto) throws SQLException{
+	public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UserUpdateDto updaUserDto) throws SQLException{
 		
-		return userService.replaceUser(id,updaUserDto);
+		try {
+			UserDto updatedUserDto = userService.updateUser(id, updaUserDto);
+			return ResponseEntity.ok(updatedUserDto);
+		} catch (EntityNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
 	}
 	@Operation(summary = "Update image of user based on ID", description = "Update the image of an user whose ID matches the one on the URL.")
 	@ApiResponses(value = {
@@ -170,18 +205,17 @@ public class UserRestController {
 			@ApiResponse(responseCode = "405", description = "Not allowed", content = @Content) })
 	
 	@PutMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<Object> replaceUserImage(@PathVariable long id) throws SQLException {
-		Optional<User> optionalUser = userService.findById(id);
+	public ResponseEntity<Object> replaceUserImage(@PathVariable long id,@RequestParam("file") MultipartFile file) throws SQLException {
+		try {
+			InputStream inputStream = file.getInputStream();
+			long size = file.getSize();
 
-		if (optionalUser.isPresent() && optionalUser.get().getImageFile() != null) {
-			Resource file = new InputStreamResource(optionalUser.get().getImageFile().getBinaryStream());
+			userService.replaceUserImage(id, inputStream, size); 
 
-			return ResponseEntity.ok()
-					.header(HttpHeaders.CONTENT_TYPE, "image/jpeg") 
-					.contentLength(optionalUser.get().getImageFile().length())
-					.body(file);
-		} else {
-			return ResponseEntity.notFound().build();
-		}
+			return ResponseEntity.ok("Imagen actualizada correctamente.");
+    	} catch (Exception e) {
+       	 	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body("Error al actualizar la imagen: " + e.getMessage());
+    	}
 	}
 }

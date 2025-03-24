@@ -126,7 +126,7 @@ public class UserService {
         return userPage.map(userMapper::toDto);
     }
     @Transactional
-    public UserDto updateUser(Long userId, UserUpdateDto userUpdateDto, MultipartFile imageFile) throws IOException {
+    public UserDto updateUser(Long userId, UserUpdateDto userUpdateDto) throws IOException {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
 
@@ -163,6 +163,7 @@ public class UserService {
     }
     
     public UserDto createUser(NewUserDto newUserDto){
+        System.out.println("Nuevo usuario recibido: " + newUserDto);
         if (newUserDto.email() == null || newUserDto.password() == null) {
             throw new IllegalArgumentException("Email y contraseña son requeridos");
         }
@@ -206,19 +207,8 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public UserDto replaceUser(Long id,UserUpdateDto updaUserDto)throws SQLException{
-        User user = userRepository.findById(id).orElseThrow();
-        userMapper.updateUserFromDto(updaUserDto, user);
-
-        if(user.getImage() && updaUserDto.imageBoolean()){
-            user.setImageFile(BlobProxy.generateProxy(user.getImageFile().getBinaryStream(),
-					user.getImageFile().length()));
-        }
-
-        userRepository.save(user);
-        return toDTO(user);
-    }
-
+    
+    @Transactional
     public void replaceUserImage(long id, InputStream inputStream, long size) {
 
 		User user = userRepository.findById(id).orElseThrow();

@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "93f00004-9a08-456f-a622-327f97c783ee",
+		"_postman_id": "425b9ab2-e50e-4530-91ea-a94723961622",
 		"name": "Pixel Paradise",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "33964635"
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "33925841"
 	},
 	"item": [
 		{
@@ -26,19 +26,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "https://localhost:8443/api/auth/login",
-									"protocol": "https",
-									"host": [
-										"localhost"
-									],
-									"port": "8443",
-									"path": [
-										"api",
-										"auth",
-										"login"
-									]
-								}
+								"url": "https://localhost:8443/api/auth/login"
 							},
 							"response": []
 						},
@@ -56,19 +44,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "https://localhost:8443/api/auth/login",
-									"protocol": "https",
-									"host": [
-										"localhost"
-									],
-									"port": "8443",
-									"path": [
-										"api",
-										"auth",
-										"login"
-									]
-								}
+								"url": "https://localhost:8443/api/auth/login"
 							},
 							"response": []
 						}
@@ -82,19 +58,7 @@
 							"request": {
 								"method": "POST",
 								"header": [],
-								"url": {
-									"raw": "https://localhost:8443/api/auth/logout",
-									"protocol": "https",
-									"host": [
-										"localhost"
-									],
-									"port": "8443",
-									"path": [
-										"api",
-										"auth",
-										"logout"
-									]
-								}
+								"url": "https://localhost:8443/api/auth/logout"
 							},
 							"response": []
 						}
@@ -110,25 +74,14 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"name\": \"nombre_usuario\",\r\n    \"surname\": \"apellido_1 apellido_2\",\r\n    \"email\": \"nuevousuario@email.com\",\r\n    \"password\": \"12345\"\r\n}",
+									"raw": "{\r\n    \"name\": \"nombre_usuario\",\r\n    \"surname\": \"apellido_1 apellido_2\",\r\n    \"email\": \"nuevousuario@email.com\",\r\n    \"phone\": \"456789924\",\r\n    \"dni\": \"45668977C\",\r\n    \"password\": \"12345\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
 										}
 									}
 								},
-								"url": {
-									"raw": "https://localhost:8443/api/users",
-									"protocol": "https",
-									"host": [
-										"localhost"
-									],
-									"port": "8443",
-									"path": [
-										"api",
-										"users"
-									]
-								}
+								"url": "https://localhost:8443/api/users"
 							},
 							"response": []
 						}
@@ -147,19 +100,7 @@
 							"request": {
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "https://localhost:8443/api/activities/1",
-									"protocol": "https",
-									"host": [
-										"localhost"
-									],
-									"port": "8443",
-									"path": [
-										"api",
-										"activities",
-										"1"
-									]
-								}
+								"url": "https://localhost:8443/api/activities/1"
 							},
 							"response": []
 						},
@@ -168,19 +109,7 @@
 							"request": {
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "https://localhost:8443/api/activities/",
-									"protocol": "https",
-									"host": [
-										"localhost"
-									],
-									"port": "8443",
-									"path": [
-										"api",
-										"activities",
-										""
-									]
-								}
+								"url": "https://localhost:8443/api/activities/"
 							},
 							"response": []
 						},
@@ -189,20 +118,7 @@
 							"request": {
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "https://localhost:8443/api/activities/1/image",
-									"protocol": "https",
-									"host": [
-										"localhost"
-									],
-									"port": "8443",
-									"path": [
-										"api",
-										"activities",
-										"1",
-										"image"
-									]
-								}
+								"url": "https://localhost:8443/api/activities/1/image"
 							},
 							"response": []
 						},
@@ -592,19 +508,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "https://localhost:8443/api/activities/",
-									"protocol": "https",
-									"host": [
-										"localhost"
-									],
-									"port": "8443",
-									"path": [
-										"api",
-										"activities",
-										""
-									]
-								}
+								"url": "https://localhost:8443/api/activities/"
 							},
 							"response": []
 						},
@@ -622,19 +526,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "https://localhost:8443/api/activities/",
-									"protocol": "https",
-									"host": [
-										"localhost"
-									],
-									"port": "8443",
-									"path": [
-										"api",
-										"activities",
-										""
-									]
-								}
+								"url": "https://localhost:8443/api/activities/"
 							},
 							"response": []
 						},
@@ -653,20 +545,7 @@
 										}
 									]
 								},
-								"url": {
-									"raw": "https://localhost:8443/api/activities/1/image",
-									"protocol": "https",
-									"host": [
-										"localhost"
-									],
-									"port": "8443",
-									"path": [
-										"api",
-										"activities",
-										"1",
-										"image"
-									]
-								}
+								"url": "https://localhost:8443/api/activities/1/image"
 							},
 							"response": []
 						},
@@ -675,20 +554,7 @@
 							"request": {
 								"method": "POST",
 								"header": [],
-								"url": {
-									"raw": "https://localhost:8443/api/activities/10/reserve",
-									"protocol": "https",
-									"host": [
-										"localhost"
-									],
-									"port": "8443",
-									"path": [
-										"api",
-										"activities",
-										"10",
-										"reserve"
-									]
-								}
+								"url": "https://localhost:8443/api/activities/10/reserve"
 							},
 							"response": []
 						}
@@ -711,19 +577,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "https://localhost:8443/api/activities/1",
-									"protocol": "https",
-									"host": [
-										"localhost"
-									],
-									"port": "8443",
-									"path": [
-										"api",
-										"activities",
-										"1"
-									]
-								}
+								"url": "https://localhost:8443/api/activities/1"
 							},
 							"response": []
 						},
@@ -742,20 +596,7 @@
 										}
 									]
 								},
-								"url": {
-									"raw": "https://localhost:8443/api/activities/1/image",
-									"protocol": "https",
-									"host": [
-										"localhost"
-									],
-									"port": "8443",
-									"path": [
-										"api",
-										"activities",
-										"1",
-										"image"
-									]
-								}
+								"url": "https://localhost:8443/api/activities/1/image"
 							},
 							"response": []
 						}
@@ -769,19 +610,7 @@
 							"request": {
 								"method": "DELETE",
 								"header": [],
-								"url": {
-									"raw": "https://localhost:8443/api/activities/1",
-									"protocol": "https",
-									"host": [
-										"localhost"
-									],
-									"port": "8443",
-									"path": [
-										"api",
-										"activities",
-										"1"
-									]
-								}
+								"url": "https://localhost:8443/api/activities/1"
 							},
 							"response": []
 						},
@@ -790,20 +619,7 @@
 							"request": {
 								"method": "DELETE",
 								"header": [],
-								"url": {
-									"raw": "https://localhost:8443/api/activities/1/image",
-									"protocol": "https",
-									"host": [
-										"localhost"
-									],
-									"port": "8443",
-									"path": [
-										"api",
-										"activities",
-										"1",
-										"image"
-									]
-								}
+								"url": "https://localhost:8443/api/activities/1/image"
 							},
 							"response": []
 						}
@@ -821,12 +637,39 @@
 							"name": "Show details",
 							"item": [
 								{
-									"name": "user info",
+									"name": "user",
 									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:8443/api/users/3"
+									},
+									"response": []
+								},
+								{
+									"name": "users",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:8443/api/users/"
+									},
+									"response": []
+								},
+								{
+									"name": "users pageable",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "https://localhost:8443/api/users/1",
+											"raw": "https://localhost:8443/api/users/pageable?page=0&size=4",
 											"protocol": "https",
 											"host": [
 												"localhost"
@@ -835,30 +678,125 @@
 											"path": [
 												"api",
 												"users",
-												"1"
+												"pageable"
+											],
+											"query": [
+												{
+													"key": "page",
+													"value": "0"
+												},
+												{
+													"key": "size",
+													"value": "4"
+												}
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "all users",
+									"name": "image",
 									"request": {
+										"auth": {
+											"type": "noauth"
+										},
 										"method": "GET",
 										"header": [],
-										"url": {
-											"raw": "https://localhost:8443/api/users/",
-											"protocol": "https",
-											"host": [
-												"localhost"
-											],
-											"port": "8443",
-											"path": [
-												"api",
-												"users",
-												""
+										"url": "https://localhost:8443/api/users/3/image"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Delete",
+							"item": [
+								{
+									"name": "delete user",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": "https://localhost:8443/api/users/2"
+									},
+									"response": []
+								},
+								{
+									"name": "delete image",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": "https://localhost:8443/api/users/1/image"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Edit",
+							"item": [
+								{
+									"name": "edit user",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\" : \"Mara\",\r\n    \"surname\" : \"Rodriguez\",\r\n    \"phone\" : \"689347779\",\r\n    \"dni\" : \"23445688C\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:8443/api/users/1"
+									},
+									"response": []
+								},
+								{
+									"name": "edit image",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "",
+													"type": "file",
+													"src": "postman-cloud:///1f008dc9-86be-4300-9408-8eaedcd25ac5"
+												}
 											]
-										}
+										},
+										"url": "https://localhost:8443/api/users/1/image"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Add new",
+							"item": [
+								{
+									"name": "New image",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [],
+										"url": "https://localhost:8443/api/users/8/image"
 									},
 									"response": []
 								}
@@ -879,19 +817,7 @@
 							"request": {
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "https://localhost:8443/api/statistics/activities-by-month",
-									"protocol": "https",
-									"host": [
-										"localhost"
-									],
-									"port": "8443",
-									"path": [
-										"api",
-										"statistics",
-										"activities-by-month"
-									]
-								}
+								"url": "https://localhost:8443/api/statistics/activities-by-month"
 							},
 							"response": []
 						}
@@ -905,19 +831,7 @@
 							"request": {
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "https://localhost:8443/api/statistics/review-statistics",
-									"protocol": "https",
-									"host": [
-										"localhost"
-									],
-									"port": "8443",
-									"path": [
-										"api",
-										"statistics",
-										"review-statistics"
-									]
-								}
+								"url": "https://localhost:8443/api/statistics/review-statistics"
 							},
 							"response": []
 						}
@@ -927,23 +841,11 @@
 					"name": "Number Stadisitics",
 					"item": [
 						{
-							"name": "New Request",
+							"name": "general statistics",
 							"request": {
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "https://localhost:8443/api/statistics/general-statistics",
-									"protocol": "https",
-									"host": [
-										"localhost"
-									],
-									"port": "8443",
-									"path": [
-										"api",
-										"statistics",
-										"general-statistics"
-									]
-								}
+								"url": "https://localhost:8443/api/statistics/general-statistics"
 							},
 							"response": []
 						}
@@ -1046,20 +948,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "https://localhost:8443/api/reviews/activity/1",
-							"protocol": "https",
-							"host": [
-								"localhost"
-							],
-							"port": "8443",
-							"path": [
-								"api",
-								"reviews",
-								"activity",
-								"1"
-							]
-						}
+						"url": "https://localhost:8443/api/reviews/activity/1"
 					},
 					"response": []
 				},
@@ -1077,19 +966,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "https://localhost:8443/api/reviews/1",
-							"protocol": "https",
-							"host": [
-								"localhost"
-							],
-							"port": "8443",
-							"path": [
-								"api",
-								"reviews",
-								"1"
-							]
-						}
+						"url": "https://localhost:8443/api/reviews/1"
 					},
 					"response": []
 				},
@@ -1097,7 +974,8 @@
 					"name": "delete review",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": ""
 					},
 					"response": []
 				}
