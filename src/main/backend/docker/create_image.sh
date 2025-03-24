@@ -1,11 +1,8 @@
 #!/bin/bash
 set -e
 
-# Nombre de la imagen
-IMAGE_NAME=przx27/backend-app:java21
+# Ir a la carpeta raíz del proyecto (donde está pom.xml)
+cd "$(dirname "$0")"/..
 
-# Navegar a la carpeta del script (docker)
-cd "$(dirname "$0")"
-
-# Construir la imagen usando el Dockerfile
-docker build -t $IMAGE_NAME .
+# Construir la imagen usando el Dockerfile ubicado en /docker
+docker build -f docker/Dockerfile -t przx27/backend-app:java21 .
