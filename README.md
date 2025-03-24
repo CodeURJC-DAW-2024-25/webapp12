@@ -369,16 +369,16 @@ Task List
 
 
 ssh -i ssh-keys/appWeb12.key vmuser@10.100.139.153
-# or
+   or
 ssh -i ssh-keys/appWeb12.key vmuser@appWeb12.dawgis.etsii.urjc.es
 
--Clone the repository into the virtual machine:
+#Clone the repository into the virtual machine:
 git clone https://github.com/CodeURJC-DAW-2024-25/webapp12.git
 
--Navigate to the docker folder:
+#Navigate to the docker folder:
 cd webapp12/src/main/backend/docker
 
-If you want to build the Docker images manually go :
+#If you want to build the Docker images manually go :
 -Give permission to the following scripts:
    chmod +x create_image.sh
    chmod +x publish_image.sh
@@ -387,13 +387,13 @@ execute:
    ./create_image.sh to generate the app image.
    ./publish_image.sh to publish into docker hub.
 
-To start the application using Docker-Compose:
+#To start the application using Docker-Compose:
    docker compose up 
 Acces the aplicattion at: 
    VM : https://appWeb12.dawgis.etsii.urjc.es
    local : https://localhost/443
 
-To stop the application:
+#To stop the application:
    docker compose down
 if you also want to remove the database volume:
    docker compose down -v
