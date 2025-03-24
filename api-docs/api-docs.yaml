@@ -6,6 +6,9 @@ info:
 servers:
 - url: https://localhost:8443
   description: Generated server url
+tags:
+- name: Review Controller
+  description: Endpoints for managing reviews
 paths:
   "/api/users/{id}":
     get:
@@ -35,6 +38,8 @@ paths:
     put:
       tags:
       - user-rest-controller
+      summary: Update an user
+      description: Updates the information and resources of an user.
       operationId: updateUser
       parameters:
       - name: id
@@ -51,11 +56,13 @@ paths:
         required: true
       responses:
         '200':
-          description: OK
-          content:
-            "*/*":
-              schema:
-                "$ref": "#/components/schemas/UserDto"
+          description: User updated successfully
+        '400':
+          description: Bad request
+        '403':
+          description: The request is unauthorized
+        '404':
+          description: Not found
     delete:
       tags:
       - user-rest-controller
@@ -86,6 +93,8 @@ paths:
     get:
       tags:
       - user-rest-controller
+      summary: Get the user photo
+      description: Returns the user image based on the ID
       operationId: getUserImage
       parameters:
       - name: id
@@ -96,14 +105,16 @@ paths:
           format: int64
       responses:
         '200':
-          description: OK
-          content:
-            "*/*":
-              schema:
-                type: object
+          description: Image returned successfully
+        '400':
+          description: Bad request
+        '404':
+          description: User not found
     put:
       tags:
       - user-rest-controller
+      summary: Update image of user based on ID
+      description: Update the image of an user whose ID matches the one on the URL.
       operationId: replaceUserImage
       parameters:
       - name: id
@@ -112,24 +123,19 @@ paths:
         schema:
           type: integer
           format: int64
-      requestBody:
-        content:
-          application/json:
-            schema:
-              required:
-              - imageFile
-              type: object
-              properties:
-                imageFile:
-                  type: string
-                  format: binary
       responses:
         '200':
-          description: OK
+          description: Image updated successfully
           content:
-            "*/*":
+            application/json:
               schema:
-                type: object
+                "$ref": "#/components/schemas/UserDto"
+        '400':
+          description: Bad request
+        '404':
+          description: User not found
+        '405':
+          description: Not allowed
     delete:
       tags:
       - user-rest-controller
@@ -156,6 +162,66 @@ paths:
           description: Not found
         '405':
           description: Not allowed
+  "/api/reviews/{reviewId}":
+    put:
+      tags:
+      - Review Controller
+      summary: Update a review
+      description: Updates an existing review. Requires authentication and ownership
+        of the review.
+      operationId: updateReview
+      parameters:
+      - name: reviewId
+        in: path
+        description: ID of the review to update
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/NewReviewDto"
+        required: true
+      responses:
+        '200':
+          description: Review updated successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ReviewDto"
+        '400':
+          description: Invalid input data
+        '401':
+          description: Unauthorized - User not authenticated
+        '403':
+          description: Forbidden - User does not own the review
+        '404':
+          description: Review not found
+        '500':
+          description: Internal server error
+    delete:
+      tags:
+      - Review Controller
+      summary: Delete a review
+      description: Deletes an existing review by its ID.
+      operationId: deleteReviewById
+      parameters:
+      - name: reviewId
+        in: path
+        description: ID of the review to delete
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Review deleted successfully
+        '404':
+          description: Review not found
+        '500':
+          description: Internal server error
   "/api/activities/{id}":
     get:
       tags:
@@ -355,16 +421,22 @@ paths:
     get:
       tags:
       - user-rest-controller
+      summary: Get every users
+      description: Returns a list with every user.
       operationId: getUsers_1
       responses:
         '200':
-          description: OK
+          description: List with users returned successfully
           content:
-            "*/*":
+            application/json:
               schema:
-                type: array
-                items:
-                  "$ref": "#/components/schemas/UserDto"
+                "$ref": "#/components/schemas/UserDto"
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: User not found
     post:
       tags:
       - user-rest-controller
@@ -382,6 +454,78 @@ paths:
             "*/*":
               schema:
                 "$ref": "#/components/schemas/UserDto"
+  "/api/reviews/activity/{activityId}":
+    get:
+      tags:
+      - Review Controller
+      summary: Get reviews by activity ID
+      description: Returns a paginated list of reviews for a specific activity.
+      operationId: getReviewsByActivity
+      parameters:
+      - name: activityId
+        in: path
+        description: ID of the activity to fetch reviews for
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: page
+        in: query
+        description: Page number (starting from 0)
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+        example: 0
+      responses:
+        '200':
+          description: Reviews returned successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ReviewDto"
+        '400':
+          description: Invalid activity ID supplied
+        '404':
+          description: Activity not found
+        '500':
+          description: Internal server error
+    post:
+      tags:
+      - Review Controller
+      summary: Add a review to an activity
+      description: Adds a new review to the specified activity. Requires authentication.
+      operationId: addReview
+      parameters:
+      - name: activityId
+        in: path
+        description: ID of the activity to add the review to
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/NewReviewDto"
+        required: true
+      responses:
+        '200':
+          description: Review added successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ReviewDto"
+        '400':
+          description: Invalid input data
+        '401':
+          description: Unauthorized - User not authenticated
+        '404':
+          description: Activity or user not found
+        '500':
+          description: Internal server error
   "/api/auth/refresh":
     post:
       tags:
@@ -518,10 +662,34 @@ paths:
           description: The request is unauthorized
         '404':
           description: Not found
+  "/debug/activities":
+    get:
+      tags:
+      - activity-controller
+      operationId: debugActivities
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
   "/api/users/pageable":
     get:
       tags:
       - user-rest-controller
+      summary: Get every users
+      description: Returns a list with every user.
       operationId: getUsers
       parameters:
       - name: page
@@ -540,11 +708,134 @@ paths:
           default: 4
       responses:
         '200':
+          description: List with users returned successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/UserDto"
+        '400':
+          description: Bad request
+        '404':
+          description: User not found
+  "/api/statistics/review-statistics":
+    get:
+      tags:
+      - statistics-rest-controller
+      operationId: getReviewStatistics
+      responses:
+        '200':
           description: OK
           content:
             "*/*":
               schema:
-                "$ref": "#/components/schemas/PageUserDto"
+                type: array
+                items:
+                  "$ref": "#/components/schemas/ReviewStatisticsDto"
+  "/api/statistics/general-statistics":
+    get:
+      tags:
+      - statistics-rest-controller
+      operationId: getGeneralStatistics
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/GeneralStatisticsDto"
+  "/api/statistics/activities-by-month":
+    get:
+      tags:
+      - statistics-rest-controller
+      operationId: getActivitiesByMonth
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/ActivitiesByMonthDto"
+  "/api/activities/users/{userId}/recommended-activities":
+    get:
+      tags:
+      - activity-rest-controller
+      summary: Get activities recommended by user
+      description: Returns a paginated list of activities recommended in which the
+        user is enrolled.
+      operationId: getRecommendedActivities
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 4
+      responses:
+        '200':
+          description: Activities recommended returned successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ActivityDto"
+        '400':
+          description: Bad request
+        '404':
+          description: User not found
+  "/api/activities/user/{userId}":
+    get:
+      tags:
+      - activity-rest-controller
+      summary: Get activities by user
+      description: Returns a paginated list of activities in which the user is enrolled.
+      operationId: getActivitiesByUser
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 2
+      responses:
+        '200':
+          description: Activities returned successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ActivityDto"
+        '400':
+          description: Bad request
+        '404':
+          description: User not found
   "/api/activities/search":
     get:
       tags:
@@ -656,6 +947,34 @@ components:
           type: boolean
         password:
           type: string
+    NewReviewDto:
+      type: object
+      properties:
+        starsValue:
+          type: integer
+          format: int32
+        comment:
+          type: string
+        userId:
+          type: integer
+          format: int64
+      description: Review data to add
+    ReviewDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        comment:
+          type: string
+        starsValue:
+          type: integer
+          format: int32
+        creationDate:
+          type: string
+          format: date-time
+        userFullName:
+          type: string
     ActivityUpdateDto:
       type: object
       properties:
@@ -694,13 +1013,6 @@ components:
         creationDate:
           type: string
           format: date-time
-        formattedCreationDate:
-          type: string
-        imageFile:
-          type: object
-          properties:
-            binaryStream:
-              type: object
         activityDate:
           type: string
           format: date-time
@@ -721,22 +1033,6 @@ components:
         name:
           type: string
         description:
-          type: string
-    ReviewDto:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        comment:
-          type: string
-        starsValue:
-          type: integer
-          format: int32
-        creationDate:
-          type: string
-          format: date-time
-        userFullName:
           type: string
     NewUserDto:
       type: object
@@ -801,62 +1097,33 @@ components:
         placeId:
           type: integer
           format: int64
-    PageUserDto:
+    ReviewStatisticsDto:
       type: object
       properties:
-        totalElements:
+        starsValue:
+          type: integer
+          format: int32
+        count:
           type: integer
           format: int64
-        totalPages:
-          type: integer
-          format: int32
-        size:
-          type: integer
-          format: int32
-        content:
-          type: array
-          items:
-            "$ref": "#/components/schemas/UserDto"
-        number:
-          type: integer
-          format: int32
-        sort:
-          "$ref": "#/components/schemas/SortObject"
-        first:
-          type: boolean
-        last:
-          type: boolean
-        numberOfElements:
-          type: integer
-          format: int32
-        pageable:
-          "$ref": "#/components/schemas/PageableObject"
-        empty:
-          type: boolean
-    PageableObject:
+    GeneralStatisticsDto:
       type: object
       properties:
-        offset:
+        userCount:
           type: integer
           format: int64
-        sort:
-          "$ref": "#/components/schemas/SortObject"
-        pageNumber:
+        activityCount:
           type: integer
-          format: int32
-        pageSize:
+          format: int64
+        placeCount:
           type: integer
-          format: int32
-        paged:
-          type: boolean
-        unpaged:
-          type: boolean
-    SortObject:
+          format: int64
+    ActivitiesByMonthDto:
       type: object
       properties:
-        empty:
-          type: boolean
-        unsorted:
-          type: boolean
-        sorted:
-          type: boolean
+        month:
+          type: integer
+          format: int32
+        count:
+          type: integer
+          format: int64
