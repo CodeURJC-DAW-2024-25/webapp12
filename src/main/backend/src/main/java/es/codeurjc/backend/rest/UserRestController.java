@@ -1,20 +1,16 @@
 package es.codeurjc.backend.rest;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-
 import javax.sql.rowset.serial.SerialBlob;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -118,6 +114,35 @@ public class UserRestController {
 
 		return ResponseEntity.created(location).body(userDto);
     } 
+
+	@Operation(summary = "Create new user image", description = "Creates a new user image and returns that new user image.")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "201", description = "User image created successfully"),
+		@ApiResponse(responseCode = "403", description = "The request is unauthorized"),
+		@ApiResponse(responseCode = "404", description = "Not found") 
+	})				
+    @PostMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> uploadImage(@PathVariable long id, @RequestParam("file") MultipartFile file) {
+        Optional<User> optionalUser = userService.findById(id);
+
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+
+            try {
+                Blob imageBlob = new SerialBlob(file.getBytes());
+                user.setImageFile(imageBlob);
+                user.setImage(true);
+                userService.save(user);
+
+                return ResponseEntity.ok().build(); // 200 OK
+            } catch (IOException | SQLException e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // 500 Internal Server Error
+            }
+        } else {
+            return ResponseEntity.notFound().build(); // 404 Not Found 
+        }
+    }
+
 	@Operation(summary = "Delete user", description = "Delete an user and returns that deleted user.")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "User deleted successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDto.class))),

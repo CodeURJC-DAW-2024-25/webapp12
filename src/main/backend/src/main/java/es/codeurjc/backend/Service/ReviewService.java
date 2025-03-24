@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import es.codeurjc.backend.dto.ReviewDto;
 import es.codeurjc.backend.model.Activity;
 import es.codeurjc.backend.model.Review;
@@ -41,9 +42,6 @@ public class ReviewService {
 
     }
 
-    public void save(Review review) {
-        reviewRepository.save(review);
-    }
 
     public List<Integer> countReviewsByValoration(){
         List<Review> reviews = reviewRepository.findAll();
