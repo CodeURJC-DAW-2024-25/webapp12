@@ -80,6 +80,8 @@ public class WebSecurityConfig {
 					.requestMatchers(HttpMethod.POST,"/api/activities/user/").hasRole("USER")
 					.requestMatchers(HttpMethod.POST,"/api/reviews/activity/").hasRole("USER")
 					.requestMatchers(HttpMethod.PUT,"/api/reviews/").hasRole("USER")
+					.requestMatchers(HttpMethod.GET,"/api/activities/users/**").hasRole("USER")
+					.requestMatchers(HttpMethod.GET,"/api/activities/user/**").hasRole("USER")
 
 					.requestMatchers(HttpMethod.POST,"/api/activities/").hasRole("ADMIN")
 					.requestMatchers(HttpMethod.GET,"/api/users/").hasRole("ADMIN")

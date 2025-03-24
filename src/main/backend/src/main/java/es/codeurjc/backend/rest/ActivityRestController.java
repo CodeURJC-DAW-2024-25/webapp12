@@ -313,7 +313,7 @@ public class ActivityRestController {
         @ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
         @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
     })
-    @GetMapping("/user/{userId}")
+    @GetMapping("/users/{userId}")
     public ResponseEntity<Page<ActivityDto>> getActivitiesByUser(
             @PathVariable Long userId,
             @RequestParam(defaultValue = "0") int page, 
