@@ -79,7 +79,7 @@ public class WebSecurityConfig {
 					
 					
 					.requestMatchers(HttpMethod.GET,"/api/activities/").permitAll()
-					.requestMatchers(HttpMethod.GET,"/api/activities/").permitAll()
+					.requestMatchers(HttpMethod.GET,"/api/activities/pageable").permitAll()
 					.requestMatchers(HttpMethod.GET,"/api/activities/{id}").permitAll()
 					.requestMatchers(HttpMethod.GET,"/api/activities/{id}/image").permitAll()
 					.requestMatchers(HttpMethod.GET,"/api/activities/user/{id}").permitAll()
@@ -103,7 +103,7 @@ public class WebSecurityConfig {
 					.requestMatchers(HttpMethod.DELETE,"/api/activities/{id}/image").hasRole("ADMIN")
 					.requestMatchers(HttpMethod.DELETE,"/api/users/{id}").hasRole("ADMIN")
 					.requestMatchers(HttpMethod.POST,"/api/users/").hasRole("ADMIN")
-					.requestMatchers(HttpMethod.PUT,"/api/users/{id}").hasRole("ADMIN")
+					.requestMatchers(HttpMethod.PUT,"/api/users/{id}/image").hasRole("USER")
 					
 					.requestMatchers(HttpMethod.POST,"/api/activities/{id}/image").hasRole("ADMIN")
 					.requestMatchers(HttpMethod.PUT,"/api/activities/{id}/image").hasRole("ADMIN")

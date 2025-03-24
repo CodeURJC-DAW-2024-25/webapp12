@@ -16,7 +16,7 @@ services:
       - pixel-network
 
   app:
-    build: .
+    image: przx27/backend-app:java21
     container_name: pixel-app
     ports:
       - "443:8443"
