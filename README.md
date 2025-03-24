@@ -359,14 +359,46 @@ Task List
 
 ### 🖥️ **Class and Templates Diagram**
 
-### ✅**Instructions for running the dockerized application**
+## 🛠️ Execution Instructions
 
-### 🖊️**Documentation for building the Docker image**
+### Deployment Steps
 
-### 🚀**Documentation for deploying on the virtual machine**
+- You must be connected to the university network. If accessing from outside, use the Windows or Ubuntu development desktop available in **MyApps**.
+- Make sure you have the **private key** downloaded to your local computer.
+- Open a terminal on your system and run one of the following commands to connect to the virtual machine:
 
-### 🌐**URL de la máquina virtual**
-ccredentials : (También se deberán incluir las credenciales de los usuarios de ejemplo (incluyendo el administrador))
+
+ssh -i ssh-keys/appWeb12.key vmuser@10.100.139.153
+# or
+ssh -i ssh-keys/appWeb12.key vmuser@appWeb12.dawgis.etsii.urjc.es
+
+-Clone the repository into the virtual machine:
+git clone https://github.com/CodeURJC-DAW-2024-25/webapp12.git
+
+-Navigate to the docker folder:
+cd webapp12/src/main/backend/docker
+
+If you want to build the Docker images manually go :
+-Give permission to the following scripts:
+   chmod +x create_image.sh
+   chmod +x publish_image.sh
+execute:
+   docker login
+   ./create_image.sh to generate the app image.
+   ./publish_image.sh to publish into docker hub.
+
+To start the application using Docker-Compose:
+   docker compose up 
+Acces the aplicattion at: 
+   VM : https://appWeb12.dawgis.etsii.urjc.es
+   local : https://localhost/443
+
+To stop the application:
+   docker compose down
+if you also want to remove the database volume:
+   docker compose down -v
+
+
 
 ### 🖊️**Documentation for API REST**
 [File: api-docs.yaml](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/api-docs/api-docs.yaml)
@@ -439,32 +471,31 @@ Task List
 ###  Gonzalo Pérez Roca 
 
 Task List
-1.  
-2.   
-3. 
-4. 
-5.
+1. Generate Dockerfile and Docker-compose.yl 
+2. Help with postman requests.
+3. set the VM.
 
 
 -Commits:
 
 | Commit   | Link   | 
 |----------|------------|
-| |  |
-| |  |
-| |  |
-|| |
-||  |
+| Update Pixel Paradise.postman_collection.json | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/f9da433833ffab45f16bb71bc2902fa5bf0e8987 |
+| V1 Docker| https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/b8aef881411485b7377df24ab488952b9e9ead94 |
+| Generacion .sh pruebas | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/ef9ea4702501dc59e61375248975833e1baeec25 |
+|update del copy | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/9cf0c1bfb8fcc0d297d40f5fd87f27a7e5b49396 |
+|.sh V2 modificacion de las carpetas | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/4862bb2a5c742354862f05dfd0b8caed806019b3 |
+
 
 -Files:
 
 | File   | Link   | 
 |----------|------------|
-|  | | 
-| ||
-|  ||
-|  ||
-|  ||
+| src/main/backend/docker/Dockerfile | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/docker/Dockerfile | 
+| src/main/backend/docker/docker-compose.yml |https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/docker/docker-compose.yml|
+| src/main/backend/docker/create_image.sh | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/docker/create_image.sh|
+| src/main/backend/docker/publish_image.sh | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/docker/publish_image.sh|
+| Pixel Paradise.postman_collection.json |https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/Pixel%20Paradise.postman_collection.json|
 
 ---
 
