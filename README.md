@@ -350,3 +350,151 @@ Task List
 | application.properties|[application.properties ](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/resources/application.properties)|
 | DatabaseInitializerService.java |https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/java/es/codeurjc/backend/config/DatabaseInitializerService.java|
 | WebSecurityConfig |[WebSecurityConfig](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/java/es/codeurjc/backend/Security/WebSecurityConfig.java)|
+
+---
+# 🛠️ PHASE 2
+
+---
+## ⚙️ Notes on Configuration
+
+### 🖥️ **Class and Templates Diagram**
+
+### ✅**Instructions for running the dockerized application**
+
+### 🖊️**Documentation for building the Docker image**
+
+### 🚀**Documentation for deploying on the virtual machine**
+
+### 🌐**URL de la máquina virtual**
+ccredentials : (También se deberán incluir las credenciales de los usuarios de ejemplo (incluyendo el administrador))
+
+---
+## 🫂 **Member Participation**
+
+---
+
+### **Alba Velasco Marqués**
+Task List
+1.  
+2.   
+3. 
+4. 
+5.
+
+-Commits:
+
+| Commit   | Link   | 
+|----------|------------|
+|  | | 
+|  | | 
+|  | |
+| |  |
+| | |
+
+-Files:
+
+| File   | Link   | 
+|----------|------------|
+|  |  | 
+| |  | 
+|   | |
+| |  |
+|  ||
+
+---
+
+### **Alexandra Cararus Verdes**
+Task List
+1.  
+2.   
+3. 
+4. 
+5.
+
+
+-Commits:
+
+| Commit   | Link   | 
+|----------|------------|
+||  | 
+| || 
+| | |
+|  ||
+|||
+
+-Files:
+
+| File   | Link   | 
+|----------|------------|
+| | | 
+| | | 
+| |  |
+|  |  |
+|  ||
+
+---
+
+###  Gonzalo Pérez Roca 
+
+Task List
+1.  
+2.   
+3. 
+4. 
+5.
+
+
+-Commits:
+
+| Commit   | Link   | 
+|----------|------------|
+| |  |
+| |  |
+| |  |
+|| |
+||  |
+
+-Files:
+
+| File   | Link   | 
+|----------|------------|
+|  | | 
+| ||
+|  ||
+|  ||
+|  ||
+
+---
+
+###  Paula Ruiz Rubio 
+
+Task List
+1.  
+2.   
+3. 
+4. 
+5.
+
+
+
+-Commits:
+
+| Commit   | Link   | 
+|----------|------------|
+| | |
+| | |
+| ||
+| | |
+| |  |
+
+-Files:
+
+| File   | Link   | 
+|----------|------------|
+|  |  | 
+| | | 
+| ||
+|  ||
+| ||
+
+---
