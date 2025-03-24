@@ -3,8 +3,8 @@ set -e
 
 IMAGE_NAME=przx27/backend-app:java21
 
-# Login (si no estás ya logueado)
-docker login 
+# Login si es necesario
+docker login
 
-# Subir la imagen
+# Subir imagen
 docker push $IMAGE_NAME
