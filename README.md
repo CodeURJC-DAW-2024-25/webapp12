@@ -368,6 +368,10 @@ Task List
 ### 🌐**URL de la máquina virtual**
 ccredentials : (También se deberán incluir las credenciales de los usuarios de ejemplo (incluyendo el administrador))
 
+### 🖊️**Documentation for API REST**
+[File: api-docs.yaml](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/api-docs/api-docs.yaml)
+[API DOCS](https://raw.githack.com/CodeURJC-DAW-2024-25/webapp12/main/api-docs/api-docs.html)
+
 ---
 ## 🫂 **Member Participation**
 
@@ -466,33 +470,26 @@ Task List
 
 ###  Paula Ruiz Rubio 
 
-Task List
-1.  
-2.   
-3. 
-4. 
-5.
-
-
+I have been responsible for implementing the API security layer, including authentication and authorization mechanisms. I developed comprehensive OpenAPI documentation to ensure clear API specifications. Additionally, I designed and implemented all API endpoints related to Activity and Statistics functionality, including CRUD operations and business logic. This involved creating the data models and implementing the DTO mapping layer for both Activity and Statistics entities to ensure proper data transfer and separation of concerns
 
 -Commits:
 
 | Commit   | Link   | 
 |----------|------------|
-| | |
-| | |
-| ||
-| | |
-| |  |
+|crear get recommendActivities y unificar servicio activity | [crear get recommendActivities y unificar servicio activity](https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/158dfd9f30b081fba1c6174c63c146405ff1a782)|
+|Modificar seguridad para que funcione en web y api | [Modificar seguridad para que funcione en web y api](https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/9e522dffc876c25df7a1b17a56f40c79324f7bc3)|
+|Upadete api-docs |[Upadete api-docs](https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/2ff49cf3c295a777b603c8d9cc995bf64a395f22)|
+|security api works | [security api works](https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/889f59ebde7364bcffcaf29a30e633b10e5783e6)|
+| Devolver error 401 seguridad Api| [Devolver error 401 seguridad Api](https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/bcbf661a4862cbc1e90d1b978a2fea1d8eb133b6) |
 
 -Files:
 
 | File   | Link   | 
 |----------|------------|
-|  |  | 
-| | | 
-| ||
-|  ||
-| ||
+| Folder: api-docs | [Folder: api-docs](https://github.com/CodeURJC-DAW-2024-25/webapp12/tree/main/api-docs) | 
+|ActivityRestController | [ActivityRestController](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/java/es/codeurjc/backend/rest/ActivityRestController.java)| 
+|StatisticsRestController |[StatisticsRestController](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/java/es/codeurjc/backend/rest/StatisticsRestController.java)|
+| Security: jwt |[Security: jwt](https://github.com/CodeURJC-DAW-2024-25/webapp12/tree/main/src/main/backend/src/main/java/es/codeurjc/backend/security/jwt)|
+| ActivityService|[ActivityService](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/java/es/codeurjc/backend/Service/ActivityService.java)|
 
 ---
