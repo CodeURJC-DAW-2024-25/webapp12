@@ -7,10 +7,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
+import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+
+import javax.sql.rowset.serial.SerialBlob;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.core.io.Resource;
+
+import es.codeurjc.backend.model.Activity;
 import es.codeurjc.backend.model.User;
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
 import es.codeurjc.backend.dto.NewUserDto;
@@ -185,16 +191,24 @@ public class UserRestController {
 	
 	@PutMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<Object> replaceUserImage(@PathVariable long id,@RequestParam("file") MultipartFile file) throws SQLException {
-		try {
-			InputStream inputStream = file.getInputStream();
-			long size = file.getSize();
+		Optional<User> optionalUser = userService.findById(id);
 
-			userService.replaceUserImage(id, inputStream, size); 
+		if (optionalUser.isPresent()) {
+			User user = optionalUser.get();
 
-			return ResponseEntity.ok("Imagen actualizada correctamente.");
-    	} catch (Exception e) {
-       	 	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body("Error al actualizar la imagen: " + e.getMessage());
-    	}
+			try {
+				Blob imageBlob = new SerialBlob(file.getBytes());
+
+				user.setImageFile(imageBlob);
+				user.setImage(true); 
+				userService.save(user); 
+
+				return ResponseEntity.ok("Imagen actualizada correctamente"); // 200 OK 
+			} catch (IOException | SQLException e) {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar la imagen"); // 500 Internal Server Error 
+			}
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrada"); // 404 Not Found 
+		}
 	}
 }
