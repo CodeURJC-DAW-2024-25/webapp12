@@ -1,7 +1,6 @@
 package es.codeurjc.backend.rest;
 
 import java.security.Principal;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,15 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import es.codeurjc.backend.dto.NewReviewDto;
 import es.codeurjc.backend.dto.ReviewDto;
 import es.codeurjc.backend.model.User;
 import es.codeurjc.backend.service.ReviewService;
 import es.codeurjc.backend.service.UserService;
-
 import org.springframework.data.domain.Page;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -84,10 +80,10 @@ public class ReviewRestController {
     
         try {
             ReviewDto reviewDto = reviewService.saveReviewDto(activityId, newReviewDto.starsValue(), newReviewDto.comment(), userId);
-            return ResponseEntity.ok(reviewDto); // Respuesta 200 OK con el DTO de la revisión
+            return ResponseEntity.ok(reviewDto); 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error al agregar la review: " + e.getMessage()); // Respuesta 500 con mensaje de error
+                    .body("Error al agregar la review: " + e.getMessage()); 
         }
     }
 
@@ -115,13 +111,13 @@ public class ReviewRestController {
 
         try {
             ReviewDto reviewDto = reviewService.updateReview(reviewId, newReviewDto.starsValue(), newReviewDto.comment(), user.getId());
-            return ResponseEntity.ok(reviewDto); // Respuesta 200 OK 
+            return ResponseEntity.ok(reviewDto);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(e.getMessage()); // Respuesta 403 
+                    .body(e.getMessage()); 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error al actualizar la review: " + e.getMessage()); // Respuesta 500 
+                    .body("Error al actualizar la review: " + e.getMessage()); 
         }
     }
 
@@ -136,13 +132,13 @@ public class ReviewRestController {
             @Parameter(description = "ID of the review to delete", required = true) @PathVariable Long reviewId) {
         try {
             reviewService.deleteReviewById(reviewId);
-            return ResponseEntity.ok("Revisión eliminada correctamente"); // Respuesta 200 OK 
+            return ResponseEntity.ok("Revisión eliminada correctamente");  
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(e.getMessage()); // Respuesta 404
+                    .body(e.getMessage()); 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error al eliminar la review: " + e.getMessage()); // Respuesta 500
+                    .body("Error al eliminar la review: " + e.getMessage());
         }
     }
 }

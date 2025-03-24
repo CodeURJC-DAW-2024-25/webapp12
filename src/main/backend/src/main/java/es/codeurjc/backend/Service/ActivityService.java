@@ -7,17 +7,13 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import java.awt.Color;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
 import org.springframework.util.StringUtils;
 import java.util.Objects;
-
 import java.util.Optional;
-
 import es.codeurjc.backend.dto.ActivityDto;
 import es.codeurjc.backend.dto.ActivityMapper;
 import es.codeurjc.backend.dto.ActivityUpdateDto;
@@ -34,14 +30,12 @@ import es.codeurjc.backend.repository.ReviewRepository;
 import es.codeurjc.backend.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.io.ByteArrayOutputStream;
@@ -62,7 +56,6 @@ public class ActivityService {
     private PlaceRepository placeRepository;
     @Autowired
     private ReviewRepository reviewRepository;
-
 
     public Optional <Activity>  findById(long id){
         return activityRepository.findById(id);
@@ -99,8 +92,6 @@ public class ActivityService {
                 
                 float margin = 50;
                 float yStart = page.getMediaBox().getHeight() - margin;
-    
-                
                 float boxWidth = page.getMediaBox().getWidth() - 2 * margin;
                 float boxHeight = 250; 
                 float boxX = margin;
@@ -111,8 +102,7 @@ public class ActivityService {
                 contentStream.setNonStrokingColor(new Color(200, 220, 255)); 
                 contentStream.addRect(boxX, boxY, boxWidth, boxHeight);
                 contentStream.fill();
-                contentStream.setNonStrokingColor(Color.BLACK); 
-    
+                contentStream.setNonStrokingColor(Color.BLACK);    
                 contentStream.setFont(PDType1Font.HELVETICA_BOLD, 18);
                 contentStream.setNonStrokingColor(new Color(0, 102, 204));
                 contentStream.beginText();
@@ -121,8 +111,7 @@ public class ActivityService {
                 contentStream.newLineAtOffset((page.getMediaBox().getWidth() - titleWidth) / 2, yStart);
                 contentStream.showText("Ticket de Reserva");
                 contentStream.endText();
-    
-                
+                   
                 Activity activity = activityRepository.findById(activityId).orElse(null);
                 User user = userRepository.findById(userId).orElse(null);
     
@@ -147,8 +136,7 @@ public class ActivityService {
                     contentStream.setNonStrokingColor(new Color(50, 50, 50)); 
                     contentStream.newLineAtOffset(0, -20);
                     contentStream.showText("Vacantes restantes: " + activity.getVacancy());
-                    contentStream.endText();
-    
+                    contentStream.endText();   
                     contentStream.setLineWidth(1.5f);
                     contentStream.setStrokingColor(new Color(0, 102, 204)); 
                     contentStream.moveTo(margin, yStart - 100);
@@ -459,7 +447,3 @@ public class ActivityService {
     }
 
 }
-
-
-
-

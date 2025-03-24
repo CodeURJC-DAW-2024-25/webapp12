@@ -8,10 +8,4 @@ public record ReviewDto(
     int starsValue,
     Calendar creationDate,
     String userFullName
-
-
-)
-
-
-{
-}
+){}

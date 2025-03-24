@@ -11,13 +11,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -48,11 +46,9 @@ public class StatisticsRestController {
     public ResponseEntity<List<ActivitiesByMonthDto>> getActivitiesByMonth() {
         Map<Integer, Long> activitiesByMonth = activityService.countActivitiesByMonth();
 
-        // Convertir el mapa a una lista de DTOs
         List<ActivitiesByMonthDto> result = activitiesByMonth.entrySet().stream()
                 .map(entry -> new ActivitiesByMonthDto(entry.getKey(), entry.getValue()))
                 .collect(Collectors.toList());
-
         return ResponseEntity.ok(result);
     }
 
@@ -90,4 +86,3 @@ public class StatisticsRestController {
         return ResponseEntity.ok(result);
     }
 }
-

@@ -20,11 +20,7 @@ public class EmailService {
         helper.setTo(to);
         helper.setSubject(subject);
         helper.setFrom("pixelparadisedaw@gmail.com");
-    
         helper.setText(text, true); 
-    
         mailSender.send(message);
     }
-    
 }
-

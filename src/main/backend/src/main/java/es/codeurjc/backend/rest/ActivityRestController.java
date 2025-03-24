@@ -3,9 +3,7 @@ package es.codeurjc.backend.rest;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Optional;
-
 import javax.sql.rowset.serial.SerialBlob;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -24,14 +22,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestBody;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import java.io.IOException;
 import java.security.Principal;
 import java.sql.Blob;
-
-
 import es.codeurjc.backend.dto.ActivityDto;
 import es.codeurjc.backend.dto.ActivityUpdateDto;
 import es.codeurjc.backend.dto.NewActivityDto;
@@ -58,7 +53,6 @@ public class ActivityRestController {
 	private UserService userService;
 	@Autowired
 	private PlaceService placeService;
-
 
 	@Operation(summary = "Get every activities", description = "Returns a list with every activity.")
 	@ApiResponses(value = {
@@ -135,11 +129,11 @@ public class ActivityRestController {
 	public ResponseEntity<String> deleteActivity(@PathVariable Long id) {
 		try {
 			activityService.deleteActivity(id);
-			return ResponseEntity.ok("Actividad eliminada correctamente"); // 200 OK con mensaje
+			return ResponseEntity.ok("Actividad eliminada correctamente"); 
 		} catch (EntityNotFoundException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Actividad no encontrada"); // 404 Not Found con mensaje
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Actividad no encontrada"); 
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar la actividad"); // 500 Internal Server Error con mensaje
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar la actividad"); 
 		}
 	}
 
@@ -319,7 +313,7 @@ public class ActivityRestController {
         @ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
         @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
     })
-    @GetMapping("/user/{userId}")
+    @GetMapping("/users/{userId}")
     public ResponseEntity<Page<ActivityDto>> getActivitiesByUser(
             @PathVariable Long userId,
             @RequestParam(defaultValue = "0") int page, 
@@ -350,5 +344,4 @@ public class ActivityRestController {
 
         return ResponseEntity.ok(recommendedActivities);
     }
-	
 }

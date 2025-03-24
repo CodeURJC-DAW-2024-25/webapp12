@@ -12,17 +12,8 @@ public record ActivityDto (
     int vacancy,
     Calendar creationDate,
     Date activityDate,
-
     PlaceDto place,
-    List<ReviewDto> reviews,
-    
-    
+    List<ReviewDto> reviews,   
     boolean imageBoolean
-)
-
-
-
-{
-    
-}
+){}
 

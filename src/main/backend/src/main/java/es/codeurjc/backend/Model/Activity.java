@@ -1,17 +1,12 @@
 package es.codeurjc.backend.model;
 
-
 import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 import java.sql.Blob;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,7 +26,6 @@ public class Activity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-
 	@ManyToOne
 	@JoinColumn(name = "place_id")
 	private Place place;
@@ -42,29 +36,20 @@ public class Activity {
 	@ManyToMany (mappedBy = "activities")
 	@JsonIgnore
 	private List<User> users;
-
-
 	private String name;
 	private String category;
 	@Column(columnDefinition = "LONGTEXT")
 	private String description;
 	private int vacancy;
-	
 	private Calendar creationDate;
 	private String formattedCreationDate;
-
 	private Date activityDate;
-
-
-	
 
 	@Lob
 	@JsonIgnore
 	private Blob imageFile;
-
 	private boolean imageBoolean;
 	
-
 	public Activity() {
 		super();
 	}
@@ -78,7 +63,6 @@ public class Activity {
 		this.creationDate.set(Calendar.HOUR_OF_DAY, 0);
 		this.formattedCreationDate = new SimpleDateFormat("dd/MM/yyyy").format(this.creationDate.getTime());
 	}
-
 
 	public List<User> getUsers() {
 		return users;
@@ -144,7 +128,6 @@ public class Activity {
 		this.reviews = reviews;
 	}
 
-
 	public Calendar getCreationDate() {
 		return creationDate;
 	}
@@ -191,7 +174,6 @@ public class Activity {
 	public Date setActivityDate(Date activityDate) {
 		return this.activityDate = activityDate;
 	}
-
 
 	@Override
     public boolean equals(Object o) {

@@ -171,18 +171,14 @@ async function loadMoreUser() {
 
         const data = await response.text();
 
-        // Agregar nuevos usuarios a la tabla
         document.querySelector('#allUsersPaginated tbody').insertAdjacentHTML('beforeend', data);
 
-        // Crear un DOM temporal para analizar la respuesta
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = data;
 
-        // Verificar si hay más usuarios
         const loadMoreIndicator = tempDiv.querySelector('#loadMoreIndicator');
         const hasMore = loadMoreIndicator && loadMoreIndicator.getAttribute('data-has-more') === 'true';
 
-        // Si no hay más usuarios, ocultar el botón y mostrar mensaje
         if (!hasMore) {
             document.getElementById('loadMore').style.display = 'none';
             document.getElementById('noMoreUsersMessage').style.display = 'block';
@@ -214,13 +210,11 @@ function loadMoreActivityAdmin() {
                 });
             }
             
-            // Actualiza la página actual y total
             const newCurrentPage = doc.getElementById('currentPage').value;
             const newTotalPages = doc.getElementById('totalPages').value;
             document.getElementById('currentPage').value = newCurrentPage;
             document.getElementById('totalPages').value = newTotalPages;
-            
-            // Oculta el botón si no hay más páginas
+
             if (currentAdminPage >= newTotalPages - 1) {
                 document.getElementById('loadMore').style.display = 'none';
             }
@@ -243,18 +237,14 @@ async function loadMoreActivitiesSubscribed() {
 
         const data = await response.text();
 
-        // Agregar nuevos actividades a la tabla
         document.querySelector('#allActivitiesPaginatedSubscribed tbody').insertAdjacentHTML('beforeend', data);
 
-        // Crear un DOM temporal para analizar la respuesta
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = data;
 
-        // Verificar si hay más actividades
         const loadMoreIndicator = tempDiv.querySelector('#loadMoreIndicator');
         const hasMore = loadMoreIndicator && loadMoreIndicator.getAttribute('data-has-more') === 'true';
 
-        // Si no hay más actividades, ocultar el botón y mostrar mensaje
         if (!hasMore) {
             document.getElementById('loadMore').style.display = 'none';
             document.getElementById('noMoreSubscribedActivitysMessage').style.display = 'block';
@@ -263,5 +253,3 @@ async function loadMoreActivitiesSubscribed() {
         console.error("Error al cargar más actividades:", error);
     }
 }
-
-

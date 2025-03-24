@@ -114,9 +114,9 @@
 				<script>
 					document.addEventListener("DOMContentLoaded", function (){
 						const activityByMonth = JSON.parse('{{activityData}}');
-						console.log("actividades"+activityByMonth);
+						
 						const reviewByValoration = JSON.parse('{{reviewData}}');
-						console.log("reviews"+reviewByValoration);
+						
 						const revenueCtx = document.getElementById('revenueChart').getContext('2d');	
 						new Chart(revenueCtx, {
 							type: 'bar',

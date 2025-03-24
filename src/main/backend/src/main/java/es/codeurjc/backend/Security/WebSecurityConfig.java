@@ -10,23 +10,14 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
-
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.http.SessionCreationPolicy;
-
 import org.springframework.http.HttpMethod;
- import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
- 
- import es.codeurjc.backend.security.jwt.JwtRequestFilter;
- import es.codeurjc.backend.security.jwt.UnauthorizedHandlerJwt;
-
-
-
-
-
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import es.codeurjc.backend.security.jwt.JwtRequestFilter;
+import es.codeurjc.backend.security.jwt.UnauthorizedHandlerJwt;
 
 @Configuration
 @EnableWebSecurity
@@ -75,9 +66,6 @@ public class WebSecurityConfig {
 		http
 			.authorizeHttpRequests(authorize -> authorize
                     // PRIVATE ENDPOINTS
-                    
-					
-					
 					.requestMatchers(HttpMethod.GET,"/api/activities/").permitAll()
 					.requestMatchers(HttpMethod.GET,"/api/activities/pageable").permitAll()
 					.requestMatchers(HttpMethod.GET,"/api/activities/{id}").permitAll()
@@ -87,13 +75,13 @@ public class WebSecurityConfig {
 					.requestMatchers(HttpMethod.GET,"/api/reviews/activity/").permitAll()
 					.requestMatchers(HttpMethod.POST,"/api/users/").permitAll()
 					
-
-
 					.requestMatchers(HttpMethod.POST,"/api/activities/{id}/reserve").hasRole("USER")
 					.requestMatchers(HttpMethod.POST,"/api/activities/users/").hasRole("USER")
 					.requestMatchers(HttpMethod.POST,"/api/activities/user/").hasRole("USER")
 					.requestMatchers(HttpMethod.POST,"/api/reviews/activity/").hasRole("USER")
 					.requestMatchers(HttpMethod.PUT,"/api/reviews/").hasRole("USER")
+					.requestMatchers(HttpMethod.GET,"/api/activities/users/**").hasRole("USER")
+					.requestMatchers(HttpMethod.GET,"/api/activities/user/**").hasRole("USER")
 
 					.requestMatchers(HttpMethod.POST,"/api/activities/").hasRole("ADMIN")
 					.requestMatchers(HttpMethod.GET,"/api/users/").hasRole("ADMIN")
@@ -112,7 +100,6 @@ public class WebSecurityConfig {
 					.requestMatchers(HttpMethod.GET,"/api/statistics/review-statistics").hasRole("ADMIN")
 					.requestMatchers(HttpMethod.GET,"/api/statistics/general-statistics").hasRole("ADMIN")
 					.requestMatchers(HttpMethod.DELETE,"/api/reviews/").hasRole("ADMIN")
-
 
 					// PUBLIC ENDPOINTS
 					.anyRequest().permitAll()
@@ -161,12 +148,8 @@ public class WebSecurityConfig {
 				.requestMatchers("/searchPage").permitAll()
 				.requestMatchers("/activity/{id}/image").permitAll()
 				.requestMatchers("/user/{id}/image").permitAll()
-				.requestMatchers("/404").permitAll()
-				
-				
-				
+				.requestMatchers("/404").permitAll()				
 				// USER PAGES
-				
 				.requestMatchers("/profile").hasAnyRole("USER")
 				.requestMatchers("/editUserProfile/").hasAnyRole("USER")
 				.requestMatchers("/activity/{activityId}/addReview").hasAnyRole("USER")
@@ -178,7 +161,6 @@ public class WebSecurityConfig {
 				.requestMatchers("/editActivity/").hasAnyRole("ADMIN")
 				.requestMatchers("/removeActivity").hasAnyRole("ADMIN")
 				.requestMatchers("/removeUser").hasAnyRole("ADMIN")
-				
 				.anyRequest().authenticated())
 		
 				// LOGIN
@@ -196,9 +178,6 @@ public class WebSecurityConfig {
 			 // Stateless session
 			 http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.ALWAYS));
 
-		
 		return http.build();
 	}
-
-
 }

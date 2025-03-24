@@ -2,10 +2,8 @@ package es.codeurjc.backend.service;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import es.codeurjc.backend.model.Place;
 import es.codeurjc.backend.repository.PlaceRepository;
 
@@ -29,6 +27,5 @@ public class PlaceService {
 
     public Optional<Place> findById(Long placeId) {
         return placeRepository.findById(placeId);
-    }
-         
+    }     
 }
