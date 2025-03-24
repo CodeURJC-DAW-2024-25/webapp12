@@ -3,12 +3,10 @@ package es.codeurjc.backend.dto;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
-
 import es.codeurjc.backend.model.Activity;
 import es.codeurjc.backend.model.Place;
 import es.codeurjc.backend.model.Review;
@@ -18,18 +16,14 @@ import es.codeurjc.backend.model.User;
 public interface ActivityMapper {
 
     ActivityMapper INSTANCE = Mappers.getMapper(ActivityMapper.class);
-    
     @Mapping(target = "creationDate", source = "creationDate")
     @Mapping(target = "place", source = "place") 
     @Mapping(target = "reviews", source = "reviews")
     ActivityDto toDto(Activity activity);
-
     List<ActivityDto> toDTOs(Collection<Activity> activities);
-
     @Mapping(target = "id", ignore = true)
     void updateActivityFromDto(NewActivityDto dto, @MappingTarget Activity activity);
 
-    // Método para mapear Place a PlaceDto
     default PlaceDto mapPlace(Place place) {
         if (place == null) {
             return null;
@@ -65,6 +59,4 @@ public interface ActivityMapper {
         }
         return user.getName() + " " + user.getSurname();
     }
-
-
 }

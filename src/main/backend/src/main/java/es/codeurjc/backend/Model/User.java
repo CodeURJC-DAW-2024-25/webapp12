@@ -1,12 +1,8 @@
 package es.codeurjc.backend.model;
 
-
 import java.sql.Blob;
 import java.util.List;
-
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -38,20 +34,16 @@ public class User {
 	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
 	private List<Review> reviews;
 	
-
 	@Lob
 	@JsonIgnore
 	private Blob imageFile;
-
 	private boolean imageBoolean;
-	
 
 	public User() {
 		super();
 	}
 
 	public User(String name, String surname, String email,String dni,String phone, String password) {
-		
 		this.name = name;
 		this.surname = surname;
 		this.email = email;

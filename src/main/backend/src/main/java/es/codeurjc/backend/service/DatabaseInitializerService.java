@@ -1,23 +1,16 @@
 package es.codeurjc.backend.service;
 
 import java.io.IOException;
-
 import java.net.URISyntaxException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.List;
-
 import javax.sql.rowset.serial.SerialBlob;
-
-
-
-import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import es.codeurjc.backend.model.Activity;
 import es.codeurjc.backend.model.Place;
 import es.codeurjc.backend.model.Review;
@@ -44,11 +37,8 @@ public class DatabaseInitializerService {
 	@Autowired
 	private PlaceRepository placeRepository;
 
-	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-
-
 	
 	@PostConstruct
 	public void init() throws IOException, URISyntaxException, SQLException {
@@ -360,7 +350,6 @@ public class DatabaseInitializerService {
 		activity.setImageFile(blob);
 	}
 	
-
 	public void setUserImage(User user, String classpathResource) throws IOException, SQLException {
 		user.setImage(true);
 		Resource image = new ClassPathResource(classpathResource);
@@ -368,6 +357,5 @@ public class DatabaseInitializerService {
 		SerialBlob blob = new SerialBlob(data);
 		user.setImageFile(blob);
 	}
-
 
 }

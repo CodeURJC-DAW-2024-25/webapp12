@@ -17,12 +17,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.springframework.data.domain.Pageable;
-
 import es.codeurjc.backend.dto.ActivityDto;
 import es.codeurjc.backend.dto.UserDto;
 import es.codeurjc.backend.model.User;
@@ -34,22 +31,15 @@ import es.codeurjc.backend.service.UserService;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
-
 import org.springframework.ui.Model;
-
 import java.io.IOException;
 import java.security.Principal;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.springframework.web.bind.annotation.PostMapping;
-
-
-
-
 
 @Controller
 public class UserController {
@@ -61,7 +51,6 @@ public class UserController {
 
     @Autowired
     private ActivityService activityService;
-
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -87,8 +76,6 @@ public class UserController {
         return "register";
     }
 
-
-
     @PostMapping("/signup")
     public String signup(User user, RedirectAttributes attributes) throws MessagingException {
         if (userService.existsByEmail(user.getEmail())) {
@@ -97,7 +84,6 @@ public class UserController {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setRoles(List.of("USER"));
             userService.save(user);
-    
             
             String htmlMessage = "<div style='font-family: Arial, sans-serif; padding: 15px; border: 2px solid #ddd; border-radius: 10px; background-color: #f9f9f9;'>"
                     + "<h2 style='color: #2d89ef;'>👋 ¡Bienvenido a nuestra aplicación, " + user.getName() + "! 🎉</h2>"
@@ -105,44 +91,34 @@ public class UserController {
                     + "<p style='font-size: 16px; color: #333;'> Te damos la vienvenida a nuestro FABULOSO resort.</p>"
                     + "<p style='font-size: 16px; color: #333;'>🚀 ¡Esperamos que disfrutes de la experiencia!</p>"
                     + "<p style='font-size: 14px; color: #777;'>Saludos,<br><strong>El equipo de Pixel Paradise</strong></p>"
-                    + "</div>";
-    
-           
+                    + "</div>";          
             emailService.sendEmail(
                 user.getEmail(),
                 "¡Bienvenido a nuestra aplicación!",
                 htmlMessage
             );
-    
             return "redirect:/login";
         }
     }
     
-
-    
     @GetMapping("/adminUsers")
     public String showAdminUsers(Model model, HttpServletRequest request, Principal principal) {
-        // Verificar roles
+        
         model.addAttribute("admin", request.isUserInRole("ADMIN"));
         model.addAttribute("user", request.isUserInRole("USER"));
 
-        // Obtener el usuario actual
         String userEmail = principal.getName();
         User user = userService.findByEmail(userEmail); 
 
-        // Obtener las actividades paginadas del usuario
-        int page = 0; // Página inicial
-        int pageSize = 4; // Tamaño de la página
+        int page = 0; 
+        int pageSize = 4;
         Pageable pageable = PageRequest.of(page, pageSize);
         Page<ActivityDto> activitiesPage = activityService.getActivitiesByUser(user.getId(), pageable);
 
-        // Obtener la lista de actividades suscritas
         List<ActivityDto> subscribedActivities = activitiesPage.getContent();
 
-        // Obtener la lista de usuarios paginados
         Page<UserDto> users = userService.getAllUsersPaginated(page, pageSize);
 
-        // Agregar atributos al modelo
         model.addAttribute("users", users.getContent()); 
         model.addAttribute("hasMore", users.hasNext());
         model.addAttribute("userCount", userService.countUsers());
@@ -155,8 +131,7 @@ public class UserController {
 
     @GetMapping("/moreUsers") 
     public String LoadMoreUser(@RequestParam int page, Model model) { 
-        System.out.println("Cargando usuarios, página: " + page);
-    
+
         try {
             int pageSize = 2;
             Page<UserDto> users = userService.getAllUsersPaginated(page, pageSize);
@@ -164,9 +139,8 @@ public class UserController {
             model.addAttribute("users", users.getContent()); 
             model.addAttribute("hasMore", users.hasNext()); 
 
-            return "moreUsers";  // Se sigue usando el mismo archivo para mostrar los usuarios
+            return "moreUsers"; 
         } catch (Exception e) {
-            System.err.println("Error en /moreUsers: " + e.getMessage());
             e.printStackTrace();
             return "errorPage";  
         }
@@ -204,32 +178,27 @@ public class UserController {
 		}
 	}
 
-
-
     @GetMapping("/profile")
     public String showProfile(Model model, Principal principal, HttpServletRequest request) {
-        // Verificar roles
+
         model.addAttribute("admin", request.isUserInRole("ADMIN"));
         model.addAttribute("user", request.isUserInRole("USER"));
     
-        // Obtener el usuario actual
         String userEmail = principal.getName();
         User user = userService.findByEmail(userEmail);
     
         if (user != null) {
-            // Agregar atributos básicos del usuario
+            
             model.addAttribute("userRegister", user);
             model.addAttribute("userCount", userService.countUsers());
             model.addAttribute("activityCount", activityService.activityCount());
             model.addAttribute("id", user.getId());
     
-            // Obtener las actividades suscritas paginadas
-            int page = 0; // Página inicial
-            int pageSize = 10; // Tamaño de la página (ajusta según sea necesario)
+            int page = 0; 
+            int pageSize = 10; 
             Pageable pageable = PageRequest.of(page, pageSize);
             Page<ActivityDto> subscribedActivities = activityService.getActivitiesByUser(user.getId(), pageable);
     
-            // Agregar las actividades suscritas al modelo
             model.addAttribute("subscribedActivities", subscribedActivities);
             model.addAttribute("countActivitiesSubscribed", subscribedActivities.getTotalElements());
     
@@ -241,20 +210,18 @@ public class UserController {
 
     @GetMapping("/moreActivitiesSubscribed")
     public String LoadMoreActivities(@RequestParam int page, Model model, Principal principal) {
-        // Obtener el usuario actual
+      
         String userEmail = principal.getName();
         User user = userService.findByEmail(userEmail);
 
         if (user != null) {
-            // Obtener las actividades suscritas paginadas
-            int pageSize = 10; // Tamaño de la página (ajusta según sea necesario)
+            
+            int pageSize = 10; 
             Pageable pageable = PageRequest.of(page, pageSize);
             Page<ActivityDto> activities = activityService.getActivitiesByUser(user.getId(), pageable);
 
-            // Agregar las actividades suscritas al modelo
             model.addAttribute("subscribedActivities", activities.getContent());
 
-            // Verificar si hay más páginas
             boolean hasMore = page < activities.getTotalPages() - 1;
             model.addAttribute("hasMore", hasMore);
 
@@ -273,26 +240,22 @@ public class UserController {
 
     @GetMapping("/editUserProfile/{id}")
     public String showEditProfile(Principal principal, Model model, HttpServletRequest request, @PathVariable long id) {
-        // Verificar roles
+
         model.addAttribute("admin", request.isUserInRole("ADMIN"));
         model.addAttribute("user", request.isUserInRole("USER"));
 
-        // Obtener el usuario por su ID
         Optional<User> optionalUser = userService.findById(id);
 
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
 
-            // Obtener las actividades paginadas del usuario
-            int page = 0; // Página inicial
-            int pageSize = 4; // Tamaño de la página (ajusta según sea necesario)
+            int page = 0; 
+            int pageSize = 4; 
             Pageable pageable = PageRequest.of(page, pageSize);
             Page<ActivityDto> activitiesPage = activityService.getActivitiesByUser(user.getId(), pageable);
 
-            // Obtener la lista de actividades suscritas
             List<ActivityDto> subscribedActivities = activitiesPage.getContent();
 
-            // Agregar atributos al modelo
             model.addAttribute("userRegistered", user);
             model.addAttribute("countActivitiesSubscribed", subscribedActivities.size());
             model.addAttribute("userCount", userService.countUsers());
@@ -333,32 +296,25 @@ public class UserController {
 
     @GetMapping("/statistics")
     public String showStatistics(HttpServletRequest request, Model model, Principal principal) throws JsonProcessingException {
-        // Verificar roles
         model.addAttribute("admin", request.isUserInRole("ADMIN"));
         model.addAttribute("user", request.isUserInRole("USER"));
 
-        // Obtener el usuario actual
         String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.findByEmail(userEmail);
 
         if (user != null) {
-            // Obtener las actividades paginadas del usuario
-            int page = 0; // Página inicial
-            int pageSize = 10; // Tamaño de la página (ajusta según sea necesario)
+            int page = 0; 
+            int pageSize = 10; 
             Pageable pageable = PageRequest.of(page, pageSize);
             Page<ActivityDto> activitiesPage = activityService.getActivitiesByUser(user.getId(), pageable);
 
-            // Obtener la lista de actividades suscritas
             List<ActivityDto> subscribedActivities = activitiesPage.getContent();
 
-            // Obtener estadísticas de actividades por mes
             Map<Integer, Long> activitiesByMonth = activityService.countActivitiesByMonth();
             List<Integer> activityData = new ArrayList<>();
             for (int i = 1; i <= 12; i++) {
                 activityData.add(activitiesByMonth.getOrDefault(i, 0L).intValue());
             }
-
-            // Agregar atributos al modelo
             model.addAttribute("activityData", new ObjectMapper().writeValueAsString(activityData));
             model.addAttribute("reviewData", reviewService.countReviewsByValoration());
             model.addAttribute("userRegistered", user);
@@ -375,10 +331,3 @@ public class UserController {
     }
     
 }
-
-    
-    
-    
-    
-
-

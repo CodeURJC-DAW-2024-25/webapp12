@@ -3,17 +3,12 @@ package es.codeurjc.backend.service;
 import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import org.springframework.web.multipart.MultipartFile;
-
 import es.codeurjc.backend.dto.NewUserDto;
 import es.codeurjc.backend.dto.UserDto;
 import es.codeurjc.backend.dto.UserMapper;
 import es.codeurjc.backend.dto.UserUpdateDto;
-
 import es.codeurjc.backend.model.User;
 import es.codeurjc.backend.repository.UserRepository;
-
 import es.codeurjc.backend.security.CSRFHandlerConfiguration;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.core.io.InputStreamResource;
@@ -22,10 +17,8 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import jakarta.transaction.Transactional;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
@@ -40,12 +33,6 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private ActivityService activityService;
-
-    @Autowired
-    private ReviewService reviewService;
 
     @Autowired
     private UserMapper userMapper;
@@ -130,7 +117,6 @@ public class UserService {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
 
-        // Actualizar los campos del usuario
         if (userUpdateDto.name() != null) {
             user.setName(userUpdateDto.name());
         }
@@ -146,12 +132,10 @@ public class UserService {
 
        
 
-        userRepository.save(user);  // Guardamos los cambios
+        userRepository.save(user);  
 
-        return userMapper.toDto(user);  // Retornamos el DTO actualizado
+        return userMapper.toDto(user);  
     }
-
-    
 
     public Resource getUserImage(Long id) throws SQLException{
         User user = userRepository.findById(id).orElseThrow();
@@ -163,19 +147,17 @@ public class UserService {
     }
     
     public UserDto createUser(NewUserDto newUserDto){
-        System.out.println("Nuevo usuario recibido: " + newUserDto);
         if (newUserDto.email() == null || newUserDto.password() == null) {
             throw new IllegalArgumentException("Email y contraseña son requeridos");
         }
         User user = userMapper.toDomain(newUserDto);
         user.setPassword(passwordEncoder.encode(newUserDto.password()));
         if (newUserDto.roles() == null || newUserDto.roles().isEmpty()) {
-            user.setRoles(List.of("USER")); // Rol por defecto
+            user.setRoles(List.of("USER"));
         } else {
             user.setRoles(newUserDto.roles());
         }
         userRepository.save(user);
-        System.out.println("Usuario creado: " + user);
         return userMapper.toDto(user);
     }
     
@@ -188,9 +170,7 @@ public class UserService {
         User user = userRepository.findById(id)
             .orElseThrow(() -> new NoSuchElementException("User not found with id: " + id));
 
-        // Convertimos el usuario a DTO antes de eliminarlo
         UserDto userDto = toDTO(user);
-        // Finalmente, eliminamos el usuario
         userRepository.delete(user);
 
         return userDto;

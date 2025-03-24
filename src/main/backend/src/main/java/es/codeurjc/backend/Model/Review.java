@@ -1,9 +1,7 @@
 package es.codeurjc.backend.model;
 
 import java.util.Calendar;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

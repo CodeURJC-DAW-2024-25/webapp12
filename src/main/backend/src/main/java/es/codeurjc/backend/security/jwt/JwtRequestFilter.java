@@ -34,14 +34,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		
-		// Solo procesar JWT para rutas API
 		if (!request.getRequestURI().startsWith("/api/")) {
 			filterChain.doFilter(request, response);
 			return;
 		}
 		
 		try {
-			var claims = jwtTokenProvider.validateToken(request, true); // Intenta validar el token
+			var claims = jwtTokenProvider.validateToken(request, true); 
 			var userDetails = userDetailsService.loadUserByUsername(claims.getSubject());
 
 			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
@@ -51,9 +50,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 
 		} catch (Exception ex) {
-			// Si hay un error (token inválido o ausente), rechaza la petición
+			
 			SecurityContextHolder.clearContext();
-			filterChain.doFilter(request, response); // Continúa para que el `AuthenticationEntryPoint` maneje el error
+			filterChain.doFilter(request, response); 
 			return;
 		}
 

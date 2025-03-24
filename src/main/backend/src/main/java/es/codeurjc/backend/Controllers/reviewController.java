@@ -1,15 +1,11 @@
 package es.codeurjc.backend.controllers;
 
-
-
 import java.security.Principal;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import es.codeurjc.backend.model.User;
 import es.codeurjc.backend.service.ReviewService;
 import es.codeurjc.backend.service.UserService;
@@ -43,11 +39,5 @@ public class ReviewController {
         } catch (Exception e) {
             return "Error al agregar la review: " + e.getMessage();
         }
-    }
-
-
-
-    
-    
+    }    
 }
-

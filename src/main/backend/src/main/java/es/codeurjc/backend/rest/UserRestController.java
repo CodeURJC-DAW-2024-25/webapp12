@@ -3,23 +3,16 @@ package es.codeurjc.backend.rest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-
-import javax.sql.rowset.serial.SerialBlob;
-
-import org.mapstruct.control.MappingControl.Use;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,18 +20,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
-import org.springframework.data.domain.PageRequest;
 import es.codeurjc.backend.model.User;
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
-
-import es.codeurjc.backend.controllers.UserController;
-import es.codeurjc.backend.dto.ActivityDto;
 import es.codeurjc.backend.dto.NewUserDto;
 import es.codeurjc.backend.dto.UserDto;
 import es.codeurjc.backend.dto.UserUpdateDto;
-import es.codeurjc.backend.model.Activity;
 import es.codeurjc.backend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -46,18 +33,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.persistence.EntityNotFoundException;
-
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.PageRequest;
-
-
-
-
-
 
 @RestController
 @RequestMapping("/api/users")
@@ -88,7 +67,7 @@ public class UserRestController {
 	
 	@GetMapping("/pageable")
 	public Page<UserDto> getUsers(@RequestParam(defaultValue = "0") int page,
-								@RequestParam(defaultValue = "4") int size) { // Tamaño por defecto 4
+								@RequestParam(defaultValue = "4") int size) {
 		return userService.getAllUsersPaginated(page, size);
 	}
 	@Operation(summary = "Get user based on ID", description = "Returns the user whose ID matches the one on the URL.")
@@ -144,11 +123,11 @@ public class UserRestController {
 	public ResponseEntity<String> deleteUser(@PathVariable Long id) {
 		try {
 			userService.deleteUser(id);
-			return ResponseEntity.ok("Usuario eliminado correctamente"); // 200 OK con mensaje
+			return ResponseEntity.ok("Usuario eliminado correctamente"); 
 		} catch (EntityNotFoundException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrada"); // 404 Not Found con mensaje
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrada");
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar la usuario"); // 500 Internal Server Error con mensaje
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar la usuario"); 
 		}
 	}
 	@Operation(summary = "Delete user image", description = "Deletes an user imageand returns that deleted user.")

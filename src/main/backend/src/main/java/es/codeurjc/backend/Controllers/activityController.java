@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -19,12 +18,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import java.util.Optional;
-
-
 import org.springframework.transaction.annotation.Transactional;
-
 import es.codeurjc.backend.dto.ActivityDto;
 import es.codeurjc.backend.model.Activity;
 import es.codeurjc.backend.model.Place;
@@ -34,28 +29,17 @@ import es.codeurjc.backend.service.ActivityService;
 import es.codeurjc.backend.service.PlaceService;
 import es.codeurjc.backend.service.ReviewService;
 import es.codeurjc.backend.service.UserService;
-
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
-
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-
-
 import org.springframework.web.multipart.MultipartFile;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import org.springframework.http.ResponseEntity;
-
-
-
 
 @Controller
 public class ActivityController {
@@ -66,12 +50,8 @@ public class ActivityController {
     @Autowired
     private ReviewService reviewService;
 
-   
-
     @Autowired
     private UserService userService;
-
-
 
     @Autowired
     private PlaceService placeService;
@@ -142,7 +122,6 @@ public class ActivityController {
         }
     }
 
-        
     @GetMapping("/debug/activities")
     @ResponseBody
     public Map<String, Object> debugActivities(@RequestParam(defaultValue = "0") int page) {
@@ -201,7 +180,7 @@ public class ActivityController {
         Pageable pageableAll = PageRequest.of(page, sizeAll);
         Page<ActivityDto> activities = activityService.getActivities(pageableAll);
         
-        model.addAttribute("allActivities", activities.getContent());  // Cambio importante aquí
+        model.addAttribute("allActivities", activities.getContent()); 
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", activities.getTotalPages());
         
@@ -212,8 +191,6 @@ public class ActivityController {
     public String loadMoreActivityAdmin(
             @RequestParam int page, 
             Model model) {
-
-        System.out.println("Cargando actividades, página: " + page);
 
         try {
             int size = 10;
@@ -239,7 +216,6 @@ public class ActivityController {
 
             return "moreActivitiesAdmin";
         } catch (Exception e) {
-            System.err.println("Error en /moreActivitiesAdmin: " + e.getMessage());
             e.printStackTrace();
             return "errorPage";
         }
@@ -346,7 +322,6 @@ public class ActivityController {
     public String loadMoreReviews(@RequestParam Long activityId, @RequestParam int page, Model model) {
         Page<Review> reviews = reviewService.getReviewsPaginated(activityId, page);
         
-        
         Optional<Activity> optionalActivity = activityService.findById(activityId);
         if (optionalActivity.isEmpty()) {
             model.addAttribute("errorMessage", "Actividad no encontrada.");
@@ -355,7 +330,6 @@ public class ActivityController {
 
         Activity activity = optionalActivity.get();
         model.addAttribute("activity", activity);  
-        
         
         boolean hasMore = page < reviews.getTotalPages() - 1;
         model.addAttribute("reviews", reviews.getContent());
@@ -367,7 +341,6 @@ public class ActivityController {
         
     @GetMapping("/createActivity")
     public String showFormNewActivity(Model model) {
-
         model.addAttribute("allPlaces", placeService.getAllPlaces());
         return "createActivity";
     }
@@ -389,15 +362,13 @@ public class ActivityController {
             } else {
                 return "error"; 
             }
-
             
             java.util.Date utilDate = activity.getActivityDate();
             if (utilDate != null) {
                 java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
                 activity.setActivityDate(sqlDate); 
             }
-
-            
+         
             activityService.saveActivity(activity);
             return "redirect:/adminActivities";
         } catch (IOException e) {
@@ -432,7 +403,6 @@ public class ActivityController {
         Optional<Activity> optionalActivity = activityService.findById(id);
         if (optionalActivity.isPresent()) {
             Activity activity = optionalActivity.get();
-
             activity.setName(updatedActivity.getName());
             activity.setDescription(updatedActivity.getDescription());
             activity.setCategory(updatedActivity.getCategory());
@@ -440,7 +410,6 @@ public class ActivityController {
             activity.setPlace(updatedActivity.getPlace());
             updateImage(activity, removeImage, imagFile);
 
-            
             activityService.saveActivity(activity);
 
             return "redirect:/adminActivities";  
@@ -455,14 +424,12 @@ public class ActivityController {
         if (placeId == null) {
             return "redirect:/error";  
         }
-    
 
         Optional<Place> optionalPlace = placeService.findById(placeId);
 
         if (optionalPlace.isPresent()) {
             Place place = optionalPlace.get();
-            List<Activity> activitiesByPlace = activityService.findByPlace(place);
-             
+            List<Activity> activitiesByPlace = activityService.findByPlace(place);    
             model.addAttribute("activitiesByPlace", activitiesByPlace); 
             model.addAttribute("placeName", place.getName());
         } else {
@@ -491,7 +458,6 @@ public class ActivityController {
         }
 
         byte[] pdfContents = activityService.generateReservationPDF(id, user.getId()).toByteArray();
-
         
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Ticket_Reserva_" + user.getName() + ".pdf");
@@ -502,4 +468,3 @@ public class ActivityController {
                 .body(pdfContents);
     }
 }
-
