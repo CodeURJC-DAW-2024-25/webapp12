@@ -93,6 +93,7 @@ public class WebSecurityConfig {
 					.requestMatchers(HttpMethod.DELETE,"/api/users/{id}").hasRole("ADMIN")
 					.requestMatchers(HttpMethod.PUT,"/api/users/{id}/image").hasRole("USER")
 					.requestMatchers(HttpMethod.POST,"/api/users/{id}/image").hasRole("USER")
+					.requestMatchers(HttpMethod.DELETE,"/api/users/{id}/image").hasRole("USER")
 
 					.requestMatchers(HttpMethod.POST,"/api/activities/{id}/image").hasRole("ADMIN")
 					.requestMatchers(HttpMethod.PUT,"/api/activities/{id}/image").hasRole("ADMIN")
