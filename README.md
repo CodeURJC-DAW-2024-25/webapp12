@@ -350,67 +350,73 @@ Task List
 | application.properties|[application.properties ](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/resources/application.properties)|
 | DatabaseInitializerService.java |https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/java/es/codeurjc/backend/config/DatabaseInitializerService.java|
 | WebSecurityConfig |[WebSecurityConfig](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/java/es/codeurjc/backend/Security/WebSecurityConfig.java)|
+---
+# 🛠️ PHASE 2  
 
 ---
-# 🛠️ PHASE 2
+
+## ⚙️ Notes on Configuration  
+
+### 🖥️ **Class and Templates Diagram**  
 
 ---
-## ⚙️ Notes on Configuration
 
-### 🖥️ **Class and Templates Diagram**
+## 🛠️ Execution Instructions  
 
-## 🛠️ Execution Instructions
+### 🚀 **Deployment Steps**  
 
-### Deployment Steps
+1. **Network Connection**  
+   - You must be connected to the university network. If accessing from outside, use the Windows or Ubuntu development desktop available in **MyApps**. 
 
-- You must be connected to the university network. If accessing from outside, use the Windows or Ubuntu development desktop available in **MyApps**.
-- Make sure you have the **private key** downloaded to your local computer.
-- Open a terminal on your system and run one of the following commands to connect to the virtual machine:
+2. **Private Key**  
+   - Make sure you have the **private key** downloaded to your local computer.
 
-  ssh -i ssh-keys/appWeb12.key vmuser@10.100.139.153
-   or
-  ssh -i ssh-keys/appWeb12.key vmuser@appWeb12.dawgis.etsii.urjc.es
+3. **Conexión SSH**  
+   - Open a terminal on your system and run one of the following commands to connect to the virtual machine:
+     ```bash
+     ssh -i ssh-keys/appWeb12.key vmuser@10.100.139.153
+     ```
+     o  
+     ```bash
+     ssh -i ssh-keys/appWeb12.key vmuser@appWeb12.dawgis.etsii.urjc.es
+     ```
 
-# Clone the repository into the virtual machine:
+4. **Clone the repository into the virtual machine**  
+   ```bash
+   git clone https://github.com/CodeURJC-DAW-2024-25/webapp12.git
 
-  git clone https://github.com/CodeURJC-DAW-2024-25/webapp12.git
+5. **Navigate to the docker folder**
+   ```bash
+   cd webapp12/src/main/backend/docker
 
-# Navigate to the docker folder:
-
-  cd webapp12/src/main/backend/docker
-
-# If you want to build the Docker images manually:
-  - Give permission to the following scripts:
-
-    chmod +x create_image.sh
-    chmod +x publish_image.sh
-
-  - Execute:
-
+6. **If you want to build the Docker images manually**
+   ```bash
+   chmod +x create_image.sh
+   chmod +x publish_image.sh
+   
+7. **Execute**
+   ```bash
     docker login
     ./create_image.sh      # To generate the app image
     ./publish_image.sh     # To publish it into Docker Hub
 
-# To start the application using Docker Compose:
-
-  docker compose up
-
-  - Access the application at:
+8. **🌐 Access the application at**
     - VM: https://appWeb12.dawgis.etsii.urjc.es
     - Local: https://localhost:443
 
-# To stop the application:
-
-  docker compose down
-
-  - If you also want to remove the database volume:
-
+9. **To stop the application**
+   ```bash
+   docker compose down
+   
+10. **If you also want to remove the database volume:**    
+    ```bash
     docker compose down -v
 
-
+---
 ### 🖊️**Documentation for API REST**
-[File: api-docs.yaml](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/api-docs/api-docs.yaml)
-[API DOCS](https://raw.githack.com/CodeURJC-DAW-2024-25/webapp12/main/api-docs/api-docs.html)
+Api-docs.yaml: [File: api-docs.yaml](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/api-docs/api-docs.yaml)
+
+Api-docs.html: [API DOCS](https://raw.githack.com/CodeURJC-DAW-2024-25/webapp12/main/api-docs/api-docs.html)
 
 ---
 ## 🫂 **Member Participation**
