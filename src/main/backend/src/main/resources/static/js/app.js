@@ -1,26 +1,126 @@
 let page = 0;
 
 async function loadMore() {
-    page++;
+    // Add logging to debug
+    console.log('Load more function called');
+    
+    // Keep track of the current page
+    const currentPage = document.getElementById('loadMore').getAttribute('data-page') || 0;
+    const nextPage = parseInt(currentPage) + 1;
+    console.log('Loading page:', nextPage);
+    
+    // Make AJAX request to get next page of activities
+    fetch(`/?page=${nextPage}`, {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => {
+        console.log('Response status:', response.status);
+        return response.json();
+    })
+    .then(data => {
+        console.log('Received data:', data);
+        
+        if (data.activities && data.activities.length > 0) {
+            console.log('Activities found:', data.activities.length);
+            
+            // Get the container for activities
+            const container = document.getElementById('allActivitiesPaginated');
+            
+            // Append new activities to the container
+            data.activities.forEach(activity => {
+                console.log('Adding activity:', activity.id, activity.name);
+                
+                const activityHtml = `
+                <div class="col-sm-12 col-lg-3">
+                    <div class="product-item bg-light">
+                        <div class="card">
+                            <div class="thumb-content">
+                                <a href="/activity/${activity.id}">
+                                    <img class="card-img-top img-fluid" src="/activity/${activity.id}/image" alt="Card image cap">
+                                </a>
+                            </div>
+                            <div class="card-body">
+                                <h4 class="card-title"><a href="/activity/${activity.id}">${activity.name}</a></h4>
+                                <ul class="list-inline product-meta">
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-folder-open-o"></i>${activity.category}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+                
+                container.insertAdjacentHTML('beforeend', activityHtml);
+            });
+            
+            // Update the current page
+            document.getElementById('loadMore').setAttribute('data-page', nextPage);
+            console.log('Updated page attribute to:', nextPage);
+            
+            // Hide "Load More" button if no more activities
+            if (!data.hasMore) {
+                console.log('No more activities, hiding button');
+                document.getElementById('loadMore').style.display = 'none';
+            }
+        } else {
+            // No more activities to load
+            console.log('No activities returned, hiding button');
+            document.getElementById('loadMore').style.display = 'none';
+        }
+    })
+    .catch(error => {
+        console.error('Error loading more activities:', error);
+    });
+}
 
-    const response = await fetch(`/moreActivities?page=${page}`);
-    const data = await response.text();
+// Initialize the page counter when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Initializing load more button');
+    document.getElementById('loadMore').setAttribute('data-page', '0');
+});
+let currentRecommendedPage = 0;
 
-    document.getElementById('allActivitiesPaginated').insertAdjacentHTML('beforeend', data);
-    // Crear un DOM temporal para analizar la respuesta
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = data;
-
-    // Verificar si hay más elementos en la paginación
-    const hasMore = tempDiv.querySelector('#loadMoreIndicator')?.getAttribute('data-has-more') === 'true';
-
-    // Si no hay más actividades, ocultar el botón y mostrar el mensaje
-    if (!hasMore) {
-        document.getElementById('loadMore').style.display = 'none';
-        document.getElementById('noMoreActivitiesMessage').style.display = 'block';
-    }
-
-
+function loadMoreRecommended() {
+    currentRecommendedPage++;
+    console.log(`Loading recommended activities page ${currentRecommendedPage}`);
+    
+    // Fetch the next page as HTML
+    fetch(`/?page=${currentRecommendedPage}&recommendedOnly=true`)
+        .then(response => response.text())
+        .then(html => {
+            // Create a temporary DOM element to parse the HTML
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            
+            // Extract the recommended activities from the response
+            const newRecommendedActivities = doc.querySelectorAll('#recommendedActivitiesContainer > div');
+            console.log(`Found ${newRecommendedActivities.length} new recommended activities`);
+            
+            if (newRecommendedActivities.length > 0) {
+                // Add the new recommended activities to the current page
+                const container = document.getElementById('recommendedActivitiesContainer');
+                newRecommendedActivities.forEach(activity => {
+                    container.appendChild(activity.cloneNode(true));
+                });
+            }
+            
+            // Check if there are more recommended activities to load
+            const loadMoreButton = document.getElementById('loadMoreRecommended');
+            const hasMoreButton = doc.querySelector('#loadMoreRecommended');
+            
+            if (!hasMoreButton) {
+                console.log('No more recommended activities to load');
+                if (loadMoreButton) {
+                    loadMoreButton.style.display = 'none';
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error loading more recommended activities:', error);
+        });
 }
 
 async function loadMoreReview() {

@@ -4,8 +4,9 @@ import java.io.IOException;
 import java.security.Principal;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 
 import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Optional;
 
@@ -44,8 +46,11 @@ import org.springframework.data.domain.Pageable;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.http.ResponseEntity;
 
@@ -72,35 +77,88 @@ public class ActivityController {
     private PlaceService placeService;
 
     @GetMapping("/")
-    public String showActivities(
+    public Object showActivities(
             Model model,
             Principal principal,
-            @RequestParam(defaultValue = "0") int page) { 
-
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "false") boolean recommendedOnly,
+            HttpServletRequest request,
+            HttpServletResponse response) { 
+    
         int size = 4;
         Pageable pageable = PageRequest.of(page, size);
-
-        Page<ActivityDto> activities = activityService.getActivities(pageable);
-
-        List<Place> places = placeService.findAll();
-
-        model.addAttribute("activities", activities);
-        model.addAttribute("allPlaces", places);
-
-        if (principal != null) {
-            String userEmail = principal.getName();
-
-            User user = userService.findByEmail(userEmail);
-            if (user != null) {
-                Page<ActivityDto> recommendedActivities = activityService.recommendActivities(user.getId(), pageable);
-                model.addAttribute("recommendedActivities", recommendedActivities.getContent()); 
-                model.addAttribute("hasMoreRecommended", recommendedActivities.hasNext()); 
-            } else {
-                System.out.println("User not found: " + userEmail);
+        
+        try {
+            // Check if request is AJAX
+            boolean isAjaxRequest = "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
+            
+            if (principal != null) {
+                String userEmail = principal.getName();
+                User user = userService.findByEmail(userEmail);
+                
+                if (user != null) {
+                    Page<ActivityDto> recommendedActivities = activityService.recommendActivities(user.getId(), pageable);
+                    
+                    if (isAjaxRequest) {
+                        // Return JSON response for AJAX requests directly
+                        response.setContentType("application/json");
+                        Map<String, Object> jsonResponse = new HashMap<>();
+                        
+                        if (recommendedOnly) {
+                            // If specifically requesting recommended activities
+                            jsonResponse.put("activities", recommendedActivities.getContent());
+                            jsonResponse.put("hasMore", recommendedActivities.hasNext());
+                        } else {
+                            // Regular activities
+                            Page<ActivityDto> activities = activityService.getActivities(pageable);
+                            jsonResponse.put("activities", activities.getContent());
+                            jsonResponse.put("hasMore", activities.hasNext());
+                        }
+                        
+                        ObjectMapper mapper = new ObjectMapper();
+                        mapper.writeValue(response.getWriter(), jsonResponse);
+                        return null;
+                    }
+                    
+                    // For non-AJAX requests, add recommended activities to the model
+                    model.addAttribute("recommendedActivities", recommendedActivities.getContent());
+                    model.addAttribute("hasMoreRecommended", recommendedActivities.hasNext());
+                }
             }
+            
+            // Regular activities pagination for the main activities list
+            Page<ActivityDto> activities = activityService.getActivities(pageable);
+            model.addAttribute("activities", activities.getContent());
+            model.addAttribute("hasMore", activities.hasNext());
+            
+            // Add places to the model
+            List<Place> places = placeService.findAll();
+            model.addAttribute("allPlaces", places);
+            
+            return "index";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "error";
         }
+    }
 
-        return "index";
+        
+    @GetMapping("/debug/activities")
+    @ResponseBody
+    public Map<String, Object> debugActivities(@RequestParam(defaultValue = "0") int page) {
+        int size = 4;
+        Pageable pageable = PageRequest.of(page, size);
+        
+        Page<ActivityDto> activities = activityService.getActivities(pageable);
+        
+        Map<String, Object> response = new HashMap<>();
+        response.put("activities", activities.getContent());
+        response.put("hasMore", activities.hasNext());
+        response.put("totalElements", activities.getTotalElements());
+        response.put("totalPages", activities.getTotalPages());
+        response.put("currentPage", page);
+        
+        return response;
     }
 
     @GetMapping("/moreActivities")
