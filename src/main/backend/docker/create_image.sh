@@ -1,8 +1,9 @@
 #!/bin/bash
 set -e
 
-# Ir a la carpeta raíz del proyecto (donde está pom.xml)
+# Go to the project root directory (where pom.xml is located)
 cd "$(dirname "$0")"/..
 
-# Construir la imagen usando el Dockerfile ubicado en /docker
+# Build the Docker image using the Dockerfile located in /docker
 docker build -f docker/Dockerfile -t przx27/backend-app:java21 .
+
