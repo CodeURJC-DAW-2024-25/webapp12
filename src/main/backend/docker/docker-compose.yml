@@ -4,7 +4,7 @@ services:
   db:
     image: mysql:8.0.33
     container_name: pixel-db
-    restart: "no"
+    restart: "always"
     environment:
       MYSQL_DATABASE: Pixel_Paradise
       MYSQL_ROOT_PASSWORD: 1234
@@ -26,7 +26,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/Pixel_Paradise
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: 1234
-    restart: "no"
+    restart: "always"
     networks:
       - pixel-network
 
