@@ -367,37 +367,45 @@ Task List
 - Make sure you have the **private key** downloaded to your local computer.
 - Open a terminal on your system and run one of the following commands to connect to the virtual machine:
 
-
-ssh -i ssh-keys/appWeb12.key vmuser@10.100.139.153
+  ssh -i ssh-keys/appWeb12.key vmuser@10.100.139.153
    or
-ssh -i ssh-keys/appWeb12.key vmuser@appWeb12.dawgis.etsii.urjc.es
+  ssh -i ssh-keys/appWeb12.key vmuser@appWeb12.dawgis.etsii.urjc.es
 
-#Clone the repository into the virtual machine:
-git clone https://github.com/CodeURJC-DAW-2024-25/webapp12.git
+# Clone the repository into the virtual machine:
 
-#Navigate to the docker folder:
-cd webapp12/src/main/backend/docker
+  git clone https://github.com/CodeURJC-DAW-2024-25/webapp12.git
 
-#If you want to build the Docker images manually go :
--Give permission to the following scripts:
-   chmod +x create_image.sh
-   chmod +x publish_image.sh
-execute:
-   docker login
-   ./create_image.sh to generate the app image.
-   ./publish_image.sh to publish into docker hub.
+# Navigate to the docker folder:
 
-#To start the application using Docker-Compose:
-   docker compose up 
-Acces the aplicattion at: 
-   VM : https://appWeb12.dawgis.etsii.urjc.es
-   local : https://localhost/443
+  cd webapp12/src/main/backend/docker
 
-#To stop the application:
-   docker compose down
-if you also want to remove the database volume:
-   docker compose down -v
+# If you want to build the Docker images manually:
+  - Give permission to the following scripts:
 
+    chmod +x create_image.sh
+    chmod +x publish_image.sh
+
+  - Execute:
+
+    docker login
+    ./create_image.sh      # To generate the app image
+    ./publish_image.sh     # To publish it into Docker Hub
+
+# To start the application using Docker Compose:
+
+  docker compose up
+
+  - Access the application at:
+    - VM: https://appWeb12.dawgis.etsii.urjc.es
+    - Local: https://localhost:443
+
+# To stop the application:
+
+  docker compose down
+
+  - If you also want to remove the database volume:
+
+    docker compose down -v
 
 
 ### 🖊️**Documentation for API REST**
