@@ -67,7 +67,7 @@ paths:
       tags:
       - user-rest-controller
       summary: Delete user
-      description: Users an activity and returns that deleted user.
+      description: Delete an user and returns that deleted user.
       operationId: deleteUser
       parameters:
       - name: id
@@ -123,6 +123,17 @@ paths:
         schema:
           type: integer
           format: int64
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              required:
+              - file
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
       responses:
         '200':
           description: Image updated successfully
@@ -155,7 +166,7 @@ paths:
           content:
             "*/*":
               schema:
-                type: object
+                type: string
         '400':
           description: Bad request
         '404':
@@ -440,6 +451,8 @@ paths:
     post:
       tags:
       - user-rest-controller
+      summary: Create new user
+      description: Creates a new user and returns that new user.
       operationId: createUser
       requestBody:
         content:
@@ -448,12 +461,16 @@ paths:
               "$ref": "#/components/schemas/NewUserDto"
         required: true
       responses:
-        '200':
-          description: OK
+        '201':
+          description: User created successfully
           content:
-            "*/*":
+            application/json:
               schema:
                 "$ref": "#/components/schemas/UserDto"
+        '403':
+          description: The request is unauthorized
+        '404':
+          description: Not found
   "/api/reviews/activity/{activityId}":
     get:
       tags:
@@ -721,42 +738,45 @@ paths:
     get:
       tags:
       - statistics-rest-controller
+      summary: Get the review-statistics
+      description: Returns the review-statistics of the the activity ratings
       operationId: getReviewStatistics
       responses:
         '200':
-          description: OK
-          content:
-            "*/*":
-              schema:
-                type: array
-                items:
-                  "$ref": "#/components/schemas/ReviewStatisticsDto"
+          description: Review-statistics returned successfully
+        '400':
+          description: Bad request
+        '404':
+          description: User not found
   "/api/statistics/general-statistics":
     get:
       tags:
       - statistics-rest-controller
+      summary: Get the general statistics
+      description: Returns the general statistics of the user, activity and place
+        count
       operationId: getGeneralStatistics
       responses:
         '200':
-          description: OK
-          content:
-            "*/*":
-              schema:
-                "$ref": "#/components/schemas/GeneralStatisticsDto"
+          description: General statistics returned successfully
+        '400':
+          description: Bad request
+        '404':
+          description: User not found
   "/api/statistics/activities-by-month":
     get:
       tags:
       - statistics-rest-controller
+      summary: Get the activities-by-month
+      description: Returns the number of activities created per month by the administrator
       operationId: getActivitiesByMonth
       responses:
         '200':
-          description: OK
-          content:
-            "*/*":
-              schema:
-                type: array
-                items:
-                  "$ref": "#/components/schemas/ActivitiesByMonthDto"
+          description: Activities-by-month returned successfully
+        '400':
+          description: Bad request
+        '404':
+          description: User not found
   "/api/activities/users/{userId}/recommended-activities":
     get:
       tags:
@@ -1095,35 +1115,5 @@ components:
           type: string
           format: date-time
         placeId:
-          type: integer
-          format: int64
-    ReviewStatisticsDto:
-      type: object
-      properties:
-        starsValue:
-          type: integer
-          format: int32
-        count:
-          type: integer
-          format: int64
-    GeneralStatisticsDto:
-      type: object
-      properties:
-        userCount:
-          type: integer
-          format: int64
-        activityCount:
-          type: integer
-          format: int64
-        placeCount:
-          type: integer
-          format: int64
-    ActivitiesByMonthDto:
-      type: object
-      properties:
-        month:
-          type: integer
-          format: int32
-        count:
           type: integer
           format: int64
