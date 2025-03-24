@@ -192,41 +192,43 @@ async function loadMoreUser() {
     }
 }
 
+let currentAdminPage = 0;
 
-
-async function loadMoreActivityAdmin() {
-    page++;
-
-    try {
-        const response = await fetch(`/moreActivitiesAdmin?page=${page}`);
-        
-        if (!response.ok) {
-            throw new Error(`Error ${response.status}: No se pudo cargar más actividades.`);
-        }
-
-        const data = await response.text();
-
-        // Agregar nuevos actividades a la tabla
-        document.querySelector('#allActivitiesPaginatedAdmin tbody').insertAdjacentHTML('beforeend', data);
-
-        // Crear un DOM temporal para analizar la respuesta
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = data;
-
-        // Verificar si hay más actividades
-        const loadMoreIndicator = tempDiv.querySelector('#loadMoreIndicator');
-        const hasMore = loadMoreIndicator && loadMoreIndicator.getAttribute('data-has-more') === 'true';
-
-        // Si no hay más actividades, ocultar el botón y mostrar mensaje
-        if (!hasMore) {
-            document.getElementById('loadMore').style.display = 'none';
-            document.getElementById('noMoreAdminActivitysMessage').style.display = 'block';
-        }
-    } catch (error) {
-        console.error("Error al cargar más actividades:", error);
-    }
+function loadMoreActivityAdmin() {
+    currentAdminPage++;
+    console.log(`Loading admin activities page ${currentAdminPage}`);
+    
+    fetch(`/adminActivities?page=${currentAdminPage}`)
+        .then(response => response.text())
+        .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            
+            const newActivities = doc.querySelectorAll('#activitiesTable tbody .activity-item');
+            console.log(`Found ${newActivities.length} new activities`);
+            
+            if (newActivities.length > 0) {
+                const container = document.querySelector('#activitiesTable tbody');
+                newActivities.forEach(activity => {
+                    container.appendChild(activity.cloneNode(true));
+                });
+            }
+            
+            // Actualiza la página actual y total
+            const newCurrentPage = doc.getElementById('currentPage').value;
+            const newTotalPages = doc.getElementById('totalPages').value;
+            document.getElementById('currentPage').value = newCurrentPage;
+            document.getElementById('totalPages').value = newTotalPages;
+            
+            // Oculta el botón si no hay más páginas
+            if (currentAdminPage >= newTotalPages - 1) {
+                document.getElementById('loadMore').style.display = 'none';
+            }
+        })
+        .catch(error => {
+            console.error('Error loading more activities:', error);
+        });
 }
-
 
 
 async function loadMoreActivitiesSubscribed() {

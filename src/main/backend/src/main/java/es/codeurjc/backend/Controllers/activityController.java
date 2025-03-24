@@ -180,34 +180,31 @@ public class ActivityController {
     }
 
     @GetMapping("/adminActivities")
-    public String showAdminActivities(
-            Model model,
-            HttpServletRequest request,
-            Principal principal,
-            @RequestParam(defaultValue = "0") int page) { 
-
+    public String showAdminActivities(Model model, HttpServletRequest request, Principal principal, 
+                                    @RequestParam(defaultValue = "0") int page) {
         model.addAttribute("admin", request.isUserInRole("ADMIN"));
         model.addAttribute("user", request.isUserInRole("USER"));
-
+        
         String userEmail = principal.getName();
         User user = userService.findByEmail(userEmail);
-
+        
         int sizeSubscribed = 10;
         Pageable pageableSubscribed = PageRequest.of(0, sizeSubscribed);
-
         Page<ActivityDto> subscribedActivities = activityService.getActivitiesByUser(user.getId(), pageableSubscribed);
+        
         model.addAttribute("countActivitiesSubscribed", subscribedActivities.getTotalElements());
-
         model.addAttribute("activityCount", activityService.activityCount());
         model.addAttribute("userCount", userService.countUsers());
         model.addAttribute("userRegister", user);
-
+        
         int sizeAll = 10;
         Pageable pageableAll = PageRequest.of(page, sizeAll);
-
         Page<ActivityDto> activities = activityService.getActivities(pageableAll);
-        model.addAttribute("allActivities", activities);
-
+        
+        model.addAttribute("allActivities", activities.getContent());  // Cambio importante aquí
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", activities.getTotalPages());
+        
         return "adminActivities";
     }
 
