@@ -350,23 +350,74 @@ Task List
 | application.properties|[application.properties ](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/resources/application.properties)|
 | DatabaseInitializerService.java |https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/java/es/codeurjc/backend/config/DatabaseInitializerService.java|
 | WebSecurityConfig |[WebSecurityConfig](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/java/es/codeurjc/backend/Security/WebSecurityConfig.java)|
+---
+# 🛠️ PHASE 2  
 
 ---
-# 🛠️ PHASE 2
+
+## ⚙️ Notes on Configuration  
+
+### 🖥️ **Class and Templates Diagram**  
+![diagrama part2](https://github.com/user-attachments/assets/a175aada-e7bd-484a-a92e-97aff79f4f9f)
 
 ---
-## ⚙️ Notes on Configuration
 
-### 🖥️ **Class and Templates Diagram**
+## 🛠️ Execution Instructions  
 
-### ✅**Instructions for running the dockerized application**
+### 🚀 **Deployment Steps**  
 
-### 🖊️**Documentation for building the Docker image**
+1. **Network Connection**  
+   - You must be connected to the university network. If accessing from outside, use the Windows or Ubuntu development desktop available in **MyApps**. 
 
-### 🚀**Documentation for deploying on the virtual machine**
+2. **Private Key**  
+   - Make sure you have the **private key** downloaded to your local computer.
 
-### 🌐**URL de la máquina virtual**
-ccredentials : (También se deberán incluir las credenciales de los usuarios de ejemplo (incluyendo el administrador))
+3. **Conexión SSH**  
+   - Open a terminal on your system and run one of the following commands to connect to the virtual machine:
+     ```bash
+     ssh -i ssh-keys/appWeb12.key vmuser@10.100.139.153
+     ```
+     o  
+     ```bash
+     ssh -i ssh-keys/appWeb12.key vmuser@appWeb12.dawgis.etsii.urjc.es
+     ```
+
+4. **Clone the repository into the virtual machine**  
+   ```bash
+   git clone https://github.com/CodeURJC-DAW-2024-25/webapp12.git
+
+5. **Navigate to the docker folder**
+   ```bash
+   cd webapp12/src/main/backend/docker
+
+6. **If you want to build the Docker images manually**
+   ```bash
+   chmod +x create_image.sh
+   chmod +x publish_image.sh
+   
+7. **Execute**
+   ```bash
+    docker login
+    ./create_image.sh      # To generate the app image
+    ./publish_image.sh     # To publish it into Docker Hub
+
+8. **🌐 Access the application at**
+    - VM: https://appWeb12.dawgis.etsii.urjc.es
+    - Local: https://localhost:443
+
+9. **To stop the application**
+   ```bash
+   docker compose down
+   
+10. **If you also want to remove the database volume:**    
+    ```bash
+    docker compose down -v
+
+---
+### 🖊️**Documentation for API REST**
+Api-docs.yaml: [File: api-docs.yaml](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/api-docs/api-docs.yaml)
+
+Api-docs.html: [API DOCS](https://raw.githack.com/CodeURJC-DAW-2024-25/webapp12/main/api-docs/api-docs.html)
 
 ---
 ## 🫂 **Member Participation**
@@ -375,126 +426,116 @@ ccredentials : (También se deberán incluir las credenciales de los usuarios de
 
 ### **Alba Velasco Marqués**
 Task List
-1.  
-2.   
-3. 
-4. 
-5.
+1. Do all user dto files
+2. Unify the user service for both controllers
+3. Make user Postman requests
 
 -Commits:
 
 | Commit   | Link   | 
 |----------|------------|
-|  | | 
-|  | | 
-|  | |
-| |  |
-| | |
+| Model de userDto y conseguido api de lista de users  | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/dc1c23ed361f826a41906563daa6ade2af44ee42 | 
+| conseguido logica unificada pageable user | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/b295c32ec4d76fc9dc9dde2755bbcf8349fc1025#diff-e522951d633aa2432cc00a8743b0753b548ca4ab3b2bc92972ac4b85eba323e8 | 
+| editar user e imagen en api | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/8fb508fc939ef3b2817bcfe559ce6d063fe93a3b#diff-6b862065f4c79b8a509ad9e86055c509aba9b96019ce8e30d5e5cf5e69274523 |
+| unificado service deleteUser/id | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/fccbea7753e3c838c9f3f27871197c7fc83148d1#diff-bc8f52316f497cf987879097b203f482bc7a6466e8afce44d0b70ebcdf0d0a46  |
+| arreglos de peticiones y openAi | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/ece9fa5bbd1c6c558df6bab272714d79d8edc7d6 |
 
 -Files:
 
 | File   | Link   | 
 |----------|------------|
-|  |  | 
-| |  | 
-|   | |
-| |  |
-|  ||
+| UserService.java  | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/java/es/codeurjc/backend/Service/UserService.java | 
+| UserController.java | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/java/es/codeurjc/backend/Controllers/UserController.java | 
+| UserRestController.java | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/java/es/codeurjc/backend/rest/UserRestController.java |
+| WebSecurityConfig.java | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/java/es/codeurjc/backend/Security/WebSecurityConfig.java |
+| UserDto.java | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/java/es/codeurjc/backend/dto/UserDto.java |
 
 ---
 
 ### **Alexandra Cararus Verdes**
 Task List
-1.  
-2.   
-3. 
-4. 
-5.
+1. Implement all review methods in the API  
+2. Modify security and OpenAPI  
+3. Modify the Postman collection 
+4. Edit images of the API
+5. Api Docs
 
 
 -Commits:
 
 | Commit   | Link   | 
 |----------|------------|
-||  | 
-| || 
-| | |
-|  ||
-|||
+|Review| https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/8bd857ab6814ab612681c8e2a0e89e1c485e9d84 | 
+|Segurity| https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/99bff82a2616ced38a40004008c9f197a35d88f0| 
+|Postman|https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/883ca8f3faa447901ff9034e2d8a5e4524c255a7 |
+|images of the API|https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/bb94e3ffcdf9e35bc7eba135abcbb4b5fb6e3f42|
+|Api Docs|https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/6fb43c706e3fa68343ae903bf24e3494dc5a515f|
 
 -Files:
 
 | File   | Link   | 
 |----------|------------|
-| | | 
-| | | 
-| |  |
-|  |  |
-|  ||
+|ReviewRestController | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/8bd857ab6814ab612681c8e2a0e89e1c485e9d84| 
+|WebSegurityConfi|https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/99bff82a2616ced38a40004008c9f197a35d88f0| 
+|UserRestController| https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/bb94e3ffcdf9e35bc7eba135abcbb4b5fb6e3f42 |
+|api-docs.yaml | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/6fb43c706e3fa68343ae903bf24e3494dc5a515f |
+|ReviewController| https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/2e793d70d784fb45e9e402932e08d2d06a18664c|
 
 ---
 
 ###  Gonzalo Pérez Roca 
 
 Task List
-1.  
-2.   
-3. 
-4. 
-5.
+1. Generate Dockerfile and Docker-compose.yl 
+2. Help with postman requests.
+3. set the VM.
 
 
 -Commits:
 
 | Commit   | Link   | 
 |----------|------------|
-| |  |
-| |  |
-| |  |
-|| |
-||  |
+| Update Pixel Paradise.postman_collection.json | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/f9da433833ffab45f16bb71bc2902fa5bf0e8987 |
+| V1 Docker| https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/b8aef881411485b7377df24ab488952b9e9ead94 |
+| Generacion .sh pruebas | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/ef9ea4702501dc59e61375248975833e1baeec25 |
+|update del copy | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/9cf0c1bfb8fcc0d297d40f5fd87f27a7e5b49396 |
+|.sh V2 modificacion de las carpetas | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/4862bb2a5c742354862f05dfd0b8caed806019b3 |
+
 
 -Files:
 
 | File   | Link   | 
 |----------|------------|
-|  | | 
-| ||
-|  ||
-|  ||
-|  ||
+| src/main/backend/docker/Dockerfile | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/docker/Dockerfile | 
+| src/main/backend/docker/docker-compose.yml |https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/docker/docker-compose.yml|
+| src/main/backend/docker/create_image.sh | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/docker/create_image.sh|
+| src/main/backend/docker/publish_image.sh | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/docker/publish_image.sh|
+| Pixel Paradise.postman_collection.json |https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/Pixel%20Paradise.postman_collection.json|
 
 ---
 
 ###  Paula Ruiz Rubio 
 
-Task List
-1.  
-2.   
-3. 
-4. 
-5.
-
-
+I have been responsible for implementing the API security layer, including authentication and authorization mechanisms. I developed comprehensive OpenAPI documentation to ensure clear API specifications. Additionally, I designed and implemented all API endpoints related to Activity and Statistics functionality, including CRUD operations and business logic. This involved creating the data models and implementing the DTO mapping layer for both Activity and Statistics entities to ensure proper data transfer and separation of concerns
 
 -Commits:
 
 | Commit   | Link   | 
 |----------|------------|
-| | |
-| | |
-| ||
-| | |
-| |  |
+|crear get recommendActivities y unificar servicio activity | [crear get recommendActivities y unificar servicio activity](https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/158dfd9f30b081fba1c6174c63c146405ff1a782)|
+|Modificar seguridad para que funcione en web y api | [Modificar seguridad para que funcione en web y api](https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/9e522dffc876c25df7a1b17a56f40c79324f7bc3)|
+|Upadete api-docs |[Upadete api-docs](https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/2ff49cf3c295a777b603c8d9cc995bf64a395f22)|
+|security api works | [security api works](https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/889f59ebde7364bcffcaf29a30e633b10e5783e6)|
+| Devolver error 401 seguridad Api| [Devolver error 401 seguridad Api](https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/bcbf661a4862cbc1e90d1b978a2fea1d8eb133b6) |
 
 -Files:
 
 | File   | Link   | 
 |----------|------------|
-|  |  | 
-| | | 
-| ||
-|  ||
-| ||
+| Folder: api-docs | [Folder: api-docs](https://github.com/CodeURJC-DAW-2024-25/webapp12/tree/main/api-docs) | 
+|ActivityRestController | [ActivityRestController](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/java/es/codeurjc/backend/rest/ActivityRestController.java)| 
+|StatisticsRestController |[StatisticsRestController](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/java/es/codeurjc/backend/rest/StatisticsRestController.java)|
+| Security: jwt |[Security: jwt](https://github.com/CodeURJC-DAW-2024-25/webapp12/tree/main/src/main/backend/src/main/java/es/codeurjc/backend/security/jwt)|
+| ActivityService|[ActivityService](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/java/es/codeurjc/backend/Service/ActivityService.java)|
 
 ---

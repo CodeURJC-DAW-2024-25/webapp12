@@ -777,6 +777,45 @@ paths:
           description: Bad request
         '404':
           description: User not found
+  "/api/activities/users/{userId}":
+    get:
+      tags:
+      - activity-rest-controller
+      summary: Get activities by user
+      description: Returns a paginated list of activities in which the user is enrolled.
+      operationId: getActivitiesByUser
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 2
+      responses:
+        '200':
+          description: Activities returned successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ActivityDto"
+        '400':
+          description: Bad request
+        '404':
+          description: User not found
   "/api/activities/users/{userId}/recommended-activities":
     get:
       tags:
@@ -809,45 +848,6 @@ paths:
       responses:
         '200':
           description: Activities recommended returned successfully
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/ActivityDto"
-        '400':
-          description: Bad request
-        '404':
-          description: User not found
-  "/api/activities/user/{userId}":
-    get:
-      tags:
-      - activity-rest-controller
-      summary: Get activities by user
-      description: Returns a paginated list of activities in which the user is enrolled.
-      operationId: getActivitiesByUser
-      parameters:
-      - name: userId
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int64
-      - name: page
-        in: query
-        required: false
-        schema:
-          type: integer
-          format: int32
-          default: 0
-      - name: size
-        in: query
-        required: false
-        schema:
-          type: integer
-          format: int32
-          default: 2
-      responses:
-        '200':
-          description: Activities returned successfully
           content:
             application/json:
               schema:
