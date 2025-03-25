@@ -142,6 +142,7 @@ public class WebSecurityConfig {
 				.requestMatchers("/signup").permitAll()
 				.requestMatchers("/register").permitAll()
 				.requestMatchers("/activity/").permitAll()
+				.requestMatchers("/activity/{id}").permitAll()
 				.requestMatchers("/index").permitAll()
 				.requestMatchers("/moreActivities").permitAll()
 				.requestMatchers("/moreReviews").permitAll()

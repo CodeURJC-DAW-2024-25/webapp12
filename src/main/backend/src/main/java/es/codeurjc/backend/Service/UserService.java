@@ -44,11 +44,6 @@ public class UserService {
         this.CSRFHandlerConfiguration = CSRFHandlerConfiguration;
     }
 
-    public List<User> getAllUsers(){
-        List<User> users = userRepository.findAll();
-        return users;
-    }
-
     public long countUsers(){
         return userRepository.count();
     }
@@ -65,30 +60,13 @@ public class UserService {
         return userRepository.existsByEmail(email);
     }
 
-    public Page<User> getAllUsers(Pageable pageable) {
-        return userRepository.findAll(pageable);
-    }
 
-    public Page<User> getUsersPaginated(int page) {
-        int pageSize = 2; 
-        Pageable pageable = PageRequest.of(page, pageSize);
-    
-        Page<User> users = userRepository.findAll(pageable);
-        
-        if (users == null) {
-            throw new RuntimeException("userRepository.findAll(pageable) retornó null");
-        }
-        
-        return users;
-    }
 
     public User findByEmail(String username) {
         return userRepository.findByEmail(username);
     }
 
-    public void delete(User user) {
-        userRepository.delete(user);
-    }
+
 
     private Collection<UserDto> toDTOs(Collection<User> users) {
 		return userMapper.toDTOs(users);
