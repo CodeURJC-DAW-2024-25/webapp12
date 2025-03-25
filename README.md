@@ -358,6 +358,7 @@ Task List
 ## ⚙️ Notes on Configuration  
 
 ### 🖥️ **Class and Templates Diagram**  
+![diagrama part2](https://github.com/user-attachments/assets/a175aada-e7bd-484a-a92e-97aff79f4f9f)
 
 ---
 
@@ -453,32 +454,32 @@ Task List
 
 ### **Alexandra Cararus Verdes**
 Task List
-1.  
-2.   
-3. 
-4. 
-5.
+1. Implement all review methods in the API  
+2. Modify security and OpenAPI  
+3. Modify the Postman collection 
+4. Edit images of the API
+5. Api Docs
 
 
 -Commits:
 
 | Commit   | Link   | 
 |----------|------------|
-||  | 
-| || 
-| | |
-|  ||
-|||
+|Review| https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/8bd857ab6814ab612681c8e2a0e89e1c485e9d84 | 
+|Segurity| https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/99bff82a2616ced38a40004008c9f197a35d88f0| 
+|Postman|https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/883ca8f3faa447901ff9034e2d8a5e4524c255a7 |
+|images of the API|https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/bb94e3ffcdf9e35bc7eba135abcbb4b5fb6e3f42|
+|Api Docs|https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/6fb43c706e3fa68343ae903bf24e3494dc5a515f|
 
 -Files:
 
 | File   | Link   | 
 |----------|------------|
-| | | 
-| | | 
-| |  |
-|  |  |
-|  ||
+|ReviewRestController | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/8bd857ab6814ab612681c8e2a0e89e1c485e9d84| 
+|WebSegurityConfi|https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/99bff82a2616ced38a40004008c9f197a35d88f0| 
+|UserRestController| https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/bb94e3ffcdf9e35bc7eba135abcbb4b5fb6e3f42 |
+|api-docs.yaml | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/6fb43c706e3fa68343ae903bf24e3494dc5a515f |
+|ReviewController| https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/2e793d70d784fb45e9e402932e08d2d06a18664c|
 
 ---
 
