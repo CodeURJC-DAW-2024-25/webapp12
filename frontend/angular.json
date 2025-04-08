@@ -32,13 +32,41 @@
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "src/assets/css",
+                "output": "/css"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/assets/images",
+                "output": "/images"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/assets/img",
+                "output": "/img"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/assets/js",
+                "output": "/js"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/assets/plugins",
+                "output": "/plugins"
+              }
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "src/styles.css"
+              "src/styles.css",
+              "src/assets/css/style.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/js/app.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -95,9 +123,19 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "src/styles.css",
+              "src/assets/plugins/bootstrap/bootstrap.min.css",
+              "src/assets/plugins/bootstrap/bootstrap-slider.css",
+              "src/assets/plugins/font-awesome/css/font-awesome.min.css",
+              "src/assets/plugins/jquery-nice-select/css/nice-select.css",
+              "src/assets/plugins/slick/slick.css",
+              "src/assets/plugins/slick/slick-theme.css",
+              "src/assets/css/style.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/js/app.js"
+            ]
           }
         }
       }
