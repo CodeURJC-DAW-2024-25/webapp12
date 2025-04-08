@@ -1,0 +1,116 @@
+
+<!--==================================
+=            User Profile            =
+===================================-->
+<section class="dashboard section">
+  <!-- Container Start -->
+  <div class="container">
+    <!-- Row Start -->
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="sidebar">
+          <!-- User Widget -->
+          
+          <div class="widget user-dashboard-profile">
+            <!-- User Image -->
+            <div class="profile-thumb">
+              
+              <img src="/user//image" alt="image description" class="rounded-circle">
+              
+              <img src="/images/sports/no-image.png" class="img-fluid mb-4" alt="No Image">
+             
+            </div>
+            <!-- User Name -->
+            <h5 class="text-center"></h5>
+            
+            <a href="/editUserProfile/" class="btn btn-main-sm">Editar Perfil</a>
+          </div>
+        
+          <!-- Dashboard Links -->
+          <div class="widget user-dashboard-menu">
+						<ul>
+              
+							<li class="active">
+								<a href="/profile"><i class="fa fa-ticket"></i>Mis actividades <span></span></a>
+              </li>
+             
+							<li>
+								<a href="/adminActivities"><i class="fa fa-bolt"></i>Todas las actividades <span></span></a>
+              </li>
+              
+              <li>
+								<a href="/createActivity"><i class="fas fa-plus-square"></i> Crear nueva actividad</a>
+							</li>
+							<li>
+								<a href="/adminUsers"><i class="fa fa-users"></i> Todos los usuarios <span></span></a>
+							</li>
+							<li>
+								<a href="/statistics"><i class="fa fa-chart-bar"></i>Estadísticas </a>
+							</li>
+              
+              <li>
+                <a>
+                  <form action="/logout" method="post" style="display: inline;">
+                      <input type="hidden" name="_csrf" value="">
+                      <button type="submit" style="border: none; background: none; color: inherit; cursor: pointer;">
+                        <i class="fa fa-power-off"></i> Cerrar sesión
+                      </button>
+                  </form>
+                </a>
+              </li>
+              
+						</ul>
+					</div>
+        </div>
+      </div>
+      <div class="col-lg-8">
+        <!-- Recently Favorited -->
+        <div class="widget dashboard-container my-adslist" id="allActivitiesPaginatedSubscribed">
+          <h3 class="widget-header">Mis Reservas</h3>
+          <table class="table table-responsive product-dashboard-table">
+            <thead>
+              <tr>
+                <th>Imagen</th>
+                <th class="text-center">Información del evento</th>
+                <th class="text-center">Categoria</th>
+								<th class="text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+            
+              <tr>
+								<td class="product-thumb">
+									<img width="80px" height="auto" src="/activity//image" alt="image description"></td>
+								<td class="product-details">
+									<h3 class="title"></h3>
+									<span><strong>Fecha y hora: </strong> </span>
+                  <!--<span class="location"><strong>Lugar:</strong>Dhaka,Bangladesh</span>-->
+									<span class="location"><strong></strong></span>
+								</td>
+								<td class="product-category"><span class="categories"></span></td>
+								<td class="action" data-title="Action">
+									<div class="">
+										<ul class="list-inline justify-content-center">
+											<li class="list-inline-item">
+												<a data-toggle="tooltip" data-placement="top" title="View" class="view" href="/activity/">
+													<i class="fa fa-eye"></i>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</td>
+							</tr>
+             
+            </tbody>
+          </table>
+          <div class="text-center mt-3">
+						<button type="button" class="btn btn-primary" id="loadMore" onclick='loadMoreActivitiesSubscribed()'>Cargar más</button>
+					</div>
+        </div>
+        <!-- pagination -->
+        
+      </div>
+    </div>
+  </div>
+</section>
+
