@@ -15,6 +15,11 @@ export interface ActivityDto {
   updatedAt: string;
 }
 
+export interface PlaceDto {
+  id: number;
+  name: string;
+}
+
 export interface PageResponse<T> {
   content: T[];
   pageable: {
@@ -120,5 +125,18 @@ export class ActivityService {
 
   getActivityImageUrl(activityId: number): string {
     return `${this.API_URL}/${activityId}/image`;
+  }
+
+  // Método para obtener lugares
+  getPlaces(): Observable<PlaceDto[]> {
+    return this.http.get<PlaceDto[]>(`${this.API_URL}/places`);
+  }
+
+  // Método para buscar actividades por lugar
+  searchActivitiesByPlace(placeId: number, page: number = 0, size: number = 8): Observable<any> {
+    return this.http.get<PageResponse<ActivityDto>>(
+      `${this.API_URL}/search?placeId=${placeId}&page=${page}&size=${size}`,
+      { observe: 'response' }
+    );
   }
 }

@@ -72,6 +72,7 @@ public class WebSecurityConfig {
 					.requestMatchers(HttpMethod.GET,"/api/activities/{id}/image").permitAll()
 					.requestMatchers(HttpMethod.GET,"/api/activities/user/{id}").permitAll()
 					.requestMatchers(HttpMethod.GET,"/api/activities/search").permitAll()
+					.requestMatchers(HttpMethod.GET,"/api/activities/places").permitAll()
 					.requestMatchers(HttpMethod.GET,"/api/reviews/activity/").permitAll()
 					.requestMatchers(HttpMethod.POST,"/api/users/").permitAll()
 					

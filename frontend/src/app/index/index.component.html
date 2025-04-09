@@ -17,16 +17,19 @@
           <div class="container">
             <div class="row justify-content-center">
               <div class="col-lg-12 col-md-12 align-content-center">
-                <form>
-                  <div class="form-row">
-                    <div class="form-group col-lg-3 col-md-6">
-                      <select class="w-100 form-control mt-lg-1 mt-md-2">
-                        <option value="">Lugares</option>
-                        <option value="">hola</option>
+                <form (ngSubmit)="searchActivitiesByPlace()">
+                  <div class="form-row d-flex justify-content-center align-items-center">
+                    <div class="form-group col-lg-4 col-md-6 mb-0">
+                      <select class="form-control" [(ngModel)]="selectedPlaceId" name="placeId" id="placeSelector">
+                        <option [ngValue]="null">Seleccione un lugar</option>
+                        <option *ngFor="let place of places" [ngValue]="place.id">{{ place.name }}</option>
                       </select>
                     </div>
-                    <div class="form-group col-xl-2 col-lg-3 col-md-6 align-self-center">
-                      <button type="button" class="btn btn-primary active w-100">Buscar</button>
+                    <div class="form-group col-lg-2 col-md-3 mb-0 ml-md-2">
+                      <button type="submit" class="btn btn-primary w-100" [disabled]="isSearching || !selectedPlaceId">
+                        <span *ngIf="isSearching" class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>
+                        {{ isSearching ? 'Buscando...' : 'Buscar' }}
+                      </button>
                     </div>
                   </div>
                 </form>
@@ -40,6 +43,79 @@
   <!-- Container End -->
 </section>
 
+<!--=========================================== =
+           Search Activity Section            =
+===========================================-->
+<!-- Sección de Actividades Buscadas -->
+<section class="popular-deals section bg-gray" *ngIf="searchResults.length > 0 || isSearching || hasSearched">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="section-title">
+          <h2>RESULTADOS DE BÚSQUEDA</h2>
+        </div>
+      </div>
+    </div>
+
+    <!-- Indicador de Carga para Búsqueda -->
+    <div class="row" *ngIf="isSearching && searchResults.length === 0">
+      <div class="col-12 text-center">
+        <div class="spinner-border text-primary" role="status">
+          <span class="sr-only">Buscando actividades...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resultados de Búsqueda -->
+    <div class="row" *ngIf="searchResults.length > 0">
+      <div class="col-sm-12 col-lg-3" *ngFor="let activity of searchResults">
+        <div class="product-item bg-light">
+          <div class="card">
+            <div class="thumb-content">
+              <a (click)="navigateToActivity(activity.id)" style="cursor: pointer;">
+                <img [src]="activity.imageUrl"
+                     (error)="handleImageError($event)"
+                     class="card-img-top img-fluid"
+                     alt="{{activity.name}}">
+              </a>
+            </div>
+            <div class="card-body">
+              <h4 class="card-title">
+                <a (click)="navigateToActivity(activity.id)"
+                   style="cursor: pointer;">
+                  {{activity.name}}
+                </a>
+              </h4>
+              <ul class="list-inline product-meta">
+                <li class="list-inline-item">
+                  <i class="fa fa-folder-open-o"></i> {{activity.category}}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mensaje si no hay resultados -->
+    <div class="row" *ngIf="!isSearching && searchResults.length === 0 && hasSearched">
+      <div class="col-12 text-center">
+        <p>No se encontraron actividades para el lugar seleccionado.</p>
+      </div>
+    </div>
+
+    <!-- Botón para cargar más resultados -->
+    <div class="text-center mt-3" *ngIf="hasMoreSearchResults && searchResults.length > 0">
+      <button type="button"
+              class="btn btn-outline-primary"
+              (click)="loadMoreSearchResults()"
+              [disabled]="isSearching">
+        <span *ngIf="isSearching" class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>
+        {{ isSearching ? 'Cargando...' : 'Ver más resultados' }}
+      </button>
+    </div>
+  </div>
+</section>
 
 <!--=========================================== =
            All Category Section            =

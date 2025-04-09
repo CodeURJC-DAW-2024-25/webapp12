@@ -2,7 +2,10 @@ package es.codeurjc.backend.rest;
 
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import javax.sql.rowset.serial.SerialBlob;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -30,6 +33,7 @@ import java.sql.Blob;
 import es.codeurjc.backend.dto.ActivityDto;
 import es.codeurjc.backend.dto.ActivityUpdateDto;
 import es.codeurjc.backend.dto.NewActivityDto;
+import es.codeurjc.backend.dto.PlaceDto;
 import es.codeurjc.backend.model.Activity;
 import es.codeurjc.backend.model.Place;
 import es.codeurjc.backend.model.User;
@@ -344,4 +348,24 @@ public class ActivityRestController {
 
         return ResponseEntity.ok(recommendedActivities);
     }
+
+	// Método para obtener todos los lugares
+	@GetMapping("/places")
+	public ResponseEntity<List<PlaceDto>> getAllPlaces() {
+		List<Place> places = placeService.findAll();
+		List<PlaceDto> placeDtos = places.stream()
+			.map(this::convertToPlaceDto)
+			.collect(Collectors.toList());
+		return ResponseEntity.ok(placeDtos);
+	}
+
+	// Método de conversión de Place a PlaceDto adaptado para record
+	private PlaceDto convertToPlaceDto(Place place) {
+		// Usar el constructor del record en lugar de setters
+		return new PlaceDto(
+			place.getId(),
+			place.getName(),
+			place.getDescription() // Asumiendo que Place también tiene description
+		);
+	}
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivityService, ActivityDto, PageResponse } from '../services/activity.service';
+import { ActivityService, ActivityDto, PageResponse, PlaceDto } from '../services/activity.service';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
@@ -12,15 +12,28 @@ import { HttpResponse } from '@angular/common/http';
 export class IndexComponent implements OnInit {
   recommendedActivities: ActivityDto[] = [];
   allActivities: ActivityDto[] = [];
+  searchResults: ActivityDto[] = [];
+  places: PlaceDto[] = [];
+  selectedPlaceId: number | null = null;
+
+  // Propiedades para paginación
   currentRecommendedPage = 0;
   currentActivitiesPage = 0;
+  currentSearchPage = 0;
   recommendedTotalPages = 0;
   activitiesTotalPages = 0;
+  searchTotalPages = 0;
+
+  // Flags
   hasMoreRecommended = true;
   hasMoreActivities = true;
+  hasMoreSearchResults = true;
   isLoading = false;
   isLoadingRecommended = false;
+  isSearching = false;
   isLoggedIn = false;
+  hasSearched = false;
+
   errorMessage: string | null = null;
   userId: number | null = null;
 
@@ -51,6 +64,7 @@ export class IndexComponent implements OnInit {
     setTimeout(() => {
       this.updateLoginStatus(); // Actualizar de nuevo por si acaso
       this.loadInitialData();
+      this.loadPlaces(); // Cargar la lista de lugares disponibles
     }, 500);
 
     this.removeProblematicScript();
@@ -78,6 +92,19 @@ export class IndexComponent implements OnInit {
 
     // Cargar todas las actividades
     this.loadActivities();
+  }
+
+  // Método para cargar los lugares disponibles
+  loadPlaces(): void {
+    this.activityService.getPlaces().subscribe({
+      next: (places) => {
+        this.places = places;
+        console.log('Lugares cargados:', places.length);
+      },
+      error: (err) => {
+        console.error('Error al cargar lugares:', err);
+      }
+    });
   }
 
   loadRecommendedActivities(): void {
@@ -260,6 +287,70 @@ export class IndexComponent implements OnInit {
     const imgElement = event.target as HTMLImageElement;
     if (imgElement) {
       imgElement.src = '/images/sports/no-image.png';
+    }
+  }
+
+  // Método para buscar actividades por lugar
+  searchActivitiesByPlace(): void {
+    if (!this.selectedPlaceId) {
+      return;
+    }
+
+    this.hasSearched = true;
+    this.isSearching = true;
+    this.searchResults = []; // Limpiar resultados anteriores
+    this.currentSearchPage = 0;
+
+    this.performSearch();
+  }
+
+  // Realizar la búsqueda
+  private performSearch(): void {
+    if (!this.selectedPlaceId) {
+      return;
+    }
+
+    this.activityService.searchActivitiesByPlace(this.selectedPlaceId, this.currentSearchPage).subscribe({
+      next: (response: any) => {
+        this.isSearching = false;
+
+        let pageData: PageResponse<ActivityDto>;
+
+        if (response && response.body) {
+          pageData = response.body;
+        } else if (response && response.content) {
+          pageData = response;
+        } else {
+          console.error('Formato de respuesta inesperado:', response);
+          return;
+        }
+
+        if (pageData && Array.isArray(pageData.content)) {
+          // Añadir URLs de imagen a cada actividad
+          const activitiesWithImages = pageData.content.map((activity: ActivityDto) => ({
+            ...activity,
+            imageUrl: this.activityService.getActivityImageUrl(activity.id)
+          }));
+
+          this.searchResults = [...this.searchResults, ...activitiesWithImages];
+          this.searchTotalPages = pageData.totalPages;
+          this.hasMoreSearchResults = !pageData.last;
+        } else {
+          console.error('No se encontró contenido en la respuesta:', pageData);
+        }
+      },
+      error: (err) => {
+        this.isSearching = false;
+        console.error('Error al buscar actividades:', err);
+      }
+    });
+  }
+
+  // Cargar más resultados de búsqueda
+  loadMoreSearchResults(): void {
+    if (this.hasMoreSearchResults && !this.isSearching) {
+      this.currentSearchPage++;
+      this.performSearch();
     }
   }
 }
