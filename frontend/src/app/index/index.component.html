@@ -68,9 +68,10 @@
             <div class="card">
               <div class="thumb-content">
                 <a (click)="navigateToActivity(activity.id)" style="cursor: pointer;">
-                  <img [src]="activity.imageUrl || '/images/sports/no-image.png'"
-                       class="card-img-top img-fluid"
-                       alt="{{activity.name}}">
+                  <img [src]="activity.imageUrl"
+                    (error)="handleImageError($event)"
+                    class="card-img-top img-fluid"
+                    alt="{{activity.name}}">
                 </a>
               </div>
               <div class="card-body">
@@ -142,9 +143,10 @@
             <div class="card">
               <div class="thumb-content">
                 <a (click)="navigateToActivity(activity.id)" style="cursor: pointer;">
-                  <img [src]="activity.imageUrl || '/images/sports/no-image.png'"
-                       class="card-img-top img-fluid"
-                       alt="{{activity.name}}">
+                  <img [src]="activity.imageUrl"
+                    (error)="handleImageError($event)"
+                    class="card-img-top img-fluid"
+                    alt="{{activity.name}}">
                 </a>
               </div>
               <div class="card-body">

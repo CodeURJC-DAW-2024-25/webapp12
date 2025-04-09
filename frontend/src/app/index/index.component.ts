@@ -141,14 +141,28 @@ export class IndexComponent implements OnInit {
 
     if (pageData && Array.isArray(pageData.content)) {
       console.log('Contenido de actividades recomendadas:', pageData.content);
-      this.recommendedActivities = [...this.recommendedActivities, ...pageData.content];
+
+      // Set image URLs for each recommended activity
+      const recommendedWithImages = pageData.content.map((activity: ActivityDto) => ({
+        ...activity,
+        imageUrl: this.activityService.getActivityImageUrl(activity.id)
+      }));
+
+      this.recommendedActivities = [...this.recommendedActivities, ...recommendedWithImages];
       this.recommendedTotalPages = pageData.totalPages || 1;
       this.hasMoreRecommended = pageData.last === false;
       console.log('Actividades recomendadas cargadas:', this.recommendedActivities.length);
     } else if (Array.isArray(pageData)) {
       // Si la respuesta es directamente un array
       console.log('La respuesta es un array directo');
-      this.recommendedActivities = [...this.recommendedActivities, ...pageData];
+
+      // Set image URLs for each recommended activity
+      const recommendedWithImages = pageData.map((activity: ActivityDto) => ({
+        ...activity,
+        imageUrl: this.activityService.getActivityImageUrl(activity.id)
+      }));
+
+      this.recommendedActivities = [...this.recommendedActivities, ...recommendedWithImages];
       this.hasMoreRecommended = false;
       console.log('Actividades recomendadas cargadas:', this.recommendedActivities.length);
     } else {
@@ -161,49 +175,6 @@ export class IndexComponent implements OnInit {
       this.currentRecommendedPage++;
       this.loadRecommendedActivities();
     }
-  }
-
-  loadActivities(): void {
-    if (this.isLoading) return;
-
-    this.isLoading = true;
-    this.errorMessage = null;
-
-    this.activityService.getActivities(this.currentActivitiesPage)
-      .subscribe({
-        next: (response: any) => {
-          this.isLoading = false;
-
-          // Manejo de la respuesta según el formato
-          let pageData: PageResponse<ActivityDto>;
-
-          if (response && response.body) {
-            // Si estamos recibiendo una HttpResponse completa
-            pageData = response.body;
-          } else if (response && response.content) {
-            // Si estamos recibiendo directamente el objeto PageResponse
-            pageData = response;
-          } else {
-            console.error('Response format is unexpected:', response);
-            this.errorMessage = 'Error: Formato de respuesta inesperado';
-            return;
-          }
-
-          if (pageData && Array.isArray(pageData.content)) {
-            this.allActivities = [...this.allActivities, ...pageData.content];
-            this.activitiesTotalPages = pageData.totalPages;
-            this.hasMoreActivities = !pageData.last;
-          } else {
-            console.error('No content array in response:', pageData);
-            this.errorMessage = 'Error: No se encontraron actividades';
-          }
-        },
-        error: (err) => {
-          console.error('Error loading activities:', err);
-          this.isLoading = false;
-          this.errorMessage = `Error: ${err.message || 'Error desconocido al cargar actividades'}`;
-        }
-      });
   }
 
   loadMoreActivities(): void {
@@ -233,5 +204,62 @@ export class IndexComponent implements OnInit {
         console.error('Error during logout:', err);
       }
     });
+  }
+
+  // Modify your loadActivities method in IndexComponent
+  loadActivities(): void {
+    if (this.isLoading) return;
+
+    this.isLoading = true;
+    this.errorMessage = null;
+
+    this.activityService.getActivities(this.currentActivitiesPage)
+      .subscribe({
+        next: (response: any) => {
+          this.isLoading = false;
+
+          // Manejo de la respuesta según el formato
+          let pageData: PageResponse<ActivityDto>;
+
+          if (response && response.body) {
+            // Si estamos recibiendo una HttpResponse completa
+            pageData = response.body;
+          } else if (response && response.content) {
+            // Si estamos recibiendo directamente el objeto PageResponse
+            pageData = response;
+          } else {
+            console.error('Response format is unexpected:', response);
+            this.errorMessage = 'Error: Formato de respuesta inesperado';
+            return;
+          }
+
+          if (pageData && Array.isArray(pageData.content)) {
+            // Set image URLs for each activity
+            const activitiesWithImages = pageData.content.map((activity: ActivityDto) => ({
+              ...activity,
+              imageUrl: this.activityService.getActivityImageUrl(activity.id)
+            }));
+
+            this.allActivities = [...this.allActivities, ...activitiesWithImages];
+            this.activitiesTotalPages = pageData.totalPages;
+            this.hasMoreActivities = !pageData.last;
+          } else {
+            console.error('No content array in response:', pageData);
+            this.errorMessage = 'Error: No se encontraron actividades';
+          }
+        },
+        error: (err) => {
+          console.error('Error loading activities:', err);
+          this.isLoading = false;
+          this.errorMessage = `Error: ${err.message || 'Error desconocido al cargar actividades'}`;
+        }
+      });
+  }
+
+  handleImageError(event: Event): void {
+    const imgElement = event.target as HTMLImageElement;
+    if (imgElement) {
+      imgElement.src = '/images/sports/no-image.png';
+    }
   }
 }

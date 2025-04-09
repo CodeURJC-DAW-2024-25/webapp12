@@ -117,4 +117,8 @@ export class ActivityService {
     console.log('Solicitando recomendaciones (ruta alternativa):', url);
     return this.http.get<any>(url, { observe: 'response' });
   }
+
+  getActivityImageUrl(activityId: number): string {
+    return `${this.API_URL}/${activityId}/image`;
+  }
 }
