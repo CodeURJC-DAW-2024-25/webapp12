@@ -37,7 +37,7 @@ export class AuthService {
     return !!this.getToken();
   }
 
-  login(credentials: {username: string, password: string}): Observable<any> {
+  /*login(credentials: {username: string, password: string}): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, credentials).pipe(
       tap((response: any) => {
         if (response.status === 'SUCCESS' && response.token) {
@@ -46,7 +46,25 @@ export class AuthService {
         }
       })
     );
-  }
+  }*/
+    login(credentials: {username: string, password: string}): Observable<any> {
+      console.log('Enviando credenciales:', credentials);
+      return this.http.post(`${this.apiUrl}/login`, credentials).pipe(
+        tap(
+          (response: any) => {
+            console.log('Respuesta completa del servidor:', response);
+            if (response.status === 'SUCCESS' && response.token) {
+              this.setToken(response.token);
+              this.currentUserSubject.next({ token: response.token });
+            }
+          },
+          error => {
+            console.error('Error completo:', error);
+            // No hacer nada más con el error, solo registrarlo
+          }
+        )
+      );
+    }
 
   logout(): Observable<any> {
     return this.http.post(`${this.apiUrl}/logout`, {}).pipe(
