@@ -108,8 +108,8 @@ export class AdminStatisticsComponent implements OnInit {
         // Actualizar valores según los datos recibidos
         data.forEach(item => {
           // Las valoraciones van de 1-5
-          if (item.valoration >= 1 && item.valoration <= 5) {
-            this.reviewsByValoration[item.valoration - 1] = item.count;
+          if (item.starsValue >= 1 && item.starsValue <= 5) {
+            this.reviewsByValoration[item.starsValue - 1] = item.count;
           }
         });
 
@@ -150,6 +150,11 @@ export class AdminStatisticsComponent implements OnInit {
   createSegmentsChart(): void {
     const ctx = document.getElementById('segmentsChart') as HTMLCanvasElement;
     if (ctx) {
+      // Destruir el gráfico anterior si existe
+      if (this.segmentsChart) {
+        this.segmentsChart.destroy();
+      }
+
       this.segmentsChart = new Chart(ctx, {
         type: 'pie',
         data: {
@@ -157,6 +162,7 @@ export class AdminStatisticsComponent implements OnInit {
           datasets: [{
             data: this.reviewsByValoration,
             backgroundColor: ['#e0f0ff', '#aad3ff', '#80b8ff', '#4f8cff', '#2c4a7f'],
+            borderWidth: 1
           }]
         },
         options: {
@@ -164,6 +170,17 @@ export class AdminStatisticsComponent implements OnInit {
           plugins: {
             legend: {
               position: 'bottom'
+            },
+            tooltip: {
+              callbacks: {
+                label: (context) => {
+                  const label = context.label || '';
+                  const value = context.raw as number;
+                  const total = (context.dataset.data as number[]).reduce((a: number, b: number) => a + b, 0);
+                  const percentage = Math.round((value / total) * 100);
+                  return `${label}: ${value} (${percentage}%)`;
+                }
+              }
             }
           }
         }
