@@ -40,11 +40,74 @@
   <!-- Container End -->
 </section>
 
-<!--===========================================
-=            All Category Section            =
+
+<!--=========================================== =
+           All Category Section            =
 ===========================================-->
 <section class="popular-deals section bg-gray">
   <div class="container">
+    <!-- Sección de Actividades Recomendadas -->
+    <div class="row mb-5" *ngIf="isLoggedIn">
+      <div class="col-md-12">
+        <div class="section-title">
+          <h2>ACTIVIDADES RECOMENDADAS PARA TI</h2>
+        </div>
+      </div>
+
+      <!-- Indicador de Carga para Recomendaciones -->
+      <div class="col-12 text-center" *ngIf="isLoadingRecommended && recommendedActivities.length === 0">
+        <div class="spinner-border text-primary" role="status">
+          <span class="sr-only">Cargando recomendaciones...</span>
+        </div>
+      </div>
+
+      <!-- Actividades Recomendadas -->
+      <ng-container *ngIf="recommendedActivities.length > 0">
+        <div class="col-sm-12 col-lg-3" *ngFor="let activity of recommendedActivities">
+          <div class="product-item bg-light">
+            <div class="card">
+              <div class="thumb-content">
+                <a (click)="navigateToActivity(activity.id)" style="cursor: pointer;">
+                  <img [src]="activity.imageUrl || '/images/sports/no-image.png'"
+                       class="card-img-top img-fluid"
+                       alt="{{activity.name}}">
+                </a>
+              </div>
+              <div class="card-body">
+                <h4 class="card-title">
+                  <a (click)="navigateToActivity(activity.id)"
+                     style="cursor: pointer;">
+                    {{activity.name}}
+                  </a>
+                </h4>
+                <ul class="list-inline product-meta">
+                  <li class="list-inline-item">
+                    <i class="fa fa-folder-open-o"></i> {{activity.category}}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- Mensaje si no hay recomendaciones -->
+      <div class="col-12" *ngIf="!isLoadingRecommended && recommendedActivities.length === 0">
+        <p>No hay actividades recomendadas disponibles.</p>
+      </div>
+
+      <!-- Botón para cargar más recomendaciones -->
+      <div class="text-center mt-3 col-12" *ngIf="hasMoreRecommended && recommendedActivities.length > 0">
+        <button type="button"
+                class="btn btn-outline-primary"
+                (click)="loadMoreRecommendedActivities()"
+                [disabled]="isLoadingRecommended">
+          <span *ngIf="isLoadingRecommended" class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>
+          {{ isLoadingRecommended ? 'Cargando...' : 'Ver más recomendaciones' }}
+        </button>
+      </div>
+    </div>
+
     <div class="row">
       <div class="col-md-12">
         <div class="section-title">

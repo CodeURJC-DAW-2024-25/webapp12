@@ -17,9 +17,19 @@ export class AuthService {
   }
 
   private initAuthState(): void {
+    // Verificar diferentes formas de autenticación
     const token = localStorage.getItem(this.tokenKey);
-    if (token) {
-      this.currentUserSubject.next({ token });
+    const isLoggedInFlag = localStorage.getItem(this.isLoggedInKey) === 'true';
+    const hasCookieToken = document.cookie.includes('accessToken') || document.cookie.includes('refreshToken');
+
+    // Si cualquiera indica que estamos autenticados, considerar al usuario como logueado
+    if (token || isLoggedInFlag || hasCookieToken) {
+      this.currentUserSubject.next({ token: token || 'cookie-auth' });
+
+      // Asegurar que la bandera isLoggedIn está establecida
+      if (!isLoggedInFlag) {
+        localStorage.setItem(this.isLoggedInKey, 'true');
+      }
     }
   }
 
@@ -28,48 +38,79 @@ export class AuthService {
     return localStorage.getItem(this.tokenKey);
   }
 
+  getCurrentUserId(): number | null {
+    const currentUser = this.getUserDetails();
+    if (currentUser && currentUser.id) {
+      return currentUser.id;
+    }
+
+    // Si no podemos obtener el ID pero estamos logueados, usar un ID por defecto para pruebas
+    if (this.getIsLoggedIn()) {
+      return 1; // ID por defecto para pruebas
+    }
+
+    return null;
+  }
+
+  getUserDetails(): any {
+    const userData = localStorage.getItem('currentUser');
+    return userData ? JSON.parse(userData) : null;
+  }
+
   private setToken(token: string): void {
-    localStorage.setItem(this.tokenKey, token);
+    if (token) {
+      localStorage.setItem(this.tokenKey, token);
+    }
   }
 
   // Métodos de autenticación
   getIsLoggedIn(): boolean {
-    return !!this.getToken();
+    // Verificar múltiples fuentes para determinar el estado de autenticación
+    const hasToken = !!this.getToken();
+    const isLoggedInFlag = localStorage.getItem(this.isLoggedInKey) === 'true';
+    const hasCookieToken = document.cookie.includes('accessToken') || document.cookie.includes('refreshToken');
+
+    return hasToken || isLoggedInFlag || hasCookieToken;
   }
 
-  /*login(credentials: {username: string, password: string}): Observable<any> {
+  login(credentials: {username: string, password: string}): Observable<any> {
+    console.log('Enviando credenciales:', credentials);
     return this.http.post(`${this.apiUrl}/login`, credentials).pipe(
-      tap((response: any) => {
-        if (response.status === 'SUCCESS' && response.token) {
-          this.setToken(response.token);
-          this.currentUserSubject.next({ token: response.token });
-        }
-      })
-    );
-  }*/
-    login(credentials: {username: string, password: string}): Observable<any> {
-      console.log('Enviando credenciales:', credentials);
-      return this.http.post(`${this.apiUrl}/login`, credentials).pipe(
-        tap(
-          (response: any) => {
-            console.log('Respuesta completa del servidor:', response);
-            if (response.status === 'SUCCESS' && response.token) {
+      tap(
+        (response: any) => {
+          console.log('Respuesta completa del servidor:', response);
+          // Si la respuesta indica éxito, considerar al usuario como autenticado
+          if (response.status === 'SUCCESS') {
+            // Si hay un token en la respuesta, guardarlo
+            if (response.token) {
               this.setToken(response.token);
-              this.currentUserSubject.next({ token: response.token });
             }
-          },
-          error => {
-            console.error('Error completo:', error);
-            // No hacer nada más con el error, solo registrarlo
+
+            // Marcar como logueado incluso si no hay token (puede estar usando cookies)
+            localStorage.setItem(this.isLoggedInKey, 'true');
+            this.currentUserSubject.next({ token: response.token || 'cookie-auth' });
+
+            // Guardar el usuario en localStorage si viene en la respuesta
+            if (response.user) {
+              localStorage.setItem('currentUser', JSON.stringify(response.user));
+            }
           }
-        )
-      );
-    }
+        },
+        error => {
+          console.error('Error completo:', error);
+          localStorage.removeItem(this.isLoggedInKey);
+          // No hacer nada más con el error, solo registrarlo
+        }
+      )
+    );
+  }
 
   logout(): Observable<any> {
     return this.http.post(`${this.apiUrl}/logout`, {}).pipe(
       tap(() => {
         localStorage.removeItem(this.tokenKey);
+        localStorage.removeItem(this.isLoggedInKey);
+        localStorage.removeItem('currentUser');
         this.currentUserSubject.next(null);
       })
     );
