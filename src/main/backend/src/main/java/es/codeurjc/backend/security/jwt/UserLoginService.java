@@ -12,6 +12,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+import es.codeurjc.backend.dto.UserDto;
+import es.codeurjc.backend.model.User;
+import es.codeurjc.backend.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -22,12 +25,14 @@ public class UserLoginService {
 
 	private final AuthenticationManager authenticationManager;
 	private final UserDetailsService userDetailsService;
+	private final UserService userService;
 	private final JwtTokenProvider jwtTokenProvider;
 
-	public UserLoginService(AuthenticationManager authenticationManager, UserDetailsService userDetailsService, JwtTokenProvider jwtTokenProvider) {
+	public UserLoginService(AuthenticationManager authenticationManager, UserDetailsService userDetailsService, JwtTokenProvider jwtTokenProvider, UserService  userService) {
 		this.authenticationManager = authenticationManager;
 		this.userDetailsService = userDetailsService;
 		this.jwtTokenProvider = jwtTokenProvider;
+		this.userService = userService;
 	}
 
 	public ResponseEntity<AuthResponse> login(HttpServletResponse response, LoginRequest loginRequest) {
@@ -96,4 +101,12 @@ public class UserLoginService {
 		cookie.setPath("/");
 		return cookie;
 	}
+
+	public User findByEmail(String email) {
+        return userService.findByEmail(email);
+    }
+
+	public UserDto getUserDto(Long id) {
+        return userService.getUserDto(id);
+    }
 }

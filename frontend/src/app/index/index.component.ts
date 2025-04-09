@@ -81,12 +81,18 @@ export class IndexComponent implements OnInit {
   }
 
   loadRecommendedActivities(): void {
+
     if (this.isLoadingRecommended) {
       return;
     }
 
     // Asegurarse de tener userId para la solicitud
-    const userId = this.userId || 1; // Usar 1 como fallback solo para pruebas
+     // Usar 1 como fallback solo para pruebas
+    const userId = this.authService.getCurrentUserId();
+    if (!userId) {
+      console.log('No hay usuario autenticado, no se cargan actividades recomendadas');
+      return;
+    }
 
     this.isLoadingRecommended = true;
     console.log('Solicitando actividades recomendadas para el usuario:', userId);
