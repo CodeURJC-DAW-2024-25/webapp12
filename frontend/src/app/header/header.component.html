@@ -1,8 +1,6 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-
   <!-- ** Basic Page Needs ** -->
   <meta charset="utf-8">
   <title>Pixel Paradise</title>
@@ -16,11 +14,9 @@
 
   <!-- theme meta -->
   <meta name="theme-name" content="classimax" />
-
 </head>
 
 <body class="body-wrapper">
-
   <header>
     <div class="container">
       <div class="row">
@@ -39,14 +35,20 @@
                 <li class="nav-item active">
                   <a class="nav-link" href="/">Home</a>
                 </li>
-                <li class="nav-item dropdown dropdown-slide @@dashboard">
+                <!-- Only show profile link if logged in -->
+                <li class="nav-item dropdown dropdown-slide" *ngIf="authService.getIsLoggedIn()">
                   <a class="nav-link" href="/profile">Perfil</a>
                 </li>
               </ul>
 
               <ul class="navbar-nav ml-auto mt-10">
-                <li class="nav-item">
+                <!-- Show Login button when not logged in -->
+                <li class="nav-item" *ngIf="!authService.getIsLoggedIn()">
                   <a class="nav-link" href="/login">Login</a>
+                </li>
+                <!-- Show Logout button when logged in -->
+                <li class="nav-item" *ngIf="authService.getIsLoggedIn()">
+                  <a class="nav-link" href="javascript:void(0);" (click)="logout()">Logout</a>
                 </li>
               </ul>
             </div>
@@ -55,3 +57,5 @@
       </div>
     </div>
   </header>
+</body>
+</html>
