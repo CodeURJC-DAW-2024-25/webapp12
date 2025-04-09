@@ -157,4 +157,14 @@ export class AuthService {
       })
     );
   }
+
+  /**
+   * Check if the user has admin privileges
+   */
+  // Add this to AuthService
+  isAdmin(): boolean {
+    const currentUser = this.getUserDetails();
+    // Using your logic that admin is user with id 7
+    return currentUser && currentUser.id === 7;
+  }
 }

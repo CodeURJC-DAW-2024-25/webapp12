@@ -1,0 +1,94 @@
+<section class="dashboard section">
+  <!-- Container Start -->
+  <div class="container">
+    <!-- Row Start -->
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="sidebar">
+          <!-- User Widget -->
+          <div class="widget user-dashboard-profile" *ngIf="currentUser">
+            <!-- User Image -->
+            <div class="profile-thumb">
+              <img *ngIf="currentUser.image" [src]="'/user/' + currentUser.id + '/image'" alt="Imagen de perfil" class="rounded-circle">
+              <img *ngIf="!currentUser.image" src="/images/sports/no-image.png" class="img-fluid mb-4" alt="No Image">
+            </div>
+            <!-- User Name -->
+            <h5 class="text-center">{{ currentUser.name }}</h5>
+            <a [routerLink]="['/editUserProfile', currentUser.id]" class="btn btn-main-sm">Editar Perfil</a>
+          </div>
+
+          <!-- Dashboard Links -->
+          <div class="widget user-dashboard-menu">
+            <ul>
+              <li>
+                <a routerLink="/profile"><i class="fa fa-ticket"></i>Mis actividades</a>
+              </li>
+              <li *ngIf="isAdmin">
+                <a routerLink="/adminActivities"><i class="fa fa-bolt"></i>Todas las actividades <span>{{ activityCount }}</span></a>
+              </li>
+              <li *ngIf="isAdmin">
+                <a routerLink="/createActivity"><i class="fas fa-plus-square"></i> Crear nueva actividad</a>
+              </li>
+              <li *ngIf="isAdmin">
+                <a routerLink="/adminUsers"><i class="fa fa-users"></i> Todos los usuarios <span>{{ userCount }}</span></a>
+              </li>
+              <li class="active" *ngIf="isAdmin">
+                <a routerLink="/statistics"><i class="fa fa-chart-bar"></i>Estadísticas </a>
+              </li>
+              <!-- En admin-statistics.component.html -->
+              <li class="nav-item" *ngIf="authService.getIsLoggedIn()">
+                <a (click)="logout()" style="cursor: pointer;" class="nav-link">
+                  <i class="fa fa-power-off"></i> Cerrar sesión
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8">
+        <div class="widget dashboard-container my-adslist">
+          <h3 class="widget-header">Estadísticas de la aplicación</h3>
+
+          <div class="row">
+            <div class="col-md-3 mb-4">
+              <div class="card text-center p-3 shadow-sm" style="background-color: rgba(86, 114, 249, 0.1); color: #5672f9;">
+                <h4>Número de usuarios</h4>
+                <p>{{ userCount }}</p>
+              </div>
+            </div>
+            <div class="col-md-3 mb-4">
+              <div class="card text-center p-3 shadow-sm" style="background-color: rgba(86, 114, 249, 0.1); color: #5672f9;">
+                <h4>Número de activades</h4>
+                <p>{{ activityCount }}</p>
+              </div>
+            </div>
+            <div class="col-md-6 mb-4">
+              <div class="card text-center p-3 shadow-sm" style="background-color: rgba(86, 114, 249, 0.1); color: #5672f9;">
+                <h4>Número de lugares en los que se han desarrollado las actividades</h4>
+                <p>{{ placeCount }}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mt-4">
+            <div class="col-md-12">
+              <div class="card p-3 shadow-sm mb-4">
+                <h5>Cantidad de actividades realizadas cada mes</h5>
+                <canvas id="revenueChart"></canvas>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="card p-3 shadow-sm">
+                <h5>Puntuación total de las valoraciones realizadas por los usuarios.</h5>
+                <p>Distribuidas en 1, 2, 3, 4 y 5 estrellas para las actividades</p>
+                <canvas id="segmentsChart" style="max-width: 300px; max-height: 300px; margin: 0 auto;"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Row End -->
+  </div>
+  <!-- Container End -->
+</section>
