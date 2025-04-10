@@ -9,15 +9,19 @@ export interface ActivityDto {
   name: string;
   description: string;
   category: string;
-  price: number;
   imageUrl?: string;
-  createdAt: string;
-  updatedAt: string;
+  image?:boolean;
+  activityDate: string;
+  vacancy?: number;
+  place?: PlaceDto;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface PlaceDto {
   id: number;
   name: string;
+  description: string;
 }
 
 export interface PageResponse<T> {

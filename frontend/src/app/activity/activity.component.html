@@ -1,0 +1,103 @@
+<section class="blog single-blog section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <article class="single-post">
+                    <h2 class="d-inline-block">{{ activity?.name }}</h2>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <ul class="list-inline mb-0">
+                            <li class="list-inline-item">by Admin</li>
+                            <li class="list-inline-item">{{ activity?.createdAt | date:'longDate' }}</li>
+
+                        </ul>
+                    </div>
+
+                    <img *ngIf="activity && imageUrl" [src]="imageUrl" alt="Imagen de actividad">
+                    <img *ngIf="!imageUrl" src="/images/sports/no-image.png" class="img-fluid mb-4" alt="No Image">
+                    
+
+                    <ul class="list-inline product-meta">
+                        <li class="list-inline-item">
+                            <a><i class="fa fa-futbol-o"></i> {{ activity?.category }}</a>
+                        </li>
+                    </ul>
+                    <p>{{ activity?.description }}</p>
+
+                    <h3>Detalles de la Actividad</h3>
+                    <ul>
+                        <li><strong>📍 Ubicación:</strong> {{activity?.place?.name }}</li>
+                        <li><strong>📍 Ubicación - Descripción:</strong> {{ activity?.place?.description }}</li>
+                        <li><strong>⏰ Fecha:</strong> {{ activity?.activityDate }}</li>
+                        <li><strong>👥 Capacidad máxima:</strong> {{ activity?.vacancy }} personas</li>
+                        <li><strong>🎟️ Reserva previa requerida</strong> en recepción o a través de la app del resort
+                        </li>
+                    </ul>
+                </article>
+
+                <div class="block comment">
+                    <div class="block comment" id="allReviewsPaginated">
+                        <h4>Comentarios</h4>
+
+                        <div *ngIf="activity && reviews.length === 0 && !reviewsLastPage">
+                            <p>Cargando comentarios...</p>
+                        </div>
+                          
+
+                        <div *ngIf="reviews?.length && reviews.length > 0; else noReviews">
+                            <div class="comment" *ngFor="let review of reviews">
+                                <p><strong>{{ review.user.name }}</strong> - {{ review.starsValue }} ⭐</p>
+                                <p>{{ review.description }}</p>
+                            </div>
+                        </div>
+
+                        <ng-template #noReviews>
+                            <p>No hay comentarios aún. ¡Sé el primero en dejar uno!</p>
+                        </ng-template>
+                    </div>
+
+                    <div class="text-center mt-3" *ngIf="!reviewsLastPage">
+                        <button type="button" class="btn btn-primary" (click)="loadMoreReview()">
+                          Cargar más
+                        </button>
+                      </div>
+                      
+
+                    <form *ngIf="register" (ngSubmit)="submitReview()"
+                        [attr.action]="'/activity/' + activity?.id + '/addReview'" method="post">
+                        <label for="starsValue">Calificación:</label>
+                        <select id="starsValue" name="starsValue" required>
+                            <option value="1">1 ⭐</option>
+                            <option value="2">2 ⭐</option>
+                            <option value="3">3 ⭐</option>
+                            <option value="4">4 ⭐</option>
+                            <option value="5">5 ⭐</option>
+                        </select>
+                        <br>
+                        <label for="description">Comentario:</label>
+                        <textarea id="description" name="description" required
+                            style="width: 100%; height: 150px;"></textarea>
+                        <br>
+                        <input type="hidden" name="_csrf" [value]="token" />
+                        <button type="submit" class="btn btn-primary">Enviar</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-lg-4" *ngIf="register">
+                <div class="sidebar">
+                    <div class="widget archive">
+                        <h5 class="widget-header">Realiza aquí tu Reserva</h5>
+
+                        <p *ngIf="isSubscribed">Ya estás inscrito en esta actividad.</p>
+
+                        <form *ngIf="!isSubscribed" [attr.action]="'/activity/' + activity?.id + '/reserve'"
+                            method="post">
+                            <input type="hidden" name="_csrf" [value]="token" />
+                            <button type="submit" class="btn btn-primary">RESERVAR</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

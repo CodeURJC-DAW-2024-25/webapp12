@@ -212,7 +212,7 @@ export class IndexComponent implements OnInit {
   }
 
   navigateToActivity(id: number): void {
-    this.router.navigate(['/activities', id]);
+    this.router.navigate(['/activity', id]);
   }
 
   onLogin(): void {

@@ -15,7 +15,7 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { AdminStatisticsComponent  } from './admin-statistics/admin-statistics.component';
 import { AdminActivitiesComponent } from './admin-activities/admin-activities.component';
-
+import { ActivityComponent } from './activity/activity.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +27,8 @@ import { AdminActivitiesComponent } from './admin-activities/admin-activities.co
     LoginComponent,
     RegisterComponent,
     AdminStatisticsComponent,
-    AdminActivitiesComponent
+    AdminActivitiesComponent,
+    ActivityComponent
   ],
   imports: [
     BrowserModule,
