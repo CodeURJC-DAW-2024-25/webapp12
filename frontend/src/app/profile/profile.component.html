@@ -11,19 +11,18 @@
         <div class="sidebar">
           <!-- User Widget -->
           
-          <div class="widget user-dashboard-profile">
+          <div class="widget user-dashboard-profile" *ngIf="currentUser">
             <!-- User Image -->
             <div class="profile-thumb">
               
-              <img src="/user//image" alt="image description" class="rounded-circle">
-              
-              <img src="/images/sports/no-image.png" class="img-fluid mb-4" alt="No Image">
+              <img *ngIf="currentUser.image" [src]="'/user/' + currentUser.id + '/image'" alt="Imagen de perfil" class="rounded-circle">
+              <img *ngIf="!currentUser.image" src="/images/sports/no-image.png" class="img-fluid mb-4" alt="No Image">
              
             </div>
             <!-- User Name -->
-            <h5 class="text-center"></h5>
+            <h5 class="text-center">{{ currentUser.name }}</h5>
             
-            <a href="/editUserProfile/" class="btn btn-main-sm">Editar Perfil</a>
+            <a [routerLink]="['/editUserProfile', currentUser.id]" class="btn btn-main-sm">Editar Perfil</a>
           </div>
         
           <!-- Dashboard Links -->
@@ -31,31 +30,26 @@
 						<ul>
               
 							<li class="active">
-								<a href="/profile"><i class="fa fa-ticket"></i>Mis actividades <span></span></a>
+								<a routerLink="/profile"><i class="fa fa-ticket"></i>Mis actividades <span></span></a>
               </li>
              
-							<li>
-								<a href="/adminActivities"><i class="fa fa-bolt"></i>Todas las actividades <span></span></a>
+							<li *ngIf="isAdmin">
+								<a routerLink="/adminActivities"><i class="fa fa-bolt"></i>Todas las actividades <span></span></a>
               </li>
               
-              <li>
-								<a href="/createActivity"><i class="fas fa-plus-square"></i> Crear nueva actividad</a>
+              <li *ngIf="isAdmin">
+								<a routerLink="/createActivity"><i class="fas fa-plus-square"></i> Crear nueva actividad</a>
 							</li>
-							<li>
-								<a href="/adminUsers"><i class="fa fa-users"></i> Todos los usuarios <span></span></a>
+							<li *ngIf="isAdmin">
+								<a routerLink="/adminUsers"><i class="fa fa-users"></i> Todos los usuarios <span></span></a>
 							</li>
-							<li>
-								<a href="/statistics"><i class="fa fa-chart-bar"></i>Estadísticas </a>
+							<li *ngIf="isAdmin">
+								<a routerLink="/statistics"><i class="fa fa-chart-bar"></i>Estadísticas </a>
 							</li>
               
-              <li>
-                <a>
-                  <form action="/logout" method="post" style="display: inline;">
-                      <input type="hidden" name="_csrf" value="">
-                      <button type="submit" style="border: none; background: none; color: inherit; cursor: pointer;">
-                        <i class="fa fa-power-off"></i> Cerrar sesión
-                      </button>
-                  </form>
+              <li class="nav-item" *ngIf="authService.getIsLoggedIn()">
+                <a (click)="logout()" style="cursor: pointer;" class="nav-link">
+                  <i class="fa fa-power-off"></i> Cerrar sesión
                 </a>
               </li>
               
