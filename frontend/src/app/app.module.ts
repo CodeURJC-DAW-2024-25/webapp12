@@ -14,6 +14,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { AdminStatisticsComponent  } from './admin-statistics/admin-statistics.component';
+import { AdminActivitiesComponent } from './admin-activities/admin-activities.component';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { AdminStatisticsComponent  } from './admin-statistics/admin-statistics.c
     ProfileComponent,
     LoginComponent,
     RegisterComponent,
-    AdminStatisticsComponent
+    AdminStatisticsComponent,
+    AdminActivitiesComponent
   ],
   imports: [
     BrowserModule,
