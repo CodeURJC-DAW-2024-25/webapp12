@@ -71,40 +71,60 @@
               </tr>
             </thead>
             <tbody>
-            
-              <tr>
+              <tr *ngIf="allActivitiesSubscribed.length === 0 && !isLoading">
+                <td colspan="4" class="text-center">No tienes actividades reservadas</td>
+              </tr>
+              <tr *ngIf="isLoading">
+                  <td colspan="4" class="text-center">
+                    <div class="spinner-border text-primary" role="status">
+                      <span class="sr-only">Cargando...</span>
+                    </div>
+                  </td>
+              </tr>
+              <tr *ngFor="let activity of allActivitiesSubscribed">
 								<td class="product-thumb">
-									<img width="80px" height="auto" src="/activity//image" alt="image description"></td>
-								<td class="product-details">
-									<h3 class="title"></h3>
+									<img width="80px" height="auto" [src]="activity.imageUrl"
+                                (error)="handleImageError($event)"
+                                class="card-img-top img-fluid"
+                                alt="{{activity.name}}">
+                </td>
+                <td class="product-details">
+									<h3 class="title">{{activity.name}}</h3>
 									<span><strong>Fecha y hora: </strong> </span>
                   <!--<span class="location"><strong>Lugar:</strong>Dhaka,Bangladesh</span>-->
 									<span class="location"><strong></strong></span>
 								</td>
-								<td class="product-category"><span class="categories"></span></td>
+								<td class="product-category"><span class="categories"></span>{{activity.category}}</td>
 								<td class="action" data-title="Action">
 									<div class="">
 										<ul class="list-inline justify-content-center">
 											<li class="list-inline-item">
-												<a data-toggle="tooltip" data-placement="top" title="View" class="view" href="/activity/">
-													<i class="fa fa-eye"></i>
+												<a data-toggle="tooltip" data-placement="top" title="View" class="view" (click)="navigateToActivity(activity.id)">
+                          <i class="fa fa-eye"></i>
 												</a>
 											</li>
 										</ul>
 									</div>
 								</td>
 							</tr>
+              <tr *ngIf="errorMessage">
+                <td colspan="4" class="text-center text-danger">{{ errorMessage }}</td>
+              </tr>
              
             </tbody>
           </table>
           <div class="text-center mt-3">
-						<button type="button" class="btn btn-primary" id="loadMore" onclick='loadMoreActivitiesSubscribed()'>Cargar más</button>
-					</div>
+            <button type="button"
+              class="btn btn-primary"
+              (click)="loadMoreActivitiesSubscribed()"
+              [disabled]="isLoading">
+              <span *ngIf="isLoading" class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>
+              {{ isLoading ? 'Cargando...' : 'Cargar más' }}
+            </button>
+          </div>
         </div>
-        <!-- pagination -->
-        
+        <!-- pagination -->       
       </div>
     </div>
   </div>
 </section>
-

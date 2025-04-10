@@ -139,4 +139,11 @@ export class ActivityService {
       { observe: 'response' }
     );
   }
+
+  getUserSubscribedActivities(userId:number,page:number = 0, size: number = 4):Observable<PageResponse<ActivityDto>>{
+    const params = new HttpParams()
+    .set('page',page.toString())
+    .set('size',size.toString());
+    return this.http.get<PageResponse<ActivityDto>>(`${this.API_URL}/users/${userId}/subscribed-activities`,{params});
+  }
 }

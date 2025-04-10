@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
   styleUrl: './profile.component.css'
 })
 export class ProfileComponent {
-  allActivities: ActivityDto[] = [];
+  allActivitiesSubscribed: ActivityDto[] = [];
 
   currentActivitiesPage = 0;
   activitiesTotalPages = 0;
@@ -39,16 +39,20 @@ export class ProfileComponent {
     this.isLoggedIn = this.authService.getIsLoggedIn();
     console.log('Is logged in:', this.isLoggedIn);
 
-    // If not admin, redirect
-    if (!this.isAdmin) {
-      console.error('El usuario no tiene permisos de administrador');
-      this.router.navigate(['/']); // Redirect to home page
+    /// Verificar si es administrador
+    this.isAdmin = this.authService.isAdmin();
+    console.log('Is admin:', this.isAdmin);
+
+    // Si no está logueado, redirigir al login
+    if (!this.isLoggedIn) {
+      console.error('Usuario no autenticado');
+      this.router.navigate(['/login']);
       return;
     }
     this.loadActivities();
   }
 
-  loadMoreActivities(): void {
+  loadMoreActivitiesSubscribed(): void {
     if (this.hasMoreActivities && !this.isLoading) {
       this.currentActivitiesPage++;
       this.loadActivities();
@@ -61,7 +65,7 @@ export class ProfileComponent {
     this.isLoading = true;
     this.errorMessage = null;
 
-    this.activityService.getActivities(this.currentActivitiesPage).subscribe(
+    this.activityService.getUserSubscribedActivities(this.currentUser.id, this.currentActivitiesPage).subscribe(
       {
         next: (response: any) => {
           this.isLoading = false;
@@ -84,7 +88,7 @@ export class ProfileComponent {
               imageUrl: this.activityService.getActivityImageUrl(activity.id)
             }));
 
-            this.allActivities = [...this.allActivities, ...activitiesWithImages];
+            this.allActivitiesSubscribed = [...this.allActivitiesSubscribed, ...activitiesWithImages];
             this.activitiesTotalPages = pageData.totalPages;
             this.hasMoreActivities = !pageData.last;
           } else {
@@ -117,6 +121,10 @@ export class ProfileComponent {
         console.error('Error during logout:', err);
       }
     });
+  }
+
+  navigateToActivity(id: number): void {
+    this.router.navigate(['/activities', id]);
   }
 
   logout(): void {

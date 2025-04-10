@@ -349,6 +349,19 @@ public class ActivityRestController {
         return ResponseEntity.ok(recommendedActivities);
     }
 
+	@GetMapping("/users/{userId}/subscribed-activities")
+    public ResponseEntity<Page<ActivityDto>> getSubscribedActivities(
+            @PathVariable Long userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "4") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<ActivityDto> susbcribedActivities = activityService.getActivitiesByUser(userId, pageable);
+
+        return ResponseEntity.ok(susbcribedActivities);
+    }
+
 	// Método para obtener todos los lugares
 	@GetMapping("/places")
 	public ResponseEntity<List<PlaceDto>> getAllPlaces() {
