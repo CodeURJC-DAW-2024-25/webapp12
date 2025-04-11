@@ -16,6 +16,7 @@ import { RegisterComponent } from './register/register.component';
 import { AdminStatisticsComponent  } from './admin-statistics/admin-statistics.component';
 import { AdminActivitiesComponent } from './admin-activities/admin-activities.component';
 import { ActivityComponent } from './activity/activity.component';
+import { EditUserProfileComponent } from './edit-user-profile/edit-user-profile.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { ActivityComponent } from './activity/activity.component';
     RegisterComponent,
     AdminStatisticsComponent,
     AdminActivitiesComponent,
-    ActivityComponent
+    ActivityComponent,
+    EditUserProfileComponent
   ],
   imports: [
     BrowserModule,

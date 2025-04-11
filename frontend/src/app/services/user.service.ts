@@ -3,6 +3,15 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { UserDto } from '../dtos/user.dto';
+
+
+export interface UserUpdateDto {
+  name: string;
+  surname: string;
+  dni: string;
+  phone: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -15,11 +24,14 @@ export class UserService {
   public currentUser$ = this.currentUserSubject.asObservable();
 
   private apiUrl = 'api/auth'; // Replace with your actual API URL
+  private api_Url = '/api/users'; 
 
   constructor(
     private http: HttpClient,
     private router: Router
   ) {}
+
+  
 
   /**
    * Login user with email and password
@@ -158,5 +170,17 @@ export class UserService {
   private clearStorage(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+  }
+
+  updateUser(id:number,userData:UserUpdateDto):Observable<UserDto>{
+    return this.http.put<UserDto>(`${this.api_Url}/${id}`,userData);
+  }
+
+  updateUserImage(id:number,formData:FormData):Observable<any>{
+    return this.http.put(`${this.api_Url}/${id}/image`,formData);
+  }
+
+  deleteUserImage(id:number):Observable<any>{
+    return this.http.delete(`${this.api_Url}/${id}/image`);
   }
 }
