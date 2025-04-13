@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { ActivityService, ActivityDto } from '../services/activity.service';
 import { ReviewDto, ReviewService } from '../services/review.service';
 
-
 @Component({
   selector: 'app-activity',
   templateUrl: './activity.component.html',
@@ -15,6 +14,7 @@ export class ActivityComponent implements OnInit {
   reviews: ReviewDto[] = [];
   reviewsPage: number = 0;
   reviewsLastPage: boolean = false;
+  reviewsLoading: boolean = false;
   token: string = 'ABC123XYZ';
   register: boolean = true;
   isSubscribed: boolean = false;
@@ -32,8 +32,10 @@ export class ActivityComponent implements OnInit {
     this.activityService.getActivityById(id).subscribe({
       next: (data) => {
         this.activity = data;
-        this.imageUrl = this.activityService.getActivityImageUrl(data.id);
-        this.loadInitialReviews(data.id);
+        if (data.id) {
+          this.imageUrl = this.activityService.getActivityImageUrl(data.id);
+          this.loadInitialReviews(data.id);
+        }
       },
       error: (err) => {
         console.error('Error al cargar actividad', err);
@@ -42,29 +44,87 @@ export class ActivityComponent implements OnInit {
   }
 
   loadMoreReview(): void {
-    if (this.reviewsLastPage || !this.activity?.id) return;
+    if (this.reviewsLastPage || !this.activity?.id || this.reviewsLoading) return;
+
+    this.reviewsLoading = true;
     this.reviewsPage++;
 
     this.reviewService.getReviewsByActivity(this.activity.id, this.reviewsPage).subscribe({
-      next: (page) => {
-        this.reviews = [...this.reviews, ...page.content];
-        this.reviewsLastPage = page.last;
+      next: (response) => {
+        console.log('Load more reviews response:', response);
+
+        if (response && response.content && Array.isArray(response.content)) {
+          this.reviews = [...this.reviews, ...response.content];
+          this.reviewsLastPage = response.last;
+        }
+
+        this.reviewsLoading = false;
       },
-      error: (e) => console.error('Error al cargar más reviews:', e)
+      error: (e) => {
+        console.error('Error al cargar más reviews:', e);
+        this.reviewsLoading = false;
+      }
     });
   }
 
   loadInitialReviews(activityId: number): void {
-    this.reviewService.getReviewsByActivity(activityId, this.reviewsPage).subscribe({
-      next: (page) => {
-        this.reviews = page.content;
-        this.reviewsLastPage = page.last;
+    this.reviewsLoading = true;
+
+    this.reviewService.getReviewsByActivity(activityId, 0).subscribe({
+      next: (response) => {
+        console.log('Initial reviews response:', response);
+
+        if (response && response.content && Array.isArray(response.content)) {
+          this.reviews = response.content;
+          this.reviewsLastPage = response.last;
+          console.log('Reviews loaded:', this.reviews);
+        } else {
+          console.warn('Unexpected response format:', response);
+          this.reviews = [];
+          this.reviewsLastPage = true;
+        }
+
+        this.reviewsLoading = false;
       },
-      error: (e) => console.error('Error al cargar reviews:', e)
+      error: (e) => {
+        console.error('Error al cargar reviews:', e);
+        this.reviews = [];
+        this.reviewsLastPage = true;
+        this.reviewsLoading = false;
+      }
     });
   }
 
-  submitReview() {
-    alert('¡Comentario enviado!');
+  submitReview(): void {
+    if (!this.activity?.id) return;
+
+    const starsValueElement = document.getElementById('starsValue') as HTMLSelectElement;
+    const descriptionElement = document.getElementById('description') as HTMLTextAreaElement;
+
+    if (!starsValueElement || !descriptionElement) return;
+
+    const review = {
+      starsValue: parseInt(starsValueElement.value),
+      description: descriptionElement.value  // El backend espera 'description' aunque luego lo mapee a 'comment'
+    };
+
+    this.reviewService.submitReview(this.activity.id, review).subscribe({
+      next: (response) => {
+        // Añadimos la nueva review al principio de la lista
+        if (response) {
+          this.reviews.unshift(response);
+        }
+
+        // Limpiamos el formulario
+        descriptionElement.value = '';
+        starsValueElement.value = '5';
+
+        alert('¡Comentario enviado con éxito!');
+      },
+      error: (err) => {
+        console.error('Error al enviar el comentario', err);
+        alert('Error al enviar el comentario. Por favor, inténtelo de nuevo.');
+      }
+    });
   }
 }
