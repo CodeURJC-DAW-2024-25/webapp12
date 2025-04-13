@@ -1,102 +1,150 @@
 <section class="blog single-blog section">
   <div class="container">
-      <div class="row">
-          <div class="col-lg-8">
-              <article class="single-post">
-                  <h2 class="d-inline-block">{{ activity?.name }}</h2>
-                  <div class="d-flex justify-content-between align-items-center">
-                      <ul class="list-inline mb-0">
-                          <li class="list-inline-item">by Admin</li>
-                          <li class="list-inline-item">{{ activity?.createdAt | date:'longDate' }}</li>
-                      </ul>
-                  </div>
-
-                  <img *ngIf="activity && imageUrl" [src]="imageUrl" alt="Imagen de actividad">
-                  <img *ngIf="!imageUrl" src="/images/sports/no-image.png" class="img-fluid mb-4" alt="No Image">
-
-                  <ul class="list-inline product-meta">
-                      <li class="list-inline-item">
-                          <a><i class="fa fa-futbol-o"></i> {{ activity?.category }}</a>
-                      </li>
-                  </ul>
-                  <p>{{ activity?.description }}</p>
-
-                  <h3>Detalles de la Actividad</h3>
-                  <ul>
-                      <li><strong>📍 Ubicación:</strong> {{activity?.place?.name }}</li>
-                      <li><strong>📍 Ubicación - Descripción:</strong> {{ activity?.place?.description }}</li>
-                      <li><strong>⏰ Fecha:</strong> {{ activity?.activityDate }}</li>
-                      <li><strong>👥 Capacidad máxima:</strong> {{ activity?.vacancy }} personas</li>
-                      <li><strong>🎟️ Reserva previa requerida</strong> en recepción o a través de la app del resort
-                      </li>
-                  </ul>
-              </article>
-
-              <div class="block comment">
-                  <div class="block comment" id="allReviewsPaginated">
-                      <h4>Comentarios</h4>
-
-                      <div *ngIf="reviewsLoading">
-                          <p>Cargando comentarios...</p>
-                      </div>
-
-                      <!-- Check length of reviews array, not undefined -->
-                      <div *ngIf="!reviewsLoading && reviews.length > 0">
-                          <div class="comment" *ngFor="let review of reviews">
-                            <div class="review-header">
-                                <strong>{{ review.userFullName || 'Usuario Anónimo' }}</strong> - {{ review.starsValue }} ⭐
-                                <span class="review-date">{{ review.creationDate | date:'medium' }}</span>
-                            </div>
-                            <p class="review-comment">{{ review.comment }}</p>
-                          </div>
-                      </div>
-
-                      <!-- Only show no reviews message if not loading and array is empty -->
-                      <div *ngIf="!reviewsLoading && reviews.length === 0">
-                          <p>No hay comentarios aún. ¡Sé el primero en dejar uno!</p>
-                      </div>
-                  </div>
-
-                  <div class="text-center mt-3" *ngIf="!reviewsLastPage && !reviewsLoading">
-                      <button type="button" class="btn btn-primary" (click)="loadMoreReview()">
-                        Cargar más
-                      </button>
-                  </div>
-
-                  <form *ngIf="register" (ngSubmit)="submitReview()">
-                      <label for="starsValue">Calificación:</label>
-                      <select id="starsValue" name="starsValue" required>
-                          <option value="1">1 ⭐</option>
-                          <option value="2">2 ⭐</option>
-                          <option value="3">3 ⭐</option>
-                          <option value="4">4 ⭐</option>
-                          <option value="5">5 ⭐</option>
-                      </select>
-                      <br>
-                      <label for="description">Comentario:</label>
-                      <textarea id="description" name="description" required
-                          style="width: 100%; height: 150px;"></textarea>
-                      <br>
-                      <input type="hidden" name="_csrf" [value]="token" />
-                      <button type="submit" class="btn btn-primary">Enviar</button>
-                  </form>
-              </div>
+    <div class="row">
+      <div class="col-lg-8">
+        <!-- Detalles de la actividad -->
+        <article class="single-post">
+          <h2 class="d-inline-block">{{ activity?.name }}</h2>
+          <div class="d-flex justify-content-between align-items-center">
+            <ul class="list-inline mb-0">
+              <li class="list-inline-item"><i class="fa fa-user"></i> Admin</li>
+              <li class="list-inline-item"><i class="fa fa-calendar"></i> {{ activity?.createdAt | date:'longDate' }}</li>
+            </ul>
           </div>
 
-          <div class="col-lg-4" *ngIf="register">
-              <div class="sidebar">
-                  <div class="widget archive">
-                      <h5 class="widget-header">Realiza aquí tu Reserva</h5>
-
-                      <p *ngIf="isSubscribed">Ya estás inscrito en esta actividad.</p>
-
-                      <form *ngIf="!isSubscribed">
-                          <input type="hidden" name="_csrf" [value]="token" />
-                          <button type="submit" class="btn btn-primary">RESERVAR</button>
-                      </form>
-                  </div>
-              </div>
+          <div class="activity-image mb-4">
+            <img *ngIf="activity && imageUrl" [src]="imageUrl" alt="Imagen de actividad" class="img-fluid rounded shadow">
+            <img *ngIf="!imageUrl" src="/images/sports/no-image.png" class="img-fluid rounded shadow" alt="No Image">
           </div>
+
+          <ul class="list-inline product-meta">
+            <li class="list-inline-item">
+              <a><i class="fa fa-futbol-o"></i> {{ activity?.category }}</a>
+            </li>
+          </ul>
+          <div class="activity-description">
+            <p>{{ activity?.description }}</p>
+          </div>
+
+          <div class="activity-details mt-4 mb-5 p-4 bg-light rounded shadow-sm">
+            <h3 class="mb-3"><i class="fa fa-info-circle"></i> Detalles de la Actividad</h3>
+            <ul class="list-unstyled">
+              <li class="mb-2"><strong>📍 Ubicación:</strong> {{activity?.place?.name }}</li>
+              <li class="mb-2"><strong>📍 Ubicación - Descripción:</strong> {{ activity?.place?.description }}</li>
+              <li class="mb-2"><strong>⏰ Fecha:</strong> {{ activity?.activityDate | date:'full' }}</li>
+              <li class="mb-2"><strong>👥 Capacidad máxima:</strong> {{ activity?.vacancy }} personas</li>
+              <li><strong>🎟️ Reserva previa requerida</strong> en recepción o a través de la app del resort</li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- Sección de comentarios -->
+        <div class="reviews-section mt-5">
+          <div class="reviews-header d-flex justify-content-between align-items-center mb-4">
+            <h3 class="m-0"><i class="fa fa-comments"></i> Comentarios</h3>
+            <span class="badge bg-primary rounded-pill">{{ reviews.length }} comentarios</span>
+          </div>
+
+          <!-- Loader para los comentarios -->
+          <div *ngIf="reviewsLoading" class="text-center p-4">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Cargando...</span>
+            </div>
+            <p class="mt-2">Cargando comentarios...</p>
+          </div>
+
+          <!-- Lista de comentarios -->
+          <div *ngIf="!reviewsLoading && reviews.length > 0" class="reviews-list">
+            <div *ngFor="let review of reviews" class="review-card p-3 mb-3 border-bottom">
+              <div class="review-header d-flex justify-content-between align-items-center mb-2">
+                <div class="user-info">
+                  <strong>{{ review.userFullName || 'Usuario Anónimo' }}</strong>
+                </div>
+                <div class="review-meta">
+                  <div class="stars mb-1">
+                    <span class="star-rating" [ngClass]="{'text-warning': review.starsValue >= 1}">★</span>
+                    <span class="star-rating" [ngClass]="{'text-warning': review.starsValue >= 2}">★</span>
+                    <span class="star-rating" [ngClass]="{'text-warning': review.starsValue >= 3}">★</span>
+                    <span class="star-rating" [ngClass]="{'text-warning': review.starsValue >= 4}">★</span>
+                    <span class="star-rating" [ngClass]="{'text-warning': review.starsValue >= 5}">★</span>
+                  </div>
+                  <small class="text-muted">{{ review.creationDate | date:'medium' }}</small>
+                </div>
+              </div>
+              <div class="review-content mt-2">
+                <p class="mb-0">{{ review.comment }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mensaje cuando no hay comentarios -->
+          <div *ngIf="!reviewsLoading && reviews.length === 0" class="no-reviews text-center p-5 bg-light rounded">
+            <i class="fa fa-comments-o fa-3x text-muted mb-3"></i>
+            <p class="lead">No hay comentarios aún. ¡Sé el primero en dejar uno!</p>
+          </div>
+
+          <!-- Botón para cargar más comentarios -->
+          <div class="text-center mt-4" *ngIf="!reviewsLastPage && !reviewsLoading && reviews.length > 0">
+            <button type="button" class="btn btn-outline-primary" (click)="loadMoreReview()">
+              <i class="fa fa-refresh me-2"></i> Cargar más comentarios
+            </button>
+          </div>
+
+          <!-- Formulario para enviar un comentario -->
+          <div *ngIf="register" class="review-form mt-5 p-4 bg-light rounded shadow-sm">
+            <h4 class="mb-3"><i class="fa fa-pencil"></i> Deja tu comentario</h4>
+            <form (ngSubmit)="submitReview()" class="needs-validation">
+              <div class="mb-3">
+                <label for="starsValue" class="form-label">Calificación:</label>
+                <div class="rating-select d-flex align-items-center">
+                  <select id="starsValue" name="starsValue" class="form-select" required>
+                    <option value="1">1 ⭐</option>
+                    <option value="2">2 ⭐</option>
+                    <option value="3">3 ⭐</option>
+                    <option value="4">4 ⭐</option>
+                    <option value="5" selected>5 ⭐</option>
+                  </select>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="description" class="form-label">Tu comentario:</label>
+                <textarea id="description" name="description" class="form-control"
+                  placeholder="Comparte tu experiencia..." required
+                  style="min-height: 120px;"></textarea>
+              </div>
+              <input type="hidden" name="_csrf" [value]="token" />
+              <button type="submit" class="btn btn-primary w-100">
+                <i class="fa fa-send me-2"></i> Enviar comentario
+              </button>
+            </form>
+          </div>
+        </div>
       </div>
+
+      <!-- Sidebar para reservas -->
+      <div class="col-lg-4" *ngIf="register">
+        <div class="sidebar mt-5 mt-lg-0">
+          <div class="widget reservation-widget p-4 bg-info text-white rounded shadow">
+            <h5 class="widget-header mb-4"><i class="fa fa-calendar-check-o me-2"></i> Realiza aquí tu Reserva</h5>
+
+            <div *ngIf="isSubscribed" class="subscribed-message p-3 bg-light text-dark rounded">
+              <i class="fa fa-check-circle text-success me-2"></i>
+              <span>Ya estás inscrito en esta actividad.</span>
+            </div>
+
+            <form *ngIf="!isSubscribed" class="reservation-form">
+              <input type="hidden" name="_csrf" [value]="token" />
+              <div class="activity-info mb-4">
+                <p><i class="fa fa-users me-2"></i> Capacidad: {{ activity?.vacancy }} personas</p>
+                <p><i class="fa fa-calendar me-2"></i> Fecha: {{ activity?.activityDate | date:'shortDate' }}</p>
+              </div>
+              <button type="submit" class="btn btn-light w-100">
+                <i class="fa fa-ticket me-2"></i> RESERVAR AHORA
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
