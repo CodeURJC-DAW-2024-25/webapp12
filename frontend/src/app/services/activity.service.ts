@@ -178,4 +178,23 @@ export class ActivityService {
       responseType: 'blob'
     });
   }
+
+  downloadReservationPdf(activityId: number): Observable<Blob> {
+    const userId = this.authService.getCurrentUserId();
+    if (!userId) {
+      throw new Error('Usuario no autenticado');
+    }
+
+    const token = this.authService.getToken();
+    let headers = new HttpHeaders();
+
+    if (token) {
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    }
+
+    return this.http.get(`${this.API_URL}/${activityId}/user/${userId}/reservation-pdf`, {
+      headers: headers,
+      responseType: 'blob'
+    });
+  }
 }

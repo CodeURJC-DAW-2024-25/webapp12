@@ -18,6 +18,7 @@ export class ActivityComponent implements OnInit {
   reviewsLoading: boolean = false;
   isSubscribed: boolean = false;
   reservationLoading: boolean = false;
+  downloadingTicket: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -96,6 +97,52 @@ export class ActivityComponent implements OnInit {
         this.reservationLoading = false;
       }
     });
+  }
+
+  // Nuevo método para descargar el ticket de una reserva existente
+  downloadTicket(): void {
+    if (!this.activity?.id || this.downloadingTicket) return;
+
+    this.downloadingTicket = true;
+
+    try {
+      this.activityService.downloadReservationPdf(this.activity.id).subscribe({
+        next: (pdfBlob) => {
+          const userName = this.authService.getUserDetails()?.name || 'Usuario';
+          this.downloadPdf(pdfBlob, `Ticket_Reserva_${userName}.pdf`);
+          this.downloadingTicket = false;
+        },
+        error: (err) => {
+          console.error('Error al descargar el ticket', err);
+          let errorMessage = 'Error al descargar el ticket. Por favor, inténtelo de nuevo.';
+
+          if (err.status === 400) {
+            errorMessage = 'No estás inscrito en esta actividad.';
+          } else if (err.status === 404) {
+            errorMessage = 'Actividad o usuario no encontrado.';
+          }
+
+          alert(errorMessage);
+          this.downloadingTicket = false;
+        }
+      });
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error: Debes iniciar sesión para descargar el ticket.');
+      this.downloadingTicket = false;
+    }
+  }
+
+  // Método auxiliar para descargar PDF
+  private downloadPdf(pdfBlob: Blob, fileName: string): void {
+    const url = window.URL.createObjectURL(pdfBlob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
   }
 
   loadMoreReview(): void {

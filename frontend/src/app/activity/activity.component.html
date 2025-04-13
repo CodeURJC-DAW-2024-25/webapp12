@@ -147,6 +147,18 @@
                 </span>
               </button>
             </form>
+
+            <!-- Botón para descargar ticket cuando ya está inscrito -->
+            <div *ngIf="isSubscribed" class="mt-3">
+              <button (click)="downloadTicket()" class="btn btn-light w-100" [disabled]="downloadingTicket">
+                <span *ngIf="!downloadingTicket">
+                  <i class="fa fa-download me-2"></i> DESCARGAR TICKET
+                </span>
+                <span *ngIf="downloadingTicket">
+                  <i class="fa fa-spinner fa-spin me-2"></i> DESCARGANDO...
+                </span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
