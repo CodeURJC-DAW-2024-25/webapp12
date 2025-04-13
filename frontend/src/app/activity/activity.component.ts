@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AuthService } from './../services/auth.service';
+import { AuthService } from '../services/auth.service';
 import { ActivityService, ActivityDto } from '../services/activity.service';
 import { ReviewDto, ReviewService } from '../services/review.service';
 
@@ -16,9 +16,8 @@ export class ActivityComponent implements OnInit {
   reviewsPage: number = 0;
   reviewsLastPage: boolean = false;
   reviewsLoading: boolean = false;
-  token: string = 'ABC123XYZ';
-  register: boolean = true;
   isSubscribed: boolean = false;
+  reservationLoading: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -37,10 +36,64 @@ export class ActivityComponent implements OnInit {
         if (data.id) {
           this.imageUrl = this.activityService.getActivityImageUrl(data.id);
           this.loadInitialReviews(data.id);
+          this.checkSubscriptionStatus(data.id);
         }
       },
       error: (err) => {
         console.error('Error al cargar actividad', err);
+      }
+    });
+  }
+
+  // Método para verificar si el usuario ya está inscrito
+  checkSubscriptionStatus(activityId: number): void {
+    if (!this.authService.getIsLoggedIn()) return;
+
+    this.activityService.isUserSubscribed(activityId).subscribe({
+      next: (subscribed) => {
+        this.isSubscribed = subscribed;
+      },
+      error: (err) => {
+        console.error('Error al verificar estado de suscripción', err);
+        this.isSubscribed = false;
+      }
+    });
+  }
+
+  // Método para realizar la reserva
+  reserveActivity(): void {
+    if (!this.activity?.id || this.reservationLoading || this.isSubscribed) return;
+
+    this.reservationLoading = true;
+
+    this.activityService.reserveActivity(this.activity.id).subscribe({
+      next: (pdfBlob) => {
+        // Crear URL para descargar el PDF
+        const url = window.URL.createObjectURL(pdfBlob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Ticket_Reserva_Actividad_${this.activity?.id}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+
+        // Actualizar estado de suscripción
+        this.isSubscribed = true;
+        this.reservationLoading = false;
+      },
+      error: (err) => {
+        console.error('Error al realizar la reserva', err);
+        let errorMessage = 'Error al realizar la reserva. Por favor, inténtelo de nuevo.';
+
+        if (err.status === 400) {
+          errorMessage = 'No hay plazas disponibles para esta actividad.';
+        } else if (err.status === 401) {
+          errorMessage = 'Debe iniciar sesión para reservar una actividad.';
+        }
+
+        alert(errorMessage);
+        this.reservationLoading = false;
       }
     });
   }

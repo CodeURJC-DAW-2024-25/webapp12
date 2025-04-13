@@ -381,4 +381,35 @@ public class ActivityRestController {
 			place.getDescription() // Asumiendo que Place también tiene description
 		);
 	}
+
+	@Operation(summary = "Check if user is subscribed to activity", 
+          description = "Returns true if the user is subscribed to the specified activity, false otherwise")
+@ApiResponses(value = {
+    @ApiResponse(responseCode = "200", description = "Subscription status returned successfully", 
+                content = @Content(mediaType = "application/json")),
+    @ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
+    @ApiResponse(responseCode = "404", description = "Activity or user not found", content = @Content)
+})
+@GetMapping("/{activityId}/user/{userId}")
+public ResponseEntity<Boolean> isUserSubscribedToActivity(
+        @PathVariable Long activityId,
+        @PathVariable Long userId) {
+    
+    try {
+        // Verificar si la actividad existe
+        Activity activity = activityService.findById(activityId)
+            .orElseThrow(() -> new EntityNotFoundException("Actividad no encontrada"));
+        
+        // Verificar si el usuario existe
+        User user = userService.findById(userId)
+            .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
+        
+        // Verificar si el usuario está inscrito en la actividad
+        boolean isSubscribed = user.getActivities().contains(activity);
+        
+        return ResponseEntity.ok(isSubscribed);
+    } catch (EntityNotFoundException e) {
+        return ResponseEntity.notFound().build();
+    }
+}
 }

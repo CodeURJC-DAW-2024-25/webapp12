@@ -113,7 +113,7 @@
                   placeholder="Comparte tu experiencia..." required
                   style="min-height: 120px;"></textarea>
               </div>
-              <input type="hidden" name="_csrf" [value]="token" />
+              <input type="hidden" name="_csrf"  />
               <button type="submit" class="btn btn-primary w-100">
                 <i class="fa fa-send me-2"></i> Enviar comentario
               </button>
@@ -123,24 +123,28 @@
       </div>
 
       <!-- Sidebar para reservas -->
-      <div class="col-lg-4" *ngIf="register">
+      <div class="col-lg-4" *ngIf="authService.getIsLoggedIn()">
         <div class="sidebar mt-5 mt-lg-0">
           <div class="widget reservation-widget p-4 bg-info text-white rounded shadow">
             <h5 class="widget-header mb-4"><i class="fa fa-calendar-check-o me-2"></i> Realiza aquí tu Reserva</h5>
 
-            <div *ngIf="isSubscribed" class="subscribed-message p-3 bg-light text-dark rounded">
+            <div *ngIf="isSubscribed" class="subscribed-message p-3 bg-light text-dark rounded mb-3">
               <i class="fa fa-check-circle text-success me-2"></i>
               <span>Ya estás inscrito en esta actividad.</span>
             </div>
 
-            <form *ngIf="!isSubscribed" class="reservation-form">
-              <input type="hidden" name="_csrf" [value]="token" />
+            <form *ngIf="!isSubscribed" (ngSubmit)="reserveActivity()" class="reservation-form">
               <div class="activity-info mb-4">
                 <p><i class="fa fa-users me-2"></i> Capacidad: {{ activity?.vacancy }} personas</p>
                 <p><i class="fa fa-calendar me-2"></i> Fecha: {{ activity?.activityDate | date:'shortDate' }}</p>
               </div>
-              <button type="submit" class="btn btn-light w-100">
-                <i class="fa fa-ticket me-2"></i> RESERVAR AHORA
+              <button type="submit" class="btn btn-light w-100" [disabled]="reservationLoading">
+                <span *ngIf="!reservationLoading">
+                  <i class="fa fa-ticket me-2"></i> RESERVAR AHORA
+                </span>
+                <span *ngIf="reservationLoading">
+                  <i class="fa fa-spinner fa-spin me-2"></i> PROCESANDO...
+                </span>
               </button>
             </form>
           </div>

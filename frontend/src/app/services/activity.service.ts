@@ -150,4 +150,32 @@ export class ActivityService {
     .set('size',size.toString());
     return this.http.get<PageResponse<ActivityDto>>(`${this.API_URL}/users/${userId}/subscribed-activities`,{params});
   }
+
+  isUserSubscribed(activityId: number): Observable<boolean> {
+    const userId = this.authService.getCurrentUserId();
+    if (!userId) {
+      return new Observable(subscriber => {
+        subscriber.next(false);
+        subscriber.complete();
+      });
+    }
+
+    return this.http.get<boolean>(`${this.API_URL}/${activityId}/user/${userId}`);
+  }
+
+  reserveActivity(activityId: number): Observable<Blob> {
+    const token = this.authService.getToken();
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    if (token) {
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    }
+
+    return this.http.post(`${this.API_URL}/${activityId}/reserve`, {}, {
+      headers: headers,
+      responseType: 'blob'
+    });
+  }
 }
