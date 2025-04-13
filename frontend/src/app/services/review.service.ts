@@ -48,6 +48,12 @@ export class ReviewService {
   }
 
   submitReview(activityId: number, review: { starsValue: number, description: string }): Observable<ReviewDto> {
+    // Crear un nuevo objeto con la estructura correcta que espera el backend
+    const requestBody = {
+      starsValue: review.starsValue,
+      comment: review.description // Mapear 'description' a 'comment' para el backend
+    };
+
     const token = this.authService.getToken();
     let headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -59,7 +65,7 @@ export class ReviewService {
 
     return this.http.post<ReviewDto>(
       `${this.API_URL}/activity/${activityId}`,
-      review,
+      requestBody,
       { headers }
     ).pipe(
       catchError(error => {

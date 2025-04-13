@@ -91,7 +91,8 @@
           </div>
 
           <!-- Formulario para enviar un comentario -->
-          <div *ngIf="register" class="review-form mt-5 p-4 bg-light rounded shadow-sm">
+
+          <div  *ngIf="authService.getIsLoggedIn()" class="review-form mt-5 p-4 bg-light rounded shadow-sm">
             <h4 class="mb-3"><i class="fa fa-pencil"></i> Deja tu comentario</h4>
             <form (ngSubmit)="submitReview()" class="needs-validation">
               <div class="mb-3">

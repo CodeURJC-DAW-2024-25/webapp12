@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { AuthService } from './../services/auth.service';
 import { ActivityService, ActivityDto } from '../services/activity.service';
 import { ReviewDto, ReviewService } from '../services/review.service';
 
@@ -21,6 +22,7 @@ export class ActivityComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    public authService: AuthService,
     private activityService: ActivityService,
     private reviewService: ReviewService
   ) {}
@@ -103,9 +105,10 @@ export class ActivityComponent implements OnInit {
 
     if (!starsValueElement || !descriptionElement) return;
 
+    // Crear objeto con los datos del formulario
     const review = {
       starsValue: parseInt(starsValueElement.value),
-      description: descriptionElement.value  // El backend espera 'description' aunque luego lo mapee a 'comment'
+      description: descriptionElement.value // Mantenemos 'description' aquí para compatibilidad con el servicio
     };
 
     this.reviewService.submitReview(this.activity.id, review).subscribe({
@@ -119,7 +122,7 @@ export class ActivityComponent implements OnInit {
         descriptionElement.value = '';
         starsValueElement.value = '5';
 
-        alert('¡Comentario enviado con éxito!');
+        window.location.reload();
       },
       error: (err) => {
         console.error('Error al enviar el comentario', err);
