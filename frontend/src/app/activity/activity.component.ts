@@ -38,7 +38,7 @@ export class ActivityComponent implements OnInit {
         if (data.id) {
           this.imageUrl = this.activityService.getActivityImageUrl(data.id);
           this.loadInitialReviews(data.id);
-        //  this.checkSubscriptionStatus(data.id);
+          this.checkSubscriptionStatus(data.id);
         }
       },
       error: (err) => {
@@ -55,6 +55,7 @@ export class ActivityComponent implements OnInit {
     this.activityService.isUserSubscribed(activityId).subscribe({
       next: (subscribed) => {
         this.isSubscribed = subscribed;
+        console.log('Estado de suscripción:', this.isSubscribed);
       },
       error: (err) => {
         console.error('Error al verificar estado de suscripción', err);

@@ -72,7 +72,7 @@
                                     <input  type="file" (change)="onImageSelected($event)" accept=".jpg,.jpeg" />
 
                                     <div>
-                                        <img [src]="'/user/' + currentUser?.id + '/image'" *ngIf="currentUser?.image" alt="Imagen de perfil">
+                                        <img [src]="'/user/' + currentUser.id + '/image'" *ngIf="currentUser?.image" alt="Imagen de perfil">
                                         <img src="/images/sports/no-image.png" *ngIf="!currentUser?.image" alt="Sin imagen" />
                                     </div>
                                   
