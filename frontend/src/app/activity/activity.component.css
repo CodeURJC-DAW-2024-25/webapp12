@@ -1,0 +1,45 @@
+/* Estilos para la sección de actividades */
+.activity-image img {
+    width: 100%;
+    object-fit: cover;
+    max-height: 400px;
+  }
+  
+  .activity-description {
+    line-height: 1.6;
+  }
+  
+  /* Estilos para la sección de comentarios */
+  .reviews-section {
+    border-top: 1px solid #eee;
+    padding-top: 2rem;
+  }
+  
+  .review-card {
+    transition: all 0.3s ease;
+  }
+  
+  .review-card:hover {
+    background-color: #f9f9f9;
+  }
+  
+  .star-rating {
+    color: #e0e0e0;
+    font-size: 1.2rem;
+  }
+  
+  .text-warning {
+    color: #ffc107 !important;
+  }
+  
+  /* Widget de reserva */
+  .reservation-widget {
+    position: sticky;
+    top: 20px;
+    background-color: #0d6dfd2b !important; /* Azul más claro */
+  }
+  
+  .subscribed-message {
+    text-align: center;
+    font-weight: 500;
+  }

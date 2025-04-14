@@ -381,4 +381,80 @@ public class ActivityRestController {
 			place.getDescription() // Asumiendo que Place también tiene description
 		);
 	}
+
+	@Operation(summary = "Check if user is subscribed to activity", 
+          description = "Returns true if the user is subscribed to the specified activity, false otherwise")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "Subscription status returned successfully", 
+					content = @Content(mediaType = "application/json")),
+		@ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
+		@ApiResponse(responseCode = "404", description = "Activity or user not found", content = @Content)
+	})
+	@GetMapping("/{activityId}/user/{userId}")
+	public ResponseEntity<Boolean> isUserSubscribedToActivity(
+			@PathVariable Long activityId,
+			@PathVariable Long userId) {
+		
+		try {
+			// Verificar si la actividad existe
+			Activity activity = activityService.findById(activityId)
+				.orElseThrow(() -> new EntityNotFoundException("Actividad no encontrada"));
+			
+			// Verificar si el usuario existe
+			User user = userService.findById(userId)
+				.orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
+			
+			// Verificar si el usuario está inscrito en la actividad
+			boolean isSubscribed = user.getActivities().contains(activity);
+			
+			return ResponseEntity.ok(isSubscribed);
+		} catch (EntityNotFoundException e) {
+			return ResponseEntity.notFound().build();
+		}
+	}
+
+	@Operation(summary = "Get reservation PDF if user is subscribed", 
+          description = "Returns reservation PDF if the user is subscribed to the specified activity")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "PDF returned successfully", 
+					content = @Content(mediaType = "application/pdf")),
+		@ApiResponse(responseCode = "400", description = "User is not subscribed to this activity", content = @Content),
+		@ApiResponse(responseCode = "404", description = "Activity or user not found", content = @Content)
+	})
+	@GetMapping("/{activityId}/user/{userId}/reservation-pdf")
+	public ResponseEntity<byte[]> getReservationPdfIfSubscribed(
+			@PathVariable Long activityId,
+			@PathVariable Long userId) throws IOException {
+		
+		try {
+			// Verificar si la actividad existe
+			Activity activity = activityService.findById(activityId)
+				.orElseThrow(() -> new EntityNotFoundException("Actividad no encontrada"));
+			
+			// Verificar si el usuario existe
+			User user = userService.findById(userId)
+				.orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
+			
+			// Verificar si el usuario está inscrito en la actividad
+			if (!user.getActivities().contains(activity)) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body("El usuario no está inscrito en esta actividad".getBytes());
+			}
+			
+			// Generar el PDF de reserva
+			byte[] pdfContents = activityService.generateReservationPDF(activityId, userId).toByteArray();
+
+			HttpHeaders headers = new HttpHeaders();
+			headers.add(HttpHeaders.CONTENT_DISPOSITION, 
+					"attachment; filename=Ticket_Reserva_" + user.getName() + ".pdf");
+
+			return ResponseEntity.ok()
+					.headers(headers)
+					.contentType(MediaType.APPLICATION_PDF)
+					.body(pdfContents);
+					
+		} catch (EntityNotFoundException e) {
+			return ResponseEntity.notFound().build();
+		}
+	}
 }

@@ -1,31 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError,tap } from 'rxjs/operators';
 import { AuthService } from './auth.service';
+import { PageResponse } from './activity.service';
 
 export interface ReviewDto {
   id: number;
+  comment: string;            // Cambio de description a comment
   starsValue: number;
-  description: string;
-  createdAt: string;
-  user: {
-    id: number;
-    name: string;
-  };
-}
-
-export interface PageResponse<T> {
-  content: T[];
-  pageable: {
-    pageNumber: number;
-    pageSize: number;
-  };
-  totalPages: number;
-  totalElements: number;
-  last: boolean;
-  size: number;
-  number: number;
+  creationDate: string;       // Fecha de creación
+  userFullName: string;       // Nombre completo del usuario (no en objeto anidado)
 }
 
 
@@ -40,35 +25,55 @@ export class ReviewService {
     private authService: AuthService
   ) {}
 
-  private getHeaders(): HttpHeaders {
-    const token = this.authService.getToken();
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    });
-    console.log('Token enviado:', token);
-    return token ? headers.set('Authorization', `Bearer ${token}`) : headers;
-    
-
-  }
-
   getReviewsByActivity(activityId: number, page: number = 0, size: number = 5): Observable<PageResponse<ReviewDto>> {
-    console.log(`Llamando a /api/activities/${activityId}/reviews?page=${page}&size=${size}`);
     const params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString());
 
     return this.http.get<PageResponse<ReviewDto>>(
-      `/api/activities/${activityId}/reviews`,
-      {
-        params,
-        headers: this.getHeaders()
-      }
+      `${this.API_URL}/activity/${activityId}`,
+      { params }
     ).pipe(
-      catchError((err) => {
-        console.error('Error en getReviewsByActivity:', err);
-        return throwError(() => new Error('Error al cargar reseñas'));
+      tap(response => {
+        console.log('Reviews response:', response);
+        // Log the structure of the first review if available
+        if (response?.content?.length > 0) {
+          console.log('First review structure:', response.content[0]);
+        }
+      }),
+      catchError(error => {
+        console.error('Error fetching reviews:', error);
+        return throwError(() => new Error('Error fetching reviews'));
       })
     );
   }
+
+  submitReview(activityId: number, review: { starsValue: number, description: string }): Observable<ReviewDto> {
+    // Crear un nuevo objeto con la estructura correcta que espera el backend
+    const requestBody = {
+      starsValue: review.starsValue,
+      comment: review.description // Mapear 'description' a 'comment' para el backend
+    };
+
+    const token = this.authService.getToken();
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    if (token) {
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    }
+
+    return this.http.post<ReviewDto>(
+      `${this.API_URL}/activity/${activityId}`,
+      requestBody,
+      { headers }
+    ).pipe(
+      catchError(error => {
+        console.error('Error submitting review:', error);
+        return throwError(() => new Error('Error submitting review'));
+      })
+    );
+  }
+
 }
