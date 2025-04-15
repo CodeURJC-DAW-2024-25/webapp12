@@ -65,14 +65,14 @@ public class DatabaseInitializerService {
 	
 		userRepository.save(user4);
 
-		User user5 = new User("Adriana", "Lopez", "adriana@email.com", "12345567D","123573336","8910");
+		User user5 = new User("Adriana", "Lopez", "adriana@email.com", "12345567D","123573336",passwordEncoder.encode("8910"));
 		user5.setRoles(List.of("USER"));
 		setUserImage(user5, "static/images/user/user1.png");
 		
 		userRepository.save(user5);
 
 
-		User user6 = new User("Paco", "Rodriguez", "paco@email.com","12345567D", "557930394","1567");
+		User user6 = new User("Paco", "Rodriguez", "paco@email.com","12345567D", "557930394",passwordEncoder.encode("1567"));
 		user6.setRoles(List.of("USER"));
 		setUserImage(user6, "static/images/user/user5.png");
 		
