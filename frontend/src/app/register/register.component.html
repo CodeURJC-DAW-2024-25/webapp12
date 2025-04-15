@@ -1,1 +1,97 @@
-<p>register works!</p>
+<section class="login py-5 border-top-1">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-5 col-md-8 align-item-center">
+        <div class="border">
+          <h3 class="bg-gray p-4">Registrate Ahora</h3>
+
+          <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <fieldset class="p-4">
+              <!-- Campo Nombre con validación -->
+              <input 
+                class="form-control mb-3" 
+                type="text" 
+                formControlName="name" 
+                placeholder="Nombre"
+                [ngClass]="{'is-invalid': registerForm.get('name')?.touched && registerForm.get('name')?.invalid}">
+              <div *ngIf="registerForm.get('name')?.touched && registerForm.get('name')?.invalid" class="invalid-feedback">
+                El nombre es requerido
+              </div>
+
+              <!-- Repite para los demás campos con sus validaciones específicas -->
+              <input 
+                class="form-control mb-3" 
+                type="text" 
+                formControlName="surname" 
+                placeholder="Apellido"
+                [ngClass]="{'is-invalid': registerForm.get('surname')?.touched && registerForm.get('surname')?.invalid}">
+              <div *ngIf="registerForm.get('surname')?.touched && registerForm.get('surname')?.invalid" class="invalid-feedback">
+                El apellido es requerido
+              </div>
+
+              <input 
+                class="form-control mb-3" 
+                type="text" 
+                formControlName="dni" 
+                placeholder="DNI"
+                [ngClass]="{'is-invalid': registerForm.get('dni')?.touched && registerForm.get('dni')?.invalid}">
+              <div *ngIf="registerForm.get('dni')?.touched && registerForm.get('dni')?.invalid" class="invalid-feedback">
+                El DNI es requerido
+              </div>
+
+              <input 
+                class="form-control mb-3" 
+                type="email" 
+                formControlName="email" 
+                placeholder="Email"
+                [ngClass]="{'is-invalid': registerForm.get('email')?.touched && registerForm.get('email')?.invalid}">
+              <div *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.errors?.['required']" class="invalid-feedback">
+                El email es requerido
+              </div>
+              <div *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.errors?.['email']" class="invalid-feedback">
+                Ingrese un email válido
+              </div>
+
+              <input 
+                class="form-control mb-3" 
+                type="text" 
+                formControlName="phone" 
+                placeholder="Número de teléfono"
+                [ngClass]="{'is-invalid': registerForm.get('phone')?.touched && registerForm.get('phone')?.invalid}">
+              <div *ngIf="registerForm.get('phone')?.touched && registerForm.get('phone')?.invalid" class="invalid-feedback">
+                El número de teléfono es requerido
+              </div>
+
+              <input 
+                class="form-control mb-3" 
+                type="password" 
+                formControlName="password" 
+                placeholder="Contraseña"
+                [ngClass]="{'is-invalid': registerForm.get('password')?.touched && registerForm.get('password')?.invalid}">
+              <div *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.errors?.['required']" class="invalid-feedback">
+                La contraseña es requerida
+              </div>
+              <div *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.errors?.['minlength']" class="invalid-feedback">
+                La contraseña debe tener al menos 4 caracteres
+              </div>
+
+              <!-- Mensaje de error general -->
+              <div *ngIf="error" class="alert alert-danger mt-3">
+                {{ error }}
+              </div>
+
+              <!-- Botón con indicador de carga -->
+              <button 
+                type="submit" 
+                class="btn btn-primary font-weight-bold mt-3" 
+                [disabled]="registerForm.invalid || loading">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                Registrarse
+              </button>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

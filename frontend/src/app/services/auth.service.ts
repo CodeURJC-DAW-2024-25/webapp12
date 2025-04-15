@@ -3,6 +3,16 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { catchError, map, tap, switchMap } from 'rxjs/operators';
 
+export interface RegisterUser {
+  email: string;
+  name: string;
+  surname: string;
+  dni: string;
+  phone: string;
+  password: string;
+  roles?: string[];
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -166,5 +176,29 @@ export class AuthService {
     const currentUser = this.getUserDetails();
     // Using your logic that admin is user with id 7
     return currentUser && currentUser.id === 7;
+  }
+
+  
+ 
+
+// MÉTODO DE REGISTRO
+  register(user: RegisterUser): Observable<any> {
+    // Garantiza que se asigna al menos ROLE_USER si no se especifica
+    if (!user.roles || user.roles.length === 0) {
+      user.roles = ['ROLE_USER'];
+    } else {
+      // Asegura que todos los roles estén con el prefijo ROLE_
+      user.roles = user.roles.map(role =>
+        role.startsWith('ROLE_') ? role : `ROLE_${role}`
+      );
+    }
+
+    return this.http.post('/api/users/', user).pipe(
+      tap(() => console.log('Usuario registrado con éxito')),
+      catchError(error => {
+        console.error('Error al registrar usuario:', error);
+        return of({ status: 'ERROR', error });
+      })
+    );
   }
 }

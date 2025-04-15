@@ -124,21 +124,7 @@ public class UserService {
         }
     }
     
-    /*public UserDto createUser(NewUserDto newUserDto){
-        if (newUserDto.email() == null || newUserDto.password() == null) {
-            throw new IllegalArgumentException("Email y contraseña son requeridos");
-        }
-        User user = userMapper.toDomain(newUserDto);
-        user.setPassword(passwordEncoder.encode(newUserDto.password()));
-        if (newUserDto.roles() == null || newUserDto.roles().isEmpty()) {
-            user.setRoles(List.of("USER"));
-        } else {
-            user.setRoles(newUserDto.roles());
-        }
-        userRepository.save(user);
-        return userMapper.toDto(user);
-    }
-*/
+
     public UserDto createUser(NewUserDto newUserDto){
         if (newUserDto.email() == null || newUserDto.password() == null) {
             throw new IllegalArgumentException("Email y contraseña son requeridos");

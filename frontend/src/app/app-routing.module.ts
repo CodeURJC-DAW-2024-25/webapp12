@@ -9,6 +9,7 @@ import { AdminActivitiesComponent } from './admin-activities/admin-activities.co
 import { ActivityComponent } from './activity/activity.component';
 import { EditUserProfileComponent } from './edit-user-profile/edit-user-profile.component';
 import { AdminUsersComponent } from './admin-users/admin-users.component';
+import { RegisterComponent } from './register/register.component';
 
 
 const routes: Routes = [
@@ -20,6 +21,7 @@ const routes: Routes = [
   {path : 'activity/:id', component: ActivityComponent},
   {path : 'editUserProfile/:id', component: EditUserProfileComponent},
   {path : 'adminUsers', component: AdminUsersComponent},
+  {path: 'register', component: RegisterComponent}, // Cambia esto a tu componente de registro
 
 
 
