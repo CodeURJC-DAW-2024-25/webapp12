@@ -230,6 +230,10 @@ export class UserService {
     return this.http.delete(`${this.api_Url}/${id}/image`);
   }
 
+  deleteUser(id:number):Observable<any>{
+    return this.http.delete(`${this.api_Url}/${id}`, { responseType: 'text' as 'json' });
+  }
+
   getUserImageUrl(userId: number): string {
     return `${this.api_Url}/${userId}/image`;
   }

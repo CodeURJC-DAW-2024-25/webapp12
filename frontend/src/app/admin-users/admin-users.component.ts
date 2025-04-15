@@ -57,6 +57,19 @@ export class AdminUsersComponent {
       }
     }
   
+    deleteUser(id:number): void {
+      this.userService.deleteUser(id).subscribe({
+        next:() => {
+          this.allUsersPaginated = this.allUsersPaginated.filter(user => user.id !== id);
+          this.usersTotalPages = this.usersTotalPages - 1;
+        },
+        error: (error) => {
+          console.error('Error al eliminar el usuario:', error);
+          this.errorMessage = `Error: ${error.message || 'Error desconocido al eliminar el usuario'}`;
+        }
+      })
+    }
+
     navigateToUser(id: number): void {
       this.router.navigate(['/users', id]);
     }
@@ -111,6 +124,7 @@ export class AdminUsersComponent {
       imgElement.src = '/images/sports/no-image.png';
     }
   }
+  
   onLogout(): void {
     this.authService.logout().subscribe({
       next: () => {

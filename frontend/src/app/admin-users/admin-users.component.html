@@ -87,12 +87,9 @@
 									<div class="">
 										<ul class="list-inline justify-content-center">
 											<li class="list-inline-item">
-												<form action="/removeUser" method="post">
-													<button type="submit" style="display: none;"></button>
-													<a data-toggle="tooltip" data-placement="top" title="Eliminar" class="delete" onclick="this.closest('form').submit();">
-														<i class="fa fa-trash"></i>
-													</a>
-												</form>
+												<a data-toggle="tooltip" data-placement="top" title="Eliminar" class="delete" (click)="deleteUser(user.id)">
+                                                    <i class="fa fa-trash"></i>
+                                                </a>
 											</li>
 										</ul>
 									</div>
@@ -103,7 +100,7 @@
                             </tr>	
 						</tbody>
 					</table>
-					<div class="text-center mt-3"  *ngIf="hasMoreUsers && allUsersPaginated.length > 0">
+					<div class="text-center mt-3"  *ngIf="isAdmin &&hasMoreUsers && allUsersPaginated.length > 0">
                         <button type="button"
                             class="btn btn-primary"
                             (click)="loadMoreUsers()"
