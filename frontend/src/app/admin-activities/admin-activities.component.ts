@@ -68,6 +68,32 @@ allActivities: ActivityDto[] = [];
     }
   }
 
+  deleteActivity(id:number):void{
+    this.activityService.deleteActivity(id).subscribe({
+      next:() => {
+        this.allActivities = this.allActivities.filter(activity => activity.id !== id);
+        this.activitiesTotalPages = this.activitiesTotalPages - 1;
+        this.updateGeneralStatistics();
+      },
+      error: (error) => {
+        console.error('Error al eliminar el usuario:', error);
+        this.errorMessage = `Error: ${error.message || 'Error desconocido al eliminar el usuario'}`;
+      }
+    });
+  }
+
+  updateGeneralStatistics(): void {
+    this.statisticsService.getGeneralStatistics().subscribe({
+      next: data => {
+        this.userCount = data.userCount;
+        this.activityCount = data.activityCount; 
+      },
+      error: err => {
+        console.error('Error al obtener estadísticas generales:', err);
+      }
+    });
+  }
+
   loadMoreActivities(): void {
     if (this.hasMoreActivities && !this.isLoading) {
       this.currentActivitiesPage++;

@@ -155,6 +155,10 @@ export class ActivityService {
     return this.http.get<number>(`${this.API_URL}/users/${userId}/subscribed-activities/count`);
   }
 
+  deleteActivity(id:number):Observable<any>{
+    return this.http.delete(`${this.API_URL}/${id}`, { responseType: 'text' as 'json' });
+  }
+
   isUserSubscribed(activityId: number): Observable<boolean> {
     const userId = this.authService.getCurrentUserId();
     if (!userId) {
