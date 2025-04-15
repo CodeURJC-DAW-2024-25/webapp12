@@ -29,19 +29,19 @@
                 <div class="widget user-dashboard-menu">
                     <ul>
                     
-                        <li class="active">
-                            <a routerLink="/profile"><i class="fa fa-ticket"></i>Mis actividades <span></span></a>
+                        <li>
+                            <a routerLink="/profile"><i class="fa fa-ticket"></i>Mis actividades <span> {{subscribedActivitiesCount}}</span></a>
                         </li>
                 
-                        <li *ngIf="isAdmin">
-                            <a routerLink="/adminActivities"><i class="fa fa-bolt"></i>Todas las actividades <span></span></a>
+                        <li class="active" *ngIf="isAdmin">
+                            <a routerLink="/adminActivities"><i class="fa fa-bolt"></i>Todas las actividades <span>{{activityCount}}</span></a>
                         </li>
                                 
                         <li *ngIf="isAdmin">
                             <a routerLink="/createActivity"><i class="fas fa-plus-square"></i> Crear nueva actividad</a>
                         </li>
                         <li *ngIf="isAdmin">
-                            <a routerLink="/adminUsers"><i class="fa fa-users"></i> Todos los usuarios <span></span></a>
+                            <a routerLink="/adminUsers"><i class="fa fa-users"></i> Todos los usuarios <span>{{userCount}}</span></a>
                         </li>
                         <li *ngIf="isAdmin">
                             <a routerLink="/statistics"><i class="fa fa-chart-bar"></i>Estadísticas </a>

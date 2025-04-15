@@ -4,6 +4,7 @@ import { StatisticsService } from '../services/statistics.service';
 import { UserService } from '../services/user.service';
 import { AuthService } from '../services/auth.service';
 import { Chart, registerables } from 'chart.js';
+import { ActivityService } from '../services/activity.service';
 
 // Registrar los componentes necesarios de Chart.js
 Chart.register(...registerables);
@@ -23,6 +24,7 @@ export class AdminStatisticsComponent implements OnInit {
   userCount: number = 0;
   activityCount: number = 0;
   placeCount: number = 0;
+  subscribedActivitiesCount:number = 0;
 
   // Datos para los gráficos
   activitiesByMonth: number[] = Array(12).fill(0);
@@ -35,8 +37,9 @@ export class AdminStatisticsComponent implements OnInit {
   constructor(
     private statisticsService: StatisticsService,
     public authService: AuthService,
-    private router: Router
-  ) { }
+    private router: Router,
+    public activityService: ActivityService
+  ) {}
 
   ngOnInit(): void {
     // Get current user from AuthService since that's what you're using for logout
@@ -55,6 +58,14 @@ export class AdminStatisticsComponent implements OnInit {
       console.error('El usuario no tiene permisos de administrador');
       this.router.navigate(['/']); // Redirect to home page
       return;
+    }
+
+    if (this.currentUser?.id) {
+      this.activityService.getUserSubscribedActivitiesCount(this.currentUser.id).subscribe({
+        next: count => {
+          this.subscribedActivitiesCount = count;
+        }
+      });
     }
 
     // Load statistics...

@@ -4,6 +4,8 @@ import { UserService,PageResponse } from '../services/user.service';
 import { UserDto } from '../dtos/user.dto';
 import { HttpResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { StatisticsService } from '../services/statistics.service';
+import { ActivityService } from '../services/activity.service';
 
 @Component({
   selector: 'app-admin-users',
@@ -15,6 +17,9 @@ export class AdminUsersComponent {
   
     currentUsersPage = 0;
     usersTotalPages = 0;
+    userCount: number = 0;
+    activityCount: number = 0;
+    subscribedActivitiesCount: number = 0;
   
     currentUser: any;
   
@@ -27,7 +32,8 @@ export class AdminUsersComponent {
     userId: number | null = null;
   
   
-    constructor(private userService:UserService,public authService: AuthService,private router: Router){}
+    constructor(private userService:UserService,public authService: AuthService,private router: Router, 
+      public statisticsService: StatisticsService,public activityService: ActivityService){}
   
     ngOnInit():void{
       // Get current user from AuthService since that's what you're using for logout
@@ -48,7 +54,22 @@ export class AdminUsersComponent {
         return;
       }
       this.loadUsers();
+
+      this.statisticsService.getGeneralStatistics().subscribe({
+        next: data => {
+          this.userCount = data.userCount;
+          this.activityCount = data.activityCount; 
+        }
+      });
+      if (this.currentUser?.id) {
+        this.activityService.getUserSubscribedActivitiesCount(this.currentUser.id).subscribe({
+          next: count => {
+            this.subscribedActivitiesCount = count;
+          }
+        });
+      }
     }
+
   
     loadMoreUsers(): void {
       if (this.hasMoreUsers && !this.isLoading) {
@@ -62,6 +83,7 @@ export class AdminUsersComponent {
         next:() => {
           this.allUsersPaginated = this.allUsersPaginated.filter(user => user.id !== id);
           this.usersTotalPages = this.usersTotalPages - 1;
+          this.updateGeneralStatistics();
         },
         error: (error) => {
           console.error('Error al eliminar el usuario:', error);
@@ -117,6 +139,18 @@ export class AdminUsersComponent {
             this.errorMessage = `Error: ${err.message || 'Error desconocido al cargar usuarios'}`;
           }
         });
+    }
+
+    updateGeneralStatistics(): void {
+      this.statisticsService.getGeneralStatistics().subscribe({
+        next: data => {
+          this.userCount = data.userCount;
+          this.activityCount = data.activityCount; 
+        },
+        error: err => {
+          console.error('Error al obtener estadísticas generales:', err);
+        }
+      });
     }
   handleImageError(event: Event): void {
     const imgElement = event.target as HTMLImageElement;

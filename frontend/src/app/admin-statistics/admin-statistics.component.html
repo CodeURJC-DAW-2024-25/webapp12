@@ -21,7 +21,7 @@
           <div class="widget user-dashboard-menu">
             <ul>
               <li>
-                <a routerLink="/profile"><i class="fa fa-ticket"></i>Mis actividades</a>
+                <a routerLink="/profile"><i class="fa fa-ticket"></i>Mis actividades<span>{{subscribedActivitiesCount}}</span></a>
               </li>
               <li *ngIf="isAdmin">
                 <a routerLink="/adminActivities"><i class="fa fa-bolt"></i>Todas las actividades <span>{{ activityCount }}</span></a>

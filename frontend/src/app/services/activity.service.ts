@@ -151,6 +151,10 @@ export class ActivityService {
     return this.http.get<PageResponse<ActivityDto>>(`${this.API_URL}/users/${userId}/subscribed-activities`,{params});
   }
 
+  getUserSubscribedActivitiesCount(userId:number):Observable<number>{
+    return this.http.get<number>(`${this.API_URL}/users/${userId}/subscribed-activities/count`);
+  }
+
   isUserSubscribed(activityId: number): Observable<boolean> {
     const userId = this.authService.getCurrentUserId();
     if (!userId) {
@@ -197,4 +201,6 @@ export class ActivityService {
       responseType: 'blob'
     });
   }
+
+
 }

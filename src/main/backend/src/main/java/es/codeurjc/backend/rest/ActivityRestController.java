@@ -362,7 +362,12 @@ public class ActivityRestController {
         return ResponseEntity.ok(susbcribedActivities);
     }
 
-	// Método para obtener todos los lugares
+	@GetMapping("/users/{userId}/subscribed-activities/count")
+    public ResponseEntity<Long> getSubscribedActivitiesCount(@PathVariable Long userId) {
+		long count = activityService.countActivitiesByUser(userId);
+		return ResponseEntity.ok(count);
+    }
+
 	@GetMapping("/places")
 	public ResponseEntity<List<PlaceDto>> getAllPlaces() {
 		List<Place> places = placeService.findAll();

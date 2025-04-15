@@ -3,6 +3,7 @@ import { ActivityService, ActivityDto, PageResponse, } from '../services/activit
 import { AuthService } from '../services/auth.service';
 import { HttpResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { StatisticsService } from '../services/statistics.service';
 
 @Component({
   selector: 'app-admin-activities',
@@ -14,6 +15,9 @@ allActivities: ActivityDto[] = [];
 
   currentActivitiesPage = 0;
   activitiesTotalPages = 0;
+  userCount: number = 0;
+  activityCount: number = 0;
+  subscribedActivitiesCount: number = 0;
 
   currentUser: any;
 
@@ -26,7 +30,8 @@ allActivities: ActivityDto[] = [];
   userId: number | null = null;
 
 
-  constructor(private activityService:ActivityService,public authService: AuthService,private router: Router){}
+  constructor(private activityService:ActivityService,public authService: AuthService,private router: Router,
+    public statisticsService: StatisticsService){}
 
   ngOnInit():void{
     // Get current user from AuthService since that's what you're using for logout
@@ -47,6 +52,20 @@ allActivities: ActivityDto[] = [];
       return;
     }
     this.loadActivities();
+
+    this.statisticsService.getGeneralStatistics().subscribe({
+      next:data => {
+        this.userCount = data.userCount;
+        this.activityCount = data.activityCount; 
+      }
+    });
+    if (this.currentUser?.id) {
+      this.activityService.getUserSubscribedActivitiesCount(this.currentUser.id).subscribe({
+        next: count => {
+          this.subscribedActivitiesCount = count;
+        }
+      });
+    }
   }
 
   loadMoreActivities(): void {

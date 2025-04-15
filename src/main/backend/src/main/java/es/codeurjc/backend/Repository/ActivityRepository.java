@@ -56,4 +56,7 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
         @Param("userActivities") List<Activity> userActivities,
         Pageable pageable
     );
+
+    @Query("SELECT COUNT(a) FROM Activity a JOIN a.users u WHERE u.id = :userId")
+    long countByUserId(@Param("userId") Long userId);
 }

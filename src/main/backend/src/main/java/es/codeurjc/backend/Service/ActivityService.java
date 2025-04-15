@@ -265,6 +265,10 @@ public class ActivityService {
         return activityMapper.toDto(savedActivity);
     }
 
+    public long countActivitiesByUser(Long userId) {
+        return activityRepository.countByUserId(userId);
+    }
+
     @Transactional
     public ActivityDto updateActivity(Long id, ActivityUpdateDto activityUpdateDto) {
         Activity activity = activityRepository.findByIdWithReviews(id)
