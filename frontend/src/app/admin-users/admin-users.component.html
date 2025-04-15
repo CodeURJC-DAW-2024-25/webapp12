@@ -1,0 +1,122 @@
+<!--==================================
+=            User Profile            =
+===================================-->
+<section class="dashboard section">
+	<!-- Container Start -->
+	<div class="container">
+		<!-- Row Start -->
+		<div class="row">
+			<div class="col-lg-4">
+				<div class="sidebar">
+					<!-- User Widget -->
+					<div class="widget user-dashboard-profile" *ngIf="currentUser">
+						<!-- User Image -->
+						<div class="profile-thumb">
+							<img *ngIf="currentUser.image" [src]="'/user/' + currentUser.id + '/image'" alt="Imagen de perfil" class="rounded-circle">
+                            <img *ngIf="!currentUser.image" src="/images/sports/no-image.png" class="img-fluid mb-4" alt="No Image">
+						</div>
+						<!-- User Name -->
+						<h5 class="text-center">{{ currentUser.name }}</h5>
+						<a [routerLink]="['/editUserProfile', currentUser.id]" class="btn btn-main-sm">Editar Perfil</a>
+					</div>					
+					<!-- Dashboard Links -->
+					<div class="widget user-dashboard-menu">
+						<ul>							
+							<li>
+								<a href="/profile"><i class="fa fa-ticket"></i>Mis actividades <span></span></a>
+							</li>
+							
+							<li *ngIf="isAdmin">
+								<a href="/adminActivities"><i class="fa fa-bolt"></i>Todas las actividades <span></span></a>
+							</li>
+							<li *ngIf="isAdmin">
+								<a href="/createActivity"><i class="fas fa-plus-square"></i> Crear nueva actividad</a>
+							</li>
+							<li *ngIf="isAdmin">
+								<a href="/adminUsers"><i class="fa fa-users"></i> Todos los usuarios <span></span></a>
+							</li>
+							<li *ngIf="isAdmin">
+								<a href="/statistics"><i class="fa fa-chart-bar"></i>Estadísticas </a>
+							</li>							
+							<li class="nav-item" *ngIf="authService.getIsLoggedIn()">
+                                <a (click)="logout()" style="cursor: pointer;" class="nav-link">
+                                    <i class="fa fa-power-off"></i> Cerrar sesión
+                                </a>
+                            </li>							
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-8">				
+				<!-- Recently Favorited -->
+				<div  class="widget dashboard-container my-adslist" id="allUsersPaginated">
+					<h3 class="widget-header">Todos los usuarios de la aplicación</h3>
+					<table class="table table-responsive product-dashboard-table">
+						<thead>
+							<tr>
+								<th>Imagen</th>
+								<th>Información del usaurio</th>
+								<th class="text-center">Tipo</th>
+								<th class="text-center">Acción</th>
+							</tr>
+						</thead>
+						<tbody>
+                            <tr *ngIf="allUsersPaginated.length === 0 && !isLoading">
+                                <td colspan="4" class="text-center">No hay usuarios</td>
+                            </tr>
+                            <tr *ngIf="isLoading">
+                                <td colspan="4" class="text-center">
+                                  <div class="spinner-border text-primary" role="status">
+                                    <span class="sr-only">Cargando...</span>
+                                  </div>
+                                </td>
+                            </tr>
+							<tr *ngFor="let user of allUsersPaginated">
+                                <td class="product-thumb">
+                                    <img width="80px" height="auto" [src]="user.imageUrl"
+                                    (error)="handleImageError($event)"
+                                    class="card-img-top img-fluid"
+                                    alt="{{user.name}}">
+                                </td>
+								<td class="product-details">
+									<h3 class="title">{{user.name}} {{user.surname}}</h3>
+									<span><strong>Email: </strong>{{user.email}} </span>
+								</td>
+								<td class="product-category"><span class="categories">Usuario registrado</span></td>                                
+								<td class="action" data-title="Action">
+									<div class="">
+										<ul class="list-inline justify-content-center">
+											<li class="list-inline-item">
+												<form action="/removeUser" method="post">
+													<button type="submit" style="display: none;"></button>
+													<a data-toggle="tooltip" data-placement="top" title="Eliminar" class="delete" onclick="this.closest('form').submit();">
+														<i class="fa fa-trash"></i>
+													</a>
+												</form>
+											</li>
+										</ul>
+									</div>
+								</td>
+							</tr>
+                            <tr *ngIf="errorMessage">
+                                <td colspan="4" class="text-center text-danger">{{ errorMessage }}</td>
+                            </tr>	
+						</tbody>
+					</table>
+					<div class="text-center mt-3"  *ngIf="hasMoreUsers && allUsersPaginated.length > 0">
+                        <button type="button"
+                            class="btn btn-primary"
+                            (click)="loadMoreUsers()"
+                            [disabled]="isLoading">
+                            <span *ngIf="isLoading" class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>
+                            {{ isLoading ? 'Cargando...' : 'Cargar más' }}
+                        </button>
+                    </div>
+				</div>
+				<!-- pagination -->
+			</div>
+		</div>
+		<!-- Row End -->
+	</div>
+	<!-- Container End -->
+</section>

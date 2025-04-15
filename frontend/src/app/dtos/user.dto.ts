@@ -8,4 +8,5 @@ export interface UserDto {
     image: boolean;
     email: string;
     role: string;
+    imageUrl?: string;
   }

@@ -17,6 +17,7 @@ import { AdminStatisticsComponent  } from './admin-statistics/admin-statistics.c
 import { AdminActivitiesComponent } from './admin-activities/admin-activities.component';
 import { ActivityComponent } from './activity/activity.component';
 import { EditUserProfileComponent } from './edit-user-profile/edit-user-profile.component';
+import { AdminUsersComponent } from './admin-users/admin-users.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { EditUserProfileComponent } from './edit-user-profile/edit-user-profile.
     AdminStatisticsComponent,
     AdminActivitiesComponent,
     ActivityComponent,
-    EditUserProfileComponent
+    EditUserProfileComponent,
+    AdminUsersComponent
   ],
   imports: [
     BrowserModule,

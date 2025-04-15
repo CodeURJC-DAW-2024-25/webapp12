@@ -1,16 +1,29 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { HttpClient , HttpParams, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { Observable, BehaviorSubject ,throwError} from 'rxjs';
+import { tap,catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { UserDto } from '../dtos/user.dto';
-
+import { AuthService } from './auth.service';
 
 export interface UserUpdateDto {
   name: string;
   surname: string;
   dni: string;
   phone: string;
+}
+
+export interface PageResponse<T> {
+  content: T[];
+  pageable: {
+    pageNumber: number;
+    pageSize: number;
+  };
+  totalPages: number;
+  totalElements: number;
+  last: boolean;
+  size: number;
+  number: number;
 }
 
 @Injectable({
@@ -28,6 +41,7 @@ export class UserService {
 
   constructor(
     private http: HttpClient,
+    private authService: AuthService,
     private router: Router
   ) {}
 
@@ -172,6 +186,38 @@ export class UserService {
     localStorage.removeItem('user');
   }
 
+  private handleError(error: HttpErrorResponse): Observable<never> {
+      console.error('Error in ActivityService:', error);
+  
+      let errorMessage = 'An unknown error occurred';
+  
+      if (error.error instanceof ErrorEvent) {
+        // Client-side error
+        errorMessage = `Error: ${error.error.message}`;
+      } else if (error.status === 0) {
+        // Network error
+        errorMessage = 'Network error: Please check your internet connection';
+      } else {
+        // Server-side error
+        errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+      }
+  
+      return throwError(() => new Error(errorMessage));
+    }
+
+  private getHeaders(): HttpHeaders {
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      });
+  
+      const token = this.authService.getToken();
+      if (token) {
+        return headers.set('Authorization', `Bearer ${token}`);
+      }
+      return headers;
+    }
+
   updateUser(id:number,userData:UserUpdateDto):Observable<UserDto>{
     return this.http.put<UserDto>(`${this.api_Url}/${id}`,userData);
   }
@@ -183,4 +229,27 @@ export class UserService {
   deleteUserImage(id:number):Observable<any>{
     return this.http.delete(`${this.api_Url}/${id}/image`);
   }
+
+  getUserImageUrl(userId: number): string {
+    return `${this.api_Url}/${userId}/image`;
+  }
+
+  getUsers(page: number = 0, size: number = 8): Observable<PageResponse<UserDto>> {
+      const params = new HttpParams()
+        .set('page', page.toString())
+        .set('size', size.toString());
+  
+      return this.http.get<PageResponse<UserDto>>(
+        `${this.api_Url}/pageable`,
+        {
+          params,
+          headers: this.getHeaders()
+        }
+      ).pipe(
+        tap(response => {
+          console.log('Response from API:', response);
+        }),
+        catchError(this.handleError)
+      );
+    }
 }
