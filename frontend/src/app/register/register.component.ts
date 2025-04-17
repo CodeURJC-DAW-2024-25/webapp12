@@ -35,12 +35,12 @@ export class RegisterComponent {
 
     const userData = {
       ...this.registerForm.value,
-      roles: ['ROLE_USER']  // ← Rol explícito y correcto para Spring Security
+      roles: ['USER']  // Simplemente 'USER', sin prefijo
     };
 
     this.authService.register(userData).subscribe({
       next: (res) => {
-        if (res.status === 'ERROR') {
+        if (res && res.status === 'ERROR') {
           this.error = 'No se pudo registrar el usuario';
         } else {
           this.router.navigate(['/']);

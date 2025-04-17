@@ -178,23 +178,26 @@ export class AuthService {
     return currentUser && currentUser.id === 7;
   }
 
-  
- 
 
-// MÉTODO DE REGISTRO
+
+
+  // MÉTODO DE REGISTRO
   register(user: RegisterUser): Observable<any> {
-    // Garantiza que se asigna al menos ROLE_USER si no se especifica
-    if (!user.roles || user.roles.length === 0) {
-      user.roles = ['ROLE_USER'];
-    } else {
-      // Asegura que todos los roles estén con el prefijo ROLE_
-      user.roles = user.roles.map(role =>
-        role.startsWith('ROLE_') ? role : `ROLE_${role}`
-      );
+    // Preparar el objeto de usuario para registro
+    const registrationData = {...user};
+
+    // Si no se especifican roles, usar USER por defecto
+    if (!registrationData.roles || registrationData.roles.length === 0) {
+      registrationData.roles = ['USER'];
     }
 
-    return this.http.post('/api/users/', user).pipe(
-      tap(() => console.log('Usuario registrado con éxito')),
+    // Asegurar que no haya prefijos ROLE_ en los roles
+    registrationData.roles = registrationData.roles.map(role =>
+      role.startsWith('ROLE_') ? role.substring(5) : role
+    );
+
+    return this.http.post('/api/users/', registrationData).pipe(
+      tap(response => console.log('Usuario registrado con éxito:', response)),
       catchError(error => {
         console.error('Error al registrar usuario:', error);
         return of({ status: 'ERROR', error });

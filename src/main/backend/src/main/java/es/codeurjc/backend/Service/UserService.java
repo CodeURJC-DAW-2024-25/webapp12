@@ -129,20 +129,13 @@ public class UserService {
         if (newUserDto.email() == null || newUserDto.password() == null) {
             throw new IllegalArgumentException("Email y contraseña son requeridos");
         }
-    
         User user = userMapper.toDomain(newUserDto);
         user.setPassword(passwordEncoder.encode(newUserDto.password()));
-    
         if (newUserDto.roles() == null || newUserDto.roles().isEmpty()) {
-            user.setRoles(List.of("ROLE_USER"));  // ← CAMBIO AQUÍ
+            user.setRoles(List.of("USER"));
         } else {
-            // Asegúrate de que todos los roles tienen el prefijo "ROLE_"
-            List<String> prefixedRoles = newUserDto.roles().stream()
-                .map(role -> role.startsWith("ROLE_") ? role : "ROLE_" + role)
-                .toList();
-            user.setRoles(prefixedRoles);
+            user.setRoles(newUserDto.roles());
         }
-    
         userRepository.save(user);
         return userMapper.toDto(user);
     }
