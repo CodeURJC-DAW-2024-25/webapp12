@@ -10,6 +10,7 @@ import { ActivityComponent } from './activity/activity.component';
 import { EditUserProfileComponent } from './edit-user-profile/edit-user-profile.component';
 import { AdminUsersComponent } from './admin-users/admin-users.component';
 import { RegisterComponent } from './register/register.component';
+import { ErrorComponent } from './error/error.component';
 
 
 const routes: Routes = [
@@ -18,14 +19,15 @@ const routes: Routes = [
   { path: 'statistics', component: AdminStatisticsComponent},
   { path: 'profile', component: ProfileComponent},
   { path: 'adminActivities', component: AdminActivitiesComponent},
-  {path : 'activity/:id', component: ActivityComponent},
-  {path : 'editUserProfile/:id', component: EditUserProfileComponent},
-  {path : 'adminUsers', component: AdminUsersComponent},
-  {path: 'register', component: RegisterComponent}, // Cambia esto a tu componente de registro
+  { path : 'activity/:id', component: ActivityComponent},
+  { path : 'editUserProfile/:id', component: EditUserProfileComponent},
+  { path : 'adminUsers', component: AdminUsersComponent},
+  { path: 'register', component: RegisterComponent},
+  { path: 'error', component: ErrorComponent}, 
 
 
 
-  { path: '**', redirectTo: '' }
+  { path: '**', component: ErrorComponent } //redirige si no existe la ruta a la pantalla de error.
 
 
 

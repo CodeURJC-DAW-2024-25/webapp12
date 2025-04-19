@@ -18,6 +18,7 @@ import { AdminActivitiesComponent } from './admin-activities/admin-activities.co
 import { ActivityComponent } from './activity/activity.component';
 import { EditUserProfileComponent } from './edit-user-profile/edit-user-profile.component';
 import { AdminUsersComponent } from './admin-users/admin-users.component';
+import { ErrorComponent } from './error/error.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { AdminUsersComponent } from './admin-users/admin-users.component';
     AdminActivitiesComponent,
     ActivityComponent,
     EditUserProfileComponent,
-    AdminUsersComponent
+    AdminUsersComponent,
+    ErrorComponent
   ],
   imports: [
     BrowserModule,
