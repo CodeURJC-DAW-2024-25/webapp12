@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { catchError, map, tap, switchMap } from 'rxjs/operators';
+import { UserDto } from '../dtos/user.dto';
 
 export interface RegisterUser {
   email: string;
@@ -19,11 +20,15 @@ export interface RegisterUser {
 export class AuthService {
   private apiUrl = '/api/auth';
   private isLoggedInKey = 'isLoggedIn';
-  private currentUserSubject = new BehaviorSubject<any>(null);
+  private currentUserSubject = new BehaviorSubject<UserDto | null>(null);
+  public currentUser$: Observable<UserDto | null> = this.currentUserSubject.asObservable();
   private tokenKey = 'auth_token';
 
   constructor(private http: HttpClient) {
-    this.initAuthState();
+    const storedUser = localStorage.getItem('currentUser');
+    if (storedUser) {
+      this.currentUserSubject.next(JSON.parse(storedUser));
+    }
   }
 
   // Métodos para el token
@@ -39,9 +44,14 @@ export class AuthService {
     return null;
   }
 
-  getUserDetails(): any {
-    const userData = localStorage.getItem('currentUser');
-    return userData ? JSON.parse(userData) : null;
+  getUserDetails(): UserDto | null {
+    return this.currentUserSubject.getValue();
+  }
+
+  updateUserDetails(user: UserDto): void {
+    this.currentUserSubject.next(user);
+    
+    localStorage.setItem('currentUser', JSON.stringify(user));
   }
 
   private setToken(token: string): void {
@@ -174,8 +184,8 @@ export class AuthService {
   // Add this to AuthService
   isAdmin(): boolean {
     const currentUser = this.getUserDetails();
-    // Using your logic that admin is user with id 7
-    return currentUser && currentUser.id === 7;
+    // Asegúrate de que se devuelva siempre un booleano
+    return currentUser !== null && currentUser.id === 7;
   }
 
 

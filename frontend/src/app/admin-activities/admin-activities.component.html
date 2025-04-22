@@ -90,7 +90,7 @@
                             </td>
                             <td class="product-details">
                                 <h3 class="title">{{ activity.name }}</h3>
-                                <span><strong>Fecha y hora: </strong> </span>
+                                <span><strong>Fecha y hora: </strong> {{activity.activityDate}}</span>
                                 <!--<span class="location"><strong>Lugar:</strong>Dhaka,Bangladesh</span>-->
                                 <span class="location"><strong></strong></span>
                             </td>
@@ -99,7 +99,7 @@
                                 <div class="">
                                     <ul class="list-inline justify-content-center">
                                         <li class="list-inline-item">
-                                            <a data-toggle="tooltip" data-placement="top" title="Ver" class="view" href="/activity/">
+                                            <a data-toggle="tooltip" data-placement="top" title="Ver" class="view" (click)="navigateToActivity(activity.id)">
                                                 <i class="fa fa-eye"></i>
                                             </a>
                                         </li>

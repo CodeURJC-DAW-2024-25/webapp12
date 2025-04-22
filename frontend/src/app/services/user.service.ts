@@ -163,6 +163,10 @@ export class UserService {
     return currentUser && currentUser.id === 7;
   }
 
+  getUserById(userId: number): Observable<UserDto> {
+    return this.http.get<UserDto>(`/api/users/${userId}`);
+  }
+
   // Private helper methods
   private hasToken(): boolean {
     return !!localStorage.getItem('token');

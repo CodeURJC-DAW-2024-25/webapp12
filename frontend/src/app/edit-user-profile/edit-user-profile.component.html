@@ -54,43 +54,43 @@
 					<div class="col-lg-6 col-md-6">
 						<div class="widget personal-info">
 							<h3 class="widget-header user">Edita tu información personal</h3>
-							<form  (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+							<form #userForm="ngForm" (ngSubmit)="onSubmit()">
 								<!-- First Name -->
 								<div class="form-group">
-									<label for="first-name">Nombre</label>
-									<input formControlName="name" type="text" class="form-control" value="{{currentUser.name}}">
+									<label for="name">Nombre</label>
+									<input [(ngModel)]="name" name="name" type="text" class="form-control" id="name">
 								</div>
 								<!-- Last Name -->
 								<div class="form-group">
 									<label for="surname">Apellidos</label>
-									<input formControlName="surname"  type="text" class="form-control" value="{{currentUser.surname}}">
+									<input [(ngModel)]="surname" name="surname" type="text" class="form-control" id="surname">
 								</div>
 								<!-- File chooser -->
 								<div class="form-group choose-file d-inline-flex">
 									<i class="fa fa-user text-center px-3"></i>
 									<label>Subir nueva imagen:</label><br>
-                                    <input  type="file" (change)="onImageSelected($event)" accept=".jpg,.jpeg" />
-
-                                    <div>
-                                        <img [src]="'/user/' + currentUser.id + '/image'" *ngIf="currentUser?.image" alt="Imagen de perfil">
-                                        <img src="/images/sports/no-image.png" *ngIf="!currentUser?.image" alt="Sin imagen" />
-                                    </div>
-                                  
-                                    <div>
-                                      <input type="checkbox" [(ngModel)]="removeImage" name="removeImage" />
-                                      <label>Eliminar imagen actual</label>
-                                    </div>
-								 </div>
+									<!-- Input para elegir nueva imagen -->
+									<input type="file" (change)="onImageSelected($event)" name="imageFile" accept=".jpg,.jpeg" />
+									<!-- Mostrar la imagen de perfil actual -->
+									<div>
+										<img *ngIf="currentUser?.image" [src]="'/user/' + currentUser.id + '/image'" alt="Imagen de perfil" class="img-fluid">
+										<img *ngIf="!currentUser?.image" src="/images/sports/no-image.png" alt="Sin imagen" class="img-fluid" />
+									</div>
+									<!-- Checkbox para eliminar la imagen -->
+									<div>
+										<input type="checkbox" [(ngModel)]="removeImage" name="removeImage" />
+										<label>Eliminar imagen actual</label>
+									</div>
+								</div>
 								<!-- dni-->
 								<div class="form-group">
 									<label for="dni">DNI</label>
-									<input formControlName="dni" type="text" class="form-control" value="{{currentUser.dni}}">
+									<input [(ngModel)]="dni" name="dni" type="text" class="form-control" id="dni">
 								</div>
-		
 								<!-- Tlf number -->
 								<div class="form-group">
 									<label for="tlf">Número de telefono</label>
-									<input formControlName="tlf" type="number" class="form-control" value="{{currentUser.phone}}">
+									<input [(ngModel)]="tlf" name="tlf" type="number" class="form-control" id="tlf">
 								</div>
 								<!-- Submit button -->
 								<button class="btn btn-transparent" type="submit">Guardar</button>

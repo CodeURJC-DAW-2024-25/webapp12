@@ -144,7 +144,7 @@ export class ProfileComponent {
   }
 
   navigateToActivity(id: number): void {
-    this.router.navigate(['/activities', id]);
+    this.router.navigate(['/activity', id]);
   }
 
   logout(): void {
