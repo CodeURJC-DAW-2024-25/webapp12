@@ -206,5 +206,63 @@ export class ActivityService {
     });
   }
 
+  createActivity(activityData: any): Observable<ActivityDto> {
+    const token = this.authService.getToken();
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    });
+
+    if (token) {
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    }
+
+    // Crear un objeto NewActivityDto según lo espera el backend
+    const newActivityDto = {
+      name: activityData.name,
+      category: activityData.category,
+      description: activityData.description,
+      imageBoolean: activityData.image || false, // Si hay imagen, será true
+      vacancy: activityData.vacancy,
+      creationDate: new Date(), // Fecha actual
+      activityDate: new Date(activityData.activityDate), // Convertir string a Date
+      placeId: Number(activityData.placeId) // Asegurarse de que sea un número
+    };
+
+    return this.http.post<ActivityDto>(
+      `${this.API_URL}/`,
+      newActivityDto,
+      {
+        headers: headers
+      }
+    ).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  // Método separado para subir la imagen si es necesario
+  uploadActivityImage(activityId: number, imageFile: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', imageFile);
+
+    const token = this.authService.getToken();
+    let headers = new HttpHeaders();
+
+    if (token) {
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    }
+
+    return this.http.post(
+      `${this.API_URL}/${activityId}/image`,
+      formData,
+      {
+        headers: headers,
+        responseType: 'text'
+      }
+    ).pipe(
+      catchError(this.handleError)
+    );
+  }
+
 
 }

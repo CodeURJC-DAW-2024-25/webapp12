@@ -11,6 +11,7 @@ import { EditUserProfileComponent } from './edit-user-profile/edit-user-profile.
 import { AdminUsersComponent } from './admin-users/admin-users.component';
 import { RegisterComponent } from './register/register.component';
 import { ErrorComponent } from './error/error.component';
+import { CreateActivityComponent } from './create-activity/create-activity.component';
 
 
 const routes: Routes = [
@@ -23,7 +24,8 @@ const routes: Routes = [
   { path : 'editUserProfile/:id', component: EditUserProfileComponent},
   { path : 'adminUsers', component: AdminUsersComponent},
   { path: 'register', component: RegisterComponent},
-  { path: 'error', component: ErrorComponent}, 
+  { path: 'error', component: ErrorComponent},
+  { path: 'newActivity', component: CreateActivityComponent },
 
 
 
