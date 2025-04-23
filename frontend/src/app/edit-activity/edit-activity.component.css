@@ -1,0 +1,29 @@
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
+.form-check-input {
+  cursor: pointer;
+}
+
+.btn {
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.close {
+  cursor: pointer;
+}
+
+.form-control.ng-invalid.ng-touched {
+  border-color: #dc3545;
+}
+
+.form-control:focus {
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}

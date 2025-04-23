@@ -20,6 +20,7 @@ import { EditUserProfileComponent } from './edit-user-profile/edit-user-profile.
 import { AdminUsersComponent } from './admin-users/admin-users.component';
 import { ErrorComponent } from './error/error.component';
 import { CreateActivityComponent } from './create-activity/create-activity.component';
+import { EditActivityComponent } from './edit-activity/edit-activity.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { CreateActivityComponent } from './create-activity/create-activity.compo
     EditUserProfileComponent,
     AdminUsersComponent,
     ErrorComponent,
-    CreateActivityComponent
+    CreateActivityComponent,
+    EditActivityComponent
   ],
   imports: [
     BrowserModule,

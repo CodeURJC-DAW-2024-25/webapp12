@@ -263,6 +263,82 @@ export class ActivityService {
       catchError(this.handleError)
     );
   }
+// Método para actualizar una actividad existente
+updateActivity(id: number, activityData: any): Observable<ActivityDto> {
+  const token = this.authService.getToken();
+  let headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  });
 
+  if (token) {
+    headers = headers.set('Authorization', `Bearer ${token}`);
+  }
+
+  // Crear un objeto ActivityUpdateDto según lo espera el backend
+  const activityUpdateDto = {
+    name: activityData.name,
+    category: activityData.category,
+    description: activityData.description,
+    imageBoolean: activityData.imageBoolean,
+    vacancy: activityData.vacancy,
+    activityDate: new Date(activityData.activityDate), // Convertir string a Date
+    placeId: Number(activityData.placeId) // Asegurarse de que sea un número
+  };
+
+  return this.http.put<ActivityDto>(
+    `${this.API_URL}/${id}`,
+    activityUpdateDto,
+    {
+      headers: headers
+    }
+  ).pipe(
+    catchError(this.handleError)
+  );
+}
+
+// Método para actualizar la imagen de una actividad
+updateActivityImage(activityId: number, imageFile: File): Observable<any> {
+  const formData = new FormData();
+  formData.append('file', imageFile);
+
+  const token = this.authService.getToken();
+  let headers = new HttpHeaders();
+
+  if (token) {
+    headers = headers.set('Authorization', `Bearer ${token}`);
+  }
+
+  return this.http.put(
+    `${this.API_URL}/${activityId}/image`,
+    formData,
+    {
+      headers: headers,
+      responseType: 'text'
+    }
+  ).pipe(
+    catchError(this.handleError)
+  );
+}
+
+// Método para eliminar la imagen de una actividad
+removeActivityImage(activityId: number): Observable<any> {
+  const token = this.authService.getToken();
+  let headers = new HttpHeaders();
+
+  if (token) {
+    headers = headers.set('Authorization', `Bearer ${token}`);
+  }
+
+  return this.http.delete(
+    `${this.API_URL}/${activityId}/image`,
+    {
+      headers: headers,
+      responseType: 'text'
+    }
+  ).pipe(
+    catchError(this.handleError)
+  );
+}
 
 }

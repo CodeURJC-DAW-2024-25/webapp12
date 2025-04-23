@@ -12,6 +12,7 @@ import { AdminUsersComponent } from './admin-users/admin-users.component';
 import { RegisterComponent } from './register/register.component';
 import { ErrorComponent } from './error/error.component';
 import { CreateActivityComponent } from './create-activity/create-activity.component';
+import { EditActivityComponent } from './edit-activity/edit-activity.component';
 
 
 const routes: Routes = [
@@ -26,7 +27,7 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent},
   { path: 'error', component: ErrorComponent},
   { path: 'newActivity', component: CreateActivityComponent },
-
+  { path: 'activities/edit/:id', component: EditActivityComponent },
 
 
   { path: '**', component: ErrorComponent } //redirige si no existe la ruta a la pantalla de error.
