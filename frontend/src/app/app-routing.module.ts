@@ -27,7 +27,7 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent},
   { path: 'error', component: ErrorComponent},
   { path: 'newActivity', component: CreateActivityComponent },
-  { path: 'activities/edit/:id', component: EditActivityComponent },
+  { path: 'activity/edit/:id', component: EditActivityComponent },
 
 
   { path: '**', component: ErrorComponent } //redirige si no existe la ruta a la pantalla de error.

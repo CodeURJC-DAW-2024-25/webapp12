@@ -15,10 +15,10 @@
                     <!-- User Image -->
                     <div class="profile-thumb">
 
-                        <img 
-                        [src]="userService.getUserImageUrl(currentUser.id)" 
-                        (error)="handleImageError($event)" 
-                        class="card-img-top img-fluid rounded-circle" 
+                        <img
+                        [src]="userService.getUserImageUrl(currentUser.id)"
+                        (error)="handleImageError($event)"
+                        class="card-img-top img-fluid rounded-circle"
                         alt="{{currentUser.name}}">
                     </div>
                     <!-- User Name -->
@@ -106,7 +106,7 @@
                                             </a>
                                         </li>
                                         <li class="list-inline-item">
-                                            <a [routerLink]="['/activity',activity.id]"data-toggle="tooltip" data-placement="top" title="Editar" class="edit">
+                                            <a [routerLink]="['/activity/edit',activity.id]"data-toggle="tooltip" data-placement="top" title="Editar" class="edit">
                                                 <i class="fa fa-pencil"></i>
                                             </a>
                                         </li>
