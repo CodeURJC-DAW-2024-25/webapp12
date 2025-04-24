@@ -10,8 +10,11 @@
 					<div class="widget user" *ngIf="currentUser">
 						<!-- User Image -->
 						<div class="image d-flex justify-content-center" >
-							<img *ngIf="currentUser.image" [src]="'/user/' + currentUser.id + '/image'" alt="Imagen de perfil" class="rounded-circle">
-                            <img *ngIf="!currentUser.image" src="/images/sports/no-image.png" class="img-fluid mb-4" alt="No Image">
+							<img 
+								[src]="userService.getUserImageUrl(currentUser.id)" 
+								(error)="handleImageError($event)" 
+								class="card-img-top img-fluid rounded-circle" 
+								alt="{{currentUser.name}}">
 						</div>
 						<!-- User Name -->
 						<h5 class="text-center">{{currentUser.name}}</h5>
@@ -20,16 +23,16 @@
 					<div class="widget user-dashboard-menu">
 						<ul>
 							<li>
-								<a routerLink="/profile"><i class="fa fa-ticket"></i>Mis actividades <span></span></a>
+								<a routerLink="/profile"><i class="fa fa-ticket"></i>Mis actividades <span>{{subscribedActivitiesCount}}</span></a>
               				</li>
 							<li *ngIf="isAdmin">
-								<a routerLink="/adminActivities"><i class="fa fa-bolt"></i>Todas las actividades <span></span></a>
+								<a routerLink="/adminActivities"><i class="fa fa-bolt"></i>Todas las actividades <span>{{activityCount}}</span></a>
               				</li>
               				<li *ngIf="isAdmin">
 								<a routerLink="/newActivity"><i class="fas fa-plus-square"></i> Crear nueva actividad</a>
 							</li>
 							<li *ngIf="isAdmin">
-								<a routerLink="/adminUsers"><i class="fa fa-users"></i> Todos los usuarios <span></span></a>
+								<a routerLink="/adminUsers"><i class="fa fa-users"></i> Todos los usuarios <span>{{userCount}}</span></a>
 							</li>
 							<li *ngIf="isAdmin">
 								<a routerLink="/statistics"><i class="fa fa-chart-bar"></i>Estadísticas </a>

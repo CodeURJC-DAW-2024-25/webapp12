@@ -6,6 +6,7 @@ import { AuthService } from '../services/auth.service';
 import { Chart, registerables } from 'chart.js';
 import { ActivityService } from '../services/activity.service';
 
+
 // Registrar los componentes necesarios de Chart.js
 Chart.register(...registerables);
 
@@ -38,7 +39,7 @@ export class AdminStatisticsComponent implements OnInit {
     private statisticsService: StatisticsService,
     public authService: AuthService,
     private router: Router,
-    public activityService: ActivityService
+    public activityService: ActivityService,public userService:UserService
   ) {}
 
   ngOnInit(): void {
@@ -72,6 +73,13 @@ export class AdminStatisticsComponent implements OnInit {
     this.loadGeneralStatistics();
     this.loadActivitiesByMonth();
     this.loadReviewStatistics();
+  }
+
+  handleImageError(event: Event): void {
+    const imgElement = event.target as HTMLImageElement;
+    if (imgElement) {
+      imgElement.src = '/images/sports/no-image.png';
+    }
   }
 
   loadGeneralStatistics(): void {

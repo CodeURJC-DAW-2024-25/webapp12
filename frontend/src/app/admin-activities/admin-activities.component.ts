@@ -4,6 +4,7 @@ import { AuthService } from '../services/auth.service';
 import { HttpResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { StatisticsService } from '../services/statistics.service';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-admin-activities',
@@ -31,7 +32,7 @@ allActivities: ActivityDto[] = [];
 
 
   constructor(private activityService:ActivityService,public authService: AuthService,private router: Router,
-    public statisticsService: StatisticsService){}
+    public statisticsService: StatisticsService, public userService:UserService){}
 
   ngOnInit():void{
     // Get current user from AuthService since that's what you're using for logout

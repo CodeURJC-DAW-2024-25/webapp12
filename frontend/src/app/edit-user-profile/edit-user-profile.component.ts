@@ -4,6 +4,8 @@ import { UserService } from '../services/user.service';
 import { Router } from '@angular/router';
 import { UserDto } from '../dtos/user.dto';
 import { NgForm } from '@angular/forms';
+import { StatisticsService } from '../services/statistics.service';
+import { ActivityService } from '../services/activity.service';
 
 @Component({
   selector: 'app-edit-user-profile',
@@ -22,6 +24,10 @@ export class EditUserProfileComponent {
   errorMessage: string | null = null;
   userId: number | null = null;
   selectedImage: File | null = null;
+
+  userCount: number = 0;
+  activityCount: number = 0;
+  subscribedActivitiesCount: number = 0;
   
 
   name: string = '';
@@ -29,7 +35,9 @@ export class EditUserProfileComponent {
   dni: string = '';
   tlf: string = '';
 
-  constructor(private userService:UserService,public authService: AuthService,private router: Router){}
+  constructor(public userService:UserService,public authService: AuthService,private router: Router,
+    public statisticsService: StatisticsService,public activityService:ActivityService
+  ){}
   
   ngOnInit():void{
     // Get current user from AuthService since that's what you're using for logout
@@ -43,20 +51,32 @@ export class EditUserProfileComponent {
     this.isLoggedIn = this.authService.getIsLoggedIn();
     console.log('Is logged in:', this.isLoggedIn);
 
-
+    this.statisticsService.getGeneralStatistics().subscribe({
+      next:data => {
+        this.userCount = data.userCount;
+        this.activityCount = data.activityCount; 
+      }
+    });
+    if (this.currentUser?.id) {
+      this.activityService.getUserSubscribedActivitiesCount(this.currentUser.id).subscribe({
+        next: count => {
+          this.subscribedActivitiesCount = count;
+        }
+      });
+    }
     if (this.currentUser) {
       this.name = this.currentUser.name;
       this.surname = this.currentUser.surname;
       this.dni = this.currentUser.dni;
       this.tlf = this.currentUser.phone;
     }
-    
   }
 
   onImageSelected(event: Event): void {
     const fileInput = event.target as HTMLInputElement;
     if (fileInput.files && fileInput.files.length > 0) {
       this.selectedImage = fileInput.files[0];
+      console.log('Imagen seleccionada:', this.selectedImage);
     }
   }
 
@@ -85,8 +105,9 @@ export class EditUserProfileComponent {
           
           // Continuar con la lógica de la imagen
           if (this.selectedImage) {
+            console.log('Subiendo imagen...');
             this.updateUserImage();
-          } else if (this.removeImage && this.currentUser?.image) {
+          } else if (this.removeImage) {
             this.onRemoveImage();
           } else {
             this.router.navigate(['/profile']);
@@ -102,7 +123,7 @@ export class EditUserProfileComponent {
   updateUserImage(): void {
     if (this.selectedImage && this.currentUser) {
       const formData = new FormData();
-      formData.append('image', this.selectedImage);
+      formData.append('file', this.selectedImage);
   
       this.userService.updateUserImage(this.currentUser.id, formData).subscribe({
         next: (response) => {
@@ -150,6 +171,13 @@ export class EditUserProfileComponent {
     return this.currentUser && this.currentUser.image
       ? `/user/${this.currentUser.id}/image`
       : '/images/sports/no-image.png';
+  }
+
+  handleImageError(event: Event): void {
+    const imgElement = event.target as HTMLImageElement;
+    if (imgElement) {
+      imgElement.src = '/images/sports/no-image.png';
+    }
   }
 
   onLogout(): void {

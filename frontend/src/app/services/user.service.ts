@@ -239,8 +239,11 @@ export class UserService {
   }
 
   getUserImageUrl(userId: number): string {
-    return `${this.api_Url}/${userId}/image`;
+    const imageUrl = `${this.api_Url}/${userId}/image`;
+    console.log('URL de imagen generada:', imageUrl);
+    return imageUrl;
   }
+  
 
   getUsers(page: number = 0, size: number = 8): Observable<PageResponse<UserDto>> {
       const params = new HttpParams()

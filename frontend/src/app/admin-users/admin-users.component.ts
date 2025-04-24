@@ -32,7 +32,7 @@ export class AdminUsersComponent {
     userId: number | null = null;
   
   
-    constructor(private userService:UserService,public authService: AuthService,private router: Router, 
+    constructor(public userService:UserService,public authService: AuthService,private router: Router, 
       public statisticsService: StatisticsService,public activityService: ActivityService){}
   
     ngOnInit():void{

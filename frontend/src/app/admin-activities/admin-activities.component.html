@@ -15,9 +15,11 @@
                     <!-- User Image -->
                     <div class="profile-thumb">
 
-                    <img *ngIf="currentUser.image" [src]="'/user/' + currentUser.id + '/image'" alt="Imagen de perfil" class="rounded-circle">
-                    <img *ngIf="!currentUser.image" src="/images/sports/no-image.png" class="img-fluid mb-4" alt="No Image">
-
+                        <img 
+                        [src]="userService.getUserImageUrl(currentUser.id)" 
+                        (error)="handleImageError($event)" 
+                        class="card-img-top img-fluid rounded-circle" 
+                        alt="{{currentUser.name}}">
                     </div>
                     <!-- User Name -->
                     <h5 class="text-center">{{ currentUser.name }}</h5>
