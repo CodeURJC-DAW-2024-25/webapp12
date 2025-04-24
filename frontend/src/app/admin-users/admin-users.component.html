@@ -26,20 +26,20 @@
 					<div class="widget user-dashboard-menu">
 						<ul>
 							<li>
-								<a href="/profile"><i class="fa fa-ticket"></i>Mis actividades <span>{{subscribedActivitiesCount}}</span></a>
+								<a routerLink="/profile"><i class="fa fa-ticket"></i>Mis actividades <span>{{subscribedActivitiesCount}}</span></a>
 							</li>
 
 							<li *ngIf="isAdmin">
-								<a href="/adminActivities"><i class="fa fa-bolt"></i>Todas las actividades <span>{{activityCount}}</span></a>
+								<a routerLink="/adminActivities"><i class="fa fa-bolt"></i>Todas las actividades <span>{{activityCount}}</span></a>
 							</li>
 							<li *ngIf="isAdmin">
-								<a href="/newActivity"><i class="fas fa-plus-square"></i> Crear nueva actividad</a>
+								<a routerLink="/newActivity"><i class="fas fa-plus-square"></i> Crear nueva actividad</a>
 							</li>
 							<li class="active" *ngIf="isAdmin">
-								<a href="/adminUsers"><i class="fa fa-users"></i> Todos los usuarios <span>{{userCount}}</span></a>
+								<a routerLink="/adminUsers"><i class="fa fa-users"></i> Todos los usuarios <span>{{userCount}}</span></a>
 							</li>
 							<li *ngIf="isAdmin">
-								<a href="/statistics"><i class="fa fa-chart-bar"></i>Estadísticas </a>
+								<a routerLink="/statistics"><i class="fa fa-chart-bar"></i>Estadísticas </a>
 							</li>
 							<li class="nav-item" *ngIf="authService.getIsLoggedIn()">
                                 <a (click)="logout()" style="cursor: pointer;" class="nav-link">
