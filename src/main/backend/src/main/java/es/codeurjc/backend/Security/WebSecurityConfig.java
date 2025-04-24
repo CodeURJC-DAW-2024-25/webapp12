@@ -153,7 +153,8 @@ public class WebSecurityConfig {
 				.requestMatchers("/searchPage").permitAll()
 				.requestMatchers("/activity/{id}/image").permitAll()
 				.requestMatchers("/user/{id}/image").permitAll()
-				.requestMatchers("/404").permitAll()				
+				.requestMatchers("/404").permitAll()	
+				.requestMatchers("/new/**").permitAll()			
 				// USER PAGES
 				.requestMatchers("/profile").hasAnyRole("USER")
 				.requestMatchers("/editUserProfile/").hasAnyRole("USER")
