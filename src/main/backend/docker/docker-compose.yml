@@ -16,7 +16,9 @@ services:
       - pixel-network
 
   app:
-    image: przx27/backend-app:java21
+    build:
+      context: C:/Users/gprsl/Documents/GitHub/webapp12   # <-- AQUÍ EL CAMBIO
+      dockerfile: src/main/backend/docker/Dockerfile
     container_name: pixel-app
     ports:
       - "443:8443"
@@ -26,7 +28,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/Pixel_Paradise
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: 1234
-    restart: "always"
+    restart: always
     networks:
       - pixel-network
 
@@ -35,21 +37,3 @@ volumes:
 
 networks:
   pixel-network:
-
-####################################
-#app:
-#    build:
-#     context: .
-#      dockerfile: src/main/backend/docker/Dockerfile
-#    container_name: pixel-app
-#    ports:
-#      - "443:8443"
-#    depends_on:
-#      - db
-#    environment:
-#      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/Pixel_Paradise
-#      SPRING_DATASOURCE_USERNAME: root
-#      SPRING_DATASOURCE_PASSWORD: 1234
-#    restart: always
-#    networks:
-#      - pixel-network
