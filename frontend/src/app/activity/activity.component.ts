@@ -47,8 +47,6 @@ export class ActivityComponent implements OnInit {
     });
   }
 
-  
-  // Método para verificar si el usuario ya está inscrito
   checkSubscriptionStatus(activityId: number): void {
     if (!this.authService.getIsLoggedIn()) return;
 
@@ -71,7 +69,6 @@ export class ActivityComponent implements OnInit {
 
     this.activityService.reserveActivity(this.activity.id).subscribe({
       next: (pdfBlob) => {
-        // Crear URL para descargar el PDF
         const url = window.URL.createObjectURL(pdfBlob);
         const a = document.createElement('a');
         a.href = url;
@@ -81,7 +78,6 @@ export class ActivityComponent implements OnInit {
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
 
-        // Actualizar estado de suscripción
         this.isSubscribed = true;
         this.reservationLoading = false;
       },
@@ -101,7 +97,6 @@ export class ActivityComponent implements OnInit {
     });
   }
 
-  // Nuevo método para descargar el ticket de una reserva existente
   downloadTicket(): void {
     if (!this.activity?.id || this.downloadingTicket) return;
 
@@ -135,7 +130,6 @@ export class ActivityComponent implements OnInit {
     }
   }
 
-  // Método auxiliar para descargar PDF
   private downloadPdf(pdfBlob: Blob, fileName: string): void {
     const url = window.URL.createObjectURL(pdfBlob);
     const a = document.createElement('a');
@@ -207,20 +201,17 @@ export class ActivityComponent implements OnInit {
 
     if (!starsValueElement || !descriptionElement) return;
 
-    // Crear objeto con los datos del formulario
     const review = {
       starsValue: parseInt(starsValueElement.value),
-      description: descriptionElement.value // Mantenemos 'description' aquí para compatibilidad con el servicio
+      description: descriptionElement.value 
     };
 
     this.reviewService.submitReview(this.activity.id, review).subscribe({
       next: (response) => {
-        // Añadimos la nueva review al principio de la lista
         if (response) {
           this.reviews.unshift(response);
         }
 
-        // Limpiamos el formulario
         descriptionElement.value = '';
         starsValueElement.value = '5';
 

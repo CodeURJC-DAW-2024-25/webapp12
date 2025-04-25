@@ -29,12 +29,7 @@ const routes: Routes = [
   { path: 'newActivity', component: CreateActivityComponent },
   { path: 'activity/edit/:id', component: EditActivityComponent },
 
-
-  { path: '**', component: ErrorComponent } //redirige si no existe la ruta a la pantalla de error.
-
-
-
-
+  { path: '**', component: ErrorComponent } 
 ];
 
 @NgModule({

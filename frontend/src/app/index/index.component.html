@@ -46,7 +46,7 @@
 <!--=========================================== =
            Search Activity Section            =
 ===========================================-->
-<!-- Sección de Actividades Buscadas -->
+
 <section class="popular-deals section bg-gray" *ngIf="searchResults.length > 0 || isSearching || hasSearched">
   <div class="container">
     <div class="row">
@@ -57,7 +57,6 @@
       </div>
     </div>
 
-    <!-- Indicador de Carga para Búsqueda -->
     <div class="row" *ngIf="isSearching && searchResults.length === 0">
       <div class="col-12 text-center">
         <div class="spinner-border text-primary" role="status">
@@ -66,7 +65,6 @@
       </div>
     </div>
 
-    <!-- Resultados de Búsqueda -->
     <div class="row" *ngIf="searchResults.length > 0">
       <div class="col-sm-12 col-lg-3" *ngFor="let activity of searchResults">
         <div class="product-item bg-light">
@@ -97,14 +95,12 @@
       </div>
     </div>
 
-    <!-- Mensaje si no hay resultados -->
     <div class="row" *ngIf="!isSearching && searchResults.length === 0 && hasSearched">
       <div class="col-12 text-center">
         <p>No se encontraron actividades para el lugar seleccionado.</p>
       </div>
     </div>
 
-    <!-- Botón para cargar más resultados -->
     <div class="text-center mt-3" *ngIf="hasMoreSearchResults && searchResults.length > 0">
       <button type="button"
               class="btn btn-outline-primary"
@@ -122,7 +118,6 @@
 ===========================================-->
 <section class="popular-deals section bg-gray">
   <div class="container">
-    <!-- Sección de Actividades Recomendadas -->
     <div class="row mb-5" *ngIf="isLoggedIn">
       <div class="col-md-12">
         <div class="section-title">
@@ -130,14 +125,12 @@
         </div>
       </div>
 
-      <!-- Indicador de Carga para Recomendaciones -->
       <div class="col-12 text-center" *ngIf="isLoadingRecommended && recommendedActivities.length === 0">
         <div class="spinner-border text-primary" role="status">
           <span class="sr-only">Cargando recomendaciones...</span>
         </div>
       </div>
 
-      <!-- Actividades Recomendadas -->
       <ng-container *ngIf="recommendedActivities.length > 0">
         <div class="col-sm-12 col-lg-3" *ngFor="let activity of recommendedActivities">
           <div class="product-item bg-light">
@@ -168,12 +161,10 @@
         </div>
       </ng-container>
 
-      <!-- Mensaje si no hay recomendaciones -->
       <div class="col-12" *ngIf="!isLoadingRecommended && recommendedActivities.length === 0">
         <p>No hay actividades recomendadas disponibles.</p>
       </div>
 
-      <!-- Botón para cargar más recomendaciones -->
       <div class="text-center mt-3 col-12" *ngIf="hasMoreRecommended && recommendedActivities.length > 0">
         <button type="button"
                 class="btn btn-outline-primary"
@@ -193,7 +184,6 @@
       </div>
     </div>
 
-    <!-- Mensaje de Error -->
     <div class="row" *ngIf="errorMessage">
       <div class="col-12">
         <div class="alert alert-danger">
@@ -202,7 +192,6 @@
       </div>
     </div>
 
-    <!-- Indicador de Carga -->
     <div class="row" *ngIf="isLoading && allActivities.length === 0">
       <div class="col-12 text-center">
         <div class="spinner-border text-primary" role="status">
@@ -212,7 +201,6 @@
     </div>
 
     <div id="allActivitiesPaginated" class="row">
-      <!-- Todas las actividades -->
       <ng-container *ngIf="allActivities.length > 0; else noActivities">
         <div class="col-sm-12 col-lg-3" *ngFor="let activity of allActivities">
           <div class="product-item bg-light">

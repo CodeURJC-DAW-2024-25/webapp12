@@ -35,7 +35,7 @@ export class RegisterComponent {
 
     const userData = {
       ...this.registerForm.value,
-      roles: ['USER']  // Simplemente 'USER', sin prefijo
+      roles: ['USER']  
     };
 
     this.authService.register(userData).subscribe({

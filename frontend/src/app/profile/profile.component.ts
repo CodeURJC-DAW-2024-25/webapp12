@@ -45,11 +45,9 @@ export class ProfileComponent {
     this.isLoggedIn = this.authService.getIsLoggedIn();
     console.log('Is logged in:', this.isLoggedIn);
 
-    /// Verificar si es administrador
     this.isAdmin = this.authService.isAdmin();
     console.log('Is admin:', this.isAdmin);
 
-    // Si no está logueado, redirigir al login
     if (!this.isLoggedIn) {
       console.error('Usuario no autenticado');
       this.router.navigate(['/login']);

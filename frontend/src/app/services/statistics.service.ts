@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-// Interfaces para los datos de la API
 export interface ActivitiesByMonthDto {
   month: number;
   count: number;

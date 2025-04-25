@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8">
-                <!-- Detalles de la actividad -->
+                <!-- Activity details -->
                 <article class="single-post">
                     <h2 class="d-inline-block">{{ activity?.name }}</h2>
                     <div class="d-flex justify-content-between align-items-center">
@@ -38,14 +38,14 @@
                     </div>
                 </article>
 
-                <!-- Sección de comentarios -->
+                <!-- Comments -->
                 <div class="reviews-section mt-5">
                     <div class="reviews-header d-flex justify-content-between align-items-center mb-4">
                         <h3 class="m-0"><i class="fa fa-comments"></i> Comentarios</h3>
                         <span class="badge bg-primary rounded-pill">{{ reviews.length }} comentarios</span>
                     </div>
 
-                    <!-- Loader para los comentarios -->
+                    <!-- Loader for comments -->
                     <div *ngIf="reviewsLoading" class="text-center p-4">
                         <div class="spinner-border text-primary" role="status">
                             <span class="visually-hidden">Cargando...</span>
@@ -53,7 +53,7 @@
                         <p class="mt-2">Cargando comentarios...</p>
                     </div>
 
-                    <!-- Lista de comentarios -->
+                    <!-- List of coments -->
                     <div *ngIf="!reviewsLoading && reviews.length > 0" class="reviews-list">
                         <div *ngFor="let review of reviews" class="review-card p-3 mb-3 border-bottom">
                             <div class="review-header d-flex justify-content-between align-items-center mb-2">
@@ -77,20 +77,16 @@
                         </div>
                     </div>
 
-                    <!-- Mensaje cuando no hay comentarios -->
                     <div *ngIf="!reviewsLoading && reviews.length === 0" class="no-reviews text-center p-5 bg-light rounded">
                         <i class="fa fa-comments-o fa-3x text-muted mb-3"></i>
                         <p class="lead">No hay comentarios aún. ¡Sé el primero en dejar uno!</p>
                     </div>
 
-                    <!-- Botón para cargar más comentarios -->
                     <div class="text-center mt-4" *ngIf="!reviewsLastPage && !reviewsLoading && reviews.length > 0">
                         <button type="button" class="btn btn-outline-primary" (click)="loadMoreReview()">
                             <i class="fa fa-refresh me-2"></i> Cargar más comentarios
                         </button>
                     </div>
-
-                    <!-- Formulario para enviar un comentario -->
 
                     <div *ngIf="authService.getIsLoggedIn()" class="review-form mt-5 p-4 bg-light rounded shadow-sm">
                         <h4 class="mb-3"><i class="fa fa-pencil"></i> Deja tu comentario</h4>
@@ -121,7 +117,6 @@
                 </div>
             </div>
 
-            <!-- Sidebar para reservas -->
             <div class="col-lg-4" *ngIf="authService.getIsLoggedIn()">
                 <div class="sidebar mt-5 mt-lg-0">
                     <div class="widget reservation-widget p-4 bg-info text-white rounded shadow">

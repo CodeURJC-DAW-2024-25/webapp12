@@ -16,22 +16,18 @@ Chart.register(...registerables);
   styleUrls: ['./admin-statistics.component.scss']
 })
 export class AdminStatisticsComponent implements OnInit {
-  // Datos del usuario
   currentUser: any;
   isAdmin = false;
   isLoggedIn = false;
 
-  // Estadísticas generales
   userCount: number = 0;
   activityCount: number = 0;
   placeCount: number = 0;
   subscribedActivitiesCount:number = 0;
 
-  // Datos para los gráficos
   activitiesByMonth: number[] = Array(12).fill(0);
   reviewsByValoration: number[] = Array(5).fill(0);
 
-  // Referencias a los gráficos
   revenueChart: any;
   segmentsChart: any;
 
@@ -98,18 +94,14 @@ export class AdminStatisticsComponent implements OnInit {
   loadActivitiesByMonth(): void {
     this.statisticsService.getActivitiesByMonth().subscribe({
       next: (data: any[]) => {
-        // Inicializar array con ceros
         this.activitiesByMonth = Array(12).fill(0);
 
-        // Actualizar valores según los datos recibidos
         data.forEach(item => {
-          // Ajustar índice porque los meses van de 1-12 pero el array de 0-11
           if (item.month >= 1 && item.month <= 12) {
             this.activitiesByMonth[item.month - 1] = item.count;
           }
         });
 
-        // Crear el gráfico de barras cuando tengamos los datos
         this.createRevenueChart();
       },
       error: (err: any) => {
@@ -121,18 +113,14 @@ export class AdminStatisticsComponent implements OnInit {
   loadReviewStatistics(): void {
     this.statisticsService.getReviewStatistics().subscribe({
       next: (data: any[]) => {
-        // Inicializar array con ceros
         this.reviewsByValoration = Array(5).fill(0);
 
-        // Actualizar valores según los datos recibidos
         data.forEach(item => {
-          // Las valoraciones van de 1-5
           if (item.starsValue >= 1 && item.starsValue <= 5) {
             this.reviewsByValoration[item.starsValue - 1] = item.count;
           }
         });
 
-        // Crear el gráfico circular cuando tengamos los datos
         this.createSegmentsChart();
       },
       error: (err: any) => {
@@ -169,7 +157,6 @@ export class AdminStatisticsComponent implements OnInit {
   createSegmentsChart(): void {
     const ctx = document.getElementById('segmentsChart') as HTMLCanvasElement;
     if (ctx) {
-      // Destruir el gráfico anterior si existe
       if (this.segmentsChart) {
         this.segmentsChart.destroy();
       }

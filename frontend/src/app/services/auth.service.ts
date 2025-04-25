@@ -31,7 +31,6 @@ export class AuthService {
     }
   }
 
-  // Métodos para el token
   getToken(): string | null {
     return localStorage.getItem(this.tokenKey);
   }
@@ -60,7 +59,6 @@ export class AuthService {
     }
   }
 
-  // Métodos de autenticación
   getIsLoggedIn(): boolean {
     return localStorage.getItem(this.isLoggedInKey) === 'true';
   }
@@ -101,7 +99,6 @@ export class AuthService {
     );
   }
 
-  // Método para obtener los datos del usuario actual
   fetchCurrentUser(): Observable<any> {
     return this.http.get(`${this.apiUrl}/me`).pipe(
       tap((userData: any) => {
@@ -130,7 +127,6 @@ export class AuthService {
     );
   }
 
-  // Para el componente home/index
   get currentUserValue() {
     return this.currentUserSubject.value;
   }
@@ -158,7 +154,6 @@ export class AuthService {
     this.currentUserSubject.next(null);
   }
 
-  // Método para validar el token con el backend
   public validateAuthStatus(): Observable<boolean> {
     return this.http.get<any>(`${this.apiUrl}/me`).pipe(
       map(userData => {
@@ -184,24 +179,16 @@ export class AuthService {
   // Add this to AuthService
   isAdmin(): boolean {
     const currentUser = this.getUserDetails();
-    // Asegúrate de que se devuelva siempre un booleano
     return currentUser !== null && currentUser.id === 7;
   }
 
-
-
-
-  // MÉTODO DE REGISTRO
   register(user: RegisterUser): Observable<any> {
-    // Preparar el objeto de usuario para registro
     const registrationData = {...user};
 
-    // Si no se especifican roles, usar USER por defecto
     if (!registrationData.roles || registrationData.roles.length === 0) {
       registrationData.roles = ['USER'];
     }
 
-    // Asegurar que no haya prefijos ROLE_ en los roles
     registrationData.roles = registrationData.roles.map(role =>
       role.startsWith('ROLE_') ? role.substring(5) : role
     );

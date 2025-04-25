@@ -7,10 +7,10 @@ import { PageResponse } from './activity.service';
 
 export interface ReviewDto {
   id: number;
-  comment: string;            // Cambio de description a comment
+  comment: string;           
   starsValue: number;
-  creationDate: string;       // Fecha de creación
-  userFullName: string;       // Nombre completo del usuario (no en objeto anidado)
+  creationDate: string;      
+  userFullName: string;       
 }
 
 
@@ -49,10 +49,10 @@ export class ReviewService {
   }
 
   submitReview(activityId: number, review: { starsValue: number, description: string }): Observable<ReviewDto> {
-    // Crear un nuevo objeto con la estructura correcta que espera el backend
+   
     const requestBody = {
       starsValue: review.starsValue,
-      comment: review.description // Mapear 'description' a 'comment' para el backend
+      comment: review.description 
     };
 
     const token = this.authService.getToken();

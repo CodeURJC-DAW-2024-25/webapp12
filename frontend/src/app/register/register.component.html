@@ -7,7 +7,6 @@
 
           <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
             <fieldset class="p-4">
-              <!-- Campo Nombre con validación -->
               <input 
                 class="form-control mb-3" 
                 type="text" 
@@ -18,7 +17,6 @@
                 El nombre es requerido
               </div>
 
-              <!-- Repite para los demás campos con sus validaciones específicas -->
               <input 
                 class="form-control mb-3" 
                 type="text" 
@@ -75,12 +73,10 @@
                 La contraseña debe tener al menos 4 caracteres
               </div>
 
-              <!-- Mensaje de error general -->
               <div *ngIf="error" class="alert alert-danger mt-3">
                 {{ error }}
               </div>
 
-              <!-- Botón con indicador de carga -->
               <button 
                 type="submit" 
                 class="btn btn-primary font-weight-bold mt-3" 

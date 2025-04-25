@@ -33,9 +33,8 @@ export class EditActivityComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Obtener el ID de la actividad de la URL
     this.route.params.subscribe(params => {
-      this.activityId = +params['id']; // Convertir a número
+      this.activityId = +params['id'];
       this.loadActivityData();
       this.loadPlaces();
     });
@@ -62,7 +61,6 @@ export class EditActivityComponent implements OnInit {
           this.activity = activity;
           this.setFormValues(activity);
 
-          // Establecer la URL de la imagen si la actividad tiene una
           if (activity.image) {
             this.imageUrl = this.activityService.getActivityImageUrl(activity.id);
           }
@@ -75,7 +73,6 @@ export class EditActivityComponent implements OnInit {
   }
 
   setFormValues(activity: ActivityDto): void {
-    // Formatear la fecha para el input type="date"
     let formattedDate = '';
     if (activity.activityDate) {
       const date = new Date(activity.activityDate);
@@ -109,7 +106,6 @@ export class EditActivityComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       this.selectedFile = input.files[0];
-      // Si se selecciona un archivo, no se puede eliminar la imagen actual al mismo tiempo
       this.activityForm.get('removeImage')?.setValue(false);
     }
   }
@@ -118,10 +114,8 @@ export class EditActivityComponent implements OnInit {
     const checkbox = event.target as HTMLInputElement;
     this.removeCurrentImage = checkbox.checked;
 
-    // Si se marca eliminar imagen, se resetea el archivo seleccionado
     if (this.removeCurrentImage && this.selectedFile) {
       this.selectedFile = null;
-      // También resetear el input file
       const fileInput = document.getElementById('file-upload') as HTMLInputElement;
       if (fileInput) {
         fileInput.value = '';
@@ -131,7 +125,6 @@ export class EditActivityComponent implements OnInit {
 
   onSubmit(): void {
     if (this.activityForm.invalid) {
-      // Marcar todos los campos como tocados para mostrar errores
       Object.keys(this.activityForm.controls).forEach(key => {
         const control = this.activityForm.get(key);
         control?.markAsTouched();
@@ -141,7 +134,6 @@ export class EditActivityComponent implements OnInit {
 
     this.isSubmitting = true;
 
-    // Preparar los datos para enviar
     const activityData = {
       name: this.activityForm.get('name')?.value,
       category: this.activityForm.get('category')?.value,
@@ -149,26 +141,21 @@ export class EditActivityComponent implements OnInit {
       vacancy: this.activityForm.get('vacancy')?.value,
       placeId: this.activityForm.get('placeId')?.value,
       activityDate: this.activityForm.get('activityDate')?.value,
-      // Mantener el estado actual de la imagen a menos que se vaya a eliminar
       imageBoolean: this.activity?.image && !this.removeCurrentImage
     };
 
-    // Actualizar la actividad
     this.activityService.updateActivity(this.activityId, activityData)
       .pipe(finalize(() => this.isSubmitting = false))
       .subscribe({
         next: (response) => {
           console.log('Actividad actualizada con éxito:', response);
 
-          // Si hay que eliminar la imagen actual
           if (this.removeCurrentImage && this.activity?.image) {
             this.removeImage();
           }
-          // Si hay un nuevo archivo seleccionado
           else if (this.selectedFile) {
             this.uploadImage();
           } else {
-            // Si no hay cambios en la imagen, redirigir directamente
             this.navigateAfterSuccess();
           }
         },
@@ -191,7 +178,6 @@ export class EditActivityComponent implements OnInit {
         },
         error: (error: HttpErrorResponse) => {
           console.error('Error al subir la imagen:', error);
-          // A pesar del error en la imagen, la actividad se actualizó, así que redirigimos
           this.navigateAfterSuccess();
         }
       });
@@ -208,14 +194,12 @@ export class EditActivityComponent implements OnInit {
         },
         error: (error: HttpErrorResponse) => {
           console.error('Error al eliminar la imagen:', error);
-          // A pesar del error, la actividad se actualizó, así que redirigimos
           this.navigateAfterSuccess();
         }
       });
   }
 
   navigateAfterSuccess(): void {
-    // Redirigir directamente a la página de administración de actividades
     this.router.navigate(['/adminActivities']);
   }
 
@@ -230,7 +214,6 @@ export class EditActivityComponent implements OnInit {
     }
   }
 
-  // Método para cancelar y volver a la lista de actividades
   onCancel(): void {
     this.router.navigate(['/adminActivities']);
   }

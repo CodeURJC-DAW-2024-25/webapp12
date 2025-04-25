@@ -38,7 +38,7 @@
               <li class="active" *ngIf="isAdmin">
                 <a routerLink="/statistics"><i class="fa fa-chart-bar"></i>Estadísticas </a>
               </li>
-              <!-- En admin-statistics.component.html -->
+             
               <li class="nav-item" *ngIf="authService.getIsLoggedIn()">
                 <a (click)="logout()" style="cursor: pointer;" class="nav-link">
                   <i class="fa fa-power-off"></i> Cerrar sesión

@@ -80,8 +80,6 @@ export class EditUserProfileComponent {
     }
   }
 
-  
-
   onSubmit(): void {
     if (this.currentUser) {
       const updatedUser: UserDto = {
@@ -100,10 +98,8 @@ export class EditUserProfileComponent {
         next: (response) => {
           console.log('Usuario actualizado correctamente', response);
           
-          // Actualizar el usuario en el AuthService
           this.authService.updateUserDetails(response);
           
-          // Continuar con la lógica de la imagen
           if (this.selectedImage) {
             console.log('Subiendo imagen...');
             this.updateUserImage();
@@ -129,10 +125,8 @@ export class EditUserProfileComponent {
         next: (response) => {
           console.log('Imagen actualizada correctamente');
           
-          // Después de actualizar la imagen, obtener el usuario actualizado
           this.userService.getUserById(this.currentUser!.id).subscribe({
             next: (updatedUser) => {
-              // Actualizar el usuario en el AuthService
               this.authService.updateUserDetails(updatedUser);
               this.router.navigate(['/profile']);
             }
@@ -151,10 +145,8 @@ export class EditUserProfileComponent {
         next: () => {
           console.log('Imagen eliminada correctamente');
           
-          // Después de eliminar la imagen, obtener el usuario actualizado
           this.userService.getUserById(this.currentUser!.id).subscribe({
             next: (updatedUser) => {
-              // Actualizar el usuario en el AuthService
               this.authService.updateUserDetails(updatedUser);
               this.router.navigate(['/profile']);
             }
@@ -198,5 +190,3 @@ export class EditUserProfileComponent {
     });
   }
 }
-  
-

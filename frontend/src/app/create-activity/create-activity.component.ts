@@ -33,7 +33,6 @@ export class CreateActivityComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Cargar la lista de lugares
     this.loadPlaces();
   }
 
@@ -58,7 +57,6 @@ export class CreateActivityComponent implements OnInit {
 
   onSubmit(): void {
     if (this.activityForm.invalid) {
-      // Marcar todos los campos como tocados para mostrar errores
       Object.keys(this.activityForm.controls).forEach(key => {
         const control = this.activityForm.get(key);
         control?.markAsTouched();
@@ -68,7 +66,6 @@ export class CreateActivityComponent implements OnInit {
 
     this.isSubmitting = true;
 
-    // Preparar los datos para enviar
     const activityData = {
       name: this.activityForm.get('name')?.value,
       category: this.activityForm.get('category')?.value,
@@ -76,22 +73,18 @@ export class CreateActivityComponent implements OnInit {
       vacancy: this.activityForm.get('vacancy')?.value,
       placeId: this.activityForm.get('placeId')?.value,
       activityDate: this.activityForm.get('activityDate')?.value,
-      // Si hay un archivo seleccionado, marcar imageBoolean como true
       image: this.selectedFile !== null
     };
 
-    // Primero crear la actividad
     this.activityService.createActivity(activityData)
       .pipe(finalize(() => this.isSubmitting = false))
       .subscribe({
         next: (response) => {
           console.log('Actividad creada con éxito:', response);
 
-          // Si hay un archivo seleccionado, subir la imagen
           if (this.selectedFile && response.id) {
             this.uploadImage(response.id);
           } else {
-            // Si no hay imagen, redirigir directamente
             this.navigateAfterSuccess();
           }
         },
@@ -114,14 +107,12 @@ export class CreateActivityComponent implements OnInit {
         },
         error: (error: HttpErrorResponse) => {
           console.error('Error al subir la imagen:', error);
-          // A pesar del error en la imagen, la actividad se creó, así que redirigimos
           this.navigateAfterSuccess();
         }
       });
   }
 
   navigateAfterSuccess(): void {
-    // Mostrar mensaje de éxito y redirigir
     this.router.navigate(['/adminActivities']);
   }
 

@@ -245,14 +245,11 @@ export class IndexComponent implements OnInit {
         next: (response: any) => {
           this.isLoading = false;
 
-          // Manejo de la respuesta según el formato
           let pageData: PageResponse<ActivityDto>;
 
           if (response && response.body) {
-            // Si estamos recibiendo una HttpResponse completa
             pageData = response.body;
           } else if (response && response.content) {
-            // Si estamos recibiendo directamente el objeto PageResponse
             pageData = response;
           } else {
             console.error('Response format is unexpected:', response);
@@ -290,7 +287,6 @@ export class IndexComponent implements OnInit {
     }
   }
 
-  // Método para buscar actividades por lugar
   searchActivitiesByPlace(): void {
     if (!this.selectedPlaceId) {
       return;
@@ -298,13 +294,12 @@ export class IndexComponent implements OnInit {
 
     this.hasSearched = true;
     this.isSearching = true;
-    this.searchResults = []; // Limpiar resultados anteriores
+    this.searchResults = [];
     this.currentSearchPage = 0;
 
     this.performSearch();
   }
 
-  // Realizar la búsqueda
   private performSearch(): void {
     if (!this.selectedPlaceId) {
       return;
@@ -326,7 +321,6 @@ export class IndexComponent implements OnInit {
         }
 
         if (pageData && Array.isArray(pageData.content)) {
-          // Añadir URLs de imagen a cada actividad
           const activitiesWithImages = pageData.content.map((activity: ActivityDto) => ({
             ...activity,
             imageUrl: this.activityService.getActivityImageUrl(activity.id)
@@ -346,7 +340,6 @@ export class IndexComponent implements OnInit {
     });
   }
 
-  // Cargar más resultados de búsqueda
   loadMoreSearchResults(): void {
     if (this.hasMoreSearchResults && !this.isSearching) {
       this.currentSearchPage++;
