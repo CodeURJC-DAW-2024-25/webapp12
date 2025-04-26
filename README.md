@@ -539,3 +539,182 @@ I have been responsible for implementing the API security layer, including authe
 | ActivityService|[ActivityService](https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/src/main/java/es/codeurjc/backend/Service/ActivityService.java)|
 
 ---
+---
+# 🛠️ PHASE 3
+
+## ⚙️ Environment setup
+
+To compile and run the SPA, follow these steps to set up your development environment:
+
+### 1. Install Node.js and npm:
+   - Download and install Node.js from [its official website](https://nodejs.org/).
+   - npm (Node Package Manager) will be installed alongside Node.js.
+
+### 2. Install Angular CLI:
+   - Open a terminal or command prompt.
+   - Execute the following command to install Angular CLI globally:
+     ```bash
+     npm install -g @angular/cli
+     ```
+
+### 3. Verify the installation:
+   - To ensure that Angular CLI was installed correctly, run:
+     ```bash
+     ng --version
+     ```
+   - You should see the installed version of Angular CLI.
+
+### 4. Clone this repository:
+   ```bash
+   git clone https://github.com/CodeURJC-DAW-2023-24/webapp07
+   ```
+
+### 5. Docker setup:
+   - Install [Docker](https://www.docker.com/get-started/)if you haven't already.
+   - Run Docker.
+
+### 6. Launch the application:
+   - Open a Git Bash (Windows) or terminal (Linux/Mac) in the cloned repository folder.
+   - Change directory:
+     ```bash
+     cd docker/
+     ```
+   - Execute the following command
+     ```bash
+     docker-compose up -d
+     ```
+
+### 7. Access the application:
+   - Open your browser and navigate to:
+     ```bash
+     https://localhost:8443/new
+     ```
+
+---
+## 📊 Diagram
+(Pegar imagen diagrama)
+
+---
+## 🫂 **Member Participation**
+
+---
+
+### **Alba Velasco Marqués**
+
+Task List
+1. 
+2. 
+3. 
+
+-Commits:
+
+| Commit   | Link   | 
+|----------|------------|
+|   |  | 
+|  |  | 
+|  |  |
+|  |   |
+| | |
+
+-Files:
+
+| File   | Link   | 
+|----------|------------|
+|   |  | 
+|  |  | 
+|  |  |
+|  |   |
+| | |
+
+---
+
+### **Alexandra Cararus Verdes**
+
+Task List
+1. 
+2. 
+3. 
+
+-Commits:
+
+| Commit   | Link   | 
+|----------|------------|
+|   |  | 
+|  |  | 
+|  |  |
+|  |   |
+| | |
+
+-Files:
+
+| File   | Link   | 
+|----------|------------|
+|   |  | 
+|  |  | 
+|  |  |
+|  |   |
+| | |
+
+---
+
+###  Gonzalo Pérez Roca 
+
+Task List
+1. 
+2. 
+3. 
+
+-Commits:
+
+| Commit   | Link   | 
+|----------|------------|
+|   |  | 
+|  |  | 
+|  |  |
+|  |   |
+| | |
+
+-Files:
+
+| File   | Link   | 
+|----------|------------|
+|   |  | 
+|  |  | 
+|  |  |
+|  |   |
+| | |
+---
+
+###  Paula Ruiz Rubio 
+
+Task List
+1. 
+2. 
+3. 
+
+-Commits:
+
+| Commit   | Link   | 
+|----------|------------|
+|   |  | 
+|  |  | 
+|  |  |
+|  |   |
+| | |
+
+-Files:
+
+| File   | Link   | 
+|----------|------------|
+|   |  | 
+|  |  | 
+|  |  |
+|  |   |
+| | |
+
+
+---
+## 🎥 Video
+[Video - Pixel Paradise | Youtube]( COPIAR AQUI EL https://ENLACE DEL VIDEO DE YOUTUBE)
+
+---
