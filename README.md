@@ -577,7 +577,7 @@ To compile and run the SPA, follow these steps to set up your development enviro
    - Open a Git Bash (Windows) or terminal (Linux/Mac) in the cloned repository folder.
    - Change directory:
      ```bash
-     cd docker/
+     cd src/main/backend/docker
      ```
    - Execute the following command
      ```bash
@@ -587,8 +587,18 @@ To compile and run the SPA, follow these steps to set up your development enviro
 ### 7. Access the application:
    - Open your browser and navigate to:
      ```bash
-     https://localhost:8443/new
+     https://localhost/new
      ```
+### 8. Shut down the application:
+- Change directory:
+     ```bash
+     cd src/main/backend/docker
+     ```
+   - Execute the following command
+     ```bash
+     docker-compose down -v
+     ```
+   
 
 ---
 ## 📊 Diagram
@@ -660,29 +670,31 @@ Task List
 ###  Gonzalo Pérez Roca 
 
 Task List
-1. 
-2. 
-3. 
+1 - I was responsible for creating the activities page in Angular along with the reviews.
+2 - I was responsible for creating the registration page for new users and fixing some errors in the REST API.
+3 - I took care of creating the error page and adjusting the routes.
+4 - I took care of generating and modifying the new Docker files that added the frontend part of the application.
+5 - I was responsible for testing that the application could be launched via Docker on any machine, including the university’s virtual machine.
 
 -Commits:
 
 | Commit   | Link   | 
 |----------|------------|
-|   |  | 
-|  |  | 
-|  |  |
-|  |   |
-| | |
+| Actividades sin reviw | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/437c40246f776712c9c42c303753ad954bfc44eb | 
+| Actividades Actualizadas_Reviews_Reserva | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/7cbb2dbec294d00061eee234141d950ff99e09e4 | 
+| Register Incompleto Erroes CORS?¿ | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/6fba5179a827984a81bd9ed47d7c459a0ef9fd07 |
+| Añadida pantalla de error |  https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/17836076d7dc808208446c49c3f6b13dccebe6ee |
+| Docker funcional, falta .sh de la simagenes | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/bb64ebe5a91873c7b80cf13dfa1a75bf1948c4f0 |
 
 -Files:
 
 | File   | Link   | 
 |----------|------------|
-|   |  | 
-|  |  | 
-|  |  |
-|  |   |
-| | |
+| src/main/backend/docker/Dockerfile  | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/src/main/backend/docker/Dockerfile | 
+| frontend/src/app/activity | https://github.com/CodeURJC-DAW-2024-25/webapp12/tree/main/frontend/src/app/activity | 
+| frontend/src/app/register | https://github.com/CodeURJC-DAW-2024-25/webapp12/tree/main/frontend/src/app/register |
+| frontend/src/app/error | https://github.com/CodeURJC-DAW-2024-25/webapp12/tree/main/frontend/src/app/error |
+| frontend/src/app/services/activity.service.ts | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/frontend/src/app/services/activity.service.ts |
 ---
 
 ###  Paula Ruiz Rubio 
