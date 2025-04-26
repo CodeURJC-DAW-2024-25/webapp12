@@ -17,7 +17,7 @@ services:
 
   app:
     build:
-      context: C:/Users/gprsl/Documents/GitHub/webapp12   # <-- AQUÍ EL CAMBIO
+      context: ../../../..     # <<< CAMBIADO AQUÍ
       dockerfile: src/main/backend/docker/Dockerfile
     container_name: pixel-app
     ports:
