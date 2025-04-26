@@ -1,21 +1,11 @@
 #!/bin/bash
 set -e
 
-# Ir al directorio donde está el script
 cd "$(dirname "$0")"
 
-# Subimos 1 nivel: desde /docker --> /backend
-cd ..
+echo "➡️ Construyendo imagen Docker via docker-compose..."
 
-# Confirmamos que estamos en el lugar correcto
-if [[ ! -f "pom.xml" ]] || [[ ! -d "src" ]]; then
-  echo "🚨 ERROR: No se encontró pom.xml o src/ en el directorio actual. ¿Estás en src/main/backend?"
-  exit 1
-fi
+docker-compose build
 
-echo "➡️ Construyendo imagen Docker przx27/backend-app:java21..."
+echo "✅ Imagen construida correctamente."
 
-# Lanzar el build (Dockerfile sigue en docker/Dockerfile)
-docker build -f docker/Dockerfile -t przx27/backend-app:java21 .
-
-echo "✅ Imagen creada correctamente: przx27/backend-app:java21"
