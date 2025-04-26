@@ -4,8 +4,8 @@ set -e
 # Ir al directorio donde está el script
 cd "$(dirname "$0")"
 
-# Subimos 2 niveles: desde /docker --> /backend
-cd ../..
+# Subimos 1 nivel: desde /docker --> /backend
+cd ..
 
 # Confirmamos que estamos en el lugar correcto
 if [[ ! -f "pom.xml" ]] || [[ ! -d "src" ]]; then
@@ -15,7 +15,7 @@ fi
 
 echo "➡️ Construyendo imagen Docker przx27/backend-app:java21..."
 
-# Lanzar el build (el Dockerfile está en docker/Dockerfile)
+# Lanzar el build (Dockerfile sigue en docker/Dockerfile)
 docker build -f docker/Dockerfile -t przx27/backend-app:java21 .
 
 echo "✅ Imagen creada correctamente: przx27/backend-app:java21"
