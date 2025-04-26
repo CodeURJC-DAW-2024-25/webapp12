@@ -670,11 +670,11 @@ Task List
 ###  Gonzalo Pérez Roca 
 
 Task List
-1 - I was responsible for creating the activities page in Angular along with the reviews.
-2 - I was responsible for creating the registration page for new users and fixing some errors in the REST API.
-3 - I took care of creating the error page and adjusting the routes.
-4 - I took care of generating and modifying the new Docker files that added the frontend part of the application.
-5 - I was responsible for testing that the application could be launched via Docker on any machine, including the university’s virtual machine.
+1. I was responsible for creating the activities page in Angular along with the reviews.
+2. I was responsible for creating the registration page for new users and fixing some errors in the REST API.
+3. I took care of creating the error page and adjusting the routes.
+4. I took care of generating and modifying the new Docker files that added the frontend part of the application.
+5. I was responsible for testing that the application could be launched via Docker on any machine, including the university’s virtual machine.
 
 -Commits:
 
