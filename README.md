@@ -646,29 +646,35 @@ Task List
 ### **Alexandra Cararus Verdes**
 
 Task List
-1. 
-2. 
-3. 
+1. Implemented edit-activities with Angular.
+
+2. Implemented activity creation.
+
+3. Modified the Activity service.
+
+4. Created a diagram.
+
+5. Created a video.
 
 -Commits:
 
 | Commit   | Link   | 
 |----------|------------|
-|   |  | 
-|  |  | 
-|  |  |
-|  |   |
-| | |
+| create ts  | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/a661a9fe311caf9518aac02448d4c7e7a37ed982 | 
+| create Activity |https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/413797930597225d701634676f8fb6603890b5f4  | 
+|edit-Activity  | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/bfb9d04bdb6e675f3ae81440d8f54c2b3e8931c7 |
+| update diagram |  https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/1397921905e79852a897485354b7e3e479a93e32 |
+|Update video | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/727ca295aefe7ebb131188f36666506cd4f0c153|
 
 -Files:
 
 | File   | Link   | 
 |----------|------------|
-|   |  | 
-|  |  | 
-|  |  |
-|  |   |
-| | |
+|  create-activities | https://github.com/CodeURJC-DAW-2024-25/webapp12/tree/main/frontend/src/app/create-activity | 
+| edit-activity | https://github.com/CodeURJC-DAW-2024-25/webapp12/tree/main/frontend/src/app/edit-activity | 
+| activity service |  https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/frontend/src/app/services/activity.service.ts|
+|statistics service  | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/frontend/src/app/services/statistics.service.ts  |
+|auth service | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/frontend/src/app/services/auth.service.ts|
 
 ---
 
