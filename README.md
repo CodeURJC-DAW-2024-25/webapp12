@@ -705,29 +705,36 @@ Task List
 ###  Paula Ruiz Rubio 
 
 Task List
-1. 
-2. 
-3. 
+   1. I developed the home screen.
+   2. I implemented the display of activities and recommended activities.
+   3. I implemented the search for activities by location.
+   4. I handled the app security: login and logout.
+   5. I developed the statistics module.
+   6. I assisted my teammates with:
+         - Displaying activity reviews.
+         - Adding new reviews.
+         - Enrolling users in activities.
+         - Downloading activity enrollment PDFs.
 
 -Commits:
 
 | Commit   | Link   | 
 |----------|------------|
-|   |  | 
-|  |  | 
-|  |  |
-|  |   |
-| | |
+| Cargar estilso css correctamente  | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/89b93258718d13abe8c17d5eef593933aea45677 | 
+| Mostrar todas las actividades en el index | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/f095b67219ea02ad2445a494f6c0c21bb3e0d984 | 
+| Buscar actividades por lugar | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/756703680fcc6dca79b8a8327bd7efb5cd283cff |
+| Mostrar estadíticas | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/13f96962cf13d7a9fabbf56cc081b28dd9f24986  |
+| Obtener el usuario actual |https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/cd62f149b908dea2ac4bb9a69ecac6ef1c84474f |
 
 -Files:
 
 | File   | Link   | 
 |----------|------------|
-|   |  | 
-|  |  | 
-|  |  |
-|  |   |
-| | |
+| ActivityService.ts  | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/frontend/src/app/services/activity.service.ts | 
+| IndexComponent.ts | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/frontend/src/app/index/index.component.ts | 
+| IndexComponent.html | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/frontend/src/app/index/index.component.html |
+| LoginComponent.ts | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/frontend/src/app/login/login.component.ts  |
+| AuthService.ts| https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/frontend/src/app/services/auth.service.ts |
 
 
 ---
