@@ -613,29 +613,33 @@ To compile and run the SPA, follow these steps to set up your development enviro
 ### **Alba Velasco Marqués**
 
 Task List
-1. 
-2. 
-3. 
-
+1. I was in charge of making the editProfile component.
+2. I was in charge of making the function of delete User.
+3. I was in charge of making the function of delete Activity.
+4. I was in charge of making the profile component.
+5. I was in charge of making the adminUsers component.
+6. I was in charge of making the adminActivities component.
+7. I was in charge of making the SPA website accessible from the URL (https://localhost:8443/new/).
+   
 -Commits:
 
 | Commit   | Link   | 
 |----------|------------|
-|   |  | 
-|  |  | 
-|  |  |
-|  |   |
-| | |
+| conseguido url /new/  | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/ecebdc8e9bd61ca455930316cf1b057dfa84e5b8 | 
+| mostrar,editar,borrar img user | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/02dd7a187d6347f6ce29b5e269c241d9859cceff | 
+| editar perfil usuario | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/e0a6165447deb915e2eb2dfd7844f9b4618796a9 |
+| conseguido mostrar actividades paginadas en perfil | https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/291c43b93247429632e65f38548cd19cbf8dcde5  |
+| conseguido mostrar actividades inscritas del usuario |  https://github.com/CodeURJC-DAW-2024-25/webapp12/commit/4d71ccf6d33eaf7f14511e1e45275da6f718a485 |
 
 -Files:
 
 | File   | Link   | 
 |----------|------------|
-|   |  | 
-|  |  | 
-|  |  |
-|  |   |
-| | |
+| admin-activities.component.ts  | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/frontend/src/app/admin-activities/admin-activities.component.ts | 
+| admin-users.component.ts  | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/frontend/src/app/admin-users/admin-users.component.ts | 
+| edit-user-profile.component.ts | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/frontend/src/app/edit-user-profile/edit-user-profile.component.ts |
+| profile.component.ts | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/frontend/src/app/profile/profile.component.ts  |
+| user.service.ts | https://github.com/CodeURJC-DAW-2024-25/webapp12/blob/main/frontend/src/app/services/user.service.ts|
 
 ---
 
