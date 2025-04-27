@@ -602,7 +602,8 @@ To compile and run the SPA, follow these steps to set up your development enviro
 
 ---
 ## 📊 Diagram
-(Pegar imagen diagrama)
+<img width="495" alt="DIAGRAMA DAWF3" src="https://github.com/user-attachments/assets/1715b70f-8f97-403a-a75e-6336ee3e4a2e" />
+
 
 ---
 ## 🫂 **Member Participation**
