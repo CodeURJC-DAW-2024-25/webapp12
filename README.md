@@ -739,6 +739,8 @@ Task List
 
 ---
 ## 🎥 Video
-[Video - Pixel Paradise | Youtube]( COPIAR AQUI EL https://ENLACE DEL VIDEO DE YOUTUBE)
+![Pixel Paradise](https://github.com/user-attachments/assets/4c8a5299-c760-452d-af57-259a6fa7672e)
+
+[Video - Pixel Paradise | Youtube] https://youtu.be/UR7jELTgZYQ
 
 ---
